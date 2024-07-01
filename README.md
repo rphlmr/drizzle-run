@@ -8,6 +8,7 @@
 Relies on:
 - [Drizzle ORM](https://orm.drizzle.team)
 - [Stackblitz Webcontainers](https://webcontainers.io)
+- [Xstate](https://stately.ai/docs)
 - [Electric SQL](https://electric-sql.com)
 - [Remix Run](https://remix.run)
 - [Supabase](https://supabase.com)
