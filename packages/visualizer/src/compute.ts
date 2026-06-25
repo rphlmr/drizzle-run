@@ -326,7 +326,7 @@ export function compute(snapshot: Snapshot) {
             targetHandle: `${foreignKey.columnFrom}-left`,
             style: { strokeWidth: 2 },
             className: "edge-plain",
-            type: "smoothstep",
+            type: "bezier",
           });
         }
 
@@ -345,7 +345,7 @@ export function compute(snapshot: Snapshot) {
             targetHandle: relation.fieldName,
             style: { strokeWidth: 2, strokeDasharray: "5" },
             className: "edge-dashed",
-            type: "smoothstep",
+            type: "bezier",
           });
         }
 
@@ -359,7 +359,7 @@ export function compute(snapshot: Snapshot) {
         const indexes = Object.values(table.indexes);
 
         /* Policies */
-        const policies = Object.values(table.policies);
+        const policies = Object.values(snapshot.policies);
 
         /* Nodes */
         nodes.push({
@@ -473,7 +473,7 @@ export function compute(snapshot: Snapshot) {
             targetHandle: `${foreignKey.columnFrom}-left`,
             style: { strokeWidth: 2 },
             className: "edge-plain",
-            type: "smoothstep",
+            type: "bezier",
           });
         }
 
@@ -492,7 +492,7 @@ export function compute(snapshot: Snapshot) {
             targetHandle: relation.fieldName,
             style: { strokeWidth: 2, strokeDasharray: "5" },
             className: "edge-dashed",
-            type: "smoothstep",
+            type: "bezier",
           });
         }
 
@@ -616,7 +616,7 @@ export function compute(snapshot: Snapshot) {
             targetHandle: `${foreignKey.columnFrom}-left`,
             style: { strokeWidth: 2 },
             className: "edge-plain",
-            type: "smoothstep",
+            type: "bezier",
           });
         }
 
@@ -635,7 +635,7 @@ export function compute(snapshot: Snapshot) {
             targetHandle: relation.fieldName,
             style: { strokeWidth: 2, strokeDasharray: "5" },
             className: "edge-dashed",
-            type: "smoothstep",
+            type: "bezier",
           });
         }
 
