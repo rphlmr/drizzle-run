@@ -70,7 +70,7 @@ export function LoadingExampleGallery() {
     <>
       {workspace.banners}
       <SiteMain className="gap-4.5 pt-7">
-        <Skeleton className="h-10 w-72" />
+        <Skeleton className="w-72 h-10" />
         <p>
           <output>Loading examples…</output>
         </p>
@@ -113,25 +113,25 @@ function Gallery({ progress }: { progress: Readonly<Record<string, GuideProgress
     <>
       {workspace.banners}
       <SiteMain className="gap-4.5 pt-7">
-        <div className="flex items-stretch gap-6 max-phone:flex-col">
-          <div className="flex flex-1 flex-col justify-center gap-2">
-            <h1 className="font-display text-[38px] font-extrabold tracking-[-0.02em] max-phone:text-[30px]">
+        <div className="flex max-phone:flex-col items-stretch gap-6">
+          <div className="flex flex-col flex-1 justify-center gap-2">
+            <h1 className="font-display font-extrabold text-[38px] max-phone:text-[30px] tracking-[-0.02em]">
               Official <mark>Examples &amp; Guides</mark>
             </h1>
-            <p className="max-w-130 text-[15px] leading-[1.6] text-muted">
+            <p className="max-w-130 text-[15px] text-muted leading-[1.6]">
               Each one opens as a scratch copy you can edit and run. Fork it to keep it. Guided ones walk you through it
               first, then unlock the code.
             </p>
           </div>
           {featured && (
-            <section className="flex w-115 shrink-0 max-phone:w-auto" aria-label="Featured example">
+            <section className="flex w-115 max-phone:w-auto shrink-0" aria-label="Featured example">
               <ExampleCard example={featured} featured progress={progress[featured.slug]} className="flex-1" />
             </section>
           )}
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <fieldset
-            className="flex min-w-auto flex-wrap gap-1.5 max-phone:w-full max-phone:scrollbar-none max-phone:flex-nowrap max-phone:overflow-x-auto"
+            className="flex flex-wrap max-phone:flex-nowrap gap-1.5 max-phone:w-full min-w-auto max-phone:overflow-x-auto max-phone:scrollbar-none"
             aria-label="Topic"
           >
             <Chip pressed={topic === undefined} onClick={() => setFilter("topic", undefined)}>
@@ -163,7 +163,7 @@ function Gallery({ progress }: { progress: Readonly<Record<string, GuideProgress
         ) : (
           // role="list" because Safari drops list semantics from a list without bullets.
           <ul
-            className="grid grid-cols-3 gap-3.5 max-wide:grid-cols-2 max-phone:grid-cols-1"
+            className="gap-3.5 grid grid-cols-3 max-phone:grid-cols-1 max-wide:grid-cols-2"
             role="list"
             aria-label="Example list"
           >
