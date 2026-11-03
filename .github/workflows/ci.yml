@@ -32,7 +32,8 @@ jobs:
       - run: pnpm guests:check
       # Every workspace check in one graph: each task runs at most once, and not at all when its inputs match a
       # restored cache entry.
-      - run: pnpm exec turbo run build typecheck typecheck:worker typecheck:e2e lint:workspace test test:worker test:pack
+      # Test suites use their own workers; overlapping suites and builds exhaust the private runner's two CPUs.
+      - run: pnpm exec turbo run build typecheck typecheck:worker typecheck:e2e lint:workspace test test:worker test:pack --concurrency=1
       - run: pnpm test:runtime
       # A cache hit restores generated files and a miss rewrites them, so a stale committed one shows up here either way.
       - name: Committed generated files are current

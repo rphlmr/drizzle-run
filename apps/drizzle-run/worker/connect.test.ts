@@ -534,16 +534,31 @@ describe("AI chat rooms sharing one daily quota", () => {
       return { core, tab, companion };
     };
 
-    for (let room = 0; room < DEFAULT_DAILY_MESSAGES / ROOM_LIMITS.roomDailyMessages; room += 1) {
-      const { core, tab } = await openRoom("address:2001:db8:1:2::/64");
+    const clientKey = "address:2001:db8:1:2::/64";
+    const remainingMessages = 2 * ROOM_LIMITS.firstQuotaBlock;
 
-      for (let index = 0; index < ROOM_LIMITS.roomDailyMessages && tab.sent.at(-1)?.t !== "busy"; index += 1) {
+    for (let left = CLIENT_DAILY_MESSAGES - remainingMessages; left > 0; left -= 10_000) {
+      await reserve(Math.min(left, 10_000), clientKey);
+    }
+
+    for (let room = 0; room < 2; room += 1) {
+      const { core, tab, companion } = await openRoom(clientKey);
+
+      for (let index = 0; index < ROOM_LIMITS.firstQuotaBlock; index += 1) {
         now += 50;
         await core.message(tab, send("x"));
       }
+
+      expect(companion.frames("data")).toHaveLength(ROOM_LIMITS.firstQuotaBlock);
     }
 
     expect(quota.storage.get("quota")).toEqual({ day: "2026-10-15", used: CLIENT_DAILY_MESSAGES });
+
+    const exhausted = await openRoom(clientKey);
+    await exhausted.core.message(exhausted.tab, send("x"));
+
+    expect(exhausted.companion.frames("data")).toEqual([]);
+    expect(exhausted.tab.frames("busy")).toHaveLength(1);
 
     const { core, tab, companion } = await openRoom("address:198.51.100.7");
 
