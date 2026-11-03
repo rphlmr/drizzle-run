@@ -1108,6 +1108,29 @@ test("should follow the system theme when storage is blocked", async ({ page }) 
   await expect(page.getByRole("heading", { name: "Write a schema. Seed it. Run a query." })).toBeVisible();
 });
 
+test("should keep the mobile typing field at 16px without enlarging the code", async ({ page, browserName }) => {
+  test.skip(browserName !== "webkit", "WebKit uses the textarea; Chromium uses native EditContext.");
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await createProject(page, "Mobile typing");
+  await waitForRun(page);
+
+  const input = page.locator(".monaco-editor textarea.inputarea");
+  const code = page.locator(".monaco-editor .view-lines");
+  await expect(input).toHaveCSS("font-size", "16px");
+  await expect(code).toHaveCSS("font-size", "12px");
+
+  await input.focus();
+  await page.keyboard.press("ControlOrMeta+Home");
+  await page.keyboard.type("// Mobile typing\n");
+
+  await expect(code).toContainText("// Mobile typing");
+  await expect(input).toHaveCSS("font-size", "16px");
+
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await expect(input).toHaveCSS("font-size", "12px");
+});
+
 test("should set the editor's code size from the menu and keep it on reload", async ({ page }) => {
   await createProject(page, "Code size");
   await waitForRun(page);

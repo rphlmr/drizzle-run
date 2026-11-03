@@ -40,7 +40,7 @@ import type { SaveState } from "../workspace/save-state";
 import { GUIDE_SEEN_SETTING, readStepNoteMeta } from "./catalog";
 import { GuideRail, type GuideDone, type GuideLeave } from "./guide-rail";
 import { createGuidedStageMachine, getFilesBefore } from "./guided-stage-machine";
-import { describeChanges, describeComparedRun } from "./what-changed";
+import { describeComparedRun } from "./what-changed";
 
 /** The guide's last run, when it was one-version, kept to compare the output with. */
 interface GuideRun {
@@ -291,9 +291,6 @@ function GuidedSession({
     runLabel: `Step ${lastRun.step + 1} run`,
     earlier,
     compareLabel: since === "the last run" ? "vs last run" : since && `vs ${since}`,
-    note: earlier
-      ? `Results from step ${lastRun.step + 1}.`
-      : since && lastRun.changes && describeChanges(lastRun.changes, since),
   };
 
   const editorBar = locked ? (

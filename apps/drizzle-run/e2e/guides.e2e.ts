@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
-import type { Page } from "@playwright/test";
+import type { Locator, Page } from "@playwright/test";
 
 import { replaceEditorCode } from "./editor";
 import { answerLeaveWarnings, expect, test } from "./fixtures";
@@ -22,6 +22,32 @@ function getEditorLines(page: Page) {
 
 function getOutputRegion(page: Page) {
   return page.getByRole("region", { name: "Execution output" });
+}
+
+async function expectGuideActionShadowVisible(button: Locator) {
+  await button.scrollIntoViewIfNeeded();
+  const space = await button.evaluate((element) => {
+    let scrollArea = element.parentElement;
+
+    while (scrollArea && getComputedStyle(scrollArea).overflowY !== "auto") {
+      scrollArea = scrollArea.parentElement;
+    }
+
+    if (!scrollArea) {
+      throw new Error("Expected the guide action to be inside a scroll area");
+    }
+
+    const buttonRect = element.getBoundingClientRect();
+    const scrollRect = scrollArea.getBoundingClientRect();
+
+    return {
+      right: scrollRect.left + scrollArea.clientLeft + scrollArea.clientWidth - buttonRect.right,
+      bottom: scrollRect.top + scrollArea.clientTop + scrollArea.clientHeight - buttonRect.bottom,
+    };
+  });
+
+  expect(space.right).toBeGreaterThanOrEqual(2);
+  expect(space.bottom).toBeGreaterThanOrEqual(2);
 }
 
 async function openGuide(page: Page, slug: string, query = "") {
@@ -131,15 +157,12 @@ test("should apply each step's edit in a guided example, run it, and show what c
   await expect(getGuideRail(page)).toContainText("Keep the savepoint's update");
   await expect(getGuideRail(page).locator("[data-slot=guide-edits]")).toContainText("Changes in this step");
   await expect(getEditorLines(page)).not.toContainText("Changed our mind");
-  await expect(getOutputRegion(page).locator("[data-slot=output-note]")).toContainText("Results from step 1.");
+  await expect(getOutputRegion(page)).toContainText("Step 1 run");
+  await expect(getOutputRegion(page).locator("[data-slot=output-note]")).toHaveCount(0);
 
   await getGuideRail(page).getByRole("button", { name: /^Run/ }).click();
-  await expect(getOutputRegion(page).locator("[data-slot=output-note]")).toContainText(
-    "Balances: 1 row changed, 1 unchanged.",
-    {
-      timeout: 120_000,
-    },
-  );
+  await expect(getOutputRegion(page)).toContainText("Step 2 run", { timeout: 120_000 });
+  await expect(getOutputRegion(page).locator("[data-slot=output-note]")).toHaveCount(0);
   await expect(getOutputRegion(page)).toContainText("vs step 1");
   await expect(getOutputRegion(page).locator("[data-changed]")).toHaveCount(1);
   await expect(getGuideRail(page)).toContainText("released");
@@ -414,6 +437,7 @@ test("should show one side at a time on a phone during the relations step", asyn
   await expect(sqlLike).toBeVisible();
   await expect(rqb).toBeHidden();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await expectGuideActionShadowVisible(sheet.getByRole("button", { name: /^Run/ }));
 
   await sheet.getByRole("button", { name: /^Run/ }).click();
   await expect(sheet).toContainText("Step 4 of 7 done", { timeout: 120_000 });
@@ -482,6 +506,7 @@ test("should show the guide as a bottom sheet over the code on a phone", async (
   await sheet.getByRole("button", { name: /^Run/ }).click();
   await expect(sheet).toContainText("Step 2 of 7 done", { timeout: 120_000 });
   await expect(sheet.getByRole("button", { name: "Next step" })).toBeEnabled();
+  await expectGuideActionShadowVisible(sheet.getByRole("button", { name: "Next step" }));
 });
 
 test("should make the rail clamp(340px, 28vw, 440px) wide, and wrap step code instead of cutting it", async ({

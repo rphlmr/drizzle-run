@@ -2,7 +2,6 @@ import type { Diagnostic, QueryPlansSettings, RunResult, SqlEvent } from "@drizz
 import type { RunResultDiff } from "@drizzle-run/core/guide";
 import type { RunManifest } from "@drizzle-run/core/manifest";
 import { useRunActions, useRunSelector } from "@drizzle-run/react";
-import { InfoIcon } from "lucide-react";
 import { useState, type ReactNode } from "react";
 
 import { Segmented, SegmentedItem, SegmentedList, SegmentedPanel } from "../components/ui/segmented";
@@ -182,8 +181,6 @@ export interface OutputComparison {
   earlier: boolean;
   /** Shown on each changed result card, such as "vs step 1". */
   compareLabel?: string;
-  /** A dashed note under the result cards. */
-  note?: string;
 }
 
 export interface OutputPanelProps {
@@ -608,15 +605,6 @@ export function OutputPanel({
                       />
                     );
                   })}
-                  {compared?.note && (
-                    <p
-                      className="m-0 flex items-center gap-2.5 rounded-[12px] border border-dashed border-faint bg-surface px-3.5 py-3 text-[12.5px] text-muted [&>svg]:size-4 [&>svg]:shrink-0"
-                      data-slot="output-note"
-                    >
-                      <InfoIcon aria-hidden="true" />
-                      {compared.note}
-                    </p>
-                  )}
                 </div>
               ) : (
                 <OutputTimeline

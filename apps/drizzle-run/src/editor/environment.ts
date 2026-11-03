@@ -370,6 +370,8 @@ export async function prepareEditor(
     selected = models.has(initialPath) ? initialPath : models.keys().next().value;
     listeners.push(watchMonacoTheme(monaco));
     editor = monaco.editor.create(host, {
+      // Safari zooms focused inputs below 16px; keep the hidden input independent of the displayed code size.
+      extraEditorClassName: "max-phone:[&_textarea.inputarea]:text-[16px]!",
       model: models.get(selected ?? "") ?? null,
       theme: getMonacoThemeName(document.documentElement.dataset.theme),
       automaticLayout: true,

@@ -550,7 +550,7 @@ export function GuideRail({ guide, controls, leave: leaveMode, done, collapsed, 
           {segmentBar}
         </div>
         {!collapsed && (
-          <div className="flex min-h-0 flex-col gap-3 overflow-y-auto *:shrink-0">
+          <div className="-m-1 flex min-h-0 flex-col gap-3 overflow-y-auto p-1 *:shrink-0">
             {stage === "loading" ? (
               <StepCardSkeleton />
             ) : stage === "left" ? (
