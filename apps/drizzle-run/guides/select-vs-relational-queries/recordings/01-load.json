@@ -1,0 +1,1311 @@
+{
+  "recordingVersion": 1,
+  "snapshotDigest": "f44981e5e47c3ee92362d4374c15b9d81b948836e3ad367ed7cd32ae8ffe363d",
+  "recordedAt": "2026-10-28T20:10:03.252Z",
+  "sides": [
+    {
+      "version": 1,
+      "target": {
+        "dialect": "postgresql"
+      },
+      "tuple": {
+        "id": "postgresql-pglite__orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+        "target": {
+          "dialect": "postgresql"
+        },
+        "ormVersion": "1.0.0-rc.5",
+        "kitVersion": "1.0.0-rc.5"
+      },
+      "random": {
+        "effectiveSeed": 134548895,
+        "source": "derived",
+        "derivation": "run-manifest-sha256-u32-v1",
+        "generator": "mulberry32-v1"
+      },
+      "phases": [
+        {
+          "phase": "validate",
+          "status": "succeeded",
+          "startedAt": "2026-10-28T20:09:58.131Z",
+          "durationMs": 0.04500000178813934
+        },
+        {
+          "phase": "resolve",
+          "status": "succeeded",
+          "startedAt": "2026-10-28T20:09:58.131Z",
+          "durationMs": 0.005000010132789612
+        },
+        {
+          "phase": "load_artifacts",
+          "status": "succeeded",
+          "startedAt": "2026-10-28T20:09:58.131Z",
+          "durationMs": 0.36499999463558197
+        },
+        {
+          "phase": "compile",
+          "status": "succeeded",
+          "startedAt": "2026-10-28T20:09:58.314Z",
+          "durationMs": 2
+        },
+        {
+          "phase": "evaluate_schema",
+          "status": "succeeded",
+          "startedAt": "2026-10-28T20:09:58.317Z",
+          "durationMs": 1
+        },
+        {
+          "phase": "generate_bootstrap",
+          "status": "succeeded",
+          "startedAt": "2026-10-28T20:09:58.318Z",
+          "durationMs": 21
+        },
+        {
+          "phase": "open_database",
+          "status": "succeeded",
+          "startedAt": "2026-10-28T20:09:58.342Z",
+          "durationMs": 5
+        },
+        {
+          "phase": "apply_bootstrap",
+          "status": "succeeded",
+          "startedAt": "2026-10-28T20:09:58.345Z",
+          "durationMs": 23
+        },
+        {
+          "phase": "initialize_context",
+          "status": "succeeded",
+          "startedAt": "2026-10-28T20:09:58.368Z",
+          "durationMs": 1
+        },
+        {
+          "phase": "seed",
+          "status": "succeeded",
+          "startedAt": "2026-10-28T20:09:58.369Z",
+          "durationMs": 8
+        },
+        {
+          "phase": "run",
+          "status": "succeeded",
+          "startedAt": "2026-10-28T20:09:58.377Z",
+          "durationMs": 4
+        },
+        {
+          "phase": "inspect",
+          "status": "succeeded",
+          "startedAt": "2026-10-28T20:09:58.466Z",
+          "durationMs": 55
+        }
+      ],
+      "diagnostics": [],
+      "sql": [
+        {
+          "sequence": 1,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "CREATE TABLE \"posts\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"author_id\" integer NOT NULL,\n\t\"title\" text NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        },
+        {
+          "sequence": 2,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "CREATE TABLE \"users\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"name\" text NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        },
+        {
+          "sequence": 3,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "ALTER TABLE \"posts\" ADD CONSTRAINT \"posts_author_id_users_id_fkey\" FOREIGN KEY (\"author_id\") REFERENCES \"users\"(\"id\");",
+          "parameters": [],
+          "outcome": "succeeded"
+        },
+        {
+          "sequence": 4,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "BEGIN",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 4
+        },
+        {
+          "sequence": 5,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "CREATE TABLE \"posts\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"author_id\" integer NOT NULL,\n\t\"title\" text NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 7
+        },
+        {
+          "sequence": 6,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "CREATE TABLE \"users\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"name\" text NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 4
+        },
+        {
+          "sequence": 7,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "ALTER TABLE \"posts\" ADD CONSTRAINT \"posts_author_id_users_id_fkey\" FOREIGN KEY (\"author_id\") REFERENCES \"users\"(\"id\");",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 5
+        },
+        {
+          "sequence": 8,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "COMMIT",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 2
+        },
+        {
+          "sequence": 9,
+          "phase": "seed",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "insert into \"users\" (\"id\", \"name\") values (default, $1), (default, $2), (default, $3) returning \"id\", \"name\"",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": "Ada"
+            },
+            {
+              "type": "primitive",
+              "value": "Grace"
+            },
+            {
+              "type": "primitive",
+              "value": "Linus"
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "seed.ts",
+          "line": 4,
+          "durationMs": 3,
+          "rowCount": 3
+        },
+        {
+          "sequence": 10,
+          "phase": "seed",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "insert into \"posts\" (\"id\", \"author_id\", \"title\") values (default, $1, $2), (default, $3, $4), (default, $5, $6)",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": 1
+            },
+            {
+              "type": "primitive",
+              "value": "Hello, Drizzle"
+            },
+            {
+              "type": "primitive",
+              "value": 1
+            },
+            {
+              "type": "primitive",
+              "value": "Joins without the boilerplate"
+            },
+            {
+              "type": "primitive",
+              "value": 2
+            },
+            {
+              "type": "primitive",
+              "value": "Types all the way down"
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "seed.ts",
+          "line": 9,
+          "durationMs": 3,
+          "rowCount": 3
+        },
+        {
+          "sequence": 11,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "select \"users\".\"id\", \"users\".\"name\", \"posts\".\"title\" from \"users\" left join \"posts\" on \"posts\".\"author_id\" = \"users\".\"id\" order by \"users\".\"id\" asc, \"posts\".\"id\" asc",
+          "parameters": [],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 6,
+          "durationMs": 2,
+          "rowCount": 4
+        }
+      ],
+      "logs": [],
+      "value": {
+        "type": "undefined"
+      },
+      "displays": [
+        {
+          "label": "Joined rows",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "userId": {
+                      "type": "primitive",
+                      "value": 1
+                    },
+                    "name": {
+                      "type": "primitive",
+                      "value": "Ada"
+                    },
+                    "title": {
+                      "type": "primitive",
+                      "value": "Hello, Drizzle"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "userId": {
+                      "type": "primitive",
+                      "value": 1
+                    },
+                    "name": {
+                      "type": "primitive",
+                      "value": "Ada"
+                    },
+                    "title": {
+                      "type": "primitive",
+                      "value": "Joins without the boilerplate"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "userId": {
+                      "type": "primitive",
+                      "value": 2
+                    },
+                    "name": {
+                      "type": "primitive",
+                      "value": "Grace"
+                    },
+                    "title": {
+                      "type": "primitive",
+                      "value": "Types all the way down"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "userId": {
+                      "type": "primitive",
+                      "value": 3
+                    },
+                    "name": {
+                      "type": "primitive",
+                      "value": "Linus"
+                    },
+                    "title": {
+                      "type": "primitive",
+                      "value": null
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 12
+        }
+      ],
+      "events": [
+        {
+          "type": "sql",
+          "sequence": 1,
+          "payload": {
+            "sequence": 1,
+            "phase": "bootstrap",
+            "origin": "kit",
+            "kind": "generated",
+            "sql": "CREATE TABLE \"posts\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"author_id\" integer NOT NULL,\n\t\"title\" text NOT NULL\n);\n",
+            "parameters": [],
+            "outcome": "succeeded"
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 2,
+          "payload": {
+            "sequence": 2,
+            "phase": "bootstrap",
+            "origin": "kit",
+            "kind": "generated",
+            "sql": "CREATE TABLE \"users\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"name\" text NOT NULL\n);\n",
+            "parameters": [],
+            "outcome": "succeeded"
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 3,
+          "payload": {
+            "sequence": 3,
+            "phase": "bootstrap",
+            "origin": "kit",
+            "kind": "generated",
+            "sql": "ALTER TABLE \"posts\" ADD CONSTRAINT \"posts_author_id_users_id_fkey\" FOREIGN KEY (\"author_id\") REFERENCES \"users\"(\"id\");",
+            "parameters": [],
+            "outcome": "succeeded"
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 4,
+          "payload": {
+            "sequence": 4,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "BEGIN",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 4
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 5,
+          "payload": {
+            "sequence": 5,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "CREATE TABLE \"posts\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"author_id\" integer NOT NULL,\n\t\"title\" text NOT NULL\n);\n",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 7
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 6,
+          "payload": {
+            "sequence": 6,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "CREATE TABLE \"users\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"name\" text NOT NULL\n);\n",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 4
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 7,
+          "payload": {
+            "sequence": 7,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "ALTER TABLE \"posts\" ADD CONSTRAINT \"posts_author_id_users_id_fkey\" FOREIGN KEY (\"author_id\") REFERENCES \"users\"(\"id\");",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 5
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 8,
+          "payload": {
+            "sequence": 8,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "COMMIT",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 2
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 9,
+          "payload": {
+            "sequence": 9,
+            "phase": "seed",
+            "origin": "drizzle",
+            "kind": "executed",
+            "sql": "insert into \"users\" (\"id\", \"name\") values (default, $1), (default, $2), (default, $3) returning \"id\", \"name\"",
+            "parameters": [
+              {
+                "type": "primitive",
+                "value": "Ada"
+              },
+              {
+                "type": "primitive",
+                "value": "Grace"
+              },
+              {
+                "type": "primitive",
+                "value": "Linus"
+              }
+            ],
+            "outcome": "succeeded",
+            "source": "seed.ts",
+            "line": 4,
+            "durationMs": 3,
+            "rowCount": 3
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 10,
+          "payload": {
+            "sequence": 10,
+            "phase": "seed",
+            "origin": "drizzle",
+            "kind": "executed",
+            "sql": "insert into \"posts\" (\"id\", \"author_id\", \"title\") values (default, $1, $2), (default, $3, $4), (default, $5, $6)",
+            "parameters": [
+              {
+                "type": "primitive",
+                "value": 1
+              },
+              {
+                "type": "primitive",
+                "value": "Hello, Drizzle"
+              },
+              {
+                "type": "primitive",
+                "value": 1
+              },
+              {
+                "type": "primitive",
+                "value": "Joins without the boilerplate"
+              },
+              {
+                "type": "primitive",
+                "value": 2
+              },
+              {
+                "type": "primitive",
+                "value": "Types all the way down"
+              }
+            ],
+            "outcome": "succeeded",
+            "source": "seed.ts",
+            "line": 9,
+            "durationMs": 3,
+            "rowCount": 3
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 11,
+          "payload": {
+            "sequence": 11,
+            "phase": "run",
+            "origin": "drizzle",
+            "kind": "executed",
+            "sql": "select \"users\".\"id\", \"users\".\"name\", \"posts\".\"title\" from \"users\" left join \"posts\" on \"posts\".\"author_id\" = \"users\".\"id\" order by \"users\".\"id\" asc, \"posts\".\"id\" asc",
+            "parameters": [],
+            "outcome": "succeeded",
+            "source": "query.ts",
+            "line": 6,
+            "durationMs": 2,
+            "rowCount": 4
+          }
+        },
+        {
+          "type": "display",
+          "sequence": 12,
+          "payload": {
+            "label": "Joined rows",
+            "values": [
+              {
+                "type": "array",
+                "value": [
+                  {
+                    "type": "object",
+                    "value": {
+                      "userId": {
+                        "type": "primitive",
+                        "value": 1
+                      },
+                      "name": {
+                        "type": "primitive",
+                        "value": "Ada"
+                      },
+                      "title": {
+                        "type": "primitive",
+                        "value": "Hello, Drizzle"
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "value": {
+                      "userId": {
+                        "type": "primitive",
+                        "value": 1
+                      },
+                      "name": {
+                        "type": "primitive",
+                        "value": "Ada"
+                      },
+                      "title": {
+                        "type": "primitive",
+                        "value": "Joins without the boilerplate"
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "value": {
+                      "userId": {
+                        "type": "primitive",
+                        "value": 2
+                      },
+                      "name": {
+                        "type": "primitive",
+                        "value": "Grace"
+                      },
+                      "title": {
+                        "type": "primitive",
+                        "value": "Types all the way down"
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "value": {
+                      "userId": {
+                        "type": "primitive",
+                        "value": 3
+                      },
+                      "name": {
+                        "type": "primitive",
+                        "value": "Linus"
+                      },
+                      "title": {
+                        "type": "primitive",
+                        "value": null
+                      }
+                    }
+                  }
+                ]
+              }
+            ],
+            "source": "query.ts",
+            "line": 12
+          }
+        }
+      ],
+      "cleanupErrors": [],
+      "cleanup": {
+        "guest": {
+          "mode": "graceful"
+        },
+        "database": {
+          "mode": "graceful"
+        }
+      },
+      "timings": {
+        "total": 397,
+        "validate": 0.04500000178813934,
+        "resolve": 0.005000010132789612,
+        "load_artifacts": 0.36499999463558197,
+        "compile": 2,
+        "evaluate_schema": 1,
+        "generate_bootstrap": 21,
+        "open_database": 5,
+        "apply_bootstrap": 23,
+        "initialize_context": 1,
+        "seed": 8,
+        "run": 4,
+        "inspect": 55
+      },
+      "ok": true,
+      "outcome": "succeeded"
+    },
+    {
+      "version": 1,
+      "target": {
+        "dialect": "postgresql"
+      },
+      "tuple": {
+        "id": "postgresql-pglite__orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+        "target": {
+          "dialect": "postgresql"
+        },
+        "ormVersion": "1.0.0-rc.5",
+        "kitVersion": "1.0.0-rc.5"
+      },
+      "random": {
+        "effectiveSeed": 1765377901,
+        "source": "derived",
+        "derivation": "run-manifest-sha256-u32-v1",
+        "generator": "mulberry32-v1"
+      },
+      "phases": [
+        {
+          "phase": "validate",
+          "status": "succeeded",
+          "startedAt": "2026-10-28T20:10:02.446Z",
+          "durationMs": 0.03500001132488251
+        },
+        {
+          "phase": "resolve",
+          "status": "succeeded",
+          "startedAt": "2026-10-28T20:10:02.446Z",
+          "durationMs": 0
+        },
+        {
+          "phase": "load_artifacts",
+          "status": "succeeded",
+          "startedAt": "2026-10-28T20:10:02.447Z",
+          "durationMs": 0.3149999976158142
+        },
+        {
+          "phase": "compile",
+          "status": "succeeded",
+          "startedAt": "2026-10-28T20:10:02.554Z",
+          "durationMs": 2
+        },
+        {
+          "phase": "evaluate_schema",
+          "status": "succeeded",
+          "startedAt": "2026-10-28T20:10:02.556Z",
+          "durationMs": 1
+        },
+        {
+          "phase": "generate_bootstrap",
+          "status": "succeeded",
+          "startedAt": "2026-10-28T20:10:02.557Z",
+          "durationMs": 16
+        },
+        {
+          "phase": "open_database",
+          "status": "succeeded",
+          "startedAt": "2026-10-28T20:10:02.575Z",
+          "durationMs": 2
+        },
+        {
+          "phase": "apply_bootstrap",
+          "status": "succeeded",
+          "startedAt": "2026-10-28T20:10:02.577Z",
+          "durationMs": 18
+        },
+        {
+          "phase": "initialize_context",
+          "status": "succeeded",
+          "startedAt": "2026-10-28T20:10:02.596Z",
+          "durationMs": 1
+        },
+        {
+          "phase": "seed",
+          "status": "succeeded",
+          "startedAt": "2026-10-28T20:10:02.596Z",
+          "durationMs": 6
+        },
+        {
+          "phase": "run",
+          "status": "succeeded",
+          "startedAt": "2026-10-28T20:10:02.603Z",
+          "durationMs": 3
+        },
+        {
+          "phase": "inspect",
+          "status": "succeeded",
+          "startedAt": "2026-10-28T20:10:02.674Z",
+          "durationMs": 59
+        }
+      ],
+      "diagnostics": [],
+      "sql": [
+        {
+          "sequence": 1,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "CREATE TABLE \"posts\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"author_id\" integer NOT NULL,\n\t\"title\" text NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        },
+        {
+          "sequence": 2,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "CREATE TABLE \"users\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"name\" text NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        },
+        {
+          "sequence": 3,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "ALTER TABLE \"posts\" ADD CONSTRAINT \"posts_author_id_users_id_fkey\" FOREIGN KEY (\"author_id\") REFERENCES \"users\"(\"id\");",
+          "parameters": [],
+          "outcome": "succeeded"
+        },
+        {
+          "sequence": 4,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "BEGIN",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 3
+        },
+        {
+          "sequence": 5,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "CREATE TABLE \"posts\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"author_id\" integer NOT NULL,\n\t\"title\" text NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 7
+        },
+        {
+          "sequence": 6,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "CREATE TABLE \"users\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"name\" text NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 3
+        },
+        {
+          "sequence": 7,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "ALTER TABLE \"posts\" ADD CONSTRAINT \"posts_author_id_users_id_fkey\" FOREIGN KEY (\"author_id\") REFERENCES \"users\"(\"id\");",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 4
+        },
+        {
+          "sequence": 8,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "COMMIT",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 1
+        },
+        {
+          "sequence": 9,
+          "phase": "seed",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "insert into \"users\" (\"id\", \"name\") values (default, $1), (default, $2), (default, $3) returning \"id\", \"name\"",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": "Ada"
+            },
+            {
+              "type": "primitive",
+              "value": "Grace"
+            },
+            {
+              "type": "primitive",
+              "value": "Linus"
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "seed.ts",
+          "line": 4,
+          "durationMs": 3,
+          "rowCount": 3
+        },
+        {
+          "sequence": 10,
+          "phase": "seed",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "insert into \"posts\" (\"id\", \"author_id\", \"title\") values (default, $1, $2), (default, $3, $4), (default, $5, $6)",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": 1
+            },
+            {
+              "type": "primitive",
+              "value": "Hello, Drizzle"
+            },
+            {
+              "type": "primitive",
+              "value": 1
+            },
+            {
+              "type": "primitive",
+              "value": "Joins without the boilerplate"
+            },
+            {
+              "type": "primitive",
+              "value": 2
+            },
+            {
+              "type": "primitive",
+              "value": "Types all the way down"
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "seed.ts",
+          "line": 9,
+          "durationMs": 3,
+          "rowCount": 3
+        },
+        {
+          "sequence": 11,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "select \"d0\".\"name\" as \"name\", \"posts\".\"r\" as \"posts\" from \"users\" as \"d0\" left join lateral(select coalesce(json_agg(row_to_json(\"t\".*)), '[]') as \"r\" from (select \"d1\".\"title\" as \"title\" from \"posts\" as \"d1\" where \"d0\".\"id\" = \"d1\".\"author_id\" order by \"d1\".\"id\" asc) as \"t\") as \"posts\" on true order by \"d0\".\"id\" asc",
+          "parameters": [],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 5,
+          "durationMs": 3,
+          "rowCount": 3
+        }
+      ],
+      "logs": [],
+      "value": {
+        "type": "undefined"
+      },
+      "displays": [
+        {
+          "label": "Authors with posts",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "name": {
+                      "type": "primitive",
+                      "value": "Ada"
+                    },
+                    "posts": {
+                      "type": "array",
+                      "value": [
+                        {
+                          "type": "object",
+                          "value": {
+                            "title": {
+                              "type": "primitive",
+                              "value": "Hello, Drizzle"
+                            }
+                          }
+                        },
+                        {
+                          "type": "object",
+                          "value": {
+                            "title": {
+                              "type": "primitive",
+                              "value": "Joins without the boilerplate"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "name": {
+                      "type": "primitive",
+                      "value": "Grace"
+                    },
+                    "posts": {
+                      "type": "array",
+                      "value": [
+                        {
+                          "type": "object",
+                          "value": {
+                            "title": {
+                              "type": "primitive",
+                              "value": "Types all the way down"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "name": {
+                      "type": "primitive",
+                      "value": "Linus"
+                    },
+                    "posts": {
+                      "type": "array",
+                      "value": []
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 16
+        }
+      ],
+      "events": [
+        {
+          "type": "sql",
+          "sequence": 1,
+          "payload": {
+            "sequence": 1,
+            "phase": "bootstrap",
+            "origin": "kit",
+            "kind": "generated",
+            "sql": "CREATE TABLE \"posts\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"author_id\" integer NOT NULL,\n\t\"title\" text NOT NULL\n);\n",
+            "parameters": [],
+            "outcome": "succeeded"
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 2,
+          "payload": {
+            "sequence": 2,
+            "phase": "bootstrap",
+            "origin": "kit",
+            "kind": "generated",
+            "sql": "CREATE TABLE \"users\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"name\" text NOT NULL\n);\n",
+            "parameters": [],
+            "outcome": "succeeded"
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 3,
+          "payload": {
+            "sequence": 3,
+            "phase": "bootstrap",
+            "origin": "kit",
+            "kind": "generated",
+            "sql": "ALTER TABLE \"posts\" ADD CONSTRAINT \"posts_author_id_users_id_fkey\" FOREIGN KEY (\"author_id\") REFERENCES \"users\"(\"id\");",
+            "parameters": [],
+            "outcome": "succeeded"
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 4,
+          "payload": {
+            "sequence": 4,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "BEGIN",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 3
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 5,
+          "payload": {
+            "sequence": 5,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "CREATE TABLE \"posts\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"author_id\" integer NOT NULL,\n\t\"title\" text NOT NULL\n);\n",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 7
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 6,
+          "payload": {
+            "sequence": 6,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "CREATE TABLE \"users\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"name\" text NOT NULL\n);\n",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 3
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 7,
+          "payload": {
+            "sequence": 7,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "ALTER TABLE \"posts\" ADD CONSTRAINT \"posts_author_id_users_id_fkey\" FOREIGN KEY (\"author_id\") REFERENCES \"users\"(\"id\");",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 4
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 8,
+          "payload": {
+            "sequence": 8,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "COMMIT",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 1
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 9,
+          "payload": {
+            "sequence": 9,
+            "phase": "seed",
+            "origin": "drizzle",
+            "kind": "executed",
+            "sql": "insert into \"users\" (\"id\", \"name\") values (default, $1), (default, $2), (default, $3) returning \"id\", \"name\"",
+            "parameters": [
+              {
+                "type": "primitive",
+                "value": "Ada"
+              },
+              {
+                "type": "primitive",
+                "value": "Grace"
+              },
+              {
+                "type": "primitive",
+                "value": "Linus"
+              }
+            ],
+            "outcome": "succeeded",
+            "source": "seed.ts",
+            "line": 4,
+            "durationMs": 3,
+            "rowCount": 3
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 10,
+          "payload": {
+            "sequence": 10,
+            "phase": "seed",
+            "origin": "drizzle",
+            "kind": "executed",
+            "sql": "insert into \"posts\" (\"id\", \"author_id\", \"title\") values (default, $1, $2), (default, $3, $4), (default, $5, $6)",
+            "parameters": [
+              {
+                "type": "primitive",
+                "value": 1
+              },
+              {
+                "type": "primitive",
+                "value": "Hello, Drizzle"
+              },
+              {
+                "type": "primitive",
+                "value": 1
+              },
+              {
+                "type": "primitive",
+                "value": "Joins without the boilerplate"
+              },
+              {
+                "type": "primitive",
+                "value": 2
+              },
+              {
+                "type": "primitive",
+                "value": "Types all the way down"
+              }
+            ],
+            "outcome": "succeeded",
+            "source": "seed.ts",
+            "line": 9,
+            "durationMs": 3,
+            "rowCount": 3
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 11,
+          "payload": {
+            "sequence": 11,
+            "phase": "run",
+            "origin": "drizzle",
+            "kind": "executed",
+            "sql": "select \"d0\".\"name\" as \"name\", \"posts\".\"r\" as \"posts\" from \"users\" as \"d0\" left join lateral(select coalesce(json_agg(row_to_json(\"t\".*)), '[]') as \"r\" from (select \"d1\".\"title\" as \"title\" from \"posts\" as \"d1\" where \"d0\".\"id\" = \"d1\".\"author_id\" order by \"d1\".\"id\" asc) as \"t\") as \"posts\" on true order by \"d0\".\"id\" asc",
+            "parameters": [],
+            "outcome": "succeeded",
+            "source": "query.ts",
+            "line": 5,
+            "durationMs": 3,
+            "rowCount": 3
+          }
+        },
+        {
+          "type": "display",
+          "sequence": 12,
+          "payload": {
+            "label": "Authors with posts",
+            "values": [
+              {
+                "type": "array",
+                "value": [
+                  {
+                    "type": "object",
+                    "value": {
+                      "name": {
+                        "type": "primitive",
+                        "value": "Ada"
+                      },
+                      "posts": {
+                        "type": "array",
+                        "value": [
+                          {
+                            "type": "object",
+                            "value": {
+                              "title": {
+                                "type": "primitive",
+                                "value": "Hello, Drizzle"
+                              }
+                            }
+                          },
+                          {
+                            "type": "object",
+                            "value": {
+                              "title": {
+                                "type": "primitive",
+                                "value": "Joins without the boilerplate"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "value": {
+                      "name": {
+                        "type": "primitive",
+                        "value": "Grace"
+                      },
+                      "posts": {
+                        "type": "array",
+                        "value": [
+                          {
+                            "type": "object",
+                            "value": {
+                              "title": {
+                                "type": "primitive",
+                                "value": "Types all the way down"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "value": {
+                      "name": {
+                        "type": "primitive",
+                        "value": "Linus"
+                      },
+                      "posts": {
+                        "type": "array",
+                        "value": []
+                      }
+                    }
+                  }
+                ]
+              }
+            ],
+            "source": "query.ts",
+            "line": 16
+          }
+        }
+      ],
+      "cleanupErrors": [],
+      "cleanup": {
+        "guest": {
+          "mode": "graceful"
+        },
+        "database": {
+          "mode": "graceful"
+        }
+      },
+      "timings": {
+        "total": 292,
+        "validate": 0.03500001132488251,
+        "resolve": 0,
+        "load_artifacts": 0.3149999976158142,
+        "compile": 2,
+        "evaluate_schema": 1,
+        "generate_bootstrap": 16,
+        "open_database": 2,
+        "apply_bootstrap": 18,
+        "initialize_context": 1,
+        "seed": 6,
+        "run": 3,
+        "inspect": 59
+      },
+      "ok": true,
+      "outcome": "succeeded"
+    }
+  ],
+  "guests": [
+    {
+      "imageId": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+      "lockDigest": "sha256-173d5c06268596c4f200f2c55999d19e7020ea73b9767d6f1cb6c8b2851731b1"
+    },
+    {
+      "imageId": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+      "lockDigest": "sha256-173d5c06268596c4f200f2c55999d19e7020ea73b9767d6f1cb6c8b2851731b1"
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+name: Setup
+description: Install pnpm, Node and dependencies, and restore guest and Turborepo caches.
+
+outputs:
+  guest-cache-key:
+    description: Exact key of the guest content caches, for the job that saves them
+    value: ${{ steps.cache-keys.outputs.guest-key }}
+  guest-cache-hit:
+    description: Whether the guest content caches were restored from their exact key
+    value: ${{ steps.guest-cache.outputs.cache-hit }}
+  turbo-cache-key:
+    description: Exact key of the Turborepo cache, for the job that saves it
+    value: ${{ steps.cache-keys.outputs.turbo-key }}
+
+runs:
+  using: composite
+  steps:
+    - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4.4.0
+    - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+      with:
+        node-version-file: .node-version
+        cache: pnpm
+    - run: pnpm install --frozen-lockfile
+      shell: bash
+    # The guest install key holds the npm major, which no file shows, so these keys name it. Each script reuses what
+    # is still current by its own content key, so a lock change in one guest restores the others from the latest
+    # entry. The Turborepo cache is keyed by commit: a pull request restores its own latest entry, else main's.
+    - id: cache-keys
+      shell: bash
+      run: |
+        npm_major="$(npm --version | cut -d. -f1)"
+        guest_prefix="guest-caches-${{ runner.os }}-${{ runner.arch }}-npm${npm_major}-"
+        turbo_prefix="turbo-${{ runner.os }}-${{ runner.arch }}-"
+        echo "guest-prefix=${guest_prefix}" >> "$GITHUB_OUTPUT"
+        echo "guest-key=${guest_prefix}${{ hashFiles('guests/*/package.json', 'guests/*/package-lock.json', 'scripts/guests/install.ts') }}" >> "$GITHUB_OUTPUT"
+        echo "turbo-prefix=${turbo_prefix}" >> "$GITHUB_OUTPUT"
+        echo "turbo-key=${turbo_prefix}${{ github.sha }}" >> "$GITHUB_OUTPUT"
+    - id: guest-cache
+      uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+      with:
+        path: |
+          .cache/guests
+          .cache/guest-runtime-installs
+          .cache/type-artifacts
+        key: ${{ steps.cache-keys.outputs.guest-key }}
+        restore-keys: ${{ steps.cache-keys.outputs.guest-prefix }}
+    - uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+      with:
+        path: .turbo/cache
+        key: ${{ steps.cache-keys.outputs.turbo-key }}
+        restore-keys: ${{ steps.cache-keys.outputs.turbo-prefix }}

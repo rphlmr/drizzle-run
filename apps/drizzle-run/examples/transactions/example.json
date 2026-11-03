@@ -1,0 +1,13 @@
+{
+  "id": "ee9bf870-ca60-4975-a7e3-f9e12000cb40",
+  "slug": "transactions",
+  "status": "published",
+  "title": "Transactions and savepoints",
+  "description": "Transfer between accounts, roll back a savepoint, and check which writes are kept.",
+  "topic": "Transactions",
+  "featured": false,
+  "order": 40,
+  "dialect": "postgresql",
+  "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+  "links": [{ "kind": "docs", "label": "Transactions", "url": "https://orm.drizzle.team/docs/transactions" }]
+}

@@ -1,0 +1,14 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`clipboard machine paths > should preserve the transition table 1`] = `
+[
+  "idle text="" --clipboard.copy--> copying text="link"",
+  "copying text="link" --clipboard.copy--> copying text="link"",
+  "copying text="link" --done(writeText)--> copied text="link"",
+  "copying text="link" --error(writeText)--> failed text="link"",
+  "copied text="link" --clipboard.copy--> copying text="link"",
+  "copied text="link" --xstate.after.2000.clipboard.copied--> idle text="link"",
+  "failed text="link" --clipboard.copy--> copying text="link"",
+  "idle text="link" --clipboard.copy--> copying text="link"",
+]
+`;

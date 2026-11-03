@@ -1,0 +1,24 @@
+{
+  "id": "cfa5f6bd-6005-4d4d-b760-72b7a0192ee1",
+  "slug": "files-with-comments-and-tags",
+  "status": "published",
+  "title": "Files with comments, authors and tags",
+  "description": "A complete PostgreSQL starter: aggregate each relation separately and filter files without losing their other tags.",
+  "topic": "Queries",
+  "featured": false,
+  "order": 80,
+  "dialect": "postgresql",
+  "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+  "links": [
+    {
+      "kind": "docs",
+      "label": "SQL expressions",
+      "url": "https://orm.drizzle.team/docs/sql"
+    },
+    {
+      "kind": "example",
+      "label": "Learn nested SQL results",
+      "slug": "nested-sql-results"
+    }
+  ]
+}

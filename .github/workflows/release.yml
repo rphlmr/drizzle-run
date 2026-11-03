@@ -1,0 +1,234 @@
+name: Release
+
+# On every push to main:
+#
+#   pending changesets ──▶ Version Packages pull request opened or updated ──▶ next.drizzle.run redeployed
+#   Version Packages merged ──▶ SDK and companion tarballs published to npm ──▶ production deployed
+#
+# Production deploys while the app's version has no `drizzle-run-app@<version>` tag and no changeset is pending, and
+# tags it once deployed. So a run GitHub drops from the queue, or a failed deploy, is caught up by the next push that
+# brings no changeset, at the latest when the next Version Packages pull request merges.
+#
+# Credentials stay out of reach of the install and the builds: npm publishes through trusted publishing (OIDC) from a
+# job that runs no repository code, only `npm publish` of the tarball the pack job built, in the `npm` environment the
+# npm trusted publisher names. CLOUDFLARE_API_TOKEN reaches only the steps that call Cloudflare, and no job keeps git
+# credentials. Third-party actions are pinned by commit.
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+# Releases run one after another, in push order, and are never cancelled halfway.
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  packages:
+    name: Version Packages pull request
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      pull-requests: write
+    outputs:
+      has-changesets: ${{ steps.changesets.outputs.has-changesets }}
+      app-version: ${{ steps.app-version.outputs.version }}
+      app-deployed: ${{ steps.app-version.outputs.deployed }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      # `changeset version` needs the dependencies only, not the shared setup's builds and caches.
+      - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4.4.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # Merging the Version Packages pull request is what bumps the app's version.
+      - id: app-version
+        run: |
+          version="$(node -p "require('./apps/drizzle-run/package.json').version")"
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+          if git rev-parse -q --verify "refs/tags/drizzle-run-app@${version}" > /dev/null; then
+            echo "deployed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "deployed=false" >> "$GITHUB_OUTPUT"
+          fi
+      # Opens or updates the pull request through the GitHub API with its github-token input. Without a publish
+      # script, it publishes nothing: the pack and publish jobs do.
+      - id: changesets
+        uses: changesets/action@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
+        with:
+          version-script: pnpm version-packages
+
+  pack:
+    name: Pack the SDK and companion
+    needs: packages
+    if: needs.packages.outputs.has-changesets == 'false'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      unpublished: ${{ steps.pack.outputs.unpublished }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup
+      - run: pnpm exec turbo run build test:pack --filter='./packages/*'
+      - run: pnpm test:sdk-api && pnpm --filter @drizzle-run/runtime test:sdk
+      - id: pack
+        run: node scripts/pack-release.ts "${RUNNER_TEMP}/packages"
+      - if: steps.pack.outputs.unpublished == 'true'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: release-packages
+          path: ${{ runner.temp }}/packages/
+          if-no-files-found: error
+          retention-days: 7
+
+  publish:
+    name: Publish the SDK and companion to npm
+    needs: pack
+    if: needs.pack.outputs.unpublished == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # Every released package's npm trusted publisher must name this environment.
+    environment: npm
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 26.13.0
+      # Trusted publishing needs npm 11.5 or later.
+      - run: npm install -g npm@12.2.0
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: release-packages
+          path: packages
+      - run: |
+          for tarball in packages/*/*.tgz; do
+            npm publish "$tarball" --provenance --access public
+          done
+
+  next:
+    name: Deploy next.drizzle.run
+    needs: packages
+    if: needs.packages.outputs.has-changesets == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    environment:
+      name: next
+      url: https://next.drizzle.run
+    env:
+      CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup
+      # The upcoming companion, from the commit the Version Packages pull request is built on.
+      - uses: ./.github/actions/publish-companion
+        with:
+          sha: ${{ github.sha }}
+          comment: "off"
+      - run: node apps/drizzle-run/scripts/manage-deploy-environment.ts prepare --name next --account-id "$CLOUDFLARE_ACCOUNT_ID"
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      # Verified on workers.dev: a first deploy's custom domain can take minutes to get its certificate, and its new
+      # workers.dev host a few minutes to answer.
+      - run: >-
+          pnpm --filter @drizzle-run/app run release
+          --config wrangler.deploy.json
+          --bucket drizzle-run-next-assets
+          --account-id "$CLOUDFLARE_ACCOUNT_ID"
+          --url "https://drizzle-run-next.${{ vars.WORKERS_SUBDOMAIN }}.workers.dev"
+          --verify-timeout 180
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      # The deployed upcoming release in a real browser, from the build the release just deployed, on workers.dev:
+      # next.drizzle.run's certificate can take minutes on a first deploy.
+      - uses: ./.github/actions/playwright-browser
+      - run: pnpm test:deployed
+        env:
+          DRIZZLE_RUN_DEPLOYED_URL: https://drizzle-run-next.${{ vars.WORKERS_SUBDOMAIN }}.workers.dev
+          DRIZZLE_RUN_DEPLOYED_SEARCH_INDEXING: "off"
+      # next.drizzle.run itself, where only SEARCH_INDEXING keeps the upcoming release out of search: workers.dev hides
+      # every deploy anyway. A first deploy's certificate can take minutes, so the domain must answer first.
+      - run: curl --silent --show-error --fail --output /dev/null --retry 30 --retry-delay 20 --retry-all-errors https://next.drizzle.run
+      - run: pnpm test:deployed --grep "search engines"
+        env:
+          DRIZZLE_RUN_DEPLOYED_URL: https://next.drizzle.run
+          DRIZZLE_RUN_DEPLOYED_SEARCH_INDEXING: "off"
+      - if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: deployed-test-results-next
+          path: test-results
+          if-no-files-found: ignore
+          retention-days: 7
+
+  production:
+    name: Deploy production
+    needs: [packages, pack, publish]
+    # Not while changesets are pending: main then holds work meant for next, which only the Version Packages pull
+    # request may release. A skipped publish is valid only when every exact package version already exists.
+    if: >-
+      !cancelled() &&
+      needs.packages.result == 'success' &&
+      needs.pack.result == 'success' &&
+      needs.packages.outputs.app-deployed == 'false' &&
+      needs.packages.outputs.has-changesets == 'false' &&
+      ((needs.pack.outputs.unpublished == 'true' && needs.publish.result == 'success') ||
+       (needs.pack.outputs.unpublished == 'false' && needs.publish.result == 'skipped'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: write
+    environment:
+      name: production
+      url: ${{ vars.PRODUCTION_URL }}
+    env:
+      CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+      APP_TAG: drizzle-run-app@${{ needs.packages.outputs.app-version }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup
+      - run: >-
+          pnpm --filter @drizzle-run/app run release
+          --bucket drizzle-run-assets
+          --account-id "$CLOUDFLARE_ACCOUNT_ID"
+          --url "${{ vars.PRODUCTION_URL }}"
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      # Only after a verified release, so a failed one deploys again on the next push. Through the API, so the token
+      # never sat in git config while the install and build ran. A rerun of this job finds its own tag and goes on.
+      - run: |
+          tagged=$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${APP_TAG}" --jq .object.sha 2> /dev/null || true)
+          if [ "$tagged" != "$GITHUB_SHA" ]; then
+            gh api "repos/${GITHUB_REPOSITORY}/git/refs" -f "ref=refs/tags/${APP_TAG}" -f "sha=${GITHUB_SHA}"
+          fi
+        env:
+          GH_TOKEN: ${{ github.token }}
+      # Production in a real browser, from the build the release just deployed. After the tag: the release is live
+      # either way, and a failure here needs a fix, not the same deploy again.
+      - uses: ./.github/actions/playwright-browser
+      - run: pnpm test:deployed
+        env:
+          DRIZZLE_RUN_DEPLOYED_URL: ${{ vars.PRODUCTION_URL }}
+      - if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: deployed-test-results-production
+          path: test-results
+          if-no-files-found: ignore
+          retention-days: 7

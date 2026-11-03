@@ -1,0 +1,172 @@
+{
+  "$schema": "./node_modules/turbo/schema.json",
+  "cacheDir": ".turbo/cache",
+  "globalDependencies": [".node-version", "tsconfig.base.json"],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$"],
+      "outputs": ["dist/**"]
+    },
+    "@drizzle-run/core#build": {
+      "dependsOn": ["^build", "//#guests:catalog"],
+      "inputs": ["$TURBO_DEFAULT$"],
+      "outputs": ["dist/**"]
+    },
+    "@drizzle-run/runtime#generate:types": {
+      "dependsOn": ["^build", "//#guests:install"],
+      "inputs": [
+        "package.json",
+        "scripts/generate-type-artifacts.ts",
+        "scripts/package-exports.ts",
+        "$TURBO_ROOT$/guests/*/package.json",
+        "$TURBO_ROOT$/guests/*/package-lock.json",
+        "$TURBO_ROOT$/scripts/guests/**"
+      ],
+      "outputs": ["artifacts/declarations/**"],
+      "outputLogs": "new-only"
+    },
+    "@drizzle-run/runtime#build": {
+      "dependsOn": ["^build", "generate:types", "//#guests:catalog"],
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/guests/**", "$TURBO_ROOT$/scripts/guests/**"],
+      "outputs": [
+        "dist/**",
+        "src/assets/*.generated.ts",
+        "$TURBO_ROOT$/.cache/runtime-assets/r2/**",
+        "$TURBO_ROOT$/.cache/runtime-assets/quickjs/**"
+      ]
+    },
+    "@drizzle-run/connect#build": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$"],
+      "outputs": ["dist/**"],
+      "env": ["VITE_CONNECT_PACKAGE"]
+    },
+    "@drizzle-run/app#build": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/scripts/drizzle-run-ports.ts"],
+      "outputs": [
+        "dist/**",
+        ".wrangler/deploy/**",
+        ".cache/embed/**",
+        "public/og/**",
+        "guides/*/guide.json",
+        "worker/examples.generated.ts"
+      ],
+      "env": ["DRIZZLE_RUN_WRANGLER_CONFIG", "DRIZZLE_RUN_WRANGLER_CONFIG_SHA256", "VITE_CONNECT_PACKAGE"],
+      "passThroughEnv": [
+        "DRIZZLE_RUN_VITE_CACHE_DIR",
+        "DRIZZLE_RUN_STATE_DIR",
+        "DRIZZLE_RUN_PORT",
+        "DRIZZLE_RUN_FIXTURE_PORT"
+      ]
+    },
+    "typecheck": {
+      "dependsOn": ["build"],
+      "inputs": ["$TURBO_DEFAULT$"],
+      "outputs": []
+    },
+    "@drizzle-run/capability-harness#typecheck": {
+      "dependsOn": ["^build", "//#guests:install"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/guests/*/package.json",
+        "$TURBO_ROOT$/guests/*/package-lock.json",
+        "$TURBO_ROOT$/scripts/guests/**"
+      ],
+      "outputs": []
+    },
+    "@drizzle-run/app#typecheck": {
+      "dependsOn": ["build"],
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/scripts/drizzle-run-ports.ts"],
+      "outputs": []
+    },
+    "typecheck:worker": {
+      "dependsOn": ["build"],
+      "inputs": ["$TURBO_DEFAULT$"],
+      "outputs": []
+    },
+    "typecheck:e2e": {
+      "dependsOn": ["build"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/playwright.config.ts",
+        "$TURBO_ROOT$/playwright.guides.config.ts",
+        "$TURBO_ROOT$/scripts/drizzle-run-ports.ts"
+      ],
+      "outputs": []
+    },
+    "test": {
+      "dependsOn": ["build"],
+      "inputs": ["$TURBO_DEFAULT$"],
+      "outputs": ["coverage/**"],
+      "env": ["CI"]
+    },
+    "@drizzle-run/app#test": {
+      "dependsOn": ["build"],
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/scripts/drizzle-run-ports.ts"],
+      "outputs": ["coverage/**"],
+      "env": ["CI"]
+    },
+    "test:worker": {
+      "dependsOn": ["build"],
+      "inputs": ["$TURBO_DEFAULT$"],
+      "outputs": [],
+      "env": ["CI"]
+    },
+    "test:pack": {
+      "dependsOn": ["build"],
+      "inputs": ["$TURBO_DEFAULT$"],
+      "outputs": []
+    },
+    "//#lint:workspace": {
+      "dependsOn": [
+        "@drizzle-run/core#build",
+        "@drizzle-run/connect#build",
+        "@drizzle-run/runtime#build",
+        "@drizzle-run/react#build"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".oxlintrc.json",
+        "packages/**",
+        "testing/**",
+        "apps/**",
+        "!**/node_modules/**",
+        "!**/dist/**",
+        "!**/coverage/**",
+        "!**/.turbo/**",
+        "!**/.wrangler/**",
+        "!**/*.tsbuildinfo",
+        "!apps/drizzle-run/public/og/**"
+      ],
+      "outputs": []
+    },
+    "//#guests:install": {
+      "inputs": [
+        "guests/*/package.json",
+        "guests/*/package-lock.json",
+        "scripts/guests/install.ts",
+        "scripts/guests/guest-packages.ts"
+      ],
+      "outputs": [],
+      "outputLogs": "new-only"
+    },
+    "//#guests:catalog": {
+      "dependsOn": ["//#guests:install"],
+      "inputs": [
+        "guests/*/package.json",
+        "guests/*/package-lock.json",
+        "scripts/guests/**",
+        "packages/runtime/package.json"
+      ],
+      "outputs": ["packages/core/src/releases/guest-catalog.generated.ts"],
+      "outputLogs": "new-only"
+    },
+    "//#test:runtime": {
+      "dependsOn": ["@drizzle-run/runtime#build"],
+      "cache": false,
+      "passThroughEnv": ["DRIZZLE_RUN_ACCEPTANCE_*", "DRIZZLE_RUN_KIT_PARITY_*"]
+    }
+  }
+}

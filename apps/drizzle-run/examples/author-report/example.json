@@ -1,0 +1,24 @@
+{
+  "id": "fdca054e-2ef4-4ad3-a1f6-e7e45f376d59",
+  "slug": "author-report",
+  "status": "published",
+  "title": "Author report with a CTE",
+  "description": "Count published posts and views per author, keep authors with no posts, and filter by a computed total.",
+  "topic": "Queries",
+  "featured": false,
+  "order": 70,
+  "dialect": "postgresql",
+  "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+  "links": [
+    {
+      "kind": "docs",
+      "label": "Subqueries and CTEs",
+      "url": "https://orm.drizzle.team/docs/select"
+    },
+    {
+      "kind": "example",
+      "label": "Learn subqueries",
+      "slug": "subqueries"
+    }
+  ]
+}

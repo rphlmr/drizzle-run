@@ -1,0 +1,319 @@
+/*
+ * Tailwind theme keys for the design tokens. Values stay in tokens.css; `inline`
+ * makes each utility read the token itself, so a theme switch repaints without a
+ * reload. styles.test.ts checks that every color key is a token reference.
+ */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-text: var(--text);
+  --color-soft: var(--text-soft);
+  --color-muted: var(--text-muted);
+  --color-faint: var(--text-faint);
+  --color-accent-text: var(--accent-text);
+  --color-lime: var(--lime);
+  --color-lime-stripe: var(--lime-stripe);
+  --color-on-lime: var(--on-lime);
+  --color-ink: var(--ink);
+  --color-ok: var(--ok);
+  --color-ok-bg: var(--ok-bg);
+  --color-err: var(--err);
+  --color-err-bg: var(--err-bg);
+  --color-warn: var(--warn-dot);
+  --color-mark: var(--mark-bg);
+  --color-notes: var(--notes-bg);
+  --color-dot: var(--dot);
+  --color-logo: var(--logo-bg);
+  --color-logo-fg: var(--logo-fg);
+  --color-progress: var(--progress-fill);
+  --color-segment: var(--segment-active-bg);
+  --color-segment-fg: var(--segment-active-fg);
+  --color-run-border: var(--run-border);
+  --color-card-border: var(--card-border);
+  --color-kbd: var(--kbd-bg);
+  --color-overlay: var(--overlay);
+  --color-dot-grid: var(--dot-grid);
+  --color-term: var(--term-bg);
+  --color-term-fg: var(--term-fg);
+  --color-term-dim: var(--term-dim);
+  --color-code: var(--code-bg);
+  --color-c-key: var(--c-key);
+  --color-c-str: var(--c-str);
+  --color-c-fn: var(--c-fn);
+  --color-c-com: var(--c-com);
+
+  /* shadcn role names used by components/ui. */
+  --color-background: var(--bg);
+  --color-foreground: var(--text);
+  --color-muted-foreground: var(--text-muted);
+  --color-popover: var(--surface);
+  --color-popover-foreground: var(--text);
+  --color-primary: var(--ink);
+  --color-primary-foreground: var(--bg);
+  --color-accent: var(--surface-2);
+  --color-accent-foreground: var(--text);
+  --color-destructive: var(--err);
+  --color-input: var(--border);
+  --color-ring: var(--accent-text);
+
+  --font-sans: var(--font-sans);
+  --font-display: var(--font-display);
+  --font-mono: var(--font-mono);
+
+  --radius-sm: var(--radius-sm);
+  --radius-base: var(--radius);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-pill: var(--radius-pill);
+
+  --shadow-sticker: var(--shadow-sticker);
+  --shadow-sticker-card: var(--shadow-sticker-card);
+  --shadow-sticker-lg: var(--shadow-sticker-lg);
+  --shadow-pop: var(--shadow-pop);
+
+  --spacing-header: var(--header-height);
+  --spacing-status: var(--status-height);
+  --spacing-touch: var(--touch-target);
+
+  /* `ease-out` and bare `transition` follow the motion tokens; durations read them as `duration-(--motion-base)`. */
+  --ease-out: var(--motion-ease);
+  --default-transition-duration: var(--motion-fast);
+  --default-transition-timing-function: var(--motion-ease);
+}
+
+@theme {
+  /* The root font size is 14px, so a rem scale would not land on the design's pixels. */
+  --spacing: 4px;
+
+  /* `max-phone:` is `width < 780px`, the viewports of PHONE_QUERY in use-media-query.ts. */
+  --breakpoint-phone: 780px;
+  /* `max-wide:` is `width < 1101px`: two-column grids from 1100px down. */
+  --breakpoint-wide: 1101px;
+
+  --animate-pulse-soft: pulse-soft 1.8s infinite;
+  --animate-progress-slide: progress-slide 1.4s ease-in-out infinite;
+  /* The loader's Drizzle mark: its bars light up in turn, left to right, through per-bar delays. */
+  --animate-wave: wave 1.2s ease-in-out infinite;
+  /* Sweeps a highlight across text painted by a background clipped to it (background-size 200%). */
+  --animate-shimmer: shimmer 2.2s linear infinite;
+  /* Moves the striped progress fill by one stripe period (background-size). */
+  --animate-stripes: stripes 0.8s linear infinite;
+  --animate-drizzle: drizzle 9s linear infinite;
+  /* The welcome page's example strip: two copies of the list, so moving by half loops seamlessly. */
+  --animate-marquee: marquee 90s linear infinite;
+
+  @keyframes pulse-soft {
+    50% {
+      opacity: 0.45;
+    }
+  }
+
+  @keyframes wave {
+    0%,
+    100% {
+      opacity: 0.25;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes shimmer {
+    from {
+      background-position: 200% 0;
+    }
+    to {
+      background-position: -200% 0;
+    }
+  }
+
+  @keyframes stripes {
+    to {
+      background-position: 20px 0;
+    }
+  }
+
+  @keyframes progress-slide {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(290%);
+    }
+  }
+
+  /* The welcome page's rain: a drop falls through the whole rotated field, fading at both ends. */
+  @keyframes drizzle {
+    0% {
+      transform: translateY(-760px);
+      opacity: 0;
+    }
+    12% {
+      opacity: 1;
+    }
+    88% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(760px);
+      opacity: 0;
+    }
+  }
+
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+}
+
+@layer base {
+  :root {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+    color: var(--text);
+    background: var(--bg);
+    font-synthesis: none;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    background: var(--bg);
+  }
+  /* A pull past the top must not reload the page and drop unsaved edits, as pull to refresh does on phones. */
+  html,
+  body {
+    overscroll-behavior-y: none;
+  }
+  button,
+  input,
+  textarea {
+    font: inherit;
+    color: inherit;
+  }
+  button {
+    cursor: pointer;
+  }
+  button:disabled {
+    cursor: default;
+  }
+  /* Base UI draws radios, toggles, tabs and menu items as spans, which keep the arrow without this. */
+  :is(
+    [role="radio"],
+    [role="checkbox"],
+    [role="switch"],
+    [role="tab"],
+    [role="option"],
+    [role="menuitem"],
+    [role="menuitemradio"],
+    [role="menuitemcheckbox"],
+    summary,
+    select
+  ) {
+    cursor: pointer;
+  }
+  :is(
+    [role="radio"],
+    [role="checkbox"],
+    [role="switch"],
+    [role="tab"],
+    [role="option"],
+    [role="menuitem"],
+    [role="menuitemradio"],
+    [role="menuitemcheckbox"]
+  ):is([aria-disabled="true"], [data-disabled]) {
+    cursor: default;
+  }
+  /* Text fields trade this ring for an accent border; their transparent outline still shows in forced colors. */
+  :focus-visible {
+    outline: 2px solid var(--accent-text);
+    outline-offset: 2px;
+  }
+  /* Buttons and links get a halo flush with their border: a ring with a gap doubled the sticker's dark edge. */
+  :is(button, a, [role="button"], [role="switch"]):focus-visible {
+    outline: 3px solid color-mix(in oklab, var(--accent-text) 55%, transparent);
+    outline-offset: 0;
+  }
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+  code,
+  kbd,
+  pre {
+    font-family: var(--font-mono);
+  }
+  pre {
+    font-size: 12px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    margin: 0;
+  }
+  mark {
+    background: var(--lime);
+    color: var(--on-lime);
+    padding: 0 0.16em;
+    border-radius: 6px;
+  }
+
+  /* Desktop panes get a slim pill thumb. Phones keep the system overlay bars, and Monaco draws its own. */
+  @media (width >= 780px) {
+    ::-webkit-scrollbar {
+      width: 12px;
+      height: 12px;
+    }
+    ::-webkit-scrollbar-track,
+    ::-webkit-scrollbar-corner {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: var(--scroll-thumb);
+      background-clip: padding-box;
+      border: 4px solid transparent;
+      border-radius: 99px;
+      min-height: 40px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background-color: var(--scroll-thumb-hover);
+      border-width: 3px;
+    }
+
+    @supports not selector(::-webkit-scrollbar) {
+      * {
+        scrollbar-width: thin;
+        scrollbar-color: var(--scroll-thumb) transparent;
+      }
+    }
+  }
+
+  /* A move between site pages crossfades the page under the header (the site layout's view transition). */
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation-duration: var(--motion-fast);
+    animation-timing-function: var(--motion-ease);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation: none !important;
+      transition: none !important;
+    }
+    /* `*` does not reach a view transition's pseudo-elements. */
+    ::view-transition-group(*),
+    ::view-transition-old(*),
+    ::view-transition-new(*) {
+      animation: none !important;
+    }
+  }
+}

@@ -1,0 +1,20 @@
+packages:
+  - "packages/*"
+  - "apps/*"
+  - "testing/*"
+allowBuilds:
+  # Optional native WebSocket accelerator; ws falls back to JavaScript.
+  bufferutil: false
+  esbuild: true
+  # Optional native accelerator pulled in by effect's msgpackr; the guest bundle and the app use its JS fallback.
+  msgpackr-extract: false
+  workerd: true
+# These shipped on 2026-10-21 or 2026-10-22, inside pnpm's minimum release age; drop each once it is older.
+minimumReleaseAgeExclude:
+  - drizzle-kit@1.0.0-rc.5
+  - drizzle-orm@1.0.0-rc.5
+  - "@electric-sql/pglite@0.5.11"
+  - "@electric-sql/pglite-pgvector@0.0.12"
+  - "@cloudflare/workers-types@5.20261022.1"
+patchedDependencies:
+  monaco-editor@0.57.0: patches/monaco-editor@0.57.0.patch

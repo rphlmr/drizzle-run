@@ -1,0 +1,7 @@
+{
+  "editor.defaultFormatter": "oxc.oxc-vscode",
+  // Off until the one-time repo-wide `pnpm format` lands, so opening a file does not reformat it.
+  "editor.formatOnSave": false,
+  "tailwindCSS.experimental.configFile": "apps/drizzle-run/src/styles.css",
+  "tailwindCSS.classFunctions": ["cn", "cva"]
+}

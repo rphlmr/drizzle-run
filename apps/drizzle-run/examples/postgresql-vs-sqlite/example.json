@@ -1,0 +1,19 @@
+{
+  "id": "12784744-9981-4c43-81b3-5101c02b3ca5",
+  "slug": "postgresql-vs-sqlite",
+  "status": "published",
+  "title": "PostgreSQL vs SQLite",
+  "description": "One query and one seed on two databases: each side declares the same tasks table with its own column types.",
+  "topic": "Schema",
+  "featured": false,
+  "order": 45,
+  "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+  "sides": [
+    { "name": "PostgreSQL", "dialect": "postgresql" },
+    { "name": "SQLite", "dialect": "sqlite" }
+  ],
+  "links": [
+    { "kind": "docs", "label": "PostgreSQL column types", "url": "https://orm.drizzle.team/docs/column-types/pg" },
+    { "kind": "docs", "label": "SQLite column types", "url": "https://orm.drizzle.team/docs/column-types/sqlite" }
+  ]
+}

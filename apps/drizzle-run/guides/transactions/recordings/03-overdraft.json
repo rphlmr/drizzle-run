@@ -1,0 +1,1022 @@
+{
+  "recordingVersion": 1,
+  "snapshotDigest": "aa933d70992df1f483ca3a2490eaa348bf983b9c9729e9bda176a3d832db5349",
+  "recordedAt": "2026-10-21T20:18:47.186Z",
+  "result": {
+    "version": 1,
+    "target": {
+      "dialect": "postgresql"
+    },
+    "tuple": {
+      "id": "postgresql-pglite__orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+      "target": {
+        "dialect": "postgresql"
+      },
+      "ormVersion": "1.0.0-rc.5",
+      "kitVersion": "1.0.0-rc.5"
+    },
+    "random": {
+      "effectiveSeed": 2149234254,
+      "source": "derived",
+      "derivation": "run-manifest-sha256-u32-v1",
+      "generator": "mulberry32-v1"
+    },
+    "phases": [
+      {
+        "phase": "validate",
+        "status": "succeeded",
+        "startedAt": "2026-10-21T20:18:46.375Z",
+        "durationMs": 0.059999942779541016
+      },
+      {
+        "phase": "resolve",
+        "status": "succeeded",
+        "startedAt": "2026-10-21T20:18:46.375Z",
+        "durationMs": 0.009999990463256836
+      },
+      {
+        "phase": "load_artifacts",
+        "status": "succeeded",
+        "startedAt": "2026-10-21T20:18:46.376Z",
+        "durationMs": 0.04499995708465576
+      },
+      {
+        "phase": "compile",
+        "status": "succeeded",
+        "startedAt": "2026-10-21T20:18:46.563Z",
+        "durationMs": 2
+      },
+      {
+        "phase": "evaluate_schema",
+        "status": "succeeded",
+        "startedAt": "2026-10-21T20:18:46.565Z",
+        "durationMs": 0
+      },
+      {
+        "phase": "generate_bootstrap",
+        "status": "succeeded",
+        "startedAt": "2026-10-21T20:18:46.566Z",
+        "durationMs": 20
+      },
+      {
+        "phase": "open_database",
+        "status": "succeeded",
+        "startedAt": "2026-10-21T20:18:46.588Z",
+        "durationMs": 4
+      },
+      {
+        "phase": "apply_bootstrap",
+        "status": "succeeded",
+        "startedAt": "2026-10-21T20:18:46.591Z",
+        "durationMs": 8
+      },
+      {
+        "phase": "initialize_context",
+        "status": "succeeded",
+        "startedAt": "2026-10-21T20:18:46.599Z",
+        "durationMs": 0
+      },
+      {
+        "phase": "seed",
+        "status": "succeeded",
+        "startedAt": "2026-10-21T20:18:46.600Z",
+        "durationMs": 4
+      },
+      {
+        "phase": "run",
+        "status": "succeeded",
+        "startedAt": "2026-10-21T20:18:46.606Z",
+        "durationMs": 18
+      },
+      {
+        "phase": "inspect",
+        "status": "succeeded",
+        "startedAt": "2026-10-21T20:18:46.622Z",
+        "durationMs": 70
+      }
+    ],
+    "diagnostics": [],
+    "sql": [
+      {
+        "sequence": 1,
+        "phase": "bootstrap",
+        "origin": "kit",
+        "kind": "generated",
+        "sql": "CREATE TABLE \"accounts\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"owner\" text NOT NULL,\n\t\"balance\" integer NOT NULL\n);\n",
+        "parameters": [],
+        "outcome": "succeeded"
+      },
+      {
+        "sequence": 2,
+        "phase": "bootstrap",
+        "origin": "adapter",
+        "kind": "executed",
+        "sql": "BEGIN",
+        "parameters": [],
+        "outcome": "succeeded",
+        "durationMs": 2
+      },
+      {
+        "sequence": 3,
+        "phase": "bootstrap",
+        "origin": "adapter",
+        "kind": "executed",
+        "sql": "CREATE TABLE \"accounts\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"owner\" text NOT NULL,\n\t\"balance\" integer NOT NULL\n);\n",
+        "parameters": [],
+        "outcome": "succeeded",
+        "durationMs": 4
+      },
+      {
+        "sequence": 4,
+        "phase": "bootstrap",
+        "origin": "adapter",
+        "kind": "executed",
+        "sql": "COMMIT",
+        "parameters": [],
+        "outcome": "succeeded",
+        "durationMs": 1
+      },
+      {
+        "sequence": 5,
+        "phase": "seed",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "insert into \"accounts\" (\"id\", \"owner\", \"balance\") values (default, $1, $2), (default, $3, $4)",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": "Ada"
+          },
+          {
+            "type": "primitive",
+            "value": 100
+          },
+          {
+            "type": "primitive",
+            "value": "Grace"
+          },
+          {
+            "type": "primitive",
+            "value": 50
+          }
+        ],
+        "outcome": "succeeded",
+        "source": "seed.ts",
+        "line": 4,
+        "durationMs": 3,
+        "rowCount": 2
+      },
+      {
+        "sequence": 6,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "begin",
+        "parameters": [],
+        "outcome": "succeeded",
+        "source": "query.ts",
+        "line": 6,
+        "durationMs": 1
+      },
+      {
+        "sequence": 7,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "update \"accounts\" set \"balance\" = \"accounts\".\"balance\" - 30 where \"accounts\".\"owner\" = $1",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": "Ada"
+          }
+        ],
+        "outcome": "succeeded",
+        "source": "query.ts",
+        "line": 7,
+        "durationMs": 1,
+        "rowCount": 1
+      },
+      {
+        "sequence": 8,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "update \"accounts\" set \"balance\" = \"accounts\".\"balance\" + 30 where \"accounts\".\"owner\" = $1",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": "Grace"
+          }
+        ],
+        "outcome": "succeeded",
+        "source": "query.ts",
+        "line": 11,
+        "durationMs": 1,
+        "rowCount": 1
+      },
+      {
+        "sequence": 9,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "savepoint sp1",
+        "parameters": [],
+        "outcome": "succeeded",
+        "source": "query.ts",
+        "line": 18,
+        "durationMs": 1
+      },
+      {
+        "sequence": 10,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "update \"accounts\" set \"balance\" = $1 where \"accounts\".\"owner\" = $2",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": 0
+          },
+          {
+            "type": "primitive",
+            "value": "Grace"
+          }
+        ],
+        "outcome": "succeeded",
+        "source": "query.ts",
+        "line": 19,
+        "durationMs": 1,
+        "rowCount": 1
+      },
+      {
+        "sequence": 11,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "release savepoint sp1",
+        "parameters": [],
+        "outcome": "succeeded",
+        "source": "query.ts",
+        "line": 19,
+        "durationMs": 1
+      },
+      {
+        "sequence": 12,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "commit",
+        "parameters": [],
+        "outcome": "succeeded",
+        "source": "query.ts",
+        "line": 19,
+        "durationMs": 0
+      },
+      {
+        "sequence": 13,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "begin",
+        "parameters": [],
+        "outcome": "succeeded",
+        "source": "query.ts",
+        "line": 28,
+        "durationMs": 0
+      },
+      {
+        "sequence": 14,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "delete from \"accounts\"",
+        "parameters": [],
+        "outcome": "succeeded",
+        "source": "query.ts",
+        "line": 29,
+        "durationMs": 1,
+        "rowCount": 2
+      },
+      {
+        "sequence": 15,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "rollback",
+        "parameters": [],
+        "outcome": "succeeded",
+        "source": "query.ts",
+        "line": 29,
+        "durationMs": 1
+      },
+      {
+        "sequence": 16,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "begin",
+        "parameters": [],
+        "outcome": "succeeded",
+        "source": "query.ts",
+        "line": 38,
+        "durationMs": 1
+      },
+      {
+        "sequence": 17,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "update \"accounts\" set \"balance\" = \"accounts\".\"balance\" - 100 where \"accounts\".\"owner\" = $1 returning \"id\", \"owner\", \"balance\"",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": "Ada"
+          }
+        ],
+        "outcome": "succeeded",
+        "source": "query.ts",
+        "line": 39,
+        "durationMs": 1,
+        "rowCount": 1
+      },
+      {
+        "sequence": 18,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "rollback",
+        "parameters": [],
+        "outcome": "succeeded",
+        "source": "query.ts",
+        "line": 39,
+        "durationMs": 0
+      },
+      {
+        "sequence": 19,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "select \"id\", \"owner\", \"balance\" from \"accounts\" order by \"accounts\".\"id\" asc",
+        "parameters": [],
+        "outcome": "succeeded",
+        "source": "query.ts",
+        "line": 50,
+        "durationMs": 1,
+        "rowCount": 2
+      }
+    ],
+    "logs": [
+      {
+        "sequence": 1,
+        "phase": "run",
+        "level": "log",
+        "values": [
+          {
+            "type": "primitive",
+            "value": "Whole transaction rolled back"
+          }
+        ],
+        "source": "query.ts",
+        "line": 33
+      },
+      {
+        "sequence": 2,
+        "phase": "run",
+        "level": "log",
+        "values": [
+          {
+            "type": "primitive",
+            "value": "Overdraft refused"
+          }
+        ],
+        "source": "query.ts",
+        "line": 47
+      }
+    ],
+    "value": {
+      "type": "undefined"
+    },
+    "displays": [
+      {
+        "label": "Balances",
+        "values": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "id": {
+                    "type": "primitive",
+                    "value": 1
+                  },
+                  "owner": {
+                    "type": "primitive",
+                    "value": "Ada"
+                  },
+                  "balance": {
+                    "type": "primitive",
+                    "value": 70
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "id": {
+                    "type": "primitive",
+                    "value": 2
+                  },
+                  "owner": {
+                    "type": "primitive",
+                    "value": "Grace"
+                  },
+                  "balance": {
+                    "type": "primitive",
+                    "value": 0
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "source": "query.ts",
+        "line": 50
+      }
+    ],
+    "events": [
+      {
+        "type": "sql",
+        "sequence": 1,
+        "payload": {
+          "sequence": 1,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "CREATE TABLE \"accounts\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"owner\" text NOT NULL,\n\t\"balance\" integer NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 2,
+        "payload": {
+          "sequence": 2,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "BEGIN",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 2
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 3,
+        "payload": {
+          "sequence": 3,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "CREATE TABLE \"accounts\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"owner\" text NOT NULL,\n\t\"balance\" integer NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 4
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 4,
+        "payload": {
+          "sequence": 4,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "COMMIT",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 1
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 5,
+        "payload": {
+          "sequence": 5,
+          "phase": "seed",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "insert into \"accounts\" (\"id\", \"owner\", \"balance\") values (default, $1, $2), (default, $3, $4)",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": "Ada"
+            },
+            {
+              "type": "primitive",
+              "value": 100
+            },
+            {
+              "type": "primitive",
+              "value": "Grace"
+            },
+            {
+              "type": "primitive",
+              "value": 50
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "seed.ts",
+          "line": 4,
+          "durationMs": 3,
+          "rowCount": 2
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 6,
+        "payload": {
+          "sequence": 6,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "begin",
+          "parameters": [],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 6,
+          "durationMs": 1
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 7,
+        "payload": {
+          "sequence": 7,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "update \"accounts\" set \"balance\" = \"accounts\".\"balance\" - 30 where \"accounts\".\"owner\" = $1",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": "Ada"
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 7,
+          "durationMs": 1,
+          "rowCount": 1
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 8,
+        "payload": {
+          "sequence": 8,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "update \"accounts\" set \"balance\" = \"accounts\".\"balance\" + 30 where \"accounts\".\"owner\" = $1",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": "Grace"
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 11,
+          "durationMs": 1,
+          "rowCount": 1
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 9,
+        "payload": {
+          "sequence": 9,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "savepoint sp1",
+          "parameters": [],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 18,
+          "durationMs": 1
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 10,
+        "payload": {
+          "sequence": 10,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "update \"accounts\" set \"balance\" = $1 where \"accounts\".\"owner\" = $2",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": 0
+            },
+            {
+              "type": "primitive",
+              "value": "Grace"
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 19,
+          "durationMs": 1,
+          "rowCount": 1
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 11,
+        "payload": {
+          "sequence": 11,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "release savepoint sp1",
+          "parameters": [],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 19,
+          "durationMs": 1
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 12,
+        "payload": {
+          "sequence": 12,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "commit",
+          "parameters": [],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 19,
+          "durationMs": 0
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 13,
+        "payload": {
+          "sequence": 13,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "begin",
+          "parameters": [],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 28,
+          "durationMs": 0
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 14,
+        "payload": {
+          "sequence": 14,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "delete from \"accounts\"",
+          "parameters": [],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 29,
+          "durationMs": 1,
+          "rowCount": 2
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 15,
+        "payload": {
+          "sequence": 15,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "rollback",
+          "parameters": [],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 29,
+          "durationMs": 1
+        }
+      },
+      {
+        "type": "log",
+        "sequence": 16,
+        "payload": {
+          "sequence": 1,
+          "phase": "run",
+          "level": "log",
+          "values": [
+            {
+              "type": "primitive",
+              "value": "Whole transaction rolled back"
+            }
+          ],
+          "source": "query.ts",
+          "line": 33
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 17,
+        "payload": {
+          "sequence": 16,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "begin",
+          "parameters": [],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 38,
+          "durationMs": 1
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 18,
+        "payload": {
+          "sequence": 17,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "update \"accounts\" set \"balance\" = \"accounts\".\"balance\" - 100 where \"accounts\".\"owner\" = $1 returning \"id\", \"owner\", \"balance\"",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": "Ada"
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 39,
+          "durationMs": 1,
+          "rowCount": 1
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 19,
+        "payload": {
+          "sequence": 18,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "rollback",
+          "parameters": [],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 39,
+          "durationMs": 0
+        }
+      },
+      {
+        "type": "log",
+        "sequence": 20,
+        "payload": {
+          "sequence": 2,
+          "phase": "run",
+          "level": "log",
+          "values": [
+            {
+              "type": "primitive",
+              "value": "Overdraft refused"
+            }
+          ],
+          "source": "query.ts",
+          "line": 47
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 21,
+        "payload": {
+          "sequence": 19,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "select \"id\", \"owner\", \"balance\" from \"accounts\" order by \"accounts\".\"id\" asc",
+          "parameters": [],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 50,
+          "durationMs": 1,
+          "rowCount": 2
+        }
+      },
+      {
+        "type": "display",
+        "sequence": 22,
+        "payload": {
+          "label": "Balances",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 1
+                    },
+                    "owner": {
+                      "type": "primitive",
+                      "value": "Ada"
+                    },
+                    "balance": {
+                      "type": "primitive",
+                      "value": 70
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 2
+                    },
+                    "owner": {
+                      "type": "primitive",
+                      "value": "Grace"
+                    },
+                    "balance": {
+                      "type": "primitive",
+                      "value": 0
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 50
+        }
+      }
+    ],
+    "cleanupErrors": [],
+    "cleanup": {
+      "guest": {
+        "mode": "graceful"
+      },
+      "database": {
+        "mode": "graceful"
+      }
+    },
+    "timings": {
+      "total": 457,
+      "validate": 0.059999942779541016,
+      "resolve": 0.009999990463256836,
+      "load_artifacts": 0.04499995708465576,
+      "compile": 2,
+      "evaluate_schema": 0,
+      "generate_bootstrap": 20,
+      "open_database": 4,
+      "apply_bootstrap": 8,
+      "initialize_context": 0,
+      "seed": 4,
+      "run": 18,
+      "inspect": 70
+    },
+    "ok": true,
+    "outcome": "succeeded",
+    "transactions": [
+      {
+        "id": 1,
+        "phase": "run",
+        "outcome": "committed",
+        "writes": "kept",
+        "statements": [
+          {
+            "sequence": 6,
+            "role": "begin"
+          },
+          {
+            "sequence": 7,
+            "role": "write"
+          },
+          {
+            "sequence": 8,
+            "role": "write"
+          },
+          {
+            "sequence": 12,
+            "role": "commit"
+          }
+        ],
+        "durationMs": 10,
+        "source": "query.ts",
+        "line": 6
+      },
+      {
+        "id": 2,
+        "phase": "run",
+        "outcome": "committed",
+        "writes": "kept",
+        "statements": [
+          {
+            "sequence": 9,
+            "role": "savepoint"
+          },
+          {
+            "sequence": 10,
+            "role": "write"
+          },
+          {
+            "sequence": 11,
+            "role": "release"
+          }
+        ],
+        "durationMs": 4,
+        "parent": 1,
+        "source": "query.ts",
+        "line": 18
+      },
+      {
+        "id": 3,
+        "phase": "run",
+        "outcome": "rolled_back",
+        "writes": "undone",
+        "statements": [
+          {
+            "sequence": 13,
+            "role": "begin"
+          },
+          {
+            "sequence": 14,
+            "role": "write"
+          },
+          {
+            "sequence": 15,
+            "role": "rollback"
+          }
+        ],
+        "durationMs": 2,
+        "source": "query.ts",
+        "line": 28,
+        "reason": "rollback_call",
+        "error": {
+          "name": "TransactionRollbackError",
+          "message": "Rollback",
+          "source": "query.ts",
+          "line": 30
+        }
+      },
+      {
+        "id": 4,
+        "phase": "run",
+        "outcome": "rolled_back",
+        "writes": "undone",
+        "statements": [
+          {
+            "sequence": 16,
+            "role": "begin"
+          },
+          {
+            "sequence": 17,
+            "role": "write"
+          },
+          {
+            "sequence": 18,
+            "role": "rollback"
+          }
+        ],
+        "durationMs": 3,
+        "source": "query.ts",
+        "line": 38,
+        "reason": "rollback_call",
+        "error": {
+          "name": "TransactionRollbackError",
+          "message": "Rollback",
+          "source": "query.ts",
+          "line": 44
+        }
+      }
+    ]
+  },
+  "guests": [
+    {
+      "imageId": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+      "lockDigest": "sha256-173d5c06268596c4f200f2c55999d19e7020ea73b9767d6f1cb6c8b2851731b1"
+    }
+  ]
+}

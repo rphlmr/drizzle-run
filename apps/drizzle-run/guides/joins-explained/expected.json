@@ -1,0 +1,481 @@
+{
+  "steps": {
+    "01-inner": {
+      "Matching authors and books": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "author": {
+                  "type": "primitive",
+                  "value": "Ada"
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Types in practice"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "author": {
+                  "type": "primitive",
+                  "value": "Ada"
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Draft notes"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "author": {
+                  "type": "primitive",
+                  "value": "Grace"
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Compilers"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "02-left": {
+      "Every author": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "author": {
+                  "type": "primitive",
+                  "value": "Ada"
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Types in practice"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "author": {
+                  "type": "primitive",
+                  "value": "Ada"
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Draft notes"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "author": {
+                  "type": "primitive",
+                  "value": "Grace"
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Compilers"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "author": {
+                  "type": "primitive",
+                  "value": "Linus"
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": null
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "03-where": {
+      "Published books, filtered after the join": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "author": {
+                  "type": "primitive",
+                  "value": "Ada"
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Types in practice"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "04-on": {
+      "Every author, with published books": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "author": {
+                  "type": "primitive",
+                  "value": "Ada"
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Types in practice"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "author": {
+                  "type": "primitive",
+                  "value": "Grace"
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": null
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "author": {
+                  "type": "primitive",
+                  "value": "Linus"
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": null
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "05-outer": {
+      "Right join keeps every book": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "author": {
+                  "type": "primitive",
+                  "value": "Ada"
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Types in practice"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "author": {
+                  "type": "primitive",
+                  "value": "Ada"
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Draft notes"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "author": {
+                  "type": "primitive",
+                  "value": "Grace"
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Compilers"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "author": {
+                  "type": "primitive",
+                  "value": null
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Anonymous tale"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "Full join keeps both sides": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "author": {
+                  "type": "primitive",
+                  "value": "Ada"
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Types in practice"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "author": {
+                  "type": "primitive",
+                  "value": "Ada"
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Draft notes"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "author": {
+                  "type": "primitive",
+                  "value": "Grace"
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Compilers"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "author": {
+                  "type": "primitive",
+                  "value": "Linus"
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": null
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "author": {
+                  "type": "primitive",
+                  "value": null
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Anonymous tale"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "06-cross": {
+      "Every possible author and book pair": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "author": {
+                  "type": "primitive",
+                  "value": "Ada"
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Types in practice"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "author": {
+                  "type": "primitive",
+                  "value": "Ada"
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Draft notes"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "author": {
+                  "type": "primitive",
+                  "value": "Ada"
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Compilers"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "author": {
+                  "type": "primitive",
+                  "value": "Ada"
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Anonymous tale"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "author": {
+                  "type": "primitive",
+                  "value": "Grace"
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Types in practice"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "author": {
+                  "type": "primitive",
+                  "value": "Grace"
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Draft notes"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "author": {
+                  "type": "primitive",
+                  "value": "Grace"
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Compilers"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "author": {
+                  "type": "primitive",
+                  "value": "Grace"
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Anonymous tale"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "author": {
+                  "type": "primitive",
+                  "value": "Linus"
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Types in practice"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "author": {
+                  "type": "primitive",
+                  "value": "Linus"
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Draft notes"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "author": {
+                  "type": "primitive",
+                  "value": "Linus"
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Compilers"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "author": {
+                  "type": "primitive",
+                  "value": "Linus"
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Anonymous tale"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

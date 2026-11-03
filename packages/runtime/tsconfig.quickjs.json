@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "src/quickjs/**/*.ts",
+    "scripts/quickjs/**/*.ts",
+    "scripts/build-quickjs.ts",
+    "../../guests/orm-0.45.4__kit-0.31.11/quickjs-entry.ts",
+    "../../guests/quickjs-client.ts",
+    "../../guests/quickjs-sqlite.ts",
+    "../../guests/quickjs-postgres.ts",
+    "../../guests/quickjs-observation.ts",
+    "../../guests/quickjs-execution.ts",
+    "test/quickjs/**/*.ts"
+  ]
+}

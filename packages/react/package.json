@@ -1,0 +1,62 @@
+{
+  "name": "@drizzle-run/react",
+  "version": "0.1.0",
+  "description": "React providers and hooks for Drizzle Run controllers",
+  "homepage": "https://github.com/rphlmr/drizzle-run/tree/main/packages/react#readme",
+  "bugs": {
+    "url": "https://github.com/rphlmr/drizzle-run/issues"
+  },
+  "license": "AGPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rphlmr/drizzle-run.git",
+    "directory": "packages/react"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "prebuild": "node scripts/clean-dist.ts",
+    "test": "vitest run --coverage && node scripts/audit-pack.ts",
+    "test:pack": "publint --strict && attw --pack . --profile esm-only && node scripts/audit-pack.ts",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@drizzle-run/core": "workspace:*",
+    "@drizzle-run/orchestration": "workspace:*",
+    "@drizzle-run/runtime": "workspace:*",
+    "@xstate/react": "6.1.0",
+    "xstate": "5.33.3"
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "0.18.5",
+    "@drizzle-run/test-fixtures": "workspace:*",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitest/coverage-v8": "5.0.5",
+    "happy-dom": "21.0.4",
+    "publint": "0.3.25",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "typescript": "7.0.2",
+    "vitest": "5.0.5"
+  },
+  "peerDependencies": {
+    "react": "^19.2.0"
+  }
+}

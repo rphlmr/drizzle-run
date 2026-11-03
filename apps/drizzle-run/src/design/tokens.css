@@ -1,0 +1,144 @@
+/*
+ * Drizzle Run design tokens. The only file in src/ allowed to hold color literals
+ * (enforced by color-literals.test.ts).
+ *
+ * Light lives on :root, dark on [data-theme="dark"] (set on <html> before first
+ * paint by the inline script in index.html). In light mode lime is a highlighter
+ * and the Run fill under dark ink, never text: it is 1.2:1 on white.
+ */
+:root {
+  color-scheme: light;
+
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --surface-2: #f3f4f6;
+  --border: #e5e7eb;
+  --text: #0a0a0a;
+  --text-soft: #3b3f4b;
+  --text-muted: #4b5563;
+  --text-faint: #9ca3af;
+  --accent-text: #4a7a0c;
+  --lime: #c5f74f;
+  /* The darker stripe of the striped lime progress bar, the same in both themes. */
+  --lime-stripe: #b2e53a;
+  --on-lime: #0a0a0a;
+  --ink: #0a0a0a;
+  --ok: #3d660a;
+  --ok-bg: #e6f4c8;
+  --err: #a34a08;
+  --err-bg: #fbe5d4;
+  --warn-dot: #ffb224;
+  --mark-bg: #eef6d9;
+  /*
+   * Line bands in the editor: Monaco paints them over its selection, so they are see-through
+   * and land on --err-bg and --mark-bg over --code-bg.
+   */
+  --err-wash: #eb7d2833;
+  --mark-wash: #aad24133;
+  --notes-bg: #ddd3fb;
+  /* Dots of the output's results grid. */
+  --dot: #e5e7eb;
+
+  --logo-bg: #c5f74f;
+  --logo-fg: #0a0a0a;
+  --progress-fill: #0a0a0a;
+  --segment-active-bg: #0a0a0a;
+  --segment-active-fg: #ffffff;
+  --run-border: #0a0a0a;
+  /* Cards, dialogs, popovers, inputs and selected choices; run-border stays on lime controls. */
+  --card-border: #0a0a0a;
+  --kbd-bg: #0a0a0a20;
+  --overlay: #11111166;
+  --scroll-thumb: #9ca3af;
+  --scroll-thumb-hover: #4b5563;
+  --dot-grid: #e5e7eb;
+  /* The terminal look: the companion command and the terminal mirror in the AI chat. */
+  --term-bg: #0a0a0a;
+  --term-fg: #e5e7eb;
+  --term-dim: #a3a3a3;
+
+  --code-bg: #ffffff;
+  --c-key: #7c3aed;
+  --c-str: #0f6b4a;
+  --c-fn: #1d4ed8;
+  --c-com: #4b5563;
+
+  --shadow-sticker: 2px 2px 0 var(--ink);
+  --shadow-sticker-card: 3px 3px 0 var(--ink);
+  --shadow-sticker-lg: 4px 4px 0 var(--ink);
+  --shadow-pop: 0 12px 32px #1111111f;
+
+  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --radius-sm: 7px;
+  --radius: 8px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-pill: 999px;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+
+  --header-height: 56px;
+  --status-height: 30px;
+  --touch-target: 44px;
+
+  /* Motion: fast for menus, tooltips and every exit; base for dialogs entering and heights. One curve. */
+  --motion-fast: 120ms;
+  --motion-base: 200ms;
+  --motion-ease: cubic-bezier(0.2, 0, 0, 1);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg: #111111;
+  --surface: #1a1a1a;
+  --surface-2: #242424;
+  --border: #303030;
+  --text: #f3f4f6;
+  --text-soft: #d1d1d1;
+  --text-muted: #a3a3a3;
+  --text-faint: #525252;
+  --accent-text: #c5f74f;
+  --ok: #c5f74f;
+  --ok-bg: #1e2a10;
+  --err: #ffb224;
+  --err-bg: #2e1d0e;
+  --mark-bg: #262f17;
+  --err-wash: #9a3d0233;
+  --mark-wash: #c5f74f1c;
+  --notes-bg: #2b2540;
+  --dot: #242424;
+
+  --logo-bg: #c5f74f;
+  --logo-fg: #0a0a0a;
+  --progress-fill: #c5f74f;
+  --segment-active-bg: #f3f4f6;
+  --segment-active-fg: #0a0a0a;
+  /* Dark keeps the light construction: lime controls and cards both take the pale ink, never lime. */
+  --run-border: #e5e5e5;
+  --card-border: #e5e5e5;
+  --overlay: #000000a6;
+  --scroll-thumb: #525252;
+  --scroll-thumb-hover: #a3a3a3;
+  --dot-grid: #242424;
+  --term-bg: #0a0a0a;
+
+  --code-bg: #141414;
+  --c-key: #c4a7ff;
+  --c-str: #8fdcb4;
+  --c-fn: #8ab4ff;
+  --c-com: #a3a3a3;
+
+  --shadow-sticker: 2px 2px 0 var(--run-border);
+  --shadow-sticker-card: 3px 3px 0 var(--card-border);
+  --shadow-sticker-lg: 4px 4px 0 var(--card-border);
+  --shadow-pop: 0 12px 32px #00000066;
+}

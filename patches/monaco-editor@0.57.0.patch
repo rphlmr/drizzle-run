@@ -1,0 +1,14 @@
+diff --git a/esm/vs/platform/clipboard/browser/clipboardService.js b/esm/vs/platform/clipboard/browser/clipboardService.js
+index 305c431258c329f4d8173c492506c933c4d9d1da..33f8e51387bb953f3f7c382c76d9716f1a357884 100644
+--- a/esm/vs/platform/clipboard/browser/clipboardService.js
++++ b/esm/vs/platform/clipboard/browser/clipboardService.js
+@@ -76,6 +76,9 @@ let BrowserClipboardService = class BrowserClipboardService extends Disposable {
+                 return;
+             }
+             const currentWritePromise = new DeferredPromise();
++            // ClipboardItem may abandon this payload without observing its expected cancellation.
++            // https://github.com/microsoft/monaco-editor/issues/5458
++            void currentWritePromise.p.catch(() => {});
+             // Cancel the previous promise since we just created a new one in response to this new event
+             if (this.webKitPendingClipboardWritePromise && !this.webKitPendingClipboardWritePromise.isSettled) {
+                 this.webKitPendingClipboardWritePromise.cancel();

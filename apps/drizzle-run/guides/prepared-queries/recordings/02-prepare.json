@@ -1,0 +1,700 @@
+{
+  "recordingVersion": 1,
+  "snapshotDigest": "35aeaa2026dce0278d572d254a7a5c4b3abd0f99466028887f253a3441759630",
+  "recordedAt": "2026-10-28T20:44:06.756Z",
+  "result": {
+    "version": 1,
+    "target": {
+      "dialect": "postgresql"
+    },
+    "tuple": {
+      "id": "postgresql-pglite__orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+      "target": {
+        "dialect": "postgresql"
+      },
+      "ormVersion": "1.0.0-rc.5",
+      "kitVersion": "1.0.0-rc.5"
+    },
+    "random": {
+      "effectiveSeed": 1736589331,
+      "source": "derived",
+      "derivation": "run-manifest-sha256-u32-v1",
+      "generator": "mulberry32-v1"
+    },
+    "phases": [
+      {
+        "phase": "validate",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T20:44:05.929Z",
+        "durationMs": 0.06999999284744263
+      },
+      {
+        "phase": "resolve",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T20:44:05.929Z",
+        "durationMs": 0
+      },
+      {
+        "phase": "load_artifacts",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T20:44:05.930Z",
+        "durationMs": 0.4399999976158142
+      },
+      {
+        "phase": "compile",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T20:44:06.110Z",
+        "durationMs": 2
+      },
+      {
+        "phase": "evaluate_schema",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T20:44:06.113Z",
+        "durationMs": 0
+      },
+      {
+        "phase": "generate_bootstrap",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T20:44:06.114Z",
+        "durationMs": 19
+      },
+      {
+        "phase": "open_database",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T20:44:06.135Z",
+        "durationMs": 4
+      },
+      {
+        "phase": "apply_bootstrap",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T20:44:06.139Z",
+        "durationMs": 10
+      },
+      {
+        "phase": "initialize_context",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T20:44:06.149Z",
+        "durationMs": 0
+      },
+      {
+        "phase": "seed",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T20:44:06.150Z",
+        "durationMs": 4
+      },
+      {
+        "phase": "run",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T20:44:06.155Z",
+        "durationMs": 5
+      },
+      {
+        "phase": "inspect",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T20:44:06.215Z",
+        "durationMs": 52
+      }
+    ],
+    "diagnostics": [],
+    "sql": [
+      {
+        "sequence": 1,
+        "phase": "bootstrap",
+        "origin": "kit",
+        "kind": "generated",
+        "sql": "CREATE TABLE \"products\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"category\" text NOT NULL,\n\t\"price_cents\" integer NOT NULL\n);\n",
+        "parameters": [],
+        "outcome": "succeeded"
+      },
+      {
+        "sequence": 2,
+        "phase": "bootstrap",
+        "origin": "adapter",
+        "kind": "executed",
+        "sql": "BEGIN",
+        "parameters": [],
+        "outcome": "succeeded",
+        "durationMs": 3
+      },
+      {
+        "sequence": 3,
+        "phase": "bootstrap",
+        "origin": "adapter",
+        "kind": "executed",
+        "sql": "CREATE TABLE \"products\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"category\" text NOT NULL,\n\t\"price_cents\" integer NOT NULL\n);\n",
+        "parameters": [],
+        "outcome": "succeeded",
+        "durationMs": 5
+      },
+      {
+        "sequence": 4,
+        "phase": "bootstrap",
+        "origin": "adapter",
+        "kind": "executed",
+        "sql": "COMMIT",
+        "parameters": [],
+        "outcome": "succeeded",
+        "durationMs": 1
+      },
+      {
+        "sequence": 5,
+        "phase": "seed",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "insert into \"products\" (\"id\", \"name\", \"category\", \"price_cents\") values ($1, $2, $3, $4), ($5, $6, $7, $8), ($9, $10, $11, $12), ($13, $14, $15, $16)",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": 1
+          },
+          {
+            "type": "primitive",
+            "value": "SQL handbook"
+          },
+          {
+            "type": "primitive",
+            "value": "books"
+          },
+          {
+            "type": "primitive",
+            "value": 2500
+          },
+          {
+            "type": "primitive",
+            "value": 2
+          },
+          {
+            "type": "primitive",
+            "value": "Pocket notes"
+          },
+          {
+            "type": "primitive",
+            "value": "books"
+          },
+          {
+            "type": "primitive",
+            "value": 800
+          },
+          {
+            "type": "primitive",
+            "value": 3
+          },
+          {
+            "type": "primitive",
+            "value": "Query notebook"
+          },
+          {
+            "type": "primitive",
+            "value": "books"
+          },
+          {
+            "type": "primitive",
+            "value": 1200
+          },
+          {
+            "type": "primitive",
+            "value": 4
+          },
+          {
+            "type": "primitive",
+            "value": "Debugging kit"
+          },
+          {
+            "type": "primitive",
+            "value": "tools"
+          },
+          {
+            "type": "primitive",
+            "value": 4500
+          }
+        ],
+        "outcome": "succeeded",
+        "source": "seed.ts",
+        "line": 4,
+        "durationMs": 3,
+        "rowCount": 4
+      },
+      {
+        "sequence": 6,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "select \"id\", \"name\", \"category\", \"price_cents\" from \"products\" where \"products\".\"category\" = $1 order by \"products\".\"price_cents\", \"products\".\"id\"",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": "books"
+          }
+        ],
+        "outcome": "succeeded",
+        "source": "query.ts",
+        "line": 5,
+        "durationMs": 2,
+        "rowCount": 3
+      },
+      {
+        "sequence": 7,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "select \"id\", \"name\", \"category\", \"price_cents\" from \"products\" where \"products\".\"category\" = $1 order by \"products\".\"price_cents\", \"products\".\"id\"",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": "tools"
+          }
+        ],
+        "outcome": "succeeded",
+        "source": "query.ts",
+        "line": 5,
+        "durationMs": 2,
+        "rowCount": 1
+      }
+    ],
+    "logs": [],
+    "value": {
+      "type": "undefined"
+    },
+    "displays": [
+      {
+        "label": "Books",
+        "values": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "id": {
+                    "type": "primitive",
+                    "value": 2
+                  },
+                  "name": {
+                    "type": "primitive",
+                    "value": "Pocket notes"
+                  },
+                  "category": {
+                    "type": "primitive",
+                    "value": "books"
+                  },
+                  "priceCents": {
+                    "type": "primitive",
+                    "value": 800
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "id": {
+                    "type": "primitive",
+                    "value": 3
+                  },
+                  "name": {
+                    "type": "primitive",
+                    "value": "Query notebook"
+                  },
+                  "category": {
+                    "type": "primitive",
+                    "value": "books"
+                  },
+                  "priceCents": {
+                    "type": "primitive",
+                    "value": 1200
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "id": {
+                    "type": "primitive",
+                    "value": 1
+                  },
+                  "name": {
+                    "type": "primitive",
+                    "value": "SQL handbook"
+                  },
+                  "category": {
+                    "type": "primitive",
+                    "value": "books"
+                  },
+                  "priceCents": {
+                    "type": "primitive",
+                    "value": 2500
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "source": "query.ts",
+        "line": 12
+      },
+      {
+        "label": "Tools",
+        "values": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "id": {
+                    "type": "primitive",
+                    "value": 4
+                  },
+                  "name": {
+                    "type": "primitive",
+                    "value": "Debugging kit"
+                  },
+                  "category": {
+                    "type": "primitive",
+                    "value": "tools"
+                  },
+                  "priceCents": {
+                    "type": "primitive",
+                    "value": 4500
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "source": "query.ts",
+        "line": 13
+      }
+    ],
+    "events": [
+      {
+        "type": "sql",
+        "sequence": 1,
+        "payload": {
+          "sequence": 1,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "CREATE TABLE \"products\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"category\" text NOT NULL,\n\t\"price_cents\" integer NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 2,
+        "payload": {
+          "sequence": 2,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "BEGIN",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 3
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 3,
+        "payload": {
+          "sequence": 3,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "CREATE TABLE \"products\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"category\" text NOT NULL,\n\t\"price_cents\" integer NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 5
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 4,
+        "payload": {
+          "sequence": 4,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "COMMIT",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 1
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 5,
+        "payload": {
+          "sequence": 5,
+          "phase": "seed",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "insert into \"products\" (\"id\", \"name\", \"category\", \"price_cents\") values ($1, $2, $3, $4), ($5, $6, $7, $8), ($9, $10, $11, $12), ($13, $14, $15, $16)",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": 1
+            },
+            {
+              "type": "primitive",
+              "value": "SQL handbook"
+            },
+            {
+              "type": "primitive",
+              "value": "books"
+            },
+            {
+              "type": "primitive",
+              "value": 2500
+            },
+            {
+              "type": "primitive",
+              "value": 2
+            },
+            {
+              "type": "primitive",
+              "value": "Pocket notes"
+            },
+            {
+              "type": "primitive",
+              "value": "books"
+            },
+            {
+              "type": "primitive",
+              "value": 800
+            },
+            {
+              "type": "primitive",
+              "value": 3
+            },
+            {
+              "type": "primitive",
+              "value": "Query notebook"
+            },
+            {
+              "type": "primitive",
+              "value": "books"
+            },
+            {
+              "type": "primitive",
+              "value": 1200
+            },
+            {
+              "type": "primitive",
+              "value": 4
+            },
+            {
+              "type": "primitive",
+              "value": "Debugging kit"
+            },
+            {
+              "type": "primitive",
+              "value": "tools"
+            },
+            {
+              "type": "primitive",
+              "value": 4500
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "seed.ts",
+          "line": 4,
+          "durationMs": 3,
+          "rowCount": 4
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 6,
+        "payload": {
+          "sequence": 6,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "select \"id\", \"name\", \"category\", \"price_cents\" from \"products\" where \"products\".\"category\" = $1 order by \"products\".\"price_cents\", \"products\".\"id\"",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": "books"
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 5,
+          "durationMs": 2,
+          "rowCount": 3
+        }
+      },
+      {
+        "type": "display",
+        "sequence": 7,
+        "payload": {
+          "label": "Books",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 2
+                    },
+                    "name": {
+                      "type": "primitive",
+                      "value": "Pocket notes"
+                    },
+                    "category": {
+                      "type": "primitive",
+                      "value": "books"
+                    },
+                    "priceCents": {
+                      "type": "primitive",
+                      "value": 800
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 3
+                    },
+                    "name": {
+                      "type": "primitive",
+                      "value": "Query notebook"
+                    },
+                    "category": {
+                      "type": "primitive",
+                      "value": "books"
+                    },
+                    "priceCents": {
+                      "type": "primitive",
+                      "value": 1200
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 1
+                    },
+                    "name": {
+                      "type": "primitive",
+                      "value": "SQL handbook"
+                    },
+                    "category": {
+                      "type": "primitive",
+                      "value": "books"
+                    },
+                    "priceCents": {
+                      "type": "primitive",
+                      "value": 2500
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 12
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 8,
+        "payload": {
+          "sequence": 7,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "select \"id\", \"name\", \"category\", \"price_cents\" from \"products\" where \"products\".\"category\" = $1 order by \"products\".\"price_cents\", \"products\".\"id\"",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": "tools"
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 5,
+          "durationMs": 2,
+          "rowCount": 1
+        }
+      },
+      {
+        "type": "display",
+        "sequence": 9,
+        "payload": {
+          "label": "Tools",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 4
+                    },
+                    "name": {
+                      "type": "primitive",
+                      "value": "Debugging kit"
+                    },
+                    "category": {
+                      "type": "primitive",
+                      "value": "tools"
+                    },
+                    "priceCents": {
+                      "type": "primitive",
+                      "value": 4500
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 13
+        }
+      }
+    ],
+    "cleanupErrors": [],
+    "cleanup": {
+      "guest": {
+        "mode": "graceful"
+      },
+      "database": {
+        "mode": "graceful"
+      }
+    },
+    "timings": {
+      "total": 342,
+      "validate": 0.06999999284744263,
+      "resolve": 0,
+      "load_artifacts": 0.4399999976158142,
+      "compile": 2,
+      "evaluate_schema": 0,
+      "generate_bootstrap": 19,
+      "open_database": 4,
+      "apply_bootstrap": 10,
+      "initialize_context": 0,
+      "seed": 4,
+      "run": 5,
+      "inspect": 52
+    },
+    "ok": true,
+    "outcome": "succeeded"
+  },
+  "guests": [
+    {
+      "imageId": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+      "lockDigest": "sha256-173d5c06268596c4f200f2c55999d19e7020ea73b9767d6f1cb6c8b2851731b1"
+    }
+  ]
+}

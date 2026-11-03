@@ -1,0 +1,58 @@
+{
+  "name": "@drizzle-run/orchestration",
+  "version": "0.1.0",
+  "description": "Host-independent Drizzle Run request and pair orchestration",
+  "license": "AGPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rphlmr/drizzle-run.git",
+    "directory": "packages/orchestration"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json",
+    "./run": {
+      "types": "./dist/run-controller.d.ts",
+      "import": "./dist/run-controller.js",
+      "default": "./dist/run-controller.js"
+    },
+    "./comparison": {
+      "types": "./dist/comparison-controller.d.ts",
+      "import": "./dist/comparison-controller.js",
+      "default": "./dist/comparison-controller.js"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "test": "vitest run",
+    "test:pack": "publint --strict && attw --pack . --profile esm-only && node scripts/audit-pack.ts",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@drizzle-run/core": "workspace:*",
+    "xstate": "5.33.3"
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "0.18.5",
+    "@drizzle-run/machine-paths": "workspace:*",
+    "@drizzle-run/test-fixtures": "workspace:*",
+    "@types/node": "24.19.2",
+    "es-toolkit": "1.52.0",
+    "publint": "0.3.25",
+    "typescript": "7.0.2",
+    "vitest": "5.0.5"
+  }
+}

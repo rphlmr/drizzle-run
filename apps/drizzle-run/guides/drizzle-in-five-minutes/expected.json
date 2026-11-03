@@ -1,0 +1,503 @@
+{
+  "steps": {
+    "01-tables": {
+      "Users": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 1
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Ada"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 2
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Grace"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 3
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Linus"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "Posts": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 1
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Hello"
+                },
+                "authorId": {
+                  "type": "primitive",
+                  "value": 1
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 2
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Notes"
+                },
+                "authorId": {
+                  "type": "primitive",
+                  "value": 1
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 3
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Ships"
+                },
+                "authorId": {
+                  "type": "primitive",
+                  "value": 2
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "02-insert": {
+      "Published post": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 4
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Learning Drizzle"
+                },
+                "authorId": {
+                  "type": "primitive",
+                  "value": 1
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "03-select": {
+      "Ada's posts": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 2
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Notes"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 1
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Hello"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "04-relations": {
+      "SQL-like": {
+        "Users with posts": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Ada"
+                  },
+                  "title": {
+                    "type": "primitive",
+                    "value": "Hello"
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Ada"
+                  },
+                  "title": {
+                    "type": "primitive",
+                    "value": "Notes"
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Grace"
+                  },
+                  "title": {
+                    "type": "primitive",
+                    "value": "Ships"
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Linus"
+                  },
+                  "title": {
+                    "type": "primitive",
+                    "value": null
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "RQB": {
+        "Users with posts": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Ada"
+                  },
+                  "posts": {
+                    "type": "array",
+                    "value": [
+                      {
+                        "type": "object",
+                        "value": {
+                          "title": {
+                            "type": "primitive",
+                            "value": "Hello"
+                          }
+                        }
+                      },
+                      {
+                        "type": "object",
+                        "value": {
+                          "title": {
+                            "type": "primitive",
+                            "value": "Notes"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Grace"
+                  },
+                  "posts": {
+                    "type": "array",
+                    "value": [
+                      {
+                        "type": "object",
+                        "value": {
+                          "title": {
+                            "type": "primitive",
+                            "value": "Ships"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Linus"
+                  },
+                  "posts": {
+                    "type": "array",
+                    "value": []
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "05-update-delete": {
+      "Renamed": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 1
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Hello, Drizzle"
+                },
+                "authorId": {
+                  "type": "primitive",
+                  "value": 1
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "Deleted": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 3
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Ships"
+                },
+                "authorId": {
+                  "type": "primitive",
+                  "value": 2
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "Posts": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 1
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Hello, Drizzle"
+                },
+                "authorId": {
+                  "type": "primitive",
+                  "value": 1
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 2
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Notes"
+                },
+                "authorId": {
+                  "type": "primitive",
+                  "value": 1
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "06-transaction": {
+      "After rollback": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 1
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Hello"
+                },
+                "authorId": {
+                  "type": "primitive",
+                  "value": 1
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 2
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Notes"
+                },
+                "authorId": {
+                  "type": "primitive",
+                  "value": 1
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 3
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Ships"
+                },
+                "authorId": {
+                  "type": "primitive",
+                  "value": 2
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "After commit": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 1
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Hello, Drizzle"
+                },
+                "authorId": {
+                  "type": "primitive",
+                  "value": 1
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 2
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Notes"
+                },
+                "authorId": {
+                  "type": "primitive",
+                  "value": 1
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

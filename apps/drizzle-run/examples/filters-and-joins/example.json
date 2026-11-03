@@ -1,0 +1,16 @@
+{
+  "id": "92f5d57d-0578-46cd-a952-610f9fae37d4",
+  "slug": "filters-and-joins",
+  "status": "published",
+  "title": "Filters, joins, and counts",
+  "description": "Combine where clauses, join two tables, and count rows per group.",
+  "topic": "Queries",
+  "featured": false,
+  "order": 50,
+  "dialect": "sqlite",
+  "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+  "links": [
+    { "kind": "docs", "label": "Filters", "url": "https://orm.drizzle.team/docs/sqlite/operators" },
+    { "kind": "docs", "label": "Joins", "url": "https://orm.drizzle.team/docs/sqlite/joins" }
+  ]
+}

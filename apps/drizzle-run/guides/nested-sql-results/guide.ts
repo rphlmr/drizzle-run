@@ -1,0 +1,182 @@
+import { defineGuideManifest } from "@drizzle-run/core/guide";
+import { defineRunManifest } from "@drizzle-run/core/manifest";
+
+import { readExampleFiles } from "../example-files.ts";
+import type { DrizzleRunGuideMeta, DrizzleRunStepMeta } from "../meta.ts";
+
+export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta>()({
+  kind: "drizzle-run-guide",
+  manifestVersion: 1,
+  id: "6ea740cb-f296-4683-9937-be77e81306fb",
+  title: "Build nested results with SQL",
+  description: "Turn multiplied join rows into ordered nested arrays, then compare with RQB.",
+  project: defineRunManifest({
+    kind: "drizzle-run",
+    manifestVersion: 1,
+    target: { dialect: "postgresql" },
+    dependencies: { "drizzle-orm": "1.0.0-rc.5", "drizzle-kit": "1.0.0-rc.5" },
+    files: readExampleFiles("nested-sql-results", ["schema.ts", "seed.ts", "query.ts"]),
+    entrypoints: { schema: "schema.ts", seed: "seed.ts", run: "query.ts" },
+  }),
+  steps: [
+    {
+      type: "walkthrough",
+      id: "01-multiplication",
+      label: "Multiplied rows",
+      title: "Two comments and three tags make six rows",
+      body: "You need a file with its comments, each comment's author, and its tags. This guide uses PostgreSQL with Drizzle ORM **1.0.0-rc.5**. The tables already contain Launch notes, Empty draft and Design sketch.\n\nA **join** pairs rows that satisfy its condition. Launch notes has two comments and three tags. Joining both collections gives each comment all three tags: **six rows for one file**.\n\nPress **Run**. The query is valid, but grouping these rows directly into arrays would repeat comments and tags. Empty draft also remains, with null child fields.",
+      focus: { file: "query.ts", lines: [5, 14] },
+      run: "required",
+      highlight: {
+        displays: ["Joined rows"],
+      },
+      meta: {
+        summary: "See why joining two collections multiplies their rows.",
+        changed: "Launch notes occupies six rows; Empty draft one; Design sketch one.",
+      },
+    },
+    {
+      type: "walkthrough",
+      id: "02-objects",
+      label: "Nested objects",
+      title: "Build a comment with its author",
+      body: "First, leave tags out and join each comment to its author. `jsonb_build_object` builds one JSON object from key/value pairs. A second call nests the author inside that comment.\n\nPress **Run**. Grace's comment has `text: null`, but it is still a real comment with an ID and an author. **A nullable field does not mean the child is missing.**\n\n`sql<Comment>` describes the result to TypeScript. It does not validate JSON or run column decoders inside it. This example uses integer IDs, text and null; dates and bigint values need their own conversion decisions.",
+      edits: [
+        {
+          file: "query.ts",
+          write:
+            'import { db } from "@drizzle-run/runtime/context";\nimport { eq, exists, sql } from "drizzle-orm";\nimport { comments, files, fileTags, tags, users } from "./schema";\n\ntype Comment = Pick<typeof comments.$inferSelect, "id" | "text"> & {\n  author: Pick<typeof users.$inferSelect, "id" | "name">;\n};\n\nconst rows = await db.select({\n  file: files.name,\n  comment: sql<Comment>`jsonb_build_object(\n    \'id\', ${comments.id},\n    \'text\', ${comments.text},\n    \'author\', jsonb_build_object(\'id\', ${users.id}, \'name\', ${users.name})\n  )`,\n}).from(files)\n  .innerJoin(comments, eq(comments.fileId, files.id))\n  .innerJoin(users, eq(comments.authorId, users.id))\n  .orderBy(files.id, comments.id);\n\n$.display("One object per comment", rows);\n',
+        },
+      ],
+      focus: { file: "query.ts", lines: [9, 19] },
+      run: "required",
+      highlight: {
+        displays: ["One object per comment"],
+      },
+      meta: {
+        summary: "Nest the author and preserve a real comment with null text.",
+        changed: "Three comments returned, including Grace's comment with null text.",
+      },
+    },
+    {
+      type: "walkthrough",
+      id: "03-groups",
+      label: "Separate groups",
+      title: "Aggregate comments and tags before joining",
+      body: "A **grouped subquery** returns one result per grouping key. `commentsByFile` builds a comments array per file ID. `tagsByFile` builds a tags array independently.\n\nThe outer query joins those two results to files. Each subquery has at most one row per file, so the arrays no longer multiply each other. `order by` inside each `jsonb_agg` makes the array order explicit.\n\nPress **Run**. Launch notes has two comments and three tags. Empty draft has null arrays: neither subquery produced a group for it.",
+      edits: [
+        {
+          file: "query.ts",
+          write:
+            'import { db } from "@drizzle-run/runtime/context";\nimport { eq, exists, sql } from "drizzle-orm";\nimport { comments, files, fileTags, tags, users } from "./schema";\n\n// sql<T> describes the result; it does not validate JSON or decode nested dates.\n// These objects contain only integer IDs, text and null.\ntype Comment = Pick<typeof comments.$inferSelect, "id" | "text"> & {\n  author: Pick<typeof users.$inferSelect, "id" | "name">;\n};\ntype Tag = Pick<typeof tags.$inferSelect, "id" | "name">;\n\nconst commentsByFile = db\n  .select({\n    fileId: comments.fileId,\n    comments: sql<Comment[]>`jsonb_agg(\n      jsonb_build_object(\n        \'id\', ${comments.id},\n        \'text\', ${comments.text},\n        \'author\', jsonb_build_object(\'id\', ${users.id}, \'name\', ${users.name})\n      ) order by ${comments.id}\n    )`.as("comments"),\n  })\n  .from(comments)\n  .innerJoin(users, eq(comments.authorId, users.id))\n  .groupBy(comments.fileId)\n  .as("comments_by_file");\n\nconst tagsByFile = db\n  .select({\n    fileId: fileTags.fileId,\n    tags: sql<Tag[]>`jsonb_agg(\n      jsonb_build_object(\'id\', ${tags.id}, \'name\', ${tags.name})\n      order by ${tags.id}\n    )`.as("tags"),\n  })\n  .from(fileTags)\n  .innerJoin(tags, eq(fileTags.tagId, tags.id))\n  .groupBy(fileTags.fileId)\n  .as("tags_by_file");\n\nconst groupedFiles = await db.select({\n  id: files.id,\n  name: files.name,\n  comments: commentsByFile.comments,\n  tags: tagsByFile.tags,\n}).from(files)\n  .leftJoin(commentsByFile, eq(commentsByFile.fileId, files.id))\n  .leftJoin(tagsByFile, eq(tagsByFile.fileId, files.id))\n  .orderBy(files.id);\n\n$.display("One row per file, before empty arrays", groupedFiles);\n',
+        },
+      ],
+      focus: { file: "query.ts", lines: [12, 26] },
+      run: "required",
+      highlight: {
+        displays: ["One row per file, before empty arrays"],
+      },
+      meta: {
+        summary: "One group per relation prevents duplicate children.",
+        changed: "Three file rows returned. Empty draft has null comments and tags.",
+      },
+    },
+    {
+      type: "walkthrough",
+      id: "04-empty",
+      label: "Empty arrays",
+      title: "Return empty arrays for missing groups",
+      body: "`coalesce(value, fallback)` uses the fallback when the value is SQL null. Put it in the **outer selection**, after the left joins, to return `[]` for a missing group.\n\nPutting `coalesce` only inside a grouped subquery would not help Empty draft: there is no group to join in the first place.\n\nPress **Run**. Empty draft now has two empty arrays. Grace's comment stays in Launch notes even though its text is null. If you aggregate a left join directly instead, filter on the child's non-null ID, not on every selected field.",
+      edits: [
+        {
+          file: "query.ts",
+          write:
+            'import { db } from "@drizzle-run/runtime/context";\nimport { eq, exists, sql } from "drizzle-orm";\nimport { comments, files, fileTags, tags, users } from "./schema";\n\n// sql<T> describes the result; it does not validate JSON or decode nested dates.\n// These objects contain only integer IDs, text and null.\ntype Comment = Pick<typeof comments.$inferSelect, "id" | "text"> & {\n  author: Pick<typeof users.$inferSelect, "id" | "name">;\n};\ntype Tag = Pick<typeof tags.$inferSelect, "id" | "name">;\n\nconst commentsByFile = db\n  .select({\n    fileId: comments.fileId,\n    comments: sql<Comment[]>`jsonb_agg(\n      jsonb_build_object(\n        \'id\', ${comments.id},\n        \'text\', ${comments.text},\n        \'author\', jsonb_build_object(\'id\', ${users.id}, \'name\', ${users.name})\n      ) order by ${comments.id}\n    )`.as("comments"),\n  })\n  .from(comments)\n  .innerJoin(users, eq(comments.authorId, users.id))\n  .groupBy(comments.fileId)\n  .as("comments_by_file");\n\nconst tagsByFile = db\n  .select({\n    fileId: fileTags.fileId,\n    tags: sql<Tag[]>`jsonb_agg(\n      jsonb_build_object(\'id\', ${tags.id}, \'name\', ${tags.name})\n      order by ${tags.id}\n    )`.as("tags"),\n  })\n  .from(fileTags)\n  .innerJoin(tags, eq(fileTags.tagId, tags.id))\n  .groupBy(fileTags.fileId)\n  .as("tags_by_file");\n\nconst selection = {\n  id: files.id,\n  name: files.name,\n  // A missing group becomes null after the LEFT JOIN, so coalesce here.\n  comments: sql<Comment[]>`coalesce(${commentsByFile.comments}, \'[]\'::jsonb)`,\n  tags: sql<Tag[]>`coalesce(${tagsByFile.tags}, \'[]\'::jsonb)`,\n};\n\nconst allFiles = await db.select(selection).from(files)\n  .leftJoin(commentsByFile, eq(commentsByFile.fileId, files.id))\n  .leftJoin(tagsByFile, eq(tagsByFile.fileId, files.id))\n  .orderBy(files.id);\n\n$.display("Files with comments and tags", allFiles);\n',
+        },
+      ],
+      focus: { file: "query.ts", lines: [41, 46] },
+      run: "required",
+      highlight: {
+        displays: ["Files with comments and tags"],
+      },
+      meta: {
+        summary: "Handle missing groups without discarding nullable child data.",
+        changed: "Empty draft has comments: [] and tags: []. Grace's comment is preserved.",
+      },
+    },
+    {
+      type: "walkthrough",
+      id: "05-filter",
+      label: "Filter files",
+      title: "Find a tagged file and keep all its tags",
+      body: "You want files tagged **release**, with their complete tag lists. `exists` checks whether a matching link is present in `fileTags` for the current file. It filters the files, while `tagsByFile` still aggregates every tag.\n\nPress **Run**. The filtered result contains Launch notes with release, review and team. Filtering inside `tagsByFile` instead would shorten its array to the matching tag.\n\nThe original gist filters an already-built JSON array. Here the link table already has the membership information, so you can ask it directly.",
+      edits: [
+        {
+          file: "query.ts",
+          write:
+            'import { db } from "@drizzle-run/runtime/context";\nimport { eq, exists, sql } from "drizzle-orm";\nimport { comments, files, fileTags, tags, users } from "./schema";\n\n// sql<T> describes the result; it does not validate JSON or decode nested dates.\n// These objects contain only integer IDs, text and null.\ntype Comment = Pick<typeof comments.$inferSelect, "id" | "text"> & {\n  author: Pick<typeof users.$inferSelect, "id" | "name">;\n};\ntype Tag = Pick<typeof tags.$inferSelect, "id" | "name">;\n\nconst commentsByFile = db\n  .select({\n    fileId: comments.fileId,\n    comments: sql<Comment[]>`jsonb_agg(\n      jsonb_build_object(\n        \'id\', ${comments.id},\n        \'text\', ${comments.text},\n        \'author\', jsonb_build_object(\'id\', ${users.id}, \'name\', ${users.name})\n      ) order by ${comments.id}\n    )`.as("comments"),\n  })\n  .from(comments)\n  .innerJoin(users, eq(comments.authorId, users.id))\n  .groupBy(comments.fileId)\n  .as("comments_by_file");\n\nconst tagsByFile = db\n  .select({\n    fileId: fileTags.fileId,\n    tags: sql<Tag[]>`jsonb_agg(\n      jsonb_build_object(\'id\', ${tags.id}, \'name\', ${tags.name})\n      order by ${tags.id}\n    )`.as("tags"),\n  })\n  .from(fileTags)\n  .innerJoin(tags, eq(fileTags.tagId, tags.id))\n  .groupBy(fileTags.fileId)\n  .as("tags_by_file");\n\nconst selection = {\n  id: files.id,\n  name: files.name,\n  // A missing group becomes null after the LEFT JOIN, so coalesce here.\n  comments: sql<Comment[]>`coalesce(${commentsByFile.comments}, \'[]\'::jsonb)`,\n  tags: sql<Tag[]>`coalesce(${tagsByFile.tags}, \'[]\'::jsonb)`,\n};\n\nconst allFiles = await db.select(selection).from(files)\n  .leftJoin(commentsByFile, eq(commentsByFile.fileId, files.id))\n  .leftJoin(tagsByFile, eq(tagsByFile.fileId, files.id))\n  .orderBy(files.id);\n\n$.display("Files with comments and tags", allFiles);\n\n// Filter the files by membership, without trimming the returned tag arrays.\nconst tagId = 1;\nconst matchingTag = db.select({ fileId: fileTags.fileId }).from(fileTags)\n  .where(sql`${fileTags.fileId} = ${files.id} and ${fileTags.tagId} = ${tagId}`);\n\nconst matchingFiles = await db.select(selection).from(files)\n  .leftJoin(commentsByFile, eq(commentsByFile.fileId, files.id))\n  .leftJoin(tagsByFile, eq(tagsByFile.fileId, files.id))\n  .where(exists(matchingTag))\n  .orderBy(files.id);\n\n$.display("Files tagged release, with all their tags", matchingFiles);\n',
+        },
+      ],
+      focus: { file: "query.ts", lines: [57, 65] },
+      run: "required",
+      highlight: {
+        displays: ["Files tagged release, with all their tags"],
+      },
+      meta: {
+        summary: "Filter parent records independently of the children you return.",
+        changed: "Only Launch notes matched release, and it kept all three tags.",
+      },
+    },
+    {
+      type: "walkthrough",
+      id: "06-rqb",
+      label: "Compare RQB",
+      title: "Load the same shape through relations",
+      body: "RQB uses the relations in `schema.ts` to load comments, authors and tags with `with`. The tags relation uses `through` to cross the file/tag link table.\n\nPress **Run** and compare the two file lists. Both return the same fields, ordering, nullable comment and empty arrays.\n\nUse RQB when your result follows declared relations. Use explicit SQL subqueries when you need to control each group, aggregate or computed field. Neither API requires you to use it for every query.",
+      edits: [
+        {
+          file: "query.ts",
+          write:
+            'import { db } from "@drizzle-run/runtime/context";\nimport { eq, exists, sql } from "drizzle-orm";\nimport { comments, files, fileTags, tags, users } from "./schema";\n\n// sql<T> describes the result; it does not validate JSON or decode nested dates.\n// These objects contain only integer IDs, text and null.\ntype Comment = Pick<typeof comments.$inferSelect, "id" | "text"> & {\n  author: Pick<typeof users.$inferSelect, "id" | "name">;\n};\ntype Tag = Pick<typeof tags.$inferSelect, "id" | "name">;\n\nconst commentsByFile = db\n  .select({\n    fileId: comments.fileId,\n    comments: sql<Comment[]>`jsonb_agg(\n      jsonb_build_object(\n        \'id\', ${comments.id},\n        \'text\', ${comments.text},\n        \'author\', jsonb_build_object(\'id\', ${users.id}, \'name\', ${users.name})\n      ) order by ${comments.id}\n    )`.as("comments"),\n  })\n  .from(comments)\n  .innerJoin(users, eq(comments.authorId, users.id))\n  .groupBy(comments.fileId)\n  .as("comments_by_file");\n\nconst tagsByFile = db\n  .select({\n    fileId: fileTags.fileId,\n    tags: sql<Tag[]>`jsonb_agg(\n      jsonb_build_object(\'id\', ${tags.id}, \'name\', ${tags.name})\n      order by ${tags.id}\n    )`.as("tags"),\n  })\n  .from(fileTags)\n  .innerJoin(tags, eq(fileTags.tagId, tags.id))\n  .groupBy(fileTags.fileId)\n  .as("tags_by_file");\n\nconst selection = {\n  id: files.id,\n  name: files.name,\n  // A missing group becomes null after the LEFT JOIN, so coalesce here.\n  comments: sql<Comment[]>`coalesce(${commentsByFile.comments}, \'[]\'::jsonb)`,\n  tags: sql<Tag[]>`coalesce(${tagsByFile.tags}, \'[]\'::jsonb)`,\n};\n\nconst allFiles = await db.select(selection).from(files)\n  .leftJoin(commentsByFile, eq(commentsByFile.fileId, files.id))\n  .leftJoin(tagsByFile, eq(tagsByFile.fileId, files.id))\n  .orderBy(files.id);\n\n$.display("Files with comments and tags", allFiles);\n\nconst relationalFiles = await db.query.files.findMany({\n  columns: { id: true, name: true },\n  with: {\n    comments: {\n      columns: { id: true, text: true },\n      with: { author: { columns: { id: true, name: true } } },\n      orderBy: { id: "asc" },\n    },\n    tags: { columns: { id: true, name: true }, orderBy: { id: "asc" } },\n  },\n  orderBy: { id: "asc" },\n});\n\n$.display("The same files with RQB", relationalFiles);\n',
+        },
+      ],
+      focus: { file: "query.ts", lines: [56, 68] },
+      run: "required",
+      highlight: {
+        displays: ["Files with comments and tags", "The same files with RQB"],
+      },
+      links: [
+        {
+          label: "Relational queries",
+          href: "https://orm.drizzle.team/docs/rqb",
+        },
+      ],
+      meta: {
+        summary: "Compare explicit aggregation with a relation-shaped query.",
+        changed: "The SQL and RQB file lists match, including empty arrays and null comment text.",
+      },
+    },
+    {
+      type: "walkthrough",
+      id: "07-starter",
+      label: "Use the starter",
+      title: "Take the complete query into your project",
+      body: "The separate **Files with comments, authors and tags** example contains the complete SQL query and tag filter. It opens as an editable example, ready to fork.\n\nKeep the independent groups when adding another collection. Choose the fields you need, order each array explicitly, and handle missing groups where you join them.\n\n[Open the complete starter](/examples/files-with-comments-and-tags).",
+      run: "none",
+      links: [
+        {
+          label: "Fork the complete starter",
+          href: "/examples/files-with-comments-and-tags",
+        },
+        {
+          label: "Original deep-subqueries gist",
+          href: "https://gist.github.com/rphlmr/de869cf24816d02068c3dd089b45ae82",
+        },
+      ],
+      meta: {
+        summary: "Open an independent, editable starter with the finished query.",
+      },
+    },
+  ],
+  meta: { slug: "nested-sql-results", status: "published", example: "7965429b-f73a-4c31-af29-2291188ca257" },
+});

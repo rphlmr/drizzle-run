@@ -1,0 +1,143 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["eslint", "typescript", "unicorn", "oxc", "import", "react", "jsx-a11y", "vitest", "promise"],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn"
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "es2026": true
+  },
+  "ignorePatterns": [
+    "**/dist/**",
+    "**/dist-isolation/**",
+    "**/.wrangler/**",
+    "**/.cache/**",
+    "**/*.d.ts",
+    "playwright-report/**",
+    "test-results/**"
+  ],
+  "rules": {
+    "react/react-in-jsx-scope": "off",
+    "import/no-default-export": "off",
+    "import/no-unassigned-import": "off",
+    // A runtime import loop can read an export before it is set; type-only imports are erased, so they are allowed.
+    "import/no-cycle": "error",
+    "import/default": "off",
+    "unicorn/require-post-message-target-origin": "off",
+    "eslint/no-underscore-dangle": "off",
+    "vitest/require-mock-type-parameters": "off",
+    // Vitest's expect takes an optional failure message as its second argument.
+    "vitest/valid-expect": ["error", { "maxArgs": 2 }],
+    "jsx-a11y/prefer-tag-over-role": "warn",
+    // Safari drops list semantics from a list without bullets; an explicit role keeps it.
+    "jsx-a11y/no-redundant-roles": ["error", { "ul": ["list"] }],
+    // The design system's controls render a native input, or a button that the wrapping label activates.
+    "jsx-a11y/label-has-associated-control": [
+      "error",
+      { "controlComponents": ["Input", "Switch", "Checkbox", "RadioGroupItem"], "depth": 3 }
+    ],
+
+    // Promise / async correctness
+    "typescript/no-floating-promises": "error",
+    "typescript/no-misused-promises": "error",
+    "typescript/return-await": ["error", "in-try-catch"],
+    "typescript/only-throw-error": "error",
+    // A chain's last then() feeds no later step, so a void side-effect callback there is fine.
+    "promise/always-return": ["warn", { "ignoreLastCallback": true }],
+    // TypeScript already checks a promise method's arguments; this rule reads Zod's z.catch(schema, fallback) as one.
+    "promise/valid-params": "off",
+
+    // TypeScript safety
+    "typescript/switch-exhaustiveness-check": "error",
+    "typescript/no-explicit-any": "off",
+    "typescript/no-non-null-assertion": "warn",
+    "typescript/consistent-type-imports": "warn",
+    // tsconfig's noImplicitReturns checks the same thing and understands exhaustive switches.
+    "typescript/consistent-return": "off",
+
+    // React correctness
+    "react/exhaustive-deps": "warn",
+
+    // Explicit preferences
+    "typescript/prefer-for-of": "warn",
+    "no-param-reassign": "warn",
+    "prefer-template": "warn"
+  },
+  "overrides": [
+    {
+      // The corpus imports plain drizzle-orm, which resolves only inside a guest install: scripts/typecheck-corpus.ts
+      // typechecks it against each guest. Lint cannot resolve it, so these rules would read every ORM type as an error.
+      "files": [
+        "testing/capability-harness/src/orm-corpus/**/*.ts",
+        "testing/capability-harness/src/kit-corpus/**/*.ts"
+      ],
+      "rules": {
+        "import/namespace": "off",
+        "typescript/no-redundant-type-constituents": "off",
+        "typescript/no-unnecessary-type-parameters": "off"
+      }
+    },
+    {
+      "files": ["apps/drizzle-run/**/*.{ts,tsx}"],
+      "jsPlugins": ["eslint-plugin-better-tailwindcss"],
+      "rules": {
+        // Off: Tailwind 4.3.3's canonicalizeCandidates keeps state between calls, so the warning depends on which files
+        // a lint thread saw first and never shows with --threads=1. Turn it back on once Tailwind fixes it, and check that
+        // `pnpm lint` reports the same with --threads=1.
+        "better-tailwindcss/enforce-canonical-classes": "off",
+        "better-tailwindcss/no-deprecated-classes": "warn",
+        "better-tailwindcss/no-duplicate-classes": "warn",
+        "better-tailwindcss/no-unnecessary-whitespace": "warn",
+        "better-tailwindcss/no-conflicting-classes": "error",
+        "better-tailwindcss/no-unknown-classes": "error",
+        "better-tailwindcss/no-concatenated-classes": "warn"
+      }
+    },
+    {
+      // Tests build partial fakes and read untyped payloads; production code keeps the rule.
+      "files": ["**/*.test.{ts,tsx}", "**/test/**", "apps/drizzle-run/e2e/**"],
+      "rules": {
+        "typescript/no-unsafe-type-assertion": "off"
+      }
+    },
+    {
+      // Example files are shown to users and their recordings are digest-checked:
+      // `export {}` keeps a file without imports a module in the playground.
+      "files": ["apps/drizzle-run/examples/*/files/**", "apps/drizzle-run/examples/*/sides/**"],
+      "rules": {
+        "unicorn/require-module-specifiers": "off"
+      }
+    },
+    {
+      // The rail splitter is a focusable window splitter with a value; an <hr> takes neither focus nor a value.
+      "files": ["apps/drizzle-run/src/ui/rail-resize-handle.tsx"],
+      "rules": {
+        "jsx-a11y/prefer-tag-over-role": "off"
+      }
+    },
+    {
+      // XState reads setup({ types }) only at compile time; this helper is the one place that declares a type
+      // without a value, so machines need no `{} as` assertion.
+      "files": [
+        "packages/runtime/src/machines/declare-type.ts",
+        "packages/orchestration/src/machine-utils.ts",
+        "apps/drizzle-run/src/lib/declare-type.ts",
+        "packages/connect/src/declare-type.ts",
+        "packages/core/src/connect/declare-type.ts",
+        "apps/drizzle-run/src/embed-loader/declare-type.ts"
+      ],
+      "rules": {
+        "typescript/no-unnecessary-type-parameters": "off"
+      }
+    }
+  ],
+  "settings": {
+    "better-tailwindcss": {
+      "cwd": "./apps/drizzle-run",
+      "entryPoint": "src/styles.css"
+    }
+  }
+}

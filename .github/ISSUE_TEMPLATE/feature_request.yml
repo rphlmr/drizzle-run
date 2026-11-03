@@ -1,0 +1,17 @@
+name: Feature request
+description: Something Drizzle Run could do.
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What you are trying to do
+      description: The task or the situation, not only the feature.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What would help
+    validations:
+      required: true

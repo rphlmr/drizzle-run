@@ -1,0 +1,15 @@
+{
+  "extends": "../../../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2025", "DOM"],
+    "types": ["node", "vite/client"],
+    "noEmit": true
+  },
+  "include": [
+    "./**/*.ts",
+    "../../../playwright.config.ts",
+    "../../../playwright.guides.config.ts",
+    "../../../playwright.deployed.config.ts",
+    "../../../playwright.stress.config.ts"
+  ]
+}

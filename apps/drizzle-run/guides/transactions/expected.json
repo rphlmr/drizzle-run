@@ -1,0 +1,133 @@
+{
+  "steps": {
+    "01-as-written": {
+      "Balances": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 1
+                },
+                "owner": {
+                  "type": "primitive",
+                  "value": "Ada"
+                },
+                "balance": {
+                  "type": "primitive",
+                  "value": 70
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 2
+                },
+                "owner": {
+                  "type": "primitive",
+                  "value": "Grace"
+                },
+                "balance": {
+                  "type": "primitive",
+                  "value": 80
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "02-savepoint": {
+      "Balances": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 1
+                },
+                "owner": {
+                  "type": "primitive",
+                  "value": "Ada"
+                },
+                "balance": {
+                  "type": "primitive",
+                  "value": 70
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 2
+                },
+                "owner": {
+                  "type": "primitive",
+                  "value": "Grace"
+                },
+                "balance": {
+                  "type": "primitive",
+                  "value": 0
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "03-overdraft": {
+      "Balances": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 1
+                },
+                "owner": {
+                  "type": "primitive",
+                  "value": "Ada"
+                },
+                "balance": {
+                  "type": "primitive",
+                  "value": 70
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 2
+                },
+                "owner": {
+                  "type": "primitive",
+                  "value": "Grace"
+                },
+                "balance": {
+                  "type": "primitive",
+                  "value": 0
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

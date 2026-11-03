@@ -1,0 +1,22 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`store queue machine paths > should take the same transitions 1`] = `
+[
+  "idle tasks=0 known=0 --task.queued--> running tasks=1 known=0",
+  "idle tasks=0 known=0 --write.queued--> running tasks=1 known=0",
+  "running tasks=1 known=0 --task.queued--> running tasks=2 known=0",
+  "running tasks=1 known=0 --write.queued--> running tasks=2 known=0",
+  "running tasks=1 known=0 --done(runTask) with a written project--> idle tasks=0 known=1",
+  "running tasks=1 known=0 --error(0.storeQueue.running)--> idle tasks=0 known=0",
+  "running tasks=2 known=0 --done(runTask) with a written project--> running tasks=1 known=1",
+  "running tasks=2 known=0 --error(0.storeQueue.running)--> running tasks=1 known=0",
+  "idle tasks=0 known=1 --task.queued--> running tasks=1 known=1",
+  "idle tasks=0 known=1 --write.queued--> running tasks=1 known=1",
+  "running tasks=1 known=1 --task.queued--> running tasks=2 known=1",
+  "running tasks=1 known=1 --write.queued--> running tasks=2 known=1",
+  "running tasks=1 known=1 --done(runTask) with a written project--> idle tasks=0 known=1",
+  "running tasks=1 known=1 --error(0.storeQueue.running)--> idle tasks=0 known=1",
+  "running tasks=2 known=1 --done(runTask) with a written project--> running tasks=1 known=1",
+  "running tasks=2 known=1 --error(0.storeQueue.running)--> running tasks=1 known=1",
+]
+`;

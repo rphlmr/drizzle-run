@@ -1,0 +1,1043 @@
+{
+  "tables": [
+    {
+      "name": "comments",
+      "columns": ["id", "post_id", "author_id", "body"],
+      "indexes": [
+        {
+          "name": "comments primary key",
+          "columns": ["id"]
+        }
+      ],
+      "foreignKeys": [
+        {
+          "columns": ["author_id"],
+          "referencedTable": "users",
+          "referencedColumns": ["id"]
+        },
+        {
+          "columns": ["post_id"],
+          "referencedTable": "posts",
+          "referencedColumns": ["id"]
+        }
+      ],
+      "keys": {
+        "id": "id",
+        "post_id": "postId",
+        "author_id": "authorId",
+        "body": "body"
+      }
+    },
+    {
+      "name": "posts",
+      "columns": ["id", "author_id", "title", "created_at"],
+      "indexes": [
+        {
+          "name": "posts primary key",
+          "columns": ["id"]
+        }
+      ],
+      "foreignKeys": [
+        {
+          "columns": ["author_id"],
+          "referencedTable": "users",
+          "referencedColumns": ["id"]
+        }
+      ],
+      "keys": {
+        "id": "id",
+        "author_id": "authorId",
+        "title": "title",
+        "created_at": "createdAt"
+      }
+    },
+    {
+      "name": "users",
+      "columns": ["id", "name", "email", "created_at"],
+      "indexes": [
+        {
+          "name": "users_email_unique",
+          "columns": ["email"]
+        },
+        {
+          "name": "users primary key",
+          "columns": ["id"]
+        }
+      ],
+      "foreignKeys": [],
+      "keys": {
+        "id": "id",
+        "name": "name",
+        "email": "email",
+        "created_at": "createdAt"
+      }
+    }
+  ],
+  "tableRows": {
+    "comments": 1000000,
+    "posts": 100000,
+    "users": 10000
+  },
+  "report": {
+    "settings": {
+      "size": "1m",
+      "measureRealTime": false
+    },
+    "dialect": "sqlite",
+    "fills": [
+      {
+        "size": "seed",
+        "tables": [
+          {
+            "name": "comments",
+            "rows": 2
+          },
+          {
+            "name": "users",
+            "rows": 3
+          },
+          {
+            "name": "posts",
+            "rows": 3
+          }
+        ],
+        "durationMs": 0
+      },
+      {
+        "size": "10k",
+        "tables": [
+          {
+            "name": "comments",
+            "rows": 10000
+          },
+          {
+            "name": "users",
+            "rows": 100
+          },
+          {
+            "name": "posts",
+            "rows": 1000
+          }
+        ],
+        "durationMs": 13
+      },
+      {
+        "size": "1m",
+        "tables": [
+          {
+            "name": "comments",
+            "rows": 1000000
+          },
+          {
+            "name": "users",
+            "rows": 10000
+          },
+          {
+            "name": "posts",
+            "rows": 100000
+          }
+        ],
+        "durationMs": 773
+      }
+    ],
+    "queries": [
+      {
+        "sequences": [10],
+        "sql": "select \"id\", \"author_id\", \"title\" from \"posts\" where \"posts\".\"author_id\" = ?",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": 1
+          }
+        ],
+        "raw": [
+          {
+            "database": "sqlite",
+            "size": "seed",
+            "rows": [
+              {
+                "id": 2,
+                "parent": 0,
+                "notused": 32,
+                "detail": "SCAN posts"
+              }
+            ],
+            "timing": {
+              "samples": 25,
+              "medianMs": 0.01,
+              "minMs": 0.009,
+              "maxMs": 0.03
+            }
+          },
+          {
+            "database": "sqlite",
+            "size": "10k",
+            "rows": [
+              {
+                "id": 2,
+                "parent": 0,
+                "notused": 115,
+                "detail": "SCAN posts"
+              }
+            ],
+            "timing": {
+              "samples": 25,
+              "medianMs": 0.032,
+              "minMs": 0.03,
+              "maxMs": 0.04
+            }
+          },
+          {
+            "database": "sqlite",
+            "size": "1m",
+            "rows": [
+              {
+                "id": 2,
+                "parent": 0,
+                "notused": 182,
+                "detail": "SCAN posts"
+              }
+            ],
+            "timing": {
+              "samples": 25,
+              "medianMs": 2.176,
+              "minMs": 2.024,
+              "maxMs": 2.24
+            }
+          }
+        ],
+        "reading": {
+          "summary": "Full scan of posts, reads 100k rows",
+          "verdict": {
+            "kind": "grows",
+            "tables": ["posts"]
+          },
+          "indexes": [
+            {
+              "trigger": "filtered_scan",
+              "table": "posts",
+              "columns": ["author_id"],
+              "name": "posts_author_idx",
+              "drizzle": "index(\"posts_author_idx\").on(t.authorId)",
+              "measure": {
+                "unit": "ms",
+                "before": 2.176,
+                "after": 0.009
+              },
+              "before": {
+                "database": "sqlite",
+                "size": "1m",
+                "rows": [
+                  {
+                    "id": 2,
+                    "parent": 0,
+                    "notused": 182,
+                    "detail": "SCAN posts"
+                  }
+                ],
+                "timing": {
+                  "samples": 25,
+                  "medianMs": 2.176,
+                  "minMs": 2.024,
+                  "maxMs": 2.24
+                }
+              },
+              "after": {
+                "database": "sqlite",
+                "size": "1m",
+                "rows": [
+                  {
+                    "id": 3,
+                    "parent": 0,
+                    "notused": 61,
+                    "detail": "SEARCH posts USING INDEX posts_author_idx (author_id=?)"
+                  }
+                ],
+                "timing": {
+                  "samples": 25,
+                  "medianMs": 0.009,
+                  "minMs": 0.008,
+                  "maxMs": 0.023
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "sequences": [11],
+        "sql": "select \"id\", \"name\" from \"users\" where \"users\".\"email\" = ?",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": "ada@example.com"
+          }
+        ],
+        "raw": [
+          {
+            "database": "sqlite",
+            "size": "seed",
+            "rows": [
+              {
+                "id": 3,
+                "parent": 0,
+                "notused": 39,
+                "detail": "SEARCH users USING INDEX users_email_unique (email=?)"
+              }
+            ],
+            "timing": {
+              "samples": 25,
+              "medianMs": 0.009,
+              "minMs": 0.009,
+              "maxMs": 0.032
+            }
+          },
+          {
+            "database": "sqlite",
+            "size": "10k",
+            "rows": [
+              {
+                "id": 3,
+                "parent": 0,
+                "notused": 39,
+                "detail": "SEARCH users USING INDEX users_email_unique (email=?)"
+              }
+            ],
+            "timing": {
+              "samples": 25,
+              "medianMs": 0.007,
+              "minMs": 0.006,
+              "maxMs": 0.017
+            }
+          },
+          {
+            "database": "sqlite",
+            "size": "1m",
+            "rows": [
+              {
+                "id": 3,
+                "parent": 0,
+                "notused": 39,
+                "detail": "SEARCH users USING INDEX users_email_unique (email=?)"
+              }
+            ],
+            "timing": {
+              "samples": 25,
+              "medianMs": 0.003,
+              "minMs": 0.003,
+              "maxMs": 0.032
+            }
+          }
+        ],
+        "reading": {
+          "summary": "Index search on users using users_email_unique",
+          "verdict": {
+            "kind": "stays_fast"
+          },
+          "indexes": []
+        }
+      },
+      {
+        "sequences": [12],
+        "sql": "select \"id\", \"title\" from \"posts\" order by \"posts\".\"created_at\" desc limit ?",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": 10
+          }
+        ],
+        "raw": [
+          {
+            "database": "sqlite",
+            "size": "seed",
+            "rows": [
+              {
+                "id": 4,
+                "parent": 0,
+                "notused": 32,
+                "detail": "SCAN posts"
+              },
+              {
+                "id": 17,
+                "parent": 0,
+                "notused": 0,
+                "detail": "USE TEMP B-TREE FOR ORDER BY"
+              }
+            ],
+            "timing": {
+              "samples": 25,
+              "medianMs": 0.016,
+              "minMs": 0.015,
+              "maxMs": 0.118
+            }
+          },
+          {
+            "database": "sqlite",
+            "size": "10k",
+            "rows": [
+              {
+                "id": 4,
+                "parent": 0,
+                "notused": 115,
+                "detail": "SCAN posts"
+              },
+              {
+                "id": 17,
+                "parent": 0,
+                "notused": 0,
+                "detail": "USE TEMP B-TREE FOR ORDER BY"
+              }
+            ],
+            "timing": {
+              "samples": 25,
+              "medianMs": 0.088,
+              "minMs": 0.07,
+              "maxMs": 0.129
+            }
+          },
+          {
+            "database": "sqlite",
+            "size": "1m",
+            "rows": [
+              {
+                "id": 4,
+                "parent": 0,
+                "notused": 182,
+                "detail": "SCAN posts"
+              },
+              {
+                "id": 17,
+                "parent": 0,
+                "notused": 0,
+                "detail": "USE TEMP B-TREE FOR ORDER BY"
+              }
+            ],
+            "timing": {
+              "samples": 25,
+              "medianMs": 3.7,
+              "minMs": 3.569,
+              "maxMs": 3.882
+            }
+          }
+        ],
+        "reading": {
+          "summary": "Full scan of posts, reads 100k rows, sorts every row",
+          "verdict": {
+            "kind": "grows",
+            "tables": ["posts"]
+          },
+          "indexes": [
+            {
+              "trigger": "sorted_limit",
+              "table": "posts",
+              "columns": ["created_at"],
+              "name": "posts_created_at_idx",
+              "drizzle": "index(\"posts_created_at_idx\").on(t.createdAt)",
+              "measure": {
+                "unit": "ms",
+                "before": 3.7,
+                "after": 0.01
+              },
+              "before": {
+                "database": "sqlite",
+                "size": "1m",
+                "rows": [
+                  {
+                    "id": 4,
+                    "parent": 0,
+                    "notused": 182,
+                    "detail": "SCAN posts"
+                  },
+                  {
+                    "id": 17,
+                    "parent": 0,
+                    "notused": 0,
+                    "detail": "USE TEMP B-TREE FOR ORDER BY"
+                  }
+                ],
+                "timing": {
+                  "samples": 25,
+                  "medianMs": 3.7,
+                  "minMs": 3.569,
+                  "maxMs": 3.882
+                }
+              },
+              "after": {
+                "database": "sqlite",
+                "size": "1m",
+                "rows": [
+                  {
+                    "id": 5,
+                    "parent": 0,
+                    "notused": 189,
+                    "detail": "SCAN posts USING INDEX posts_created_at_idx"
+                  }
+                ],
+                "timing": {
+                  "samples": 25,
+                  "medianMs": 0.01,
+                  "minMs": 0.009,
+                  "maxMs": 0.78
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "sequences": [13],
+        "sql": "select count(*) from \"posts\"",
+        "parameters": [],
+        "raw": [
+          {
+            "database": "sqlite",
+            "size": "seed",
+            "rows": [
+              {
+                "id": 4,
+                "parent": 0,
+                "notused": 0,
+                "detail": "SCAN posts"
+              }
+            ],
+            "timing": {
+              "samples": 25,
+              "medianMs": 0.008,
+              "minMs": 0.008,
+              "maxMs": 0.017
+            }
+          },
+          {
+            "database": "sqlite",
+            "size": "10k",
+            "rows": [
+              {
+                "id": 4,
+                "parent": 0,
+                "notused": 0,
+                "detail": "SCAN posts"
+              }
+            ],
+            "timing": {
+              "samples": 25,
+              "medianMs": 0.006,
+              "minMs": 0.006,
+              "maxMs": 0.02
+            }
+          },
+          {
+            "database": "sqlite",
+            "size": "1m",
+            "rows": [
+              {
+                "id": 4,
+                "parent": 0,
+                "notused": 0,
+                "detail": "SCAN posts"
+              }
+            ],
+            "timing": {
+              "samples": 25,
+              "medianMs": 0.011,
+              "minMs": 0.01,
+              "maxMs": 0.025
+            }
+          }
+        ],
+        "reading": {
+          "summary": "Full scan of posts, reads 100k rows",
+          "verdict": {
+            "kind": "grows",
+            "tables": ["posts"]
+          },
+          "indexes": []
+        }
+      },
+      {
+        "sequences": [14],
+        "sql": "select \"users\".\"id\", \"users\".\"name\", count(\"posts\".\"id\") from \"users\" left join \"posts\" on \"posts\".\"author_id\" = \"users\".\"id\" group by \"users\".\"id\"",
+        "parameters": [],
+        "raw": [
+          {
+            "database": "sqlite",
+            "size": "seed",
+            "rows": [
+              {
+                "id": 7,
+                "parent": 0,
+                "notused": 32,
+                "detail": "SCAN users"
+              },
+              {
+                "id": 9,
+                "parent": 0,
+                "notused": 32,
+                "detail": "SCAN posts LEFT-JOIN"
+              }
+            ],
+            "timing": {
+              "samples": 25,
+              "medianMs": 0.011,
+              "minMs": 0.01,
+              "maxMs": 0.078
+            }
+          },
+          {
+            "database": "sqlite",
+            "size": "10k",
+            "rows": [
+              {
+                "id": 7,
+                "parent": 0,
+                "notused": 82,
+                "detail": "SCAN users"
+              },
+              {
+                "id": 11,
+                "parent": 0,
+                "notused": 0,
+                "detail": "BLOOM FILTER ON posts (author_id=?)"
+              },
+              {
+                "id": 20,
+                "parent": 0,
+                "notused": 49,
+                "detail": "SEARCH posts USING AUTOMATIC COVERING INDEX (author_id=?) LEFT-JOIN"
+              }
+            ],
+            "timing": {
+              "samples": 25,
+              "medianMs": 0.345,
+              "minMs": 0.324,
+              "maxMs": 2.292
+            }
+          },
+          {
+            "database": "sqlite",
+            "size": "1m",
+            "rows": [
+              {
+                "id": 7,
+                "parent": 0,
+                "notused": 148,
+                "detail": "SCAN users"
+              },
+              {
+                "id": 11,
+                "parent": 0,
+                "notused": 0,
+                "detail": "BLOOM FILTER ON posts (author_id=?)"
+              },
+              {
+                "id": 20,
+                "parent": 0,
+                "notused": 52,
+                "detail": "SEARCH posts USING AUTOMATIC COVERING INDEX (author_id=?) LEFT-JOIN"
+              }
+            ],
+            "timing": {
+              "samples": 5,
+              "medianMs": 49.825,
+              "minMs": 49.001,
+              "maxMs": 50.744
+            }
+          }
+        ],
+        "reading": {
+          "summary": "Scans users, builds a temporary index on posts each call",
+          "verdict": {
+            "kind": "grows",
+            "tables": ["users", "posts"]
+          },
+          "indexes": []
+        }
+      },
+      {
+        "sequences": [15],
+        "sql": "select \"comments\".\"body\", \"posts\".\"title\" from \"comments\" inner join \"posts\" on \"posts\".\"id\" = \"comments\".\"post_id\" where \"comments\".\"author_id\" = ?",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": 2
+          }
+        ],
+        "raw": [
+          {
+            "database": "sqlite",
+            "size": "seed",
+            "rows": [
+              {
+                "id": 3,
+                "parent": 0,
+                "notused": 26,
+                "detail": "SCAN comments"
+              },
+              {
+                "id": 7,
+                "parent": 0,
+                "notused": 22,
+                "detail": "SEARCH posts USING INTEGER PRIMARY KEY (rowid=?)"
+              }
+            ],
+            "timing": {
+              "samples": 25,
+              "medianMs": 0.008,
+              "minMs": 0.008,
+              "maxMs": 0.021
+            }
+          },
+          {
+            "database": "sqlite",
+            "size": "10k",
+            "rows": [
+              {
+                "id": 3,
+                "parent": 0,
+                "notused": 148,
+                "detail": "SCAN comments"
+              },
+              {
+                "id": 7,
+                "parent": 0,
+                "notused": 37,
+                "detail": "SEARCH posts USING INTEGER PRIMARY KEY (rowid=?)"
+              }
+            ],
+            "timing": {
+              "samples": 25,
+              "medianMs": 0.267,
+              "minMs": 0.261,
+              "maxMs": 0.291
+            }
+          },
+          {
+            "database": "sqlite",
+            "size": "1m",
+            "rows": [
+              {
+                "id": 3,
+                "parent": 0,
+                "notused": 215,
+                "detail": "SCAN comments"
+              },
+              {
+                "id": 7,
+                "parent": 0,
+                "notused": 43,
+                "detail": "SEARCH posts USING INTEGER PRIMARY KEY (rowid=?)"
+              }
+            ],
+            "timing": {
+              "samples": 9,
+              "medianMs": 23.182,
+              "minMs": 23.01,
+              "maxMs": 24.035
+            }
+          }
+        ],
+        "reading": {
+          "summary": "Scans comments, looks up on posts",
+          "verdict": {
+            "kind": "grows",
+            "tables": ["comments"]
+          },
+          "indexes": [
+            {
+              "trigger": "filtered_scan",
+              "table": "comments",
+              "columns": ["author_id"],
+              "name": "comments_author_idx",
+              "drizzle": "index(\"comments_author_idx\").on(t.authorId)",
+              "measure": {
+                "unit": "ms",
+                "before": 23.182,
+                "after": 0.077
+              },
+              "before": {
+                "database": "sqlite",
+                "size": "1m",
+                "rows": [
+                  {
+                    "id": 3,
+                    "parent": 0,
+                    "notused": 215,
+                    "detail": "SCAN comments"
+                  },
+                  {
+                    "id": 7,
+                    "parent": 0,
+                    "notused": 43,
+                    "detail": "SEARCH posts USING INTEGER PRIMARY KEY (rowid=?)"
+                  }
+                ],
+                "timing": {
+                  "samples": 9,
+                  "medianMs": 23.182,
+                  "minMs": 23.01,
+                  "maxMs": 24.035
+                }
+              },
+              "after": {
+                "database": "sqlite",
+                "size": "1m",
+                "rows": [
+                  {
+                    "id": 4,
+                    "parent": 0,
+                    "notused": 90,
+                    "detail": "SEARCH comments USING INDEX comments_author_idx (author_id=?)"
+                  },
+                  {
+                    "id": 11,
+                    "parent": 0,
+                    "notused": 43,
+                    "detail": "SEARCH posts USING INTEGER PRIMARY KEY (rowid=?)"
+                  }
+                ],
+                "timing": {
+                  "samples": 25,
+                  "medianMs": 0.077,
+                  "minMs": 0.074,
+                  "maxMs": 0.237
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "sequences": [16],
+        "sql": "insert into \"posts\" (\"author_id\", \"title\", \"created_at\") values (?, ?, ?) returning \"id\"",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": 1
+          },
+          {
+            "type": "primitive",
+            "value": "Planned"
+          },
+          {
+            "type": "primitive",
+            "value": 4
+          }
+        ],
+        "raw": [
+          {
+            "database": "sqlite",
+            "size": "seed",
+            "rows": [
+              {
+                "id": 23,
+                "parent": 0,
+                "notused": 26,
+                "detail": "SCAN comments"
+              }
+            ],
+            "timing": {
+              "samples": 25,
+              "medianMs": 0.033,
+              "minMs": 0.026,
+              "maxMs": 0.132
+            }
+          },
+          {
+            "database": "sqlite",
+            "size": "10k",
+            "rows": [
+              {
+                "id": 23,
+                "parent": 0,
+                "notused": 148,
+                "detail": "SCAN comments"
+              }
+            ],
+            "timing": {
+              "samples": 25,
+              "medianMs": 0.022,
+              "minMs": 0.019,
+              "maxMs": 0.056
+            }
+          },
+          {
+            "database": "sqlite",
+            "size": "1m",
+            "rows": [
+              {
+                "id": 23,
+                "parent": 0,
+                "notused": 215,
+                "detail": "SCAN comments"
+              }
+            ],
+            "timing": {
+              "samples": 25,
+              "medianMs": 0.015,
+              "minMs": 0.013,
+              "maxMs": 0.098
+            }
+          }
+        ],
+        "reading": {
+          "summary": "Inserts without reading a table first",
+          "verdict": {
+            "kind": "stays_fast"
+          },
+          "indexes": []
+        }
+      },
+      {
+        "sequences": [17],
+        "sql": "update \"users\" set \"name\" = ? where \"users\".\"id\" = ?",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": "Ada L."
+          },
+          {
+            "type": "primitive",
+            "value": 1
+          }
+        ],
+        "raw": [
+          {
+            "database": "sqlite",
+            "size": "seed",
+            "rows": [
+              {
+                "id": 4,
+                "parent": 0,
+                "notused": 33,
+                "detail": "SEARCH users USING INTEGER PRIMARY KEY (rowid=?)"
+              }
+            ],
+            "timing": {
+              "samples": 25,
+              "medianMs": 0.029,
+              "minMs": 0.02,
+              "maxMs": 0.069
+            }
+          },
+          {
+            "database": "sqlite",
+            "size": "10k",
+            "rows": [
+              {
+                "id": 4,
+                "parent": 0,
+                "notused": 33,
+                "detail": "SEARCH users USING INTEGER PRIMARY KEY (rowid=?)"
+              }
+            ],
+            "timing": {
+              "samples": 25,
+              "medianMs": 0.017,
+              "minMs": 0.015,
+              "maxMs": 0.025
+            }
+          },
+          {
+            "database": "sqlite",
+            "size": "1m",
+            "rows": [
+              {
+                "id": 4,
+                "parent": 0,
+                "notused": 33,
+                "detail": "SEARCH users USING INTEGER PRIMARY KEY (rowid=?)"
+              }
+            ],
+            "timing": {
+              "samples": 25,
+              "medianMs": 0.013,
+              "minMs": 0.011,
+              "maxMs": 0.024
+            }
+          }
+        ],
+        "reading": {
+          "summary": "Updates; primary key lookup on users",
+          "verdict": {
+            "kind": "stays_fast"
+          },
+          "indexes": []
+        }
+      },
+      {
+        "sequences": [18],
+        "sql": "select \"id\", \"title\" from \"posts\" limit ?",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": 5
+          }
+        ],
+        "raw": [
+          {
+            "database": "sqlite",
+            "size": "seed",
+            "rows": [
+              {
+                "id": 3,
+                "parent": 0,
+                "notused": 32,
+                "detail": "SCAN posts"
+              }
+            ],
+            "timing": {
+              "samples": 25,
+              "medianMs": 0.012,
+              "minMs": 0.011,
+              "maxMs": 0.033
+            }
+          },
+          {
+            "database": "sqlite",
+            "size": "10k",
+            "rows": [
+              {
+                "id": 3,
+                "parent": 0,
+                "notused": 115,
+                "detail": "SCAN posts"
+              }
+            ],
+            "timing": {
+              "samples": 25,
+              "medianMs": 0.006,
+              "minMs": 0.006,
+              "maxMs": 0.015
+            }
+          },
+          {
+            "database": "sqlite",
+            "size": "1m",
+            "rows": [
+              {
+                "id": 3,
+                "parent": 0,
+                "notused": 182,
+                "detail": "SCAN posts"
+              }
+            ],
+            "timing": {
+              "samples": 25,
+              "medianMs": 0.006,
+              "minMs": 0.006,
+              "maxMs": 0.018
+            }
+          }
+        ],
+        "reading": {
+          "summary": "Reads the first rows of posts and stops",
+          "verdict": {
+            "kind": "stays_fast"
+          },
+          "indexes": []
+        }
+      }
+    ],
+    "skipped": [],
+    "durationMs": 1929
+  }
+}

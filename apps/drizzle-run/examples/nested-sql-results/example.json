@@ -1,0 +1,24 @@
+{
+  "id": "7965429b-f73a-4c31-af29-2291188ca257",
+  "slug": "nested-sql-results",
+  "status": "published",
+  "title": "Build nested results with SQL",
+  "description": "Learn why joins multiply rows, aggregate each relation, keep empty arrays, and compare the result with RQB.",
+  "topic": "Queries",
+  "featured": false,
+  "order": 75,
+  "dialect": "postgresql",
+  "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+  "links": [
+    {
+      "kind": "docs",
+      "label": "Subqueries",
+      "url": "https://orm.drizzle.team/docs/select"
+    },
+    {
+      "kind": "example",
+      "label": "Fork the complete starter",
+      "slug": "files-with-comments-and-tags"
+    }
+  ]
+}

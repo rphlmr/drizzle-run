@@ -1,0 +1,13 @@
+{
+  "id": "a7f8f855-95e9-47d5-afac-792f682cc29b",
+  "slug": "quick-start-postgresql",
+  "status": "published",
+  "title": "PostgreSQL quick start",
+  "description": "A users table, two seeded rows, and a first select.",
+  "topic": "Queries",
+  "featured": false,
+  "order": 10,
+  "dialect": "postgresql",
+  "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+  "links": [{ "kind": "docs", "label": "Select", "url": "https://orm.drizzle.team/docs/select" }]
+}

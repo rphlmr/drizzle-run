@@ -1,0 +1,187 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "drizzle-run",
+  "main": "./worker/index.ts",
+  "compatibility_date": "2026-10-11",
+  "assets": {
+    // Where the Cloudflare Vite plugin writes the static files. Its own builds and dev server set this themselves;
+    // `wrangler dev --config wrangler.jsonc` (the built local server) reads it.
+    "directory": "./dist/client",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    // Every request but Vite's build files, so each page the app routes to gets its isolation headers, a page not
+    // found included. The build files are served as they are, with the headers public/_headers gives them.
+    "run_worker_first": ["/*", "!/assets/*"],
+  },
+  // The production resources. Local servers keep their own copies under these names in .cache, never the account's.
+  // Drizzle migrations in ./drizzle, applied by scripts/migrate-d1.ts, locally and in every release.
+  "d1_databases": [
+    {
+      "binding": "PLAYGROUNDS",
+      "database_name": "drizzle-run",
+      "database_id": "da073235-4429-4f60-9028-c3f6782f11af",
+    },
+  ],
+  // RUNTIME_ASSETS serves the runtime packages; CLOUD_PROJECTS keeps signed-in users' synced projects (cloud-sync.ts).
+  "r2_buckets": [
+    {
+      "binding": "RUNTIME_ASSETS",
+      "bucket_name": "drizzle-run-assets",
+    },
+    {
+      "binding": "CLOUD_PROJECTS",
+      "bucket_name": "drizzle-run-cloud-projects",
+    },
+  ],
+  // Budgets: the daily one resets at midnight UTC, and the stored-bytes cap never resets. Each matches its code fallback
+  // (worker/wrangler-config.test.ts).
+  "vars": {
+    // Every AI chat room's forwarded messages per day before the relay answers busy.
+    "CONNECT_DAILY_MESSAGES": "400000",
+    // Bytes every publish, revision and recorded run may keep in D1, all days together, under the Free plan's 500 MB
+    // database (400 MB). Past it, publishing pauses; nothing is deleted.
+    "PUBLISH_MAX_STORED_BYTES": "400000000",
+  },
+  // Every period matches rateLimitRetryAfterMs in worker/http.ts or saveRateLimitRetryAfterMs in worker/cloud-sync.ts,
+  // the wait a refusal answers (worker/wrangler-config.test.ts).
+  "ratelimits": [
+    // Publishes, Community reports and recorded runs, each counted per account when signed in, else per address.
+    {
+      "name": "PUBLISH_RATE_LIMIT",
+      "namespace_id": "58294017",
+      "simple": {
+        "limit": 30,
+        "period": 60,
+      },
+    },
+    // Sign-ins started per address (IPv6 by /64): a classroom behind one address signing in at once.
+    {
+      "name": "AUTH_RATE_LIMIT",
+      "namespace_id": "58294019",
+      "simple": {
+        "limit": 60,
+        "period": 60,
+      },
+    },
+    // AI chat connections per room and address: reconnects of every tab and the companion of one pairing.
+    {
+      "name": "CONNECT_RATE_LIMIT",
+      "namespace_id": "58294020",
+      "simple": {
+        "limit": 60,
+        "period": 60,
+      },
+    },
+    // AI chat connections per address across all rooms: a classroom of pairings behind one address reconnecting,
+    // while fresh room ids cannot get one client past the room limit.
+    {
+      "name": "CONNECT_ADDRESS_RATE_LIMIT",
+      "namespace_id": "58294021",
+      "simple": {
+        "limit": 300,
+        "period": 60,
+      },
+    },
+    // Each account's cloud saves: enough for a first sync of all 100 projects in one pass. The period matches
+    // saveRateLimitRetryAfterMs.
+    {
+      "name": "CLOUD_SYNC_RATE_LIMIT",
+      "namespace_id": "58294018",
+      "simple": {
+        "limit": 100,
+        "period": 60,
+      },
+    },
+  ],
+  // The AI chat relay (worker/connect-*.ts): a room per pairing and one daily quota. SQLite-backed
+  // classes, as the Workers Free plan requires.
+  "durable_objects": {
+    "bindings": [
+      { "name": "CONNECT_ROOMS", "class_name": "ConnectRoom" },
+      { "name": "CONNECT_QUOTA", "class_name": "ConnectQuota" },
+    ],
+  },
+  "migrations": [{ "tag": "connect-v1", "new_sqlite_classes": ["ConnectRoom", "ConnectQuota"] }],
+  // Local e2e server only (apps/drizzle-run/scripts/serve-drizzle-run.ts): parallel Playwright workers publish
+  // far more than 30 snapshots a minute. Bindings do not inherit into an environment, so all of them repeat.
+  "env": {
+    "e2e": {
+      // Sign-in against the mock GitHub the e2e server serves on 4311 (scripts/github-oauth-mock.ts). A linked
+      // worktree's serve script overrides both URLs with its own fixture port. These values are not secrets. Production sets GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET instead; see README.
+      "vars": {
+        "GITHUB_CLIENT_ID": "Iv1.e2e-drizzle-run",
+        "GITHUB_CLIENT_SECRET": "e2e-client-secret",
+        "GITHUB_OAUTH_URL": "http://127.0.0.1:4311/github",
+        "GITHUB_API_URL": "http://127.0.0.1:4311/github/api",
+        "CONNECT_DAILY_MESSAGES": "400000",
+        "PUBLISH_MAX_STORED_BYTES": "400000000",
+      },
+      // A placeholder D1 id, so this local-only environment can never reach the production database.
+      "d1_databases": [
+        {
+          "binding": "PLAYGROUNDS",
+          "database_name": "drizzle-run-local",
+          "database_id": "00000000-0000-0000-0000-000000000000",
+        },
+      ],
+      "r2_buckets": [
+        {
+          "binding": "RUNTIME_ASSETS",
+          "bucket_name": "drizzle-run-assets",
+        },
+        {
+          "binding": "CLOUD_PROJECTS",
+          "bucket_name": "drizzle-run-cloud-projects",
+        },
+      ],
+      "ratelimits": [
+        {
+          "name": "PUBLISH_RATE_LIMIT",
+          "namespace_id": "58294017",
+          "simple": {
+            "limit": 1000,
+            "period": 60,
+          },
+        },
+        {
+          "name": "CLOUD_SYNC_RATE_LIMIT",
+          "namespace_id": "58294018",
+          "simple": {
+            "limit": 1000,
+            "period": 60,
+          },
+        },
+        {
+          "name": "AUTH_RATE_LIMIT",
+          "namespace_id": "58294019",
+          "simple": {
+            "limit": 1000,
+            "period": 60,
+          },
+        },
+        {
+          "name": "CONNECT_RATE_LIMIT",
+          "namespace_id": "58294020",
+          "simple": {
+            "limit": 1000,
+            "period": 60,
+          },
+        },
+        {
+          "name": "CONNECT_ADDRESS_RATE_LIMIT",
+          "namespace_id": "58294021",
+          "simple": {
+            "limit": 1000,
+            "period": 60,
+          },
+        },
+      ],
+      "durable_objects": {
+        "bindings": [
+          { "name": "CONNECT_ROOMS", "class_name": "ConnectRoom" },
+          { "name": "CONNECT_QUOTA", "class_name": "ConnectQuota" },
+        ],
+      },
+    },
+  },
+}

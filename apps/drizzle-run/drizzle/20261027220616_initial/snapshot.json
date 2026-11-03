@@ -1,0 +1,960 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "id": "6dc8c0b9-c23b-415e-85ef-f459f5599b91",
+  "prevIds": ["00000000-0000-0000-0000-000000000000"],
+  "ddl": [
+    {
+      "name": "cloud_projects",
+      "entityType": "tables"
+    },
+    {
+      "name": "community_listings",
+      "entityType": "tables"
+    },
+    {
+      "name": "playground_links",
+      "entityType": "tables"
+    },
+    {
+      "name": "publish_storage",
+      "entityType": "tables"
+    },
+    {
+      "name": "recorded_runs",
+      "entityType": "tables"
+    },
+    {
+      "name": "sessions",
+      "entityType": "tables"
+    },
+    {
+      "name": "users",
+      "entityType": "tables"
+    },
+    {
+      "table": "cloud_projects",
+      "name": "user_id",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "cloud_projects",
+      "name": "project_id",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "cloud_projects",
+      "name": "name",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "cloud_projects",
+      "name": "revision",
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "cloud_projects",
+      "name": "content_digest",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "cloud_projects",
+      "name": "byte_size",
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "cloud_projects",
+      "name": "object_key",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "cloud_projects",
+      "name": "created_at",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "cloud_projects",
+      "name": "updated_at",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "community_listings",
+      "name": "link_id",
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "community_listings",
+      "name": "owner_user_id",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "community_listings",
+      "name": "state",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "community_listings",
+      "name": "title",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "community_listings",
+      "name": "description",
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "community_listings",
+      "name": "topic",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "community_listings",
+      "name": "dialect",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "community_listings",
+      "name": "orm_version",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "community_listings",
+      "name": "kit_version",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "community_listings",
+      "name": "guest_flavor",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "community_listings",
+      "name": "second_dialect",
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "community_listings",
+      "name": "second_orm_version",
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "community_listings",
+      "name": "second_kit_version",
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "community_listings",
+      "name": "second_guest_flavor",
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "community_listings",
+      "name": "side_name",
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "community_listings",
+      "name": "second_side_name",
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "community_listings",
+      "name": "file_names",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "community_listings",
+      "name": "listed_at",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "community_listings",
+      "name": "report_count",
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "0",
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "community_listings",
+      "name": "last_reported_at",
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "playground_links",
+      "name": "id",
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "playground_links",
+      "name": "owner_user_id",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "playground_links",
+      "name": "snapshot_version",
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "playground_links",
+      "name": "payload_json",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "playground_links",
+      "name": "content_digest",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "playground_links",
+      "name": "description",
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "playground_links",
+      "name": "summary_json",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "playground_links",
+      "name": "idempotency_key",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "playground_links",
+      "name": "created_at",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "playground_links",
+      "name": "updated_at",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "publish_storage",
+      "name": "scope",
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "publish_storage",
+      "name": "bytes",
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "recorded_runs",
+      "name": "link_id",
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "recorded_runs",
+      "name": "snapshot_digest",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "recorded_runs",
+      "name": "payload_json",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "recorded_runs",
+      "name": "recorded_at",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "recorded_runs",
+      "name": "created_at",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "sessions",
+      "name": "token_hash",
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "sessions",
+      "name": "user_id",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "sessions",
+      "name": "created_at",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "sessions",
+      "name": "expires_at",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "users",
+      "name": "id",
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "users",
+      "name": "github_id",
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "users",
+      "name": "login",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "users",
+      "name": "name",
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "users",
+      "name": "created_at",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "users",
+      "name": "updated_at",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "community_listings",
+      "name": "community_listings_visible",
+      "columns": [
+        {
+          "value": "listed_at",
+          "isExpression": false
+        },
+        {
+          "value": "link_id",
+          "isExpression": false
+        }
+      ],
+      "isUnique": false,
+      "where": "\"community_listings\".\"state\" = 'listed'",
+      "origin": "manual",
+      "entityType": "indexes"
+    },
+    {
+      "table": "community_listings",
+      "name": "community_listings_reported",
+      "columns": [
+        {
+          "value": "report_count",
+          "isExpression": false
+        },
+        {
+          "value": "last_reported_at",
+          "isExpression": false
+        }
+      ],
+      "isUnique": false,
+      "where": "\"community_listings\".\"report_count\" > 0 AND \"community_listings\".\"state\" <> 'removed'",
+      "origin": "manual",
+      "entityType": "indexes"
+    },
+    {
+      "table": "playground_links",
+      "name": "playground_links_owner_created",
+      "columns": [
+        {
+          "value": "owner_user_id",
+          "isExpression": false
+        },
+        {
+          "value": "created_at",
+          "isExpression": false
+        },
+        {
+          "value": "id",
+          "isExpression": false
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "origin": "manual",
+      "entityType": "indexes"
+    },
+    {
+      "table": "sessions",
+      "name": "sessions_user",
+      "columns": [
+        {
+          "value": "user_id",
+          "isExpression": false
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "origin": "manual",
+      "entityType": "indexes"
+    },
+    {
+      "table": "cloud_projects",
+      "name": "fk_cloud_projects_user_id_users_id_fk",
+      "columns": ["user_id"],
+      "tableTo": "users",
+      "columnsTo": ["id"],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "nameExplicit": false,
+      "entityType": "fks"
+    },
+    {
+      "table": "community_listings",
+      "name": "fk_community_listings_link_id_playground_links_id_fk",
+      "columns": ["link_id"],
+      "tableTo": "playground_links",
+      "columnsTo": ["id"],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "nameExplicit": false,
+      "entityType": "fks"
+    },
+    {
+      "table": "community_listings",
+      "name": "fk_community_listings_owner_user_id_users_id_fk",
+      "columns": ["owner_user_id"],
+      "tableTo": "users",
+      "columnsTo": ["id"],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "nameExplicit": false,
+      "entityType": "fks"
+    },
+    {
+      "table": "playground_links",
+      "name": "fk_playground_links_owner_user_id_users_id_fk",
+      "columns": ["owner_user_id"],
+      "tableTo": "users",
+      "columnsTo": ["id"],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "nameExplicit": false,
+      "entityType": "fks"
+    },
+    {
+      "table": "recorded_runs",
+      "name": "fk_recorded_runs_link_id_playground_links_id_fk",
+      "columns": ["link_id"],
+      "tableTo": "playground_links",
+      "columnsTo": ["id"],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "nameExplicit": false,
+      "entityType": "fks"
+    },
+    {
+      "table": "sessions",
+      "name": "fk_sessions_user_id_users_id_fk",
+      "columns": ["user_id"],
+      "tableTo": "users",
+      "columnsTo": ["id"],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "nameExplicit": false,
+      "entityType": "fks"
+    },
+    {
+      "table": "cloud_projects",
+      "name": "cloud_projects_pk",
+      "columns": ["user_id", "project_id"],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "table": "community_listings",
+      "name": "community_listings_pk",
+      "columns": ["link_id"],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "table": "playground_links",
+      "name": "playground_links_pk",
+      "columns": ["id"],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "table": "publish_storage",
+      "name": "publish_storage_pk",
+      "columns": ["scope"],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "table": "recorded_runs",
+      "name": "recorded_runs_pk",
+      "columns": ["link_id"],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "table": "sessions",
+      "name": "sessions_pk",
+      "columns": ["token_hash"],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "table": "users",
+      "name": "users_pk",
+      "columns": ["id"],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "table": "playground_links",
+      "name": "playground_links_idempotency_key_unique",
+      "columns": ["idempotency_key"],
+      "nameExplicit": false,
+      "entityType": "uniques"
+    },
+    {
+      "table": "users",
+      "name": "users_github_id_unique",
+      "columns": ["github_id"],
+      "nameExplicit": false,
+      "entityType": "uniques"
+    },
+    {
+      "table": "cloud_projects",
+      "name": "cloud_projects_revision",
+      "value": "\"revision\" > 0",
+      "entityType": "checks"
+    },
+    {
+      "table": "cloud_projects",
+      "name": "cloud_projects_content_digest",
+      "value": "length(\"content_digest\") = 64 AND \"content_digest\" NOT GLOB '*[^0-9a-f]*'",
+      "entityType": "checks"
+    },
+    {
+      "table": "cloud_projects",
+      "name": "cloud_projects_byte_size",
+      "value": "\"byte_size\" BETWEEN 1 AND 1048576",
+      "entityType": "checks"
+    },
+    {
+      "table": "cloud_projects",
+      "name": "cloud_projects_name",
+      "value": "length(\"name\") BETWEEN 1 AND 200",
+      "entityType": "checks"
+    },
+    {
+      "table": "community_listings",
+      "name": "community_listings_state",
+      "value": "\"state\" IN ('listed', 'unlisted', 'removed')",
+      "entityType": "checks"
+    },
+    {
+      "table": "community_listings",
+      "name": "community_listings_title",
+      "value": "length(\"title\") BETWEEN 1 AND 160",
+      "entityType": "checks"
+    },
+    {
+      "table": "community_listings",
+      "name": "community_listings_description",
+      "value": "\"description\" IS NULL OR length(\"description\") BETWEEN 1 AND 140",
+      "entityType": "checks"
+    },
+    {
+      "table": "community_listings",
+      "name": "community_listings_topic",
+      "value": "\"topic\" IN ('playground', 'bug-repros')",
+      "entityType": "checks"
+    },
+    {
+      "table": "community_listings",
+      "name": "community_listings_dialect",
+      "value": "\"dialect\" IN ('postgresql', 'sqlite')",
+      "entityType": "checks"
+    },
+    {
+      "table": "community_listings",
+      "name": "community_listings_second_dialect",
+      "value": "\"second_dialect\" IS NULL OR \"second_dialect\" IN ('postgresql', 'sqlite')",
+      "entityType": "checks"
+    },
+    {
+      "table": "community_listings",
+      "name": "community_listings_guest_flavor",
+      "value": "\"guest_flavor\" IN ('slim', 'effect')",
+      "entityType": "checks"
+    },
+    {
+      "table": "community_listings",
+      "name": "community_listings_second_guest_flavor",
+      "value": "\"second_guest_flavor\" IS NULL OR \"second_guest_flavor\" IN ('slim', 'effect')",
+      "entityType": "checks"
+    },
+    {
+      "table": "community_listings",
+      "name": "community_listings_side_name",
+      "value": "\"side_name\" IS NULL OR length(\"side_name\") BETWEEN 1 AND 40",
+      "entityType": "checks"
+    },
+    {
+      "table": "community_listings",
+      "name": "community_listings_second_side_name",
+      "value": "\"second_side_name\" IS NULL OR length(\"second_side_name\") BETWEEN 1 AND 40",
+      "entityType": "checks"
+    },
+    {
+      "table": "community_listings",
+      "name": "community_listings_file_names",
+      "value": "json_valid(\"file_names\") AND json_type(\"file_names\") = 'array'",
+      "entityType": "checks"
+    },
+    {
+      "table": "community_listings",
+      "name": "community_listings_report_count",
+      "value": "\"report_count\" >= 0",
+      "entityType": "checks"
+    },
+    {
+      "table": "playground_links",
+      "name": "playground_links_snapshot_version",
+      "value": "\"snapshot_version\" > 0",
+      "entityType": "checks"
+    },
+    {
+      "table": "playground_links",
+      "name": "playground_links_payload_json",
+      "value": "length(CAST(\"payload_json\" AS BLOB)) <= 1048576",
+      "entityType": "checks"
+    },
+    {
+      "table": "playground_links",
+      "name": "playground_links_content_digest",
+      "value": "length(\"content_digest\") = 64 AND \"content_digest\" NOT GLOB '*[^0-9a-f]*'",
+      "entityType": "checks"
+    },
+    {
+      "table": "playground_links",
+      "name": "playground_links_description",
+      "value": "\"description\" IS NULL OR length(\"description\") BETWEEN 1 AND 140",
+      "entityType": "checks"
+    },
+    {
+      "table": "publish_storage",
+      "name": "publish_storage_bytes",
+      "value": "\"bytes\" >= 0",
+      "entityType": "checks"
+    },
+    {
+      "table": "recorded_runs",
+      "name": "recorded_runs_snapshot_digest",
+      "value": "length(\"snapshot_digest\") = 64 AND \"snapshot_digest\" NOT GLOB '*[^0-9a-f]*'",
+      "entityType": "checks"
+    },
+    {
+      "table": "recorded_runs",
+      "name": "recorded_runs_payload_json",
+      "value": "length(CAST(\"payload_json\" AS BLOB)) <= 262144",
+      "entityType": "checks"
+    },
+    {
+      "table": "sessions",
+      "name": "sessions_token_hash",
+      "value": "length(\"token_hash\") = 64 AND \"token_hash\" NOT GLOB '*[^0-9a-f]*'",
+      "entityType": "checks"
+    },
+    {
+      "table": "users",
+      "name": "users_github_id",
+      "value": "\"github_id\" > 0",
+      "entityType": "checks"
+    },
+    {
+      "table": "users",
+      "name": "users_login",
+      "value": "length(\"login\") BETWEEN 1 AND 39",
+      "entityType": "checks"
+    },
+    {
+      "table": "users",
+      "name": "users_name",
+      "value": "\"name\" IS NULL OR length(\"name\") <= 255",
+      "entityType": "checks"
+    }
+  ],
+  "renames": []
+}

@@ -1,0 +1,1472 @@
+{
+  "steps": {
+    "01-relations": {
+      "0.45": {
+        "Authors with posts and comments": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Ada"
+                  },
+                  "posts": {
+                    "type": "array",
+                    "value": [
+                      {
+                        "type": "object",
+                        "value": {
+                          "title": {
+                            "type": "primitive",
+                            "value": "Hello, Drizzle"
+                          },
+                          "comments": {
+                            "type": "array",
+                            "value": [
+                              {
+                                "type": "object",
+                                "value": {
+                                  "body": {
+                                    "type": "primitive",
+                                    "value": "Welcome aboard."
+                                  },
+                                  "author": {
+                                    "type": "object",
+                                    "value": {
+                                      "name": {
+                                        "type": "primitive",
+                                        "value": "Grace"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "type": "object",
+                        "value": {
+                          "title": {
+                            "type": "primitive",
+                            "value": "Relations in one query"
+                          },
+                          "comments": {
+                            "type": "array",
+                            "value": [
+                              {
+                                "type": "object",
+                                "value": {
+                                  "body": {
+                                    "type": "primitive",
+                                    "value": "One round trip, nice."
+                                  },
+                                  "author": {
+                                    "type": "object",
+                                    "value": {
+                                      "name": {
+                                        "type": "primitive",
+                                        "value": "Grace"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Grace"
+                  },
+                  "posts": {
+                    "type": "array",
+                    "value": [
+                      {
+                        "type": "object",
+                        "value": {
+                          "title": {
+                            "type": "primitive",
+                            "value": "Types all the way down"
+                          },
+                          "comments": {
+                            "type": "array",
+                            "value": [
+                              {
+                                "type": "object",
+                                "value": {
+                                  "body": {
+                                    "type": "primitive",
+                                    "value": "Inferred from the schema, nice."
+                                  },
+                                  "author": {
+                                    "type": "object",
+                                    "value": {
+                                      "name": {
+                                        "type": "primitive",
+                                        "value": "Ada"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              {
+                                "type": "object",
+                                "value": {
+                                  "body": {
+                                    "type": "primitive",
+                                    "value": "No codegen step either."
+                                  },
+                                  "author": {
+                                    "type": "object",
+                                    "value": {
+                                      "name": {
+                                        "type": "primitive",
+                                        "value": "Grace"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "rc.5": {
+        "Authors with posts and comments": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Ada"
+                  },
+                  "posts": {
+                    "type": "array",
+                    "value": [
+                      {
+                        "type": "object",
+                        "value": {
+                          "title": {
+                            "type": "primitive",
+                            "value": "Hello, Drizzle"
+                          },
+                          "comments": {
+                            "type": "array",
+                            "value": [
+                              {
+                                "type": "object",
+                                "value": {
+                                  "body": {
+                                    "type": "primitive",
+                                    "value": "Welcome aboard."
+                                  },
+                                  "author": {
+                                    "type": "object",
+                                    "value": {
+                                      "name": {
+                                        "type": "primitive",
+                                        "value": "Grace"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "type": "object",
+                        "value": {
+                          "title": {
+                            "type": "primitive",
+                            "value": "Relations in one query"
+                          },
+                          "comments": {
+                            "type": "array",
+                            "value": [
+                              {
+                                "type": "object",
+                                "value": {
+                                  "body": {
+                                    "type": "primitive",
+                                    "value": "One round trip, nice."
+                                  },
+                                  "author": {
+                                    "type": "object",
+                                    "value": {
+                                      "name": {
+                                        "type": "primitive",
+                                        "value": "Grace"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Grace"
+                  },
+                  "posts": {
+                    "type": "array",
+                    "value": [
+                      {
+                        "type": "object",
+                        "value": {
+                          "title": {
+                            "type": "primitive",
+                            "value": "Types all the way down"
+                          },
+                          "comments": {
+                            "type": "array",
+                            "value": [
+                              {
+                                "type": "object",
+                                "value": {
+                                  "body": {
+                                    "type": "primitive",
+                                    "value": "Inferred from the schema, nice."
+                                  },
+                                  "author": {
+                                    "type": "object",
+                                    "value": {
+                                      "name": {
+                                        "type": "primitive",
+                                        "value": "Ada"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              {
+                                "type": "object",
+                                "value": {
+                                  "body": {
+                                    "type": "primitive",
+                                    "value": "No codegen step either."
+                                  },
+                                  "author": {
+                                    "type": "object",
+                                    "value": {
+                                      "name": {
+                                        "type": "primitive",
+                                        "value": "Grace"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "Posts Ada commented on": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "title": {
+                    "type": "primitive",
+                    "value": "Types all the way down"
+                  },
+                  "author": {
+                    "type": "object",
+                    "value": {
+                      "name": {
+                        "type": "primitive",
+                        "value": "Grace"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "02-filters": {
+      "0.45": {
+        "Authors with posts and comments": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Ada"
+                  },
+                  "posts": {
+                    "type": "array",
+                    "value": [
+                      {
+                        "type": "object",
+                        "value": {
+                          "title": {
+                            "type": "primitive",
+                            "value": "Hello, Drizzle"
+                          },
+                          "comments": {
+                            "type": "array",
+                            "value": [
+                              {
+                                "type": "object",
+                                "value": {
+                                  "body": {
+                                    "type": "primitive",
+                                    "value": "Welcome aboard."
+                                  },
+                                  "author": {
+                                    "type": "object",
+                                    "value": {
+                                      "name": {
+                                        "type": "primitive",
+                                        "value": "Grace"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "type": "object",
+                        "value": {
+                          "title": {
+                            "type": "primitive",
+                            "value": "Relations in one query"
+                          },
+                          "comments": {
+                            "type": "array",
+                            "value": [
+                              {
+                                "type": "object",
+                                "value": {
+                                  "body": {
+                                    "type": "primitive",
+                                    "value": "One round trip, nice."
+                                  },
+                                  "author": {
+                                    "type": "object",
+                                    "value": {
+                                      "name": {
+                                        "type": "primitive",
+                                        "value": "Grace"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Grace"
+                  },
+                  "posts": {
+                    "type": "array",
+                    "value": [
+                      {
+                        "type": "object",
+                        "value": {
+                          "title": {
+                            "type": "primitive",
+                            "value": "Types all the way down"
+                          },
+                          "comments": {
+                            "type": "array",
+                            "value": [
+                              {
+                                "type": "object",
+                                "value": {
+                                  "body": {
+                                    "type": "primitive",
+                                    "value": "Inferred from the schema, nice."
+                                  },
+                                  "author": {
+                                    "type": "object",
+                                    "value": {
+                                      "name": {
+                                        "type": "primitive",
+                                        "value": "Ada"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              {
+                                "type": "object",
+                                "value": {
+                                  "body": {
+                                    "type": "primitive",
+                                    "value": "No codegen step either."
+                                  },
+                                  "author": {
+                                    "type": "object",
+                                    "value": {
+                                      "name": {
+                                        "type": "primitive",
+                                        "value": "Grace"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "Names starting with A": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Ada"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "rc.5": {
+        "Authors with posts and comments": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Ada"
+                  },
+                  "posts": {
+                    "type": "array",
+                    "value": [
+                      {
+                        "type": "object",
+                        "value": {
+                          "title": {
+                            "type": "primitive",
+                            "value": "Hello, Drizzle"
+                          },
+                          "comments": {
+                            "type": "array",
+                            "value": [
+                              {
+                                "type": "object",
+                                "value": {
+                                  "body": {
+                                    "type": "primitive",
+                                    "value": "Welcome aboard."
+                                  },
+                                  "author": {
+                                    "type": "object",
+                                    "value": {
+                                      "name": {
+                                        "type": "primitive",
+                                        "value": "Grace"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "type": "object",
+                        "value": {
+                          "title": {
+                            "type": "primitive",
+                            "value": "Relations in one query"
+                          },
+                          "comments": {
+                            "type": "array",
+                            "value": [
+                              {
+                                "type": "object",
+                                "value": {
+                                  "body": {
+                                    "type": "primitive",
+                                    "value": "One round trip, nice."
+                                  },
+                                  "author": {
+                                    "type": "object",
+                                    "value": {
+                                      "name": {
+                                        "type": "primitive",
+                                        "value": "Grace"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Grace"
+                  },
+                  "posts": {
+                    "type": "array",
+                    "value": [
+                      {
+                        "type": "object",
+                        "value": {
+                          "title": {
+                            "type": "primitive",
+                            "value": "Types all the way down"
+                          },
+                          "comments": {
+                            "type": "array",
+                            "value": [
+                              {
+                                "type": "object",
+                                "value": {
+                                  "body": {
+                                    "type": "primitive",
+                                    "value": "Inferred from the schema, nice."
+                                  },
+                                  "author": {
+                                    "type": "object",
+                                    "value": {
+                                      "name": {
+                                        "type": "primitive",
+                                        "value": "Ada"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              {
+                                "type": "object",
+                                "value": {
+                                  "body": {
+                                    "type": "primitive",
+                                    "value": "No codegen step either."
+                                  },
+                                  "author": {
+                                    "type": "object",
+                                    "value": {
+                                      "name": {
+                                        "type": "primitive",
+                                        "value": "Grace"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "Posts Ada commented on": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "title": {
+                    "type": "primitive",
+                    "value": "Types all the way down"
+                  },
+                  "author": {
+                    "type": "object",
+                    "value": {
+                      "name": {
+                        "type": "primitive",
+                        "value": "Grace"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "Names starting with A": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Ada"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "03-nested": {
+      "0.45": {
+        "Authors with posts and comments": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Ada"
+                  },
+                  "posts": {
+                    "type": "array",
+                    "value": [
+                      {
+                        "type": "object",
+                        "value": {
+                          "title": {
+                            "type": "primitive",
+                            "value": "Hello, Drizzle"
+                          },
+                          "comments": {
+                            "type": "array",
+                            "value": [
+                              {
+                                "type": "object",
+                                "value": {
+                                  "body": {
+                                    "type": "primitive",
+                                    "value": "Welcome aboard."
+                                  },
+                                  "author": {
+                                    "type": "object",
+                                    "value": {
+                                      "name": {
+                                        "type": "primitive",
+                                        "value": "Grace"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "type": "object",
+                        "value": {
+                          "title": {
+                            "type": "primitive",
+                            "value": "Relations in one query"
+                          },
+                          "comments": {
+                            "type": "array",
+                            "value": [
+                              {
+                                "type": "object",
+                                "value": {
+                                  "body": {
+                                    "type": "primitive",
+                                    "value": "One round trip, nice."
+                                  },
+                                  "author": {
+                                    "type": "object",
+                                    "value": {
+                                      "name": {
+                                        "type": "primitive",
+                                        "value": "Grace"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Grace"
+                  },
+                  "posts": {
+                    "type": "array",
+                    "value": [
+                      {
+                        "type": "object",
+                        "value": {
+                          "title": {
+                            "type": "primitive",
+                            "value": "Types all the way down"
+                          },
+                          "comments": {
+                            "type": "array",
+                            "value": [
+                              {
+                                "type": "object",
+                                "value": {
+                                  "body": {
+                                    "type": "primitive",
+                                    "value": "Inferred from the schema, nice."
+                                  },
+                                  "author": {
+                                    "type": "object",
+                                    "value": {
+                                      "name": {
+                                        "type": "primitive",
+                                        "value": "Ada"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              {
+                                "type": "object",
+                                "value": {
+                                  "body": {
+                                    "type": "primitive",
+                                    "value": "No codegen step either."
+                                  },
+                                  "author": {
+                                    "type": "object",
+                                    "value": {
+                                      "name": {
+                                        "type": "primitive",
+                                        "value": "Grace"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "Names starting with A": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Ada"
+                  },
+                  "posts": {
+                    "type": "array",
+                    "value": [
+                      {
+                        "type": "object",
+                        "value": {
+                          "title": {
+                            "type": "primitive",
+                            "value": "Relations in one query"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "rc.5": {
+        "Authors with posts and comments": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Ada"
+                  },
+                  "posts": {
+                    "type": "array",
+                    "value": [
+                      {
+                        "type": "object",
+                        "value": {
+                          "title": {
+                            "type": "primitive",
+                            "value": "Hello, Drizzle"
+                          },
+                          "comments": {
+                            "type": "array",
+                            "value": [
+                              {
+                                "type": "object",
+                                "value": {
+                                  "body": {
+                                    "type": "primitive",
+                                    "value": "Welcome aboard."
+                                  },
+                                  "author": {
+                                    "type": "object",
+                                    "value": {
+                                      "name": {
+                                        "type": "primitive",
+                                        "value": "Grace"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "type": "object",
+                        "value": {
+                          "title": {
+                            "type": "primitive",
+                            "value": "Relations in one query"
+                          },
+                          "comments": {
+                            "type": "array",
+                            "value": [
+                              {
+                                "type": "object",
+                                "value": {
+                                  "body": {
+                                    "type": "primitive",
+                                    "value": "One round trip, nice."
+                                  },
+                                  "author": {
+                                    "type": "object",
+                                    "value": {
+                                      "name": {
+                                        "type": "primitive",
+                                        "value": "Grace"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Grace"
+                  },
+                  "posts": {
+                    "type": "array",
+                    "value": [
+                      {
+                        "type": "object",
+                        "value": {
+                          "title": {
+                            "type": "primitive",
+                            "value": "Types all the way down"
+                          },
+                          "comments": {
+                            "type": "array",
+                            "value": [
+                              {
+                                "type": "object",
+                                "value": {
+                                  "body": {
+                                    "type": "primitive",
+                                    "value": "Inferred from the schema, nice."
+                                  },
+                                  "author": {
+                                    "type": "object",
+                                    "value": {
+                                      "name": {
+                                        "type": "primitive",
+                                        "value": "Ada"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              {
+                                "type": "object",
+                                "value": {
+                                  "body": {
+                                    "type": "primitive",
+                                    "value": "No codegen step either."
+                                  },
+                                  "author": {
+                                    "type": "object",
+                                    "value": {
+                                      "name": {
+                                        "type": "primitive",
+                                        "value": "Grace"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "Posts Ada commented on": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "title": {
+                    "type": "primitive",
+                    "value": "Types all the way down"
+                  },
+                  "author": {
+                    "type": "object",
+                    "value": {
+                      "name": {
+                        "type": "primitive",
+                        "value": "Grace"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "Names starting with A": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Ada"
+                  },
+                  "posts": {
+                    "type": "array",
+                    "value": [
+                      {
+                        "type": "object",
+                        "value": {
+                          "title": {
+                            "type": "primitive",
+                            "value": "Relations in one query"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "04-columns": {
+      "0.45": {
+        "Authors with posts and comments": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Ada"
+                  },
+                  "posts": {
+                    "type": "array",
+                    "value": [
+                      {
+                        "type": "object",
+                        "value": {
+                          "title": {
+                            "type": "primitive",
+                            "value": "Hello, Drizzle"
+                          },
+                          "comments": {
+                            "type": "array",
+                            "value": [
+                              {
+                                "type": "object",
+                                "value": {
+                                  "body": {
+                                    "type": "primitive",
+                                    "value": "Welcome aboard."
+                                  },
+                                  "author": {
+                                    "type": "object",
+                                    "value": {
+                                      "name": {
+                                        "type": "primitive",
+                                        "value": "Grace"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "type": "object",
+                        "value": {
+                          "title": {
+                            "type": "primitive",
+                            "value": "Relations in one query"
+                          },
+                          "comments": {
+                            "type": "array",
+                            "value": [
+                              {
+                                "type": "object",
+                                "value": {
+                                  "body": {
+                                    "type": "primitive",
+                                    "value": "One round trip, nice."
+                                  },
+                                  "author": {
+                                    "type": "object",
+                                    "value": {
+                                      "name": {
+                                        "type": "primitive",
+                                        "value": "Grace"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Grace"
+                  },
+                  "posts": {
+                    "type": "array",
+                    "value": [
+                      {
+                        "type": "object",
+                        "value": {
+                          "title": {
+                            "type": "primitive",
+                            "value": "Types all the way down"
+                          },
+                          "comments": {
+                            "type": "array",
+                            "value": [
+                              {
+                                "type": "object",
+                                "value": {
+                                  "body": {
+                                    "type": "primitive",
+                                    "value": "Inferred from the schema, nice."
+                                  },
+                                  "author": {
+                                    "type": "object",
+                                    "value": {
+                                      "name": {
+                                        "type": "primitive",
+                                        "value": "Ada"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              {
+                                "type": "object",
+                                "value": {
+                                  "body": {
+                                    "type": "primitive",
+                                    "value": "No codegen step either."
+                                  },
+                                  "author": {
+                                    "type": "object",
+                                    "value": {
+                                      "name": {
+                                        "type": "primitive",
+                                        "value": "Grace"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "Names starting with A": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Ada"
+                  },
+                  "posts": {
+                    "type": "array",
+                    "value": [
+                      {
+                        "type": "object",
+                        "value": {
+                          "title": {
+                            "type": "primitive",
+                            "value": "Relations in one query"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "rc.5": {
+        "Authors with posts and comments": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Ada"
+                  },
+                  "posts": {
+                    "type": "array",
+                    "value": [
+                      {
+                        "type": "object",
+                        "value": {
+                          "title": {
+                            "type": "primitive",
+                            "value": "Hello, Drizzle"
+                          },
+                          "comments": {
+                            "type": "array",
+                            "value": [
+                              {
+                                "type": "object",
+                                "value": {
+                                  "body": {
+                                    "type": "primitive",
+                                    "value": "Welcome aboard."
+                                  },
+                                  "author": {
+                                    "type": "object",
+                                    "value": {
+                                      "name": {
+                                        "type": "primitive",
+                                        "value": "Grace"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "type": "object",
+                        "value": {
+                          "title": {
+                            "type": "primitive",
+                            "value": "Relations in one query"
+                          },
+                          "comments": {
+                            "type": "array",
+                            "value": [
+                              {
+                                "type": "object",
+                                "value": {
+                                  "body": {
+                                    "type": "primitive",
+                                    "value": "One round trip, nice."
+                                  },
+                                  "author": {
+                                    "type": "object",
+                                    "value": {
+                                      "name": {
+                                        "type": "primitive",
+                                        "value": "Grace"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Grace"
+                  },
+                  "posts": {
+                    "type": "array",
+                    "value": [
+                      {
+                        "type": "object",
+                        "value": {
+                          "title": {
+                            "type": "primitive",
+                            "value": "Types all the way down"
+                          },
+                          "comments": {
+                            "type": "array",
+                            "value": [
+                              {
+                                "type": "object",
+                                "value": {
+                                  "body": {
+                                    "type": "primitive",
+                                    "value": "Inferred from the schema, nice."
+                                  },
+                                  "author": {
+                                    "type": "object",
+                                    "value": {
+                                      "name": {
+                                        "type": "primitive",
+                                        "value": "Ada"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              {
+                                "type": "object",
+                                "value": {
+                                  "body": {
+                                    "type": "primitive",
+                                    "value": "No codegen step either."
+                                  },
+                                  "author": {
+                                    "type": "object",
+                                    "value": {
+                                      "name": {
+                                        "type": "primitive",
+                                        "value": "Grace"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "Posts Ada commented on": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "title": {
+                    "type": "primitive",
+                    "value": "Types all the way down"
+                  },
+                  "author": {
+                    "type": "object",
+                    "value": {
+                      "name": {
+                        "type": "primitive",
+                        "value": "Grace"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "Names starting with A": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Ada"
+                  },
+                  "posts": {
+                    "type": "array",
+                    "value": [
+                      {
+                        "type": "object",
+                        "value": {
+                          "title": {
+                            "type": "primitive",
+                            "value": "Relations in one query"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

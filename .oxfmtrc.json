@@ -1,0 +1,26 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "printWidth": 120,
+  "sortImports": true,
+  "sortPackageJson": { "sortScripts": true },
+  "sortTailwindcss": {
+    "stylesheet": "./apps/drizzle-run/src/styles.css",
+    "functions": ["cn", "cva"]
+  },
+  "ignorePatterns": [
+    "**/dist/**",
+    "**/dist-isolation/**",
+    "**/.wrangler/**",
+    "**/.cache/**",
+    "pnpm-lock.yaml",
+    "playwright-report/**",
+    "test-results/**",
+    "apps/drizzle-run/e2e/*-snapshots/**",
+    "apps/drizzle-run/examples/*/files/**",
+    "apps/drizzle-run/examples/*/sides/**",
+    "apps/drizzle-run/guides/*/guide.json",
+    "**/*.generated.ts",
+    "packages/runtime/artifacts/**",
+    "guests/*/package.json"
+  ]
+}

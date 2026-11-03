@@ -1,0 +1,18 @@
+{
+  "id": "2962c124-0d08-4088-905d-3d695002ff8e",
+  "slug": "select-vs-relational-queries",
+  "status": "published",
+  "title": "Select vs relational queries",
+  "description": "The same authors with their posts, twice: a select with a join on one side, db.query on the other.",
+  "topic": "Queries",
+  "featured": false,
+  "order": 35,
+  "dialect": "postgresql",
+  "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+  "sides": [{ "name": "SQL-like" }, { "name": "RQB" }],
+  "links": [
+    { "kind": "docs", "label": "Joins", "url": "https://orm.drizzle.team/docs/joins" },
+    { "kind": "docs", "label": "Relational queries", "url": "https://orm.drizzle.team/docs/rqb" },
+    { "kind": "example", "label": "Relational queries example", "slug": "relational-queries" }
+  ]
+}

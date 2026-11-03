@@ -1,0 +1,44 @@
+name: Bug report
+description: Something in Drizzle Run does not work as expected.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A bug in Drizzle ORM or Drizzle Kit themselves, which you can reproduce outside Drizzle Run, belongs in the
+        [Drizzle ORM issues](https://github.com/drizzle-team/drizzle-orm/issues). A Drizzle Run share link of the
+        reproduction helps there too.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you did, what you saw, and any error message.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: input
+    id: share-link
+    attributes:
+      label: Share link
+      description: "If it is about a project: **Share playground…** in the app gives a read-only link to it."
+      placeholder: https://drizzle.run/s/...
+  - type: dropdown
+    id: database
+    attributes:
+      label: Database
+      options:
+        - PostgreSQL
+        - SQLite
+        - Not about a project
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and version
+      placeholder: Chrome 141 on macOS
+    validations:
+      required: true

@@ -1,0 +1,629 @@
+{
+  "tables": [
+    {
+      "name": "comments",
+      "schema": "public",
+      "columns": ["id", "post_id", "author_id", "body"],
+      "indexes": [
+        {
+          "name": "comments_pkey",
+          "columns": ["id"]
+        }
+      ],
+      "foreignKeys": [
+        {
+          "columns": ["post_id"],
+          "referencedTable": "posts",
+          "referencedSchema": "public",
+          "referencedColumns": ["id"]
+        },
+        {
+          "columns": ["author_id"],
+          "referencedTable": "users",
+          "referencedSchema": "public",
+          "referencedColumns": ["id"]
+        }
+      ],
+      "keys": {
+        "id": "id",
+        "post_id": "postId",
+        "author_id": "authorId",
+        "body": "body"
+      }
+    },
+    {
+      "name": "posts",
+      "schema": "public",
+      "columns": ["id", "author_id", "title", "created_at"],
+      "indexes": [
+        {
+          "name": "posts_pkey",
+          "columns": ["id"]
+        }
+      ],
+      "foreignKeys": [
+        {
+          "columns": ["author_id"],
+          "referencedTable": "users",
+          "referencedSchema": "public",
+          "referencedColumns": ["id"]
+        }
+      ],
+      "keys": {
+        "id": "id",
+        "author_id": "authorId",
+        "title": "title",
+        "created_at": "createdAt"
+      }
+    },
+    {
+      "name": "users",
+      "schema": "public",
+      "columns": ["id", "name", "email", "created_at"],
+      "indexes": [
+        {
+          "name": "users_pkey",
+          "columns": ["id"]
+        },
+        {
+          "name": "users_email_key",
+          "columns": ["email"]
+        }
+      ],
+      "foreignKeys": [],
+      "keys": {
+        "id": "id",
+        "name": "name",
+        "email": "email",
+        "created_at": "createdAt"
+      }
+    }
+  ],
+  "tableRows": {
+    "comments": 1000000,
+    "posts": 100000,
+    "users": 10000
+  },
+  "report": {
+    "settings": {
+      "size": "1m",
+      "measureRealTime": true
+    },
+    "dialect": "postgresql",
+    "fills": [
+      {
+        "size": "seed",
+        "tables": [
+          {
+            "name": "comments",
+            "schema": "public",
+            "rows": 2
+          },
+          {
+            "name": "posts",
+            "schema": "public",
+            "rows": 3
+          },
+          {
+            "name": "users",
+            "schema": "public",
+            "rows": 3
+          }
+        ],
+        "durationMs": 0
+      },
+      {
+        "size": "10k",
+        "tables": [
+          {
+            "name": "comments",
+            "schema": "public",
+            "rows": 10000
+          },
+          {
+            "name": "posts",
+            "schema": "public",
+            "rows": 1000
+          },
+          {
+            "name": "users",
+            "schema": "public",
+            "rows": 100
+          }
+        ],
+        "durationMs": 34
+      },
+      {
+        "size": "1m",
+        "tables": [
+          {
+            "name": "comments",
+            "schema": "public",
+            "rows": 1000000
+          },
+          {
+            "name": "posts",
+            "schema": "public",
+            "rows": 100000
+          },
+          {
+            "name": "users",
+            "schema": "public",
+            "rows": 10000
+          }
+        ],
+        "durationMs": 2916
+      }
+    ],
+    "queries": [
+      {
+        "sequences": [10],
+        "sql": "select \"id\", \"author_id\", \"title\" from \"posts\" where \"posts\".\"author_id\" = $1",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": 1
+          }
+        ],
+        "raw": [
+          {
+            "database": "postgresql",
+            "size": "seed",
+            "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"Seq Scan\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Relation Name\": \"posts\",\n      \"Alias\": \"posts\",\n      \"Startup Cost\": 0.00,\n      \"Total Cost\": 1.04,\n      \"Plan Rows\": 2,\n      \"Plan Width\": 14,\n      \"Disabled\": false,\n      \"Filter\": \"(author_id = 1)\"\n    }\n  }\n]",
+            "text": "Seq Scan on posts  (cost=0.00..1.04 rows=2 width=14)\n  Filter: (author_id = 1)"
+          },
+          {
+            "database": "postgresql",
+            "size": "10k",
+            "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"Seq Scan\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Relation Name\": \"posts\",\n      \"Alias\": \"posts\",\n      \"Startup Cost\": 0.00,\n      \"Total Cost\": 20.50,\n      \"Plan Rows\": 11,\n      \"Plan Width\": 17,\n      \"Disabled\": false,\n      \"Filter\": \"(author_id = 1)\"\n    }\n  }\n]",
+            "text": "Seq Scan on posts  (cost=0.00..20.50 rows=11 width=17)\n  Filter: (author_id = 1)"
+          },
+          {
+            "database": "postgresql",
+            "size": "1m",
+            "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"Seq Scan\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Relation Name\": \"posts\",\n      \"Alias\": \"posts\",\n      \"Startup Cost\": 0.00,\n      \"Total Cost\": 1986.00,\n      \"Plan Rows\": 33,\n      \"Plan Width\": 19,\n      \"Disabled\": false,\n      \"Filter\": \"(author_id = 1)\"\n    }\n  }\n]",
+            "text": "Seq Scan on posts  (cost=0.00..1986.00 rows=33 width=19)\n  Filter: (author_id = 1)",
+            "analyze": {
+              "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"Seq Scan\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Relation Name\": \"posts\",\n      \"Alias\": \"posts\",\n      \"Startup Cost\": 0.00,\n      \"Total Cost\": 1986.00,\n      \"Plan Rows\": 33,\n      \"Plan Width\": 19,\n      \"Actual Startup Time\": 0.017,\n      \"Actual Total Time\": 3.975,\n      \"Actual Rows\": 20.00,\n      \"Actual Loops\": 1,\n      \"Disabled\": false,\n      \"Filter\": \"(author_id = 1)\",\n      \"Rows Removed by Filter\": 99980,\n      \"Shared Hit Blocks\": 736,\n      \"Shared Read Blocks\": 0,\n      \"Shared Dirtied Blocks\": 0,\n      \"Shared Written Blocks\": 0,\n      \"Local Hit Blocks\": 0,\n      \"Local Read Blocks\": 0,\n      \"Local Dirtied Blocks\": 0,\n      \"Local Written Blocks\": 0,\n      \"Temp Read Blocks\": 0,\n      \"Temp Written Blocks\": 0\n    },\n    \"Planning\": {\n      \"Shared Hit Blocks\": 0,\n      \"Shared Read Blocks\": 0,\n      \"Shared Dirtied Blocks\": 0,\n      \"Shared Written Blocks\": 0,\n      \"Local Hit Blocks\": 0,\n      \"Local Read Blocks\": 0,\n      \"Local Dirtied Blocks\": 0,\n      \"Local Written Blocks\": 0,\n      \"Temp Read Blocks\": 0,\n      \"Temp Written Blocks\": 0\n    },\n    \"Planning Time\": 0.009,\n    \"Triggers\": [\n    ],\n    \"Execution Time\": 4.019\n  }\n]",
+              "text": "Seq Scan on posts  (cost=0.00..1986.00 rows=33 width=19) (actual time=0.005..3.658 rows=20.00 loops=1)\n  Filter: (author_id = 1)\n  Rows Removed by Filter: 99980\n  Buffers: shared hit=736\nPlanning Time: 0.024 ms\nExecution Time: 3.668 ms"
+            }
+          }
+        ],
+        "reading": {
+          "summary": "Full scan of posts, reads 100k rows to return 33 rows",
+          "verdict": {
+            "kind": "grows",
+            "tables": ["posts"]
+          },
+          "indexes": [
+            {
+              "trigger": "filtered_scan",
+              "table": "posts",
+              "schema": "public",
+              "columns": ["author_id"],
+              "name": "posts_author_idx",
+              "drizzle": "index(\"posts_author_idx\").on(t.authorId)",
+              "measure": {
+                "unit": "cost",
+                "before": 1986,
+                "after": 8.87
+              },
+              "before": {
+                "database": "postgresql",
+                "size": "1m",
+                "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"Seq Scan\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Relation Name\": \"posts\",\n      \"Alias\": \"posts\",\n      \"Startup Cost\": 0.00,\n      \"Total Cost\": 1986.00,\n      \"Plan Rows\": 33,\n      \"Plan Width\": 19,\n      \"Disabled\": false,\n      \"Filter\": \"(author_id = 1)\"\n    }\n  }\n]",
+                "text": "Seq Scan on posts  (cost=0.00..1986.00 rows=33 width=19)\n  Filter: (author_id = 1)",
+                "analyze": {
+                  "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"Seq Scan\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Relation Name\": \"posts\",\n      \"Alias\": \"posts\",\n      \"Startup Cost\": 0.00,\n      \"Total Cost\": 1986.00,\n      \"Plan Rows\": 33,\n      \"Plan Width\": 19,\n      \"Actual Startup Time\": 0.017,\n      \"Actual Total Time\": 3.975,\n      \"Actual Rows\": 20.00,\n      \"Actual Loops\": 1,\n      \"Disabled\": false,\n      \"Filter\": \"(author_id = 1)\",\n      \"Rows Removed by Filter\": 99980,\n      \"Shared Hit Blocks\": 736,\n      \"Shared Read Blocks\": 0,\n      \"Shared Dirtied Blocks\": 0,\n      \"Shared Written Blocks\": 0,\n      \"Local Hit Blocks\": 0,\n      \"Local Read Blocks\": 0,\n      \"Local Dirtied Blocks\": 0,\n      \"Local Written Blocks\": 0,\n      \"Temp Read Blocks\": 0,\n      \"Temp Written Blocks\": 0\n    },\n    \"Planning\": {\n      \"Shared Hit Blocks\": 0,\n      \"Shared Read Blocks\": 0,\n      \"Shared Dirtied Blocks\": 0,\n      \"Shared Written Blocks\": 0,\n      \"Local Hit Blocks\": 0,\n      \"Local Read Blocks\": 0,\n      \"Local Dirtied Blocks\": 0,\n      \"Local Written Blocks\": 0,\n      \"Temp Read Blocks\": 0,\n      \"Temp Written Blocks\": 0\n    },\n    \"Planning Time\": 0.009,\n    \"Triggers\": [\n    ],\n    \"Execution Time\": 4.019\n  }\n]",
+                  "text": "Seq Scan on posts  (cost=0.00..1986.00 rows=33 width=19) (actual time=0.005..3.658 rows=20.00 loops=1)\n  Filter: (author_id = 1)\n  Rows Removed by Filter: 99980\n  Buffers: shared hit=736\nPlanning Time: 0.024 ms\nExecution Time: 3.668 ms"
+                }
+              },
+              "after": {
+                "database": "postgresql",
+                "size": "1m",
+                "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"Index Scan\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Scan Direction\": \"Forward\",\n      \"Index Name\": \"posts_author_idx\",\n      \"Relation Name\": \"posts\",\n      \"Alias\": \"posts\",\n      \"Startup Cost\": 0.29,\n      \"Total Cost\": 8.87,\n      \"Plan Rows\": 33,\n      \"Plan Width\": 19,\n      \"Disabled\": false,\n      \"Index Cond\": \"(author_id = 1)\"\n    }\n  }\n]",
+                "text": "Index Scan using posts_author_idx on posts  (cost=0.29..8.87 rows=33 width=19)\n  Index Cond: (author_id = 1)"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "sequences": [11],
+        "sql": "select \"id\", \"name\" from \"users\" where \"users\".\"email\" = $1",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": "ada@example.com"
+          }
+        ],
+        "raw": [
+          {
+            "database": "postgresql",
+            "size": "seed",
+            "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"Seq Scan\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Relation Name\": \"users\",\n      \"Alias\": \"users\",\n      \"Startup Cost\": 0.00,\n      \"Total Cost\": 1.04,\n      \"Plan Rows\": 1,\n      \"Plan Width\": 9,\n      \"Disabled\": false,\n      \"Filter\": \"(email = 'ada@example.com'::text)\"\n    }\n  }\n]",
+            "text": "Seq Scan on users  (cost=0.00..1.04 rows=1 width=9)\n  Filter: (email = 'ada@example.com'::text)"
+          },
+          {
+            "database": "postgresql",
+            "size": "10k",
+            "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"Seq Scan\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Relation Name\": \"users\",\n      \"Alias\": \"users\",\n      \"Startup Cost\": 0.00,\n      \"Total Cost\": 2.25,\n      \"Plan Rows\": 1,\n      \"Plan Width\": 11,\n      \"Disabled\": false,\n      \"Filter\": \"(email = 'ada@example.com'::text)\"\n    }\n  }\n]",
+            "text": "Seq Scan on users  (cost=0.00..2.25 rows=1 width=11)\n  Filter: (email = 'ada@example.com'::text)"
+          },
+          {
+            "database": "postgresql",
+            "size": "1m",
+            "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"Index Scan\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Scan Direction\": \"Forward\",\n      \"Index Name\": \"users_email_key\",\n      \"Relation Name\": \"users\",\n      \"Alias\": \"users\",\n      \"Startup Cost\": 0.29,\n      \"Total Cost\": 8.30,\n      \"Plan Rows\": 1,\n      \"Plan Width\": 13,\n      \"Disabled\": false,\n      \"Index Cond\": \"(email = 'ada@example.com'::text)\"\n    }\n  }\n]",
+            "text": "Index Scan using users_email_key on users  (cost=0.29..8.30 rows=1 width=13)\n  Index Cond: (email = 'ada@example.com'::text)",
+            "analyze": {
+              "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"Index Scan\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Scan Direction\": \"Forward\",\n      \"Index Name\": \"users_email_key\",\n      \"Relation Name\": \"users\",\n      \"Alias\": \"users\",\n      \"Startup Cost\": 0.29,\n      \"Total Cost\": 8.30,\n      \"Plan Rows\": 1,\n      \"Plan Width\": 13,\n      \"Actual Startup Time\": 0.008,\n      \"Actual Total Time\": 0.009,\n      \"Actual Rows\": 1.00,\n      \"Actual Loops\": 1,\n      \"Disabled\": false,\n      \"Index Cond\": \"(email = 'ada@example.com'::text)\",\n      \"Rows Removed by Index Recheck\": 0,\n      \"Index Searches\": 1,\n      \"Shared Hit Blocks\": 3,\n      \"Shared Read Blocks\": 0,\n      \"Shared Dirtied Blocks\": 0,\n      \"Shared Written Blocks\": 0,\n      \"Local Hit Blocks\": 0,\n      \"Local Read Blocks\": 0,\n      \"Local Dirtied Blocks\": 0,\n      \"Local Written Blocks\": 0,\n      \"Temp Read Blocks\": 0,\n      \"Temp Written Blocks\": 0\n    },\n    \"Planning\": {\n      \"Shared Hit Blocks\": 0,\n      \"Shared Read Blocks\": 0,\n      \"Shared Dirtied Blocks\": 0,\n      \"Shared Written Blocks\": 0,\n      \"Local Hit Blocks\": 0,\n      \"Local Read Blocks\": 0,\n      \"Local Dirtied Blocks\": 0,\n      \"Local Written Blocks\": 0,\n      \"Temp Read Blocks\": 0,\n      \"Temp Written Blocks\": 0\n    },\n    \"Planning Time\": 0.017,\n    \"Triggers\": [\n    ],\n    \"Execution Time\": 0.015\n  }\n]",
+              "text": "Index Scan using users_email_key on users  (cost=0.29..8.30 rows=1 width=13) (actual time=0.002..0.003 rows=1.00 loops=1)\n  Index Cond: (email = 'ada@example.com'::text)\n  Index Searches: 1\n  Buffers: shared hit=3\nPlanning Time: 0.008 ms\nExecution Time: 0.006 ms"
+            }
+          }
+        ],
+        "reading": {
+          "summary": "Index lookup on users using users_email_key to return 1 row",
+          "verdict": {
+            "kind": "stays_fast"
+          },
+          "indexes": []
+        }
+      },
+      {
+        "sequences": [12],
+        "sql": "select \"id\", \"title\" from \"posts\" order by \"posts\".\"created_at\" desc limit $1",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": 10
+          }
+        ],
+        "raw": [
+          {
+            "database": "postgresql",
+            "size": "seed",
+            "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"Limit\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Startup Cost\": 1.05,\n      \"Total Cost\": 1.06,\n      \"Plan Rows\": 3,\n      \"Plan Width\": 18,\n      \"Disabled\": false,\n      \"Plans\": [\n        {\n          \"Node Type\": \"Sort\",\n          \"Parent Relationship\": \"Outer\",\n          \"Parallel Aware\": false,\n          \"Async Capable\": false,\n          \"Startup Cost\": 1.05,\n          \"Total Cost\": 1.06,\n          \"Plan Rows\": 3,\n          \"Plan Width\": 18,\n          \"Disabled\": false,\n          \"Sort Key\": [\"created_at DESC\"],\n          \"Plans\": [\n            {\n              \"Node Type\": \"Seq Scan\",\n              \"Parent Relationship\": \"Outer\",\n              \"Parallel Aware\": false,\n              \"Async Capable\": false,\n              \"Relation Name\": \"posts\",\n              \"Alias\": \"posts\",\n              \"Startup Cost\": 0.00,\n              \"Total Cost\": 1.03,\n              \"Plan Rows\": 3,\n              \"Plan Width\": 18,\n              \"Disabled\": false\n            }\n          ]\n        }\n      ]\n    }\n  }\n]",
+            "text": "Limit  (cost=1.05..1.06 rows=3 width=18)\n  ->  Sort  (cost=1.05..1.06 rows=3 width=18)\n        Sort Key: created_at DESC\n        ->  Seq Scan on posts  (cost=0.00..1.03 rows=3 width=18)"
+          },
+          {
+            "database": "postgresql",
+            "size": "10k",
+            "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"Limit\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Startup Cost\": 39.61,\n      \"Total Cost\": 39.63,\n      \"Plan Rows\": 10,\n      \"Plan Width\": 21,\n      \"Disabled\": false,\n      \"Plans\": [\n        {\n          \"Node Type\": \"Sort\",\n          \"Parent Relationship\": \"Outer\",\n          \"Parallel Aware\": false,\n          \"Async Capable\": false,\n          \"Startup Cost\": 39.61,\n          \"Total Cost\": 42.11,\n          \"Plan Rows\": 1000,\n          \"Plan Width\": 21,\n          \"Disabled\": false,\n          \"Sort Key\": [\"created_at DESC\"],\n          \"Plans\": [\n            {\n              \"Node Type\": \"Seq Scan\",\n              \"Parent Relationship\": \"Outer\",\n              \"Parallel Aware\": false,\n              \"Async Capable\": false,\n              \"Relation Name\": \"posts\",\n              \"Alias\": \"posts\",\n              \"Startup Cost\": 0.00,\n              \"Total Cost\": 18.00,\n              \"Plan Rows\": 1000,\n              \"Plan Width\": 21,\n              \"Disabled\": false\n            }\n          ]\n        }\n      ]\n    }\n  }\n]",
+            "text": "Limit  (cost=39.61..39.63 rows=10 width=21)\n  ->  Sort  (cost=39.61..42.11 rows=1000 width=21)\n        Sort Key: created_at DESC\n        ->  Seq Scan on posts  (cost=0.00..18.00 rows=1000 width=21)"
+          },
+          {
+            "database": "postgresql",
+            "size": "1m",
+            "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"Limit\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Startup Cost\": 3896.96,\n      \"Total Cost\": 3896.99,\n      \"Plan Rows\": 10,\n      \"Plan Width\": 23,\n      \"Disabled\": false,\n      \"Plans\": [\n        {\n          \"Node Type\": \"Sort\",\n          \"Parent Relationship\": \"Outer\",\n          \"Parallel Aware\": false,\n          \"Async Capable\": false,\n          \"Startup Cost\": 3896.96,\n          \"Total Cost\": 4146.96,\n          \"Plan Rows\": 100000,\n          \"Plan Width\": 23,\n          \"Disabled\": false,\n          \"Sort Key\": [\"created_at DESC\"],\n          \"Plans\": [\n            {\n              \"Node Type\": \"Seq Scan\",\n              \"Parent Relationship\": \"Outer\",\n              \"Parallel Aware\": false,\n              \"Async Capable\": false,\n              \"Relation Name\": \"posts\",\n              \"Alias\": \"posts\",\n              \"Startup Cost\": 0.00,\n              \"Total Cost\": 1736.00,\n              \"Plan Rows\": 100000,\n              \"Plan Width\": 23,\n              \"Disabled\": false\n            }\n          ]\n        }\n      ]\n    }\n  }\n]",
+            "text": "Limit  (cost=3896.96..3896.99 rows=10 width=23)\n  ->  Sort  (cost=3896.96..4146.96 rows=100000 width=23)\n        Sort Key: created_at DESC\n        ->  Seq Scan on posts  (cost=0.00..1736.00 rows=100000 width=23)",
+            "analyze": {
+              "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"Limit\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Startup Cost\": 3896.96,\n      \"Total Cost\": 3896.99,\n      \"Plan Rows\": 10,\n      \"Plan Width\": 23,\n      \"Actual Startup Time\": 25.622,\n      \"Actual Total Time\": 25.625,\n      \"Actual Rows\": 10.00,\n      \"Actual Loops\": 1,\n      \"Disabled\": false,\n      \"Shared Hit Blocks\": 736,\n      \"Shared Read Blocks\": 0,\n      \"Shared Dirtied Blocks\": 0,\n      \"Shared Written Blocks\": 0,\n      \"Local Hit Blocks\": 0,\n      \"Local Read Blocks\": 0,\n      \"Local Dirtied Blocks\": 0,\n      \"Local Written Blocks\": 0,\n      \"Temp Read Blocks\": 0,\n      \"Temp Written Blocks\": 0,\n      \"Plans\": [\n        {\n          \"Node Type\": \"Sort\",\n          \"Parent Relationship\": \"Outer\",\n          \"Parallel Aware\": false,\n          \"Async Capable\": false,\n          \"Startup Cost\": 3896.96,\n          \"Total Cost\": 4146.96,\n          \"Plan Rows\": 100000,\n          \"Plan Width\": 23,\n          \"Actual Startup Time\": 25.620,\n          \"Actual Total Time\": 25.621,\n          \"Actual Rows\": 10.00,\n          \"Actual Loops\": 1,\n          \"Disabled\": false,\n          \"Sort Key\": [\"created_at DESC\"],\n          \"Sort Method\": \"top-N heapsort\",\n          \"Sort Space Used\": 18,\n          \"Sort Space Type\": \"Memory\",\n          \"Shared Hit Blocks\": 736,\n          \"Shared Read Blocks\": 0,\n          \"Shared Dirtied Blocks\": 0,\n          \"Shared Written Blocks\": 0,\n          \"Local Hit Blocks\": 0,\n          \"Local Read Blocks\": 0,\n          \"Local Dirtied Blocks\": 0,\n          \"Local Written Blocks\": 0,\n          \"Temp Read Blocks\": 0,\n          \"Temp Written Blocks\": 0,\n          \"Plans\": [\n            {\n              \"Node Type\": \"Seq Scan\",\n              \"Parent Relationship\": \"Outer\",\n              \"Parallel Aware\": false,\n              \"Async Capable\": false,\n              \"Relation Name\": \"posts\",\n              \"Alias\": \"posts\",\n              \"Startup Cost\": 0.00,\n              \"Total Cost\": 1736.00,\n              \"Plan Rows\": 100000,\n              \"Plan Width\": 23,\n              \"Actual Startup Time\": 0.004,\n              \"Actual Total Time\": 10.609,\n              \"Actual Rows\": 100000.00,\n              \"Actual Loops\": 1,\n              \"Disabled\": false,\n              \"Shared Hit Blocks\": 736,\n              \"Shared Read Blocks\": 0,\n              \"Shared Dirtied Blocks\": 0,\n              \"Shared Written Blocks\": 0,\n              \"Local Hit Blocks\": 0,\n              \"Local Read Blocks\": 0,\n              \"Local Dirtied Blocks\": 0,\n              \"Local Written Blocks\": 0,\n              \"Temp Read Blocks\": 0,\n              \"Temp Written Blocks\": 0\n            }\n          ]\n        }\n      ]\n    },\n    \"Planning\": {\n      \"Shared Hit Blocks\": 0,\n      \"Shared Read Blocks\": 0,\n      \"Shared Dirtied Blocks\": 0,\n      \"Shared Written Blocks\": 0,\n      \"Local Hit Blocks\": 0,\n      \"Local Read Blocks\": 0,\n      \"Local Dirtied Blocks\": 0,\n      \"Local Written Blocks\": 0,\n      \"Temp Read Blocks\": 0,\n      \"Temp Written Blocks\": 0\n    },\n    \"Planning Time\": 0.007,\n    \"Triggers\": [\n    ],\n    \"Execution Time\": 25.635\n  }\n]",
+              "text": "Limit  (cost=3896.96..3896.99 rows=10 width=23) (actual time=24.333..24.336 rows=10.00 loops=1)\n  Buffers: shared hit=736\n  ->  Sort  (cost=3896.96..4146.96 rows=100000 width=23) (actual time=24.332..24.333 rows=10.00 loops=1)\n        Sort Key: created_at DESC\n        Sort Method: top-N heapsort  Memory: 18kB\n        Buffers: shared hit=736\n        ->  Seq Scan on posts  (cost=0.00..1736.00 rows=100000 width=23) (actual time=0.005..10.174 rows=100000.00 loops=1)\n              Buffers: shared hit=736\nPlanning Time: 0.042 ms\nExecution Time: 24.353 ms"
+            }
+          }
+        ],
+        "reading": {
+          "summary": "Full scan of posts, reads 100k rows, sorts every row to return 10 rows",
+          "verdict": {
+            "kind": "grows",
+            "tables": ["posts"]
+          },
+          "indexes": [
+            {
+              "trigger": "sorted_limit",
+              "table": "posts",
+              "schema": "public",
+              "columns": ["created_at"],
+              "name": "posts_created_at_idx",
+              "drizzle": "index(\"posts_created_at_idx\").on(t.createdAt)",
+              "measure": {
+                "unit": "cost",
+                "before": 3896.99,
+                "after": 0.85
+              },
+              "before": {
+                "database": "postgresql",
+                "size": "1m",
+                "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"Limit\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Startup Cost\": 3896.96,\n      \"Total Cost\": 3896.99,\n      \"Plan Rows\": 10,\n      \"Plan Width\": 23,\n      \"Disabled\": false,\n      \"Plans\": [\n        {\n          \"Node Type\": \"Sort\",\n          \"Parent Relationship\": \"Outer\",\n          \"Parallel Aware\": false,\n          \"Async Capable\": false,\n          \"Startup Cost\": 3896.96,\n          \"Total Cost\": 4146.96,\n          \"Plan Rows\": 100000,\n          \"Plan Width\": 23,\n          \"Disabled\": false,\n          \"Sort Key\": [\"created_at DESC\"],\n          \"Plans\": [\n            {\n              \"Node Type\": \"Seq Scan\",\n              \"Parent Relationship\": \"Outer\",\n              \"Parallel Aware\": false,\n              \"Async Capable\": false,\n              \"Relation Name\": \"posts\",\n              \"Alias\": \"posts\",\n              \"Startup Cost\": 0.00,\n              \"Total Cost\": 1736.00,\n              \"Plan Rows\": 100000,\n              \"Plan Width\": 23,\n              \"Disabled\": false\n            }\n          ]\n        }\n      ]\n    }\n  }\n]",
+                "text": "Limit  (cost=3896.96..3896.99 rows=10 width=23)\n  ->  Sort  (cost=3896.96..4146.96 rows=100000 width=23)\n        Sort Key: created_at DESC\n        ->  Seq Scan on posts  (cost=0.00..1736.00 rows=100000 width=23)",
+                "analyze": {
+                  "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"Limit\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Startup Cost\": 3896.96,\n      \"Total Cost\": 3896.99,\n      \"Plan Rows\": 10,\n      \"Plan Width\": 23,\n      \"Actual Startup Time\": 25.622,\n      \"Actual Total Time\": 25.625,\n      \"Actual Rows\": 10.00,\n      \"Actual Loops\": 1,\n      \"Disabled\": false,\n      \"Shared Hit Blocks\": 736,\n      \"Shared Read Blocks\": 0,\n      \"Shared Dirtied Blocks\": 0,\n      \"Shared Written Blocks\": 0,\n      \"Local Hit Blocks\": 0,\n      \"Local Read Blocks\": 0,\n      \"Local Dirtied Blocks\": 0,\n      \"Local Written Blocks\": 0,\n      \"Temp Read Blocks\": 0,\n      \"Temp Written Blocks\": 0,\n      \"Plans\": [\n        {\n          \"Node Type\": \"Sort\",\n          \"Parent Relationship\": \"Outer\",\n          \"Parallel Aware\": false,\n          \"Async Capable\": false,\n          \"Startup Cost\": 3896.96,\n          \"Total Cost\": 4146.96,\n          \"Plan Rows\": 100000,\n          \"Plan Width\": 23,\n          \"Actual Startup Time\": 25.620,\n          \"Actual Total Time\": 25.621,\n          \"Actual Rows\": 10.00,\n          \"Actual Loops\": 1,\n          \"Disabled\": false,\n          \"Sort Key\": [\"created_at DESC\"],\n          \"Sort Method\": \"top-N heapsort\",\n          \"Sort Space Used\": 18,\n          \"Sort Space Type\": \"Memory\",\n          \"Shared Hit Blocks\": 736,\n          \"Shared Read Blocks\": 0,\n          \"Shared Dirtied Blocks\": 0,\n          \"Shared Written Blocks\": 0,\n          \"Local Hit Blocks\": 0,\n          \"Local Read Blocks\": 0,\n          \"Local Dirtied Blocks\": 0,\n          \"Local Written Blocks\": 0,\n          \"Temp Read Blocks\": 0,\n          \"Temp Written Blocks\": 0,\n          \"Plans\": [\n            {\n              \"Node Type\": \"Seq Scan\",\n              \"Parent Relationship\": \"Outer\",\n              \"Parallel Aware\": false,\n              \"Async Capable\": false,\n              \"Relation Name\": \"posts\",\n              \"Alias\": \"posts\",\n              \"Startup Cost\": 0.00,\n              \"Total Cost\": 1736.00,\n              \"Plan Rows\": 100000,\n              \"Plan Width\": 23,\n              \"Actual Startup Time\": 0.004,\n              \"Actual Total Time\": 10.609,\n              \"Actual Rows\": 100000.00,\n              \"Actual Loops\": 1,\n              \"Disabled\": false,\n              \"Shared Hit Blocks\": 736,\n              \"Shared Read Blocks\": 0,\n              \"Shared Dirtied Blocks\": 0,\n              \"Shared Written Blocks\": 0,\n              \"Local Hit Blocks\": 0,\n              \"Local Read Blocks\": 0,\n              \"Local Dirtied Blocks\": 0,\n              \"Local Written Blocks\": 0,\n              \"Temp Read Blocks\": 0,\n              \"Temp Written Blocks\": 0\n            }\n          ]\n        }\n      ]\n    },\n    \"Planning\": {\n      \"Shared Hit Blocks\": 0,\n      \"Shared Read Blocks\": 0,\n      \"Shared Dirtied Blocks\": 0,\n      \"Shared Written Blocks\": 0,\n      \"Local Hit Blocks\": 0,\n      \"Local Read Blocks\": 0,\n      \"Local Dirtied Blocks\": 0,\n      \"Local Written Blocks\": 0,\n      \"Temp Read Blocks\": 0,\n      \"Temp Written Blocks\": 0\n    },\n    \"Planning Time\": 0.007,\n    \"Triggers\": [\n    ],\n    \"Execution Time\": 25.635\n  }\n]",
+                  "text": "Limit  (cost=3896.96..3896.99 rows=10 width=23) (actual time=24.333..24.336 rows=10.00 loops=1)\n  Buffers: shared hit=736\n  ->  Sort  (cost=3896.96..4146.96 rows=100000 width=23) (actual time=24.332..24.333 rows=10.00 loops=1)\n        Sort Key: created_at DESC\n        Sort Method: top-N heapsort  Memory: 18kB\n        Buffers: shared hit=736\n        ->  Seq Scan on posts  (cost=0.00..1736.00 rows=100000 width=23) (actual time=0.005..10.174 rows=100000.00 loops=1)\n              Buffers: shared hit=736\nPlanning Time: 0.042 ms\nExecution Time: 24.353 ms"
+                }
+              },
+              "after": {
+                "database": "postgresql",
+                "size": "1m",
+                "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"Limit\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Startup Cost\": 0.29,\n      \"Total Cost\": 0.85,\n      \"Plan Rows\": 10,\n      \"Plan Width\": 23,\n      \"Disabled\": false,\n      \"Plans\": [\n        {\n          \"Node Type\": \"Index Scan\",\n          \"Parent Relationship\": \"Outer\",\n          \"Parallel Aware\": false,\n          \"Async Capable\": false,\n          \"Scan Direction\": \"Backward\",\n          \"Index Name\": \"posts_created_at_idx\",\n          \"Relation Name\": \"posts\",\n          \"Alias\": \"posts\",\n          \"Startup Cost\": 0.29,\n          \"Total Cost\": 5545.95,\n          \"Plan Rows\": 100000,\n          \"Plan Width\": 23,\n          \"Disabled\": false\n        }\n      ]\n    }\n  }\n]",
+                "text": "Limit  (cost=0.29..0.85 rows=10 width=23)\n  ->  Index Scan Backward using posts_created_at_idx on posts  (cost=0.29..5545.95 rows=100000 width=23)"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "sequences": [13],
+        "sql": "select count(*) from \"posts\"",
+        "parameters": [],
+        "raw": [
+          {
+            "database": "postgresql",
+            "size": "seed",
+            "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"Aggregate\",\n      \"Strategy\": \"Plain\",\n      \"Partial Mode\": \"Simple\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Startup Cost\": 1.04,\n      \"Total Cost\": 1.05,\n      \"Plan Rows\": 1,\n      \"Plan Width\": 8,\n      \"Disabled\": false,\n      \"Plans\": [\n        {\n          \"Node Type\": \"Seq Scan\",\n          \"Parent Relationship\": \"Outer\",\n          \"Parallel Aware\": false,\n          \"Async Capable\": false,\n          \"Relation Name\": \"posts\",\n          \"Alias\": \"posts\",\n          \"Startup Cost\": 0.00,\n          \"Total Cost\": 1.03,\n          \"Plan Rows\": 3,\n          \"Plan Width\": 0,\n          \"Disabled\": false\n        }\n      ]\n    }\n  }\n]",
+            "text": "Aggregate  (cost=1.04..1.05 rows=1 width=8)\n  ->  Seq Scan on posts  (cost=0.00..1.03 rows=3 width=0)"
+          },
+          {
+            "database": "postgresql",
+            "size": "10k",
+            "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"Aggregate\",\n      \"Strategy\": \"Plain\",\n      \"Partial Mode\": \"Simple\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Startup Cost\": 20.50,\n      \"Total Cost\": 20.51,\n      \"Plan Rows\": 1,\n      \"Plan Width\": 8,\n      \"Disabled\": false,\n      \"Plans\": [\n        {\n          \"Node Type\": \"Seq Scan\",\n          \"Parent Relationship\": \"Outer\",\n          \"Parallel Aware\": false,\n          \"Async Capable\": false,\n          \"Relation Name\": \"posts\",\n          \"Alias\": \"posts\",\n          \"Startup Cost\": 0.00,\n          \"Total Cost\": 18.00,\n          \"Plan Rows\": 1000,\n          \"Plan Width\": 0,\n          \"Disabled\": false\n        }\n      ]\n    }\n  }\n]",
+            "text": "Aggregate  (cost=20.50..20.51 rows=1 width=8)\n  ->  Seq Scan on posts  (cost=0.00..18.00 rows=1000 width=0)"
+          },
+          {
+            "database": "postgresql",
+            "size": "1m",
+            "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"Aggregate\",\n      \"Strategy\": \"Plain\",\n      \"Partial Mode\": \"Simple\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Startup Cost\": 1986.00,\n      \"Total Cost\": 1986.01,\n      \"Plan Rows\": 1,\n      \"Plan Width\": 8,\n      \"Disabled\": false,\n      \"Plans\": [\n        {\n          \"Node Type\": \"Seq Scan\",\n          \"Parent Relationship\": \"Outer\",\n          \"Parallel Aware\": false,\n          \"Async Capable\": false,\n          \"Relation Name\": \"posts\",\n          \"Alias\": \"posts\",\n          \"Startup Cost\": 0.00,\n          \"Total Cost\": 1736.00,\n          \"Plan Rows\": 100000,\n          \"Plan Width\": 0,\n          \"Disabled\": false\n        }\n      ]\n    }\n  }\n]",
+            "text": "Aggregate  (cost=1986.00..1986.01 rows=1 width=8)\n  ->  Seq Scan on posts  (cost=0.00..1736.00 rows=100000 width=0)",
+            "analyze": {
+              "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"Aggregate\",\n      \"Strategy\": \"Plain\",\n      \"Partial Mode\": \"Simple\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Startup Cost\": 1986.00,\n      \"Total Cost\": 1986.01,\n      \"Plan Rows\": 1,\n      \"Plan Width\": 8,\n      \"Actual Startup Time\": 15.515,\n      \"Actual Total Time\": 15.516,\n      \"Actual Rows\": 1.00,\n      \"Actual Loops\": 1,\n      \"Disabled\": false,\n      \"Shared Hit Blocks\": 736,\n      \"Shared Read Blocks\": 0,\n      \"Shared Dirtied Blocks\": 0,\n      \"Shared Written Blocks\": 0,\n      \"Local Hit Blocks\": 0,\n      \"Local Read Blocks\": 0,\n      \"Local Dirtied Blocks\": 0,\n      \"Local Written Blocks\": 0,\n      \"Temp Read Blocks\": 0,\n      \"Temp Written Blocks\": 0,\n      \"Plans\": [\n        {\n          \"Node Type\": \"Seq Scan\",\n          \"Parent Relationship\": \"Outer\",\n          \"Parallel Aware\": false,\n          \"Async Capable\": false,\n          \"Relation Name\": \"posts\",\n          \"Alias\": \"posts\",\n          \"Startup Cost\": 0.00,\n          \"Total Cost\": 1736.00,\n          \"Plan Rows\": 100000,\n          \"Plan Width\": 0,\n          \"Actual Startup Time\": 0.005,\n          \"Actual Total Time\": 7.918,\n          \"Actual Rows\": 100000.00,\n          \"Actual Loops\": 1,\n          \"Disabled\": false,\n          \"Shared Hit Blocks\": 736,\n          \"Shared Read Blocks\": 0,\n          \"Shared Dirtied Blocks\": 0,\n          \"Shared Written Blocks\": 0,\n          \"Local Hit Blocks\": 0,\n          \"Local Read Blocks\": 0,\n          \"Local Dirtied Blocks\": 0,\n          \"Local Written Blocks\": 0,\n          \"Temp Read Blocks\": 0,\n          \"Temp Written Blocks\": 0\n        }\n      ]\n    },\n    \"Planning\": {\n      \"Shared Hit Blocks\": 0,\n      \"Shared Read Blocks\": 0,\n      \"Shared Dirtied Blocks\": 0,\n      \"Shared Written Blocks\": 0,\n      \"Local Hit Blocks\": 0,\n      \"Local Read Blocks\": 0,\n      \"Local Dirtied Blocks\": 0,\n      \"Local Written Blocks\": 0,\n      \"Temp Read Blocks\": 0,\n      \"Temp Written Blocks\": 0\n    },\n    \"Planning Time\": 0.010,\n    \"Triggers\": [\n    ],\n    \"Execution Time\": 15.523\n  }\n]",
+              "text": "Aggregate  (cost=1986.00..1986.01 rows=1 width=8) (actual time=15.621..15.622 rows=1.00 loops=1)\n  Buffers: shared hit=736\n  ->  Seq Scan on posts  (cost=0.00..1736.00 rows=100000 width=0) (actual time=0.005..7.878 rows=100000.00 loops=1)\n        Buffers: shared hit=736\nPlanning Time: 0.033 ms\nExecution Time: 15.641 ms"
+            }
+          }
+        ],
+        "reading": {
+          "summary": "Full scan of posts, reads 100k rows to return 1 row",
+          "verdict": {
+            "kind": "grows",
+            "tables": ["posts"]
+          },
+          "indexes": []
+        }
+      },
+      {
+        "sequences": [14],
+        "sql": "select \"users\".\"id\", \"users\".\"name\", count(\"posts\".\"id\") from \"users\" left join \"posts\" on \"posts\".\"author_id\" = \"users\".\"id\" group by \"users\".\"id\"",
+        "parameters": [],
+        "raw": [
+          {
+            "database": "postgresql",
+            "size": "seed",
+            "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"Aggregate\",\n      \"Strategy\": \"Hashed\",\n      \"Partial Mode\": \"Simple\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Startup Cost\": 2.13,\n      \"Total Cost\": 2.16,\n      \"Plan Rows\": 3,\n      \"Plan Width\": 17,\n      \"Disabled\": false,\n      \"Group Key\": [\"users.id\"],\n      \"Planned Partitions\": 0,\n      \"Plans\": [\n        {\n          \"Node Type\": \"Hash Join\",\n          \"Parent Relationship\": \"Outer\",\n          \"Parallel Aware\": false,\n          \"Async Capable\": false,\n          \"Join Type\": \"Right\",\n          \"Startup Cost\": 1.07,\n          \"Total Cost\": 2.12,\n          \"Plan Rows\": 3,\n          \"Plan Width\": 13,\n          \"Disabled\": false,\n          \"Inner Unique\": true,\n          \"Hash Cond\": \"(posts.author_id = users.id)\",\n          \"Plans\": [\n            {\n              \"Node Type\": \"Seq Scan\",\n              \"Parent Relationship\": \"Outer\",\n              \"Parallel Aware\": false,\n              \"Async Capable\": false,\n              \"Relation Name\": \"posts\",\n              \"Alias\": \"posts\",\n              \"Startup Cost\": 0.00,\n              \"Total Cost\": 1.03,\n              \"Plan Rows\": 3,\n              \"Plan Width\": 8,\n              \"Disabled\": false\n            },\n            {\n              \"Node Type\": \"Hash\",\n              \"Parent Relationship\": \"Inner\",\n              \"Parallel Aware\": false,\n              \"Async Capable\": false,\n              \"Startup Cost\": 1.03,\n              \"Total Cost\": 1.03,\n              \"Plan Rows\": 3,\n              \"Plan Width\": 9,\n              \"Disabled\": false,\n              \"Plans\": [\n                {\n                  \"Node Type\": \"Seq Scan\",\n                  \"Parent Relationship\": \"Outer\",\n                  \"Parallel Aware\": false,\n                  \"Async Capable\": false,\n                  \"Relation Name\": \"users\",\n                  \"Alias\": \"users\",\n                  \"Startup Cost\": 0.00,\n                  \"Total Cost\": 1.03,\n                  \"Plan Rows\": 3,\n                  \"Plan Width\": 9,\n                  \"Disabled\": false\n                }\n              ]\n            }\n          ]\n        }\n      ]\n    }\n  }\n]",
+            "text": "HashAggregate  (cost=2.13..2.16 rows=3 width=17)\n  Group Key: users.id\n  ->  Hash Right Join  (cost=1.07..2.12 rows=3 width=13)\n        Hash Cond: (posts.author_id = users.id)\n        ->  Seq Scan on posts  (cost=0.00..1.03 rows=3 width=8)\n        ->  Hash  (cost=1.03..1.03 rows=3 width=9)\n              ->  Seq Scan on users  (cost=0.00..1.03 rows=3 width=9)"
+          },
+          {
+            "database": "postgresql",
+            "size": "10k",
+            "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"Aggregate\",\n      \"Strategy\": \"Hashed\",\n      \"Partial Mode\": \"Simple\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Startup Cost\": 28.99,\n      \"Total Cost\": 29.99,\n      \"Plan Rows\": 100,\n      \"Plan Width\": 19,\n      \"Disabled\": false,\n      \"Group Key\": [\"users.id\"],\n      \"Planned Partitions\": 0,\n      \"Plans\": [\n        {\n          \"Node Type\": \"Hash Join\",\n          \"Parent Relationship\": \"Outer\",\n          \"Parallel Aware\": false,\n          \"Async Capable\": false,\n          \"Join Type\": \"Right\",\n          \"Startup Cost\": 3.25,\n          \"Total Cost\": 23.99,\n          \"Plan Rows\": 1000,\n          \"Plan Width\": 15,\n          \"Disabled\": false,\n          \"Inner Unique\": true,\n          \"Hash Cond\": \"(posts.author_id = users.id)\",\n          \"Plans\": [\n            {\n              \"Node Type\": \"Seq Scan\",\n              \"Parent Relationship\": \"Outer\",\n              \"Parallel Aware\": false,\n              \"Async Capable\": false,\n              \"Relation Name\": \"posts\",\n              \"Alias\": \"posts\",\n              \"Startup Cost\": 0.00,\n              \"Total Cost\": 18.00,\n              \"Plan Rows\": 1000,\n              \"Plan Width\": 8,\n              \"Disabled\": false\n            },\n            {\n              \"Node Type\": \"Hash\",\n              \"Parent Relationship\": \"Inner\",\n              \"Parallel Aware\": false,\n              \"Async Capable\": false,\n              \"Startup Cost\": 2.00,\n              \"Total Cost\": 2.00,\n              \"Plan Rows\": 100,\n              \"Plan Width\": 11,\n              \"Disabled\": false,\n              \"Plans\": [\n                {\n                  \"Node Type\": \"Seq Scan\",\n                  \"Parent Relationship\": \"Outer\",\n                  \"Parallel Aware\": false,\n                  \"Async Capable\": false,\n                  \"Relation Name\": \"users\",\n                  \"Alias\": \"users\",\n                  \"Startup Cost\": 0.00,\n                  \"Total Cost\": 2.00,\n                  \"Plan Rows\": 100,\n                  \"Plan Width\": 11,\n                  \"Disabled\": false\n                }\n              ]\n            }\n          ]\n        }\n      ]\n    }\n  }\n]",
+            "text": "HashAggregate  (cost=28.99..29.99 rows=100 width=19)\n  Group Key: users.id\n  ->  Hash Right Join  (cost=3.25..23.99 rows=1000 width=15)\n        Hash Cond: (posts.author_id = users.id)\n        ->  Seq Scan on posts  (cost=0.00..18.00 rows=1000 width=8)\n        ->  Hash  (cost=2.00..2.00 rows=100 width=11)\n              ->  Seq Scan on users  (cost=0.00..2.00 rows=100 width=11)"
+          },
+          {
+            "database": "postgresql",
+            "size": "1m",
+            "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"Aggregate\",\n      \"Strategy\": \"Hashed\",\n      \"Partial Mode\": \"Simple\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Startup Cost\": 2806.61,\n      \"Total Cost\": 2906.61,\n      \"Plan Rows\": 10000,\n      \"Plan Width\": 21,\n      \"Disabled\": false,\n      \"Group Key\": [\"users.id\"],\n      \"Planned Partitions\": 0,\n      \"Plans\": [\n        {\n          \"Node Type\": \"Hash Join\",\n          \"Parent Relationship\": \"Outer\",\n          \"Parallel Aware\": false,\n          \"Async Capable\": false,\n          \"Join Type\": \"Right\",\n          \"Startup Cost\": 308.00,\n          \"Total Cost\": 2306.61,\n          \"Plan Rows\": 100000,\n          \"Plan Width\": 17,\n          \"Disabled\": false,\n          \"Inner Unique\": true,\n          \"Hash Cond\": \"(posts.author_id = users.id)\",\n          \"Plans\": [\n            {\n              \"Node Type\": \"Seq Scan\",\n              \"Parent Relationship\": \"Outer\",\n              \"Parallel Aware\": false,\n              \"Async Capable\": false,\n              \"Relation Name\": \"posts\",\n              \"Alias\": \"posts\",\n              \"Startup Cost\": 0.00,\n              \"Total Cost\": 1736.00,\n              \"Plan Rows\": 100000,\n              \"Plan Width\": 8,\n              \"Disabled\": false\n            },\n            {\n              \"Node Type\": \"Hash\",\n              \"Parent Relationship\": \"Inner\",\n              \"Parallel Aware\": false,\n              \"Async Capable\": false,\n              \"Startup Cost\": 183.00,\n              \"Total Cost\": 183.00,\n              \"Plan Rows\": 10000,\n              \"Plan Width\": 13,\n              \"Disabled\": false,\n              \"Plans\": [\n                {\n                  \"Node Type\": \"Seq Scan\",\n                  \"Parent Relationship\": \"Outer\",\n                  \"Parallel Aware\": false,\n                  \"Async Capable\": false,\n                  \"Relation Name\": \"users\",\n                  \"Alias\": \"users\",\n                  \"Startup Cost\": 0.00,\n                  \"Total Cost\": 183.00,\n                  \"Plan Rows\": 10000,\n                  \"Plan Width\": 13,\n                  \"Disabled\": false\n                }\n              ]\n            }\n          ]\n        }\n      ]\n    }\n  }\n]",
+            "text": "HashAggregate  (cost=2806.61..2906.61 rows=10000 width=21)\n  Group Key: users.id\n  ->  Hash Right Join  (cost=308.00..2306.61 rows=100000 width=17)\n        Hash Cond: (posts.author_id = users.id)\n        ->  Seq Scan on posts  (cost=0.00..1736.00 rows=100000 width=8)\n        ->  Hash  (cost=183.00..183.00 rows=10000 width=13)\n              ->  Seq Scan on users  (cost=0.00..183.00 rows=10000 width=13)",
+            "analyze": {
+              "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"Aggregate\",\n      \"Strategy\": \"Hashed\",\n      \"Partial Mode\": \"Simple\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Startup Cost\": 2806.61,\n      \"Total Cost\": 2906.61,\n      \"Plan Rows\": 10000,\n      \"Plan Width\": 21,\n      \"Actual Startup Time\": 46.772,\n      \"Actual Total Time\": 48.219,\n      \"Actual Rows\": 10000.00,\n      \"Actual Loops\": 1,\n      \"Disabled\": false,\n      \"Group Key\": [\"users.id\"],\n      \"Planned Partitions\": 0,\n      \"HashAgg Batches\": 1,\n      \"Peak Memory Usage\": 977,\n      \"Disk Usage\": 0,\n      \"Shared Hit Blocks\": 819,\n      \"Shared Read Blocks\": 0,\n      \"Shared Dirtied Blocks\": 0,\n      \"Shared Written Blocks\": 0,\n      \"Local Hit Blocks\": 0,\n      \"Local Read Blocks\": 0,\n      \"Local Dirtied Blocks\": 0,\n      \"Local Written Blocks\": 0,\n      \"Temp Read Blocks\": 0,\n      \"Temp Written Blocks\": 0,\n      \"Plans\": [\n        {\n          \"Node Type\": \"Hash Join\",\n          \"Parent Relationship\": \"Outer\",\n          \"Parallel Aware\": false,\n          \"Async Capable\": false,\n          \"Join Type\": \"Right\",\n          \"Startup Cost\": 308.00,\n          \"Total Cost\": 2306.61,\n          \"Plan Rows\": 100000,\n          \"Plan Width\": 17,\n          \"Actual Startup Time\": 2.194,\n          \"Actual Total Time\": 30.954,\n          \"Actual Rows\": 100000.00,\n          \"Actual Loops\": 1,\n          \"Disabled\": false,\n          \"Inner Unique\": true,\n          \"Hash Cond\": \"(posts.author_id = users.id)\",\n          \"Shared Hit Blocks\": 819,\n          \"Shared Read Blocks\": 0,\n          \"Shared Dirtied Blocks\": 0,\n          \"Shared Written Blocks\": 0,\n          \"Local Hit Blocks\": 0,\n          \"Local Read Blocks\": 0,\n          \"Local Dirtied Blocks\": 0,\n          \"Local Written Blocks\": 0,\n          \"Temp Read Blocks\": 0,\n          \"Temp Written Blocks\": 0,\n          \"Plans\": [\n            {\n              \"Node Type\": \"Seq Scan\",\n              \"Parent Relationship\": \"Outer\",\n              \"Parallel Aware\": false,\n              \"Async Capable\": false,\n              \"Relation Name\": \"posts\",\n              \"Alias\": \"posts\",\n              \"Startup Cost\": 0.00,\n              \"Total Cost\": 1736.00,\n              \"Plan Rows\": 100000,\n              \"Plan Width\": 8,\n              \"Actual Startup Time\": 0.003,\n              \"Actual Total Time\": 8.467,\n              \"Actual Rows\": 100000.00,\n              \"Actual Loops\": 1,\n              \"Disabled\": false,\n              \"Shared Hit Blocks\": 736,\n              \"Shared Read Blocks\": 0,\n              \"Shared Dirtied Blocks\": 0,\n              \"Shared Written Blocks\": 0,\n              \"Local Hit Blocks\": 0,\n              \"Local Read Blocks\": 0,\n              \"Local Dirtied Blocks\": 0,\n              \"Local Written Blocks\": 0,\n              \"Temp Read Blocks\": 0,\n              \"Temp Written Blocks\": 0\n            },\n            {\n              \"Node Type\": \"Hash\",\n              \"Parent Relationship\": \"Inner\",\n              \"Parallel Aware\": false,\n              \"Async Capable\": false,\n              \"Startup Cost\": 183.00,\n              \"Total Cost\": 183.00,\n              \"Plan Rows\": 10000,\n              \"Plan Width\": 13,\n              \"Actual Startup Time\": 2.186,\n              \"Actual Total Time\": 2.187,\n              \"Actual Rows\": 10000.00,\n              \"Actual Loops\": 1,\n              \"Disabled\": false,\n              \"Hash Buckets\": 16384,\n              \"Original Hash Buckets\": 16384,\n              \"Hash Batches\": 1,\n              \"Original Hash Batches\": 1,\n              \"Peak Memory Usage\": 434,\n              \"Shared Hit Blocks\": 83,\n              \"Shared Read Blocks\": 0,\n              \"Shared Dirtied Blocks\": 0,\n              \"Shared Written Blocks\": 0,\n              \"Local Hit Blocks\": 0,\n              \"Local Read Blocks\": 0,\n              \"Local Dirtied Blocks\": 0,\n              \"Local Written Blocks\": 0,\n              \"Temp Read Blocks\": 0,\n              \"Temp Written Blocks\": 0,\n              \"Plans\": [\n                {\n                  \"Node Type\": \"Seq Scan\",\n                  \"Parent Relationship\": \"Outer\",\n                  \"Parallel Aware\": false,\n                  \"Async Capable\": false,\n                  \"Relation Name\": \"users\",\n                  \"Alias\": \"users\",\n                  \"Startup Cost\": 0.00,\n                  \"Total Cost\": 183.00,\n                  \"Plan Rows\": 10000,\n                  \"Plan Width\": 13,\n                  \"Actual Startup Time\": 0.005,\n                  \"Actual Total Time\": 0.975,\n                  \"Actual Rows\": 10000.00,\n                  \"Actual Loops\": 1,\n                  \"Disabled\": false,\n                  \"Shared Hit Blocks\": 83,\n                  \"Shared Read Blocks\": 0,\n                  \"Shared Dirtied Blocks\": 0,\n                  \"Shared Written Blocks\": 0,\n                  \"Local Hit Blocks\": 0,\n                  \"Local Read Blocks\": 0,\n                  \"Local Dirtied Blocks\": 0,\n                  \"Local Written Blocks\": 0,\n                  \"Temp Read Blocks\": 0,\n                  \"Temp Written Blocks\": 0\n                }\n              ]\n            }\n          ]\n        }\n      ]\n    },\n    \"Planning\": {\n      \"Shared Hit Blocks\": 6,\n      \"Shared Read Blocks\": 0,\n      \"Shared Dirtied Blocks\": 0,\n      \"Shared Written Blocks\": 0,\n      \"Local Hit Blocks\": 0,\n      \"Local Read Blocks\": 0,\n      \"Local Dirtied Blocks\": 0,\n      \"Local Written Blocks\": 0,\n      \"Temp Read Blocks\": 0,\n      \"Temp Written Blocks\": 0\n    },\n    \"Planning Time\": 0.041,\n    \"Triggers\": [\n    ],\n    \"Execution Time\": 48.891\n  }\n]",
+              "text": "HashAggregate  (cost=2806.61..2906.61 rows=10000 width=21) (actual time=44.999..46.186 rows=10000.00 loops=1)\n  Group Key: users.id\n  Batches: 1  Memory Usage: 977kB\n  Buffers: shared hit=819\n  ->  Hash Right Join  (cost=308.00..2306.61 rows=100000 width=17) (actual time=2.139..30.222 rows=100000.00 loops=1)\n        Hash Cond: (posts.author_id = users.id)\n        Buffers: shared hit=819\n        ->  Seq Scan on posts  (cost=0.00..1736.00 rows=100000 width=8) (actual time=0.004..8.411 rows=100000.00 loops=1)\n              Buffers: shared hit=736\n        ->  Hash  (cost=183.00..183.00 rows=10000 width=13) (actual time=2.132..2.133 rows=10000.00 loops=1)\n              Buckets: 16384  Batches: 1  Memory Usage: 434kB\n              Buffers: shared hit=83\n              ->  Seq Scan on users  (cost=0.00..183.00 rows=10000 width=13) (actual time=0.006..0.975 rows=10000.00 loops=1)\n                    Buffers: shared hit=83\nPlanning:\n  Buffers: shared hit=6\nPlanning Time: 0.130 ms\nExecution Time: 46.848 ms"
+            }
+          }
+        ],
+        "reading": {
+          "summary": "Hash join over posts and users, full scan of both, then groups to return 10k rows",
+          "verdict": {
+            "kind": "grows",
+            "tables": ["posts", "users"]
+          },
+          "indexes": []
+        }
+      },
+      {
+        "sequences": [15],
+        "sql": "select \"comments\".\"body\", \"posts\".\"title\" from \"comments\" inner join \"posts\" on \"posts\".\"id\" = \"comments\".\"post_id\" where \"comments\".\"author_id\" = $1",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": 2
+          }
+        ],
+        "raw": [
+          {
+            "database": "postgresql",
+            "size": "seed",
+            "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"Nested Loop\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Join Type\": \"Inner\",\n      \"Startup Cost\": 0.00,\n      \"Total Cost\": 2.09,\n      \"Plan Rows\": 1,\n      \"Plan Width\": 12,\n      \"Disabled\": false,\n      \"Inner Unique\": true,\n      \"Join Filter\": \"(posts.id = comments.post_id)\",\n      \"Plans\": [\n        {\n          \"Node Type\": \"Seq Scan\",\n          \"Parent Relationship\": \"Outer\",\n          \"Parallel Aware\": false,\n          \"Async Capable\": false,\n          \"Relation Name\": \"comments\",\n          \"Alias\": \"comments\",\n          \"Startup Cost\": 0.00,\n          \"Total Cost\": 1.02,\n          \"Plan Rows\": 1,\n          \"Plan Width\": 10,\n          \"Disabled\": false,\n          \"Filter\": \"(author_id = 2)\"\n        },\n        {\n          \"Node Type\": \"Seq Scan\",\n          \"Parent Relationship\": \"Inner\",\n          \"Parallel Aware\": false,\n          \"Async Capable\": false,\n          \"Relation Name\": \"posts\",\n          \"Alias\": \"posts\",\n          \"Startup Cost\": 0.00,\n          \"Total Cost\": 1.03,\n          \"Plan Rows\": 3,\n          \"Plan Width\": 10,\n          \"Disabled\": false\n        }\n      ]\n    }\n  }\n]",
+            "text": "Nested Loop  (cost=0.00..2.09 rows=1 width=12)\n  Join Filter: (posts.id = comments.post_id)\n  ->  Seq Scan on comments  (cost=0.00..1.02 rows=1 width=10)\n        Filter: (author_id = 2)\n  ->  Seq Scan on posts  (cost=0.00..1.03 rows=3 width=10)"
+          },
+          {
+            "database": "postgresql",
+            "size": "10k",
+            "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"Hash Join\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Join Type\": \"Inner\",\n      \"Startup Cost\": 30.50,\n      \"Total Cost\": 219.77,\n      \"Plan Rows\": 101,\n      \"Plan Width\": 18,\n      \"Disabled\": false,\n      \"Inner Unique\": true,\n      \"Hash Cond\": \"(comments.post_id = posts.id)\",\n      \"Plans\": [\n        {\n          \"Node Type\": \"Seq Scan\",\n          \"Parent Relationship\": \"Outer\",\n          \"Parallel Aware\": false,\n          \"Async Capable\": false,\n          \"Relation Name\": \"comments\",\n          \"Alias\": \"comments\",\n          \"Startup Cost\": 0.00,\n          \"Total Cost\": 189.00,\n          \"Plan Rows\": 101,\n          \"Plan Width\": 13,\n          \"Disabled\": false,\n          \"Filter\": \"(author_id = 2)\"\n        },\n        {\n          \"Node Type\": \"Hash\",\n          \"Parent Relationship\": \"Inner\",\n          \"Parallel Aware\": false,\n          \"Async Capable\": false,\n          \"Startup Cost\": 18.00,\n          \"Total Cost\": 18.00,\n          \"Plan Rows\": 1000,\n          \"Plan Width\": 13,\n          \"Disabled\": false,\n          \"Plans\": [\n            {\n              \"Node Type\": \"Seq Scan\",\n              \"Parent Relationship\": \"Outer\",\n              \"Parallel Aware\": false,\n              \"Async Capable\": false,\n              \"Relation Name\": \"posts\",\n              \"Alias\": \"posts\",\n              \"Startup Cost\": 0.00,\n              \"Total Cost\": 18.00,\n              \"Plan Rows\": 1000,\n              \"Plan Width\": 13,\n              \"Disabled\": false\n            }\n          ]\n        }\n      ]\n    }\n  }\n]",
+            "text": "Hash Join  (cost=30.50..219.77 rows=101 width=18)\n  Hash Cond: (comments.post_id = posts.id)\n  ->  Seq Scan on comments  (cost=0.00..189.00 rows=101 width=13)\n        Filter: (author_id = 2)\n  ->  Hash  (cost=18.00..18.00 rows=1000 width=13)\n        ->  Seq Scan on posts  (cost=0.00..18.00 rows=1000 width=13)"
+          },
+          {
+            "database": "postgresql",
+            "size": "1m",
+            "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"Nested Loop\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Join Type\": \"Inner\",\n      \"Startup Cost\": 0.29,\n      \"Total Cost\": 19633.00,\n      \"Plan Rows\": 100,\n      \"Plan Width\": 22,\n      \"Disabled\": false,\n      \"Inner Unique\": true,\n      \"Plans\": [\n        {\n          \"Node Type\": \"Seq Scan\",\n          \"Parent Relationship\": \"Outer\",\n          \"Parallel Aware\": false,\n          \"Async Capable\": false,\n          \"Relation Name\": \"comments\",\n          \"Alias\": \"comments\",\n          \"Startup Cost\": 0.00,\n          \"Total Cost\": 18870.00,\n          \"Plan Rows\": 100,\n          \"Plan Width\": 15,\n          \"Disabled\": false,\n          \"Filter\": \"(author_id = 2)\"\n        },\n        {\n          \"Node Type\": \"Index Scan\",\n          \"Parent Relationship\": \"Inner\",\n          \"Parallel Aware\": false,\n          \"Async Capable\": false,\n          \"Scan Direction\": \"Forward\",\n          \"Index Name\": \"posts_pkey\",\n          \"Relation Name\": \"posts\",\n          \"Alias\": \"posts\",\n          \"Startup Cost\": 0.29,\n          \"Total Cost\": 7.63,\n          \"Plan Rows\": 1,\n          \"Plan Width\": 15,\n          \"Disabled\": false,\n          \"Index Cond\": \"(id = comments.post_id)\"\n        }\n      ]\n    }\n  }\n]",
+            "text": "Nested Loop  (cost=0.29..19633.00 rows=100 width=22)\n  ->  Seq Scan on comments  (cost=0.00..18870.00 rows=100 width=15)\n        Filter: (author_id = 2)\n  ->  Index Scan using posts_pkey on posts  (cost=0.29..7.63 rows=1 width=15)\n        Index Cond: (id = comments.post_id)",
+            "analyze": {
+              "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"Nested Loop\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Join Type\": \"Inner\",\n      \"Startup Cost\": 0.29,\n      \"Total Cost\": 19633.00,\n      \"Plan Rows\": 100,\n      \"Plan Width\": 22,\n      \"Actual Startup Time\": 0.012,\n      \"Actual Total Time\": 39.083,\n      \"Actual Rows\": 200.00,\n      \"Actual Loops\": 1,\n      \"Disabled\": false,\n      \"Inner Unique\": true,\n      \"Shared Hit Blocks\": 6970,\n      \"Shared Read Blocks\": 0,\n      \"Shared Dirtied Blocks\": 0,\n      \"Shared Written Blocks\": 0,\n      \"Local Hit Blocks\": 0,\n      \"Local Read Blocks\": 0,\n      \"Local Dirtied Blocks\": 0,\n      \"Local Written Blocks\": 0,\n      \"Temp Read Blocks\": 0,\n      \"Temp Written Blocks\": 0,\n      \"Plans\": [\n        {\n          \"Node Type\": \"Seq Scan\",\n          \"Parent Relationship\": \"Outer\",\n          \"Parallel Aware\": false,\n          \"Async Capable\": false,\n          \"Relation Name\": \"comments\",\n          \"Alias\": \"comments\",\n          \"Startup Cost\": 0.00,\n          \"Total Cost\": 18870.00,\n          \"Plan Rows\": 100,\n          \"Plan Width\": 15,\n          \"Actual Startup Time\": 0.007,\n          \"Actual Total Time\": 38.840,\n          \"Actual Rows\": 200.00,\n          \"Actual Loops\": 1,\n          \"Disabled\": false,\n          \"Filter\": \"(author_id = 2)\",\n          \"Rows Removed by Filter\": 999800,\n          \"Shared Hit Blocks\": 6370,\n          \"Shared Read Blocks\": 0,\n          \"Shared Dirtied Blocks\": 0,\n          \"Shared Written Blocks\": 0,\n          \"Local Hit Blocks\": 0,\n          \"Local Read Blocks\": 0,\n          \"Local Dirtied Blocks\": 0,\n          \"Local Written Blocks\": 0,\n          \"Temp Read Blocks\": 0,\n          \"Temp Written Blocks\": 0\n        },\n        {\n          \"Node Type\": \"Index Scan\",\n          \"Parent Relationship\": \"Inner\",\n          \"Parallel Aware\": false,\n          \"Async Capable\": false,\n          \"Scan Direction\": \"Forward\",\n          \"Index Name\": \"posts_pkey\",\n          \"Relation Name\": \"posts\",\n          \"Alias\": \"posts\",\n          \"Startup Cost\": 0.29,\n          \"Total Cost\": 7.63,\n          \"Plan Rows\": 1,\n          \"Plan Width\": 15,\n          \"Actual Startup Time\": 0.001,\n          \"Actual Total Time\": 0.001,\n          \"Actual Rows\": 1.00,\n          \"Actual Loops\": 200,\n          \"Disabled\": false,\n          \"Index Cond\": \"(id = comments.post_id)\",\n          \"Rows Removed by Index Recheck\": 0,\n          \"Index Searches\": 200,\n          \"Shared Hit Blocks\": 600,\n          \"Shared Read Blocks\": 0,\n          \"Shared Dirtied Blocks\": 0,\n          \"Shared Written Blocks\": 0,\n          \"Local Hit Blocks\": 0,\n          \"Local Read Blocks\": 0,\n          \"Local Dirtied Blocks\": 0,\n          \"Local Written Blocks\": 0,\n          \"Temp Read Blocks\": 0,\n          \"Temp Written Blocks\": 0\n        }\n      ]\n    },\n    \"Planning\": {\n      \"Shared Hit Blocks\": 6,\n      \"Shared Read Blocks\": 0,\n      \"Shared Dirtied Blocks\": 0,\n      \"Shared Written Blocks\": 0,\n      \"Local Hit Blocks\": 0,\n      \"Local Read Blocks\": 0,\n      \"Local Dirtied Blocks\": 0,\n      \"Local Written Blocks\": 0,\n      \"Temp Read Blocks\": 0,\n      \"Temp Written Blocks\": 0\n    },\n    \"Planning Time\": 0.037,\n    \"Triggers\": [\n    ],\n    \"Execution Time\": 39.107\n  }\n]",
+              "text": "Nested Loop  (cost=0.29..19633.00 rows=100 width=22) (actual time=0.009..45.826 rows=200.00 loops=1)\n  Buffers: shared hit=6970\n  ->  Seq Scan on comments  (cost=0.00..18870.00 rows=100 width=15) (actual time=0.006..45.488 rows=200.00 loops=1)\n        Filter: (author_id = 2)\n        Rows Removed by Filter: 999800\n        Buffers: shared hit=6370\n  ->  Index Scan using posts_pkey on posts  (cost=0.29..7.63 rows=1 width=15) (actual time=0.001..0.001 rows=1.00 loops=200)\n        Index Cond: (id = comments.post_id)\n        Index Searches: 200\n        Buffers: shared hit=600\nPlanning:\n  Buffers: shared hit=6\nPlanning Time: 0.098 ms\nExecution Time: 45.859 ms"
+            }
+          }
+        ],
+        "reading": {
+          "summary": "Nested loop join over comments and posts, full scan of comments to return 100 rows",
+          "verdict": {
+            "kind": "grows",
+            "tables": ["comments"]
+          },
+          "indexes": [
+            {
+              "trigger": "filtered_scan",
+              "table": "comments",
+              "schema": "public",
+              "columns": ["author_id"],
+              "name": "comments_author_idx",
+              "drizzle": "index(\"comments_author_idx\").on(t.authorId)",
+              "measure": {
+                "unit": "cost",
+                "before": 19633,
+                "after": 1131.86
+              },
+              "before": {
+                "database": "postgresql",
+                "size": "1m",
+                "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"Nested Loop\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Join Type\": \"Inner\",\n      \"Startup Cost\": 0.29,\n      \"Total Cost\": 19633.00,\n      \"Plan Rows\": 100,\n      \"Plan Width\": 22,\n      \"Disabled\": false,\n      \"Inner Unique\": true,\n      \"Plans\": [\n        {\n          \"Node Type\": \"Seq Scan\",\n          \"Parent Relationship\": \"Outer\",\n          \"Parallel Aware\": false,\n          \"Async Capable\": false,\n          \"Relation Name\": \"comments\",\n          \"Alias\": \"comments\",\n          \"Startup Cost\": 0.00,\n          \"Total Cost\": 18870.00,\n          \"Plan Rows\": 100,\n          \"Plan Width\": 15,\n          \"Disabled\": false,\n          \"Filter\": \"(author_id = 2)\"\n        },\n        {\n          \"Node Type\": \"Index Scan\",\n          \"Parent Relationship\": \"Inner\",\n          \"Parallel Aware\": false,\n          \"Async Capable\": false,\n          \"Scan Direction\": \"Forward\",\n          \"Index Name\": \"posts_pkey\",\n          \"Relation Name\": \"posts\",\n          \"Alias\": \"posts\",\n          \"Startup Cost\": 0.29,\n          \"Total Cost\": 7.63,\n          \"Plan Rows\": 1,\n          \"Plan Width\": 15,\n          \"Disabled\": false,\n          \"Index Cond\": \"(id = comments.post_id)\"\n        }\n      ]\n    }\n  }\n]",
+                "text": "Nested Loop  (cost=0.29..19633.00 rows=100 width=22)\n  ->  Seq Scan on comments  (cost=0.00..18870.00 rows=100 width=15)\n        Filter: (author_id = 2)\n  ->  Index Scan using posts_pkey on posts  (cost=0.29..7.63 rows=1 width=15)\n        Index Cond: (id = comments.post_id)",
+                "analyze": {
+                  "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"Nested Loop\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Join Type\": \"Inner\",\n      \"Startup Cost\": 0.29,\n      \"Total Cost\": 19633.00,\n      \"Plan Rows\": 100,\n      \"Plan Width\": 22,\n      \"Actual Startup Time\": 0.012,\n      \"Actual Total Time\": 39.083,\n      \"Actual Rows\": 200.00,\n      \"Actual Loops\": 1,\n      \"Disabled\": false,\n      \"Inner Unique\": true,\n      \"Shared Hit Blocks\": 6970,\n      \"Shared Read Blocks\": 0,\n      \"Shared Dirtied Blocks\": 0,\n      \"Shared Written Blocks\": 0,\n      \"Local Hit Blocks\": 0,\n      \"Local Read Blocks\": 0,\n      \"Local Dirtied Blocks\": 0,\n      \"Local Written Blocks\": 0,\n      \"Temp Read Blocks\": 0,\n      \"Temp Written Blocks\": 0,\n      \"Plans\": [\n        {\n          \"Node Type\": \"Seq Scan\",\n          \"Parent Relationship\": \"Outer\",\n          \"Parallel Aware\": false,\n          \"Async Capable\": false,\n          \"Relation Name\": \"comments\",\n          \"Alias\": \"comments\",\n          \"Startup Cost\": 0.00,\n          \"Total Cost\": 18870.00,\n          \"Plan Rows\": 100,\n          \"Plan Width\": 15,\n          \"Actual Startup Time\": 0.007,\n          \"Actual Total Time\": 38.840,\n          \"Actual Rows\": 200.00,\n          \"Actual Loops\": 1,\n          \"Disabled\": false,\n          \"Filter\": \"(author_id = 2)\",\n          \"Rows Removed by Filter\": 999800,\n          \"Shared Hit Blocks\": 6370,\n          \"Shared Read Blocks\": 0,\n          \"Shared Dirtied Blocks\": 0,\n          \"Shared Written Blocks\": 0,\n          \"Local Hit Blocks\": 0,\n          \"Local Read Blocks\": 0,\n          \"Local Dirtied Blocks\": 0,\n          \"Local Written Blocks\": 0,\n          \"Temp Read Blocks\": 0,\n          \"Temp Written Blocks\": 0\n        },\n        {\n          \"Node Type\": \"Index Scan\",\n          \"Parent Relationship\": \"Inner\",\n          \"Parallel Aware\": false,\n          \"Async Capable\": false,\n          \"Scan Direction\": \"Forward\",\n          \"Index Name\": \"posts_pkey\",\n          \"Relation Name\": \"posts\",\n          \"Alias\": \"posts\",\n          \"Startup Cost\": 0.29,\n          \"Total Cost\": 7.63,\n          \"Plan Rows\": 1,\n          \"Plan Width\": 15,\n          \"Actual Startup Time\": 0.001,\n          \"Actual Total Time\": 0.001,\n          \"Actual Rows\": 1.00,\n          \"Actual Loops\": 200,\n          \"Disabled\": false,\n          \"Index Cond\": \"(id = comments.post_id)\",\n          \"Rows Removed by Index Recheck\": 0,\n          \"Index Searches\": 200,\n          \"Shared Hit Blocks\": 600,\n          \"Shared Read Blocks\": 0,\n          \"Shared Dirtied Blocks\": 0,\n          \"Shared Written Blocks\": 0,\n          \"Local Hit Blocks\": 0,\n          \"Local Read Blocks\": 0,\n          \"Local Dirtied Blocks\": 0,\n          \"Local Written Blocks\": 0,\n          \"Temp Read Blocks\": 0,\n          \"Temp Written Blocks\": 0\n        }\n      ]\n    },\n    \"Planning\": {\n      \"Shared Hit Blocks\": 6,\n      \"Shared Read Blocks\": 0,\n      \"Shared Dirtied Blocks\": 0,\n      \"Shared Written Blocks\": 0,\n      \"Local Hit Blocks\": 0,\n      \"Local Read Blocks\": 0,\n      \"Local Dirtied Blocks\": 0,\n      \"Local Written Blocks\": 0,\n      \"Temp Read Blocks\": 0,\n      \"Temp Written Blocks\": 0\n    },\n    \"Planning Time\": 0.037,\n    \"Triggers\": [\n    ],\n    \"Execution Time\": 39.107\n  }\n]",
+                  "text": "Nested Loop  (cost=0.29..19633.00 rows=100 width=22) (actual time=0.009..45.826 rows=200.00 loops=1)\n  Buffers: shared hit=6970\n  ->  Seq Scan on comments  (cost=0.00..18870.00 rows=100 width=15) (actual time=0.006..45.488 rows=200.00 loops=1)\n        Filter: (author_id = 2)\n        Rows Removed by Filter: 999800\n        Buffers: shared hit=6370\n  ->  Index Scan using posts_pkey on posts  (cost=0.29..7.63 rows=1 width=15) (actual time=0.001..0.001 rows=1.00 loops=200)\n        Index Cond: (id = comments.post_id)\n        Index Searches: 200\n        Buffers: shared hit=600\nPlanning:\n  Buffers: shared hit=6\nPlanning Time: 0.098 ms\nExecution Time: 45.859 ms"
+                }
+              },
+              "after": {
+                "database": "postgresql",
+                "size": "1m",
+                "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"Nested Loop\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Join Type\": \"Inner\",\n      \"Startup Cost\": 5.49,\n      \"Total Cost\": 1131.86,\n      \"Plan Rows\": 100,\n      \"Plan Width\": 22,\n      \"Disabled\": false,\n      \"Inner Unique\": true,\n      \"Plans\": [\n        {\n          \"Node Type\": \"Bitmap Heap Scan\",\n          \"Parent Relationship\": \"Outer\",\n          \"Parallel Aware\": false,\n          \"Async Capable\": false,\n          \"Relation Name\": \"comments\",\n          \"Alias\": \"comments\",\n          \"Startup Cost\": 5.20,\n          \"Total Cost\": 368.86,\n          \"Plan Rows\": 100,\n          \"Plan Width\": 15,\n          \"Disabled\": false,\n          \"Recheck Cond\": \"(author_id = 2)\",\n          \"Plans\": [\n            {\n              \"Node Type\": \"Bitmap Index Scan\",\n              \"Parent Relationship\": \"Outer\",\n              \"Parallel Aware\": false,\n              \"Async Capable\": false,\n              \"Index Name\": \"comments_author_idx\",\n              \"Startup Cost\": 0.00,\n              \"Total Cost\": 5.17,\n              \"Plan Rows\": 100,\n              \"Plan Width\": 0,\n              \"Disabled\": false,\n              \"Index Cond\": \"(author_id = 2)\"\n            }\n          ]\n        },\n        {\n          \"Node Type\": \"Index Scan\",\n          \"Parent Relationship\": \"Inner\",\n          \"Parallel Aware\": false,\n          \"Async Capable\": false,\n          \"Scan Direction\": \"Forward\",\n          \"Index Name\": \"posts_pkey\",\n          \"Relation Name\": \"posts\",\n          \"Alias\": \"posts\",\n          \"Startup Cost\": 0.29,\n          \"Total Cost\": 7.63,\n          \"Plan Rows\": 1,\n          \"Plan Width\": 15,\n          \"Disabled\": false,\n          \"Index Cond\": \"(id = comments.post_id)\"\n        }\n      ]\n    }\n  }\n]",
+                "text": "Nested Loop  (cost=5.49..1131.86 rows=100 width=22)\n  ->  Bitmap Heap Scan on comments  (cost=5.20..368.86 rows=100 width=15)\n        Recheck Cond: (author_id = 2)\n        ->  Bitmap Index Scan on comments_author_idx  (cost=0.00..5.17 rows=100 width=0)\n              Index Cond: (author_id = 2)\n  ->  Index Scan using posts_pkey on posts  (cost=0.29..7.63 rows=1 width=15)\n        Index Cond: (id = comments.post_id)"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "sequences": [16],
+        "sql": "insert into \"posts\" (\"author_id\", \"title\", \"created_at\") values ($1, $2, $3) returning \"id\"",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": 1
+          },
+          {
+            "type": "primitive",
+            "value": "Planned"
+          },
+          {
+            "type": "primitive",
+            "value": 4
+          }
+        ],
+        "raw": [
+          {
+            "database": "postgresql",
+            "size": "seed",
+            "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"ModifyTable\",\n      \"Operation\": \"Insert\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Relation Name\": \"posts\",\n      \"Alias\": \"posts\",\n      \"Startup Cost\": 0.00,\n      \"Total Cost\": 0.01,\n      \"Plan Rows\": 1,\n      \"Plan Width\": 48,\n      \"Disabled\": false,\n      \"Plans\": [\n        {\n          \"Node Type\": \"Result\",\n          \"Parent Relationship\": \"Outer\",\n          \"Parallel Aware\": false,\n          \"Async Capable\": false,\n          \"Startup Cost\": 0.00,\n          \"Total Cost\": 0.01,\n          \"Plan Rows\": 1,\n          \"Plan Width\": 48,\n          \"Disabled\": false\n        }\n      ]\n    }\n  }\n]",
+            "text": "Insert on posts  (cost=0.00..0.01 rows=1 width=48)\n  ->  Result  (cost=0.00..0.01 rows=1 width=48)"
+          },
+          {
+            "database": "postgresql",
+            "size": "10k",
+            "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"ModifyTable\",\n      \"Operation\": \"Insert\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Relation Name\": \"posts\",\n      \"Alias\": \"posts\",\n      \"Startup Cost\": 0.00,\n      \"Total Cost\": 0.01,\n      \"Plan Rows\": 1,\n      \"Plan Width\": 48,\n      \"Disabled\": false,\n      \"Plans\": [\n        {\n          \"Node Type\": \"Result\",\n          \"Parent Relationship\": \"Outer\",\n          \"Parallel Aware\": false,\n          \"Async Capable\": false,\n          \"Startup Cost\": 0.00,\n          \"Total Cost\": 0.01,\n          \"Plan Rows\": 1,\n          \"Plan Width\": 48,\n          \"Disabled\": false\n        }\n      ]\n    }\n  }\n]",
+            "text": "Insert on posts  (cost=0.00..0.01 rows=1 width=48)\n  ->  Result  (cost=0.00..0.01 rows=1 width=48)"
+          },
+          {
+            "database": "postgresql",
+            "size": "1m",
+            "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"ModifyTable\",\n      \"Operation\": \"Insert\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Relation Name\": \"posts\",\n      \"Alias\": \"posts\",\n      \"Startup Cost\": 0.00,\n      \"Total Cost\": 0.01,\n      \"Plan Rows\": 1,\n      \"Plan Width\": 48,\n      \"Disabled\": false,\n      \"Plans\": [\n        {\n          \"Node Type\": \"Result\",\n          \"Parent Relationship\": \"Outer\",\n          \"Parallel Aware\": false,\n          \"Async Capable\": false,\n          \"Startup Cost\": 0.00,\n          \"Total Cost\": 0.01,\n          \"Plan Rows\": 1,\n          \"Plan Width\": 48,\n          \"Disabled\": false\n        }\n      ]\n    }\n  }\n]",
+            "text": "Insert on posts  (cost=0.00..0.01 rows=1 width=48)\n  ->  Result  (cost=0.00..0.01 rows=1 width=48)",
+            "analyze": {
+              "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"ModifyTable\",\n      \"Operation\": \"Insert\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Relation Name\": \"posts\",\n      \"Alias\": \"posts\",\n      \"Startup Cost\": 0.00,\n      \"Total Cost\": 0.01,\n      \"Plan Rows\": 1,\n      \"Plan Width\": 48,\n      \"Actual Startup Time\": 0.099,\n      \"Actual Total Time\": 0.100,\n      \"Actual Rows\": 1.00,\n      \"Actual Loops\": 1,\n      \"Disabled\": false,\n      \"Shared Hit Blocks\": 5,\n      \"Shared Read Blocks\": 0,\n      \"Shared Dirtied Blocks\": 0,\n      \"Shared Written Blocks\": 0,\n      \"Local Hit Blocks\": 0,\n      \"Local Read Blocks\": 0,\n      \"Local Dirtied Blocks\": 0,\n      \"Local Written Blocks\": 0,\n      \"Temp Read Blocks\": 0,\n      \"Temp Written Blocks\": 0,\n      \"Plans\": [\n        {\n          \"Node Type\": \"Result\",\n          \"Parent Relationship\": \"Outer\",\n          \"Parallel Aware\": false,\n          \"Async Capable\": false,\n          \"Startup Cost\": 0.00,\n          \"Total Cost\": 0.01,\n          \"Plan Rows\": 1,\n          \"Plan Width\": 48,\n          \"Actual Startup Time\": 0.012,\n          \"Actual Total Time\": 0.013,\n          \"Actual Rows\": 1.00,\n          \"Actual Loops\": 1,\n          \"Disabled\": false,\n          \"Shared Hit Blocks\": 1,\n          \"Shared Read Blocks\": 0,\n          \"Shared Dirtied Blocks\": 0,\n          \"Shared Written Blocks\": 0,\n          \"Local Hit Blocks\": 0,\n          \"Local Read Blocks\": 0,\n          \"Local Dirtied Blocks\": 0,\n          \"Local Written Blocks\": 0,\n          \"Temp Read Blocks\": 0,\n          \"Temp Written Blocks\": 0\n        }\n      ]\n    },\n    \"Planning\": {\n      \"Shared Hit Blocks\": 0,\n      \"Shared Read Blocks\": 0,\n      \"Shared Dirtied Blocks\": 0,\n      \"Shared Written Blocks\": 0,\n      \"Local Hit Blocks\": 0,\n      \"Local Read Blocks\": 0,\n      \"Local Dirtied Blocks\": 0,\n      \"Local Written Blocks\": 0,\n      \"Temp Read Blocks\": 0,\n      \"Temp Written Blocks\": 0\n    },\n    \"Planning Time\": 0.004,\n    \"Triggers\": [\n      {\n        \"Trigger Name\": \"RI_ConstraintTrigger_c_16417\",\n        \"Constraint Name\": \"posts_author_id_fkey\",\n        \"Relation\": \"posts\",\n        \"Time\": 0.115,\n        \"Calls\": 1\n      }\n    ],\n    \"Execution Time\": 0.221\n  }\n]",
+              "text": "Insert on posts  (cost=0.00..0.01 rows=1 width=48) (actual time=0.010..0.010 rows=1.00 loops=1)\n  Buffers: shared hit=4\n  ->  Result  (cost=0.00..0.01 rows=1 width=48) (actual time=0.003..0.003 rows=1.00 loops=1)\n        Buffers: shared hit=1\nPlanning Time: 0.022 ms\nTrigger for constraint posts_author_id_fkey: time=0.028 calls=1\nExecution Time: 0.044 ms"
+            }
+          }
+        ],
+        "reading": {
+          "summary": "Inserts into posts",
+          "verdict": {
+            "kind": "stays_fast"
+          },
+          "indexes": []
+        }
+      },
+      {
+        "sequences": [17],
+        "sql": "update \"users\" set \"name\" = $1 where \"users\".\"id\" = $2",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": "Ada L."
+          },
+          {
+            "type": "primitive",
+            "value": 1
+          }
+        ],
+        "raw": [
+          {
+            "database": "postgresql",
+            "size": "seed",
+            "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"ModifyTable\",\n      \"Operation\": \"Update\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Relation Name\": \"users\",\n      \"Alias\": \"users\",\n      \"Startup Cost\": 0.00,\n      \"Total Cost\": 1.04,\n      \"Plan Rows\": 0,\n      \"Plan Width\": 0,\n      \"Disabled\": false,\n      \"Plans\": [\n        {\n          \"Node Type\": \"Seq Scan\",\n          \"Parent Relationship\": \"Outer\",\n          \"Parallel Aware\": false,\n          \"Async Capable\": false,\n          \"Relation Name\": \"users\",\n          \"Alias\": \"users\",\n          \"Startup Cost\": 0.00,\n          \"Total Cost\": 1.04,\n          \"Plan Rows\": 1,\n          \"Plan Width\": 38,\n          \"Disabled\": false,\n          \"Filter\": \"(id = 1)\"\n        }\n      ]\n    }\n  }\n]",
+            "text": "Update on users  (cost=0.00..1.04 rows=0 width=0)\n  ->  Seq Scan on users  (cost=0.00..1.04 rows=1 width=38)\n        Filter: (id = 1)"
+          },
+          {
+            "database": "postgresql",
+            "size": "10k",
+            "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"ModifyTable\",\n      \"Operation\": \"Update\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Relation Name\": \"users\",\n      \"Alias\": \"users\",\n      \"Startup Cost\": 0.00,\n      \"Total Cost\": 2.25,\n      \"Plan Rows\": 0,\n      \"Plan Width\": 0,\n      \"Disabled\": false,\n      \"Plans\": [\n        {\n          \"Node Type\": \"Seq Scan\",\n          \"Parent Relationship\": \"Outer\",\n          \"Parallel Aware\": false,\n          \"Async Capable\": false,\n          \"Relation Name\": \"users\",\n          \"Alias\": \"users\",\n          \"Startup Cost\": 0.00,\n          \"Total Cost\": 2.25,\n          \"Plan Rows\": 1,\n          \"Plan Width\": 38,\n          \"Disabled\": false,\n          \"Filter\": \"(id = 1)\"\n        }\n      ]\n    }\n  }\n]",
+            "text": "Update on users  (cost=0.00..2.25 rows=0 width=0)\n  ->  Seq Scan on users  (cost=0.00..2.25 rows=1 width=38)\n        Filter: (id = 1)"
+          },
+          {
+            "database": "postgresql",
+            "size": "1m",
+            "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"ModifyTable\",\n      \"Operation\": \"Update\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Relation Name\": \"users\",\n      \"Alias\": \"users\",\n      \"Startup Cost\": 0.29,\n      \"Total Cost\": 8.30,\n      \"Plan Rows\": 0,\n      \"Plan Width\": 0,\n      \"Disabled\": false,\n      \"Plans\": [\n        {\n          \"Node Type\": \"Index Scan\",\n          \"Parent Relationship\": \"Outer\",\n          \"Parallel Aware\": false,\n          \"Async Capable\": false,\n          \"Scan Direction\": \"Forward\",\n          \"Index Name\": \"users_pkey\",\n          \"Relation Name\": \"users\",\n          \"Alias\": \"users\",\n          \"Startup Cost\": 0.29,\n          \"Total Cost\": 8.30,\n          \"Plan Rows\": 1,\n          \"Plan Width\": 38,\n          \"Disabled\": false,\n          \"Index Cond\": \"(id = 1)\"\n        }\n      ]\n    }\n  }\n]",
+            "text": "Update on users  (cost=0.29..8.30 rows=0 width=0)\n  ->  Index Scan using users_pkey on users  (cost=0.29..8.30 rows=1 width=38)\n        Index Cond: (id = 1)",
+            "analyze": {
+              "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"ModifyTable\",\n      \"Operation\": \"Update\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Relation Name\": \"users\",\n      \"Alias\": \"users\",\n      \"Startup Cost\": 0.29,\n      \"Total Cost\": 8.30,\n      \"Plan Rows\": 0,\n      \"Plan Width\": 0,\n      \"Actual Startup Time\": 0.104,\n      \"Actual Total Time\": 0.104,\n      \"Actual Rows\": 0.00,\n      \"Actual Loops\": 1,\n      \"Disabled\": false,\n      \"Shared Hit Blocks\": 14,\n      \"Shared Read Blocks\": 0,\n      \"Shared Dirtied Blocks\": 0,\n      \"Shared Written Blocks\": 0,\n      \"Local Hit Blocks\": 0,\n      \"Local Read Blocks\": 0,\n      \"Local Dirtied Blocks\": 0,\n      \"Local Written Blocks\": 0,\n      \"Temp Read Blocks\": 0,\n      \"Temp Written Blocks\": 0,\n      \"Plans\": [\n        {\n          \"Node Type\": \"Index Scan\",\n          \"Parent Relationship\": \"Outer\",\n          \"Parallel Aware\": false,\n          \"Async Capable\": false,\n          \"Scan Direction\": \"Forward\",\n          \"Index Name\": \"users_pkey\",\n          \"Relation Name\": \"users\",\n          \"Alias\": \"users\",\n          \"Startup Cost\": 0.29,\n          \"Total Cost\": 8.30,\n          \"Plan Rows\": 1,\n          \"Plan Width\": 38,\n          \"Actual Startup Time\": 0.002,\n          \"Actual Total Time\": 0.003,\n          \"Actual Rows\": 1.00,\n          \"Actual Loops\": 1,\n          \"Disabled\": false,\n          \"Index Cond\": \"(id = 1)\",\n          \"Rows Removed by Index Recheck\": 0,\n          \"Index Searches\": 1,\n          \"Shared Hit Blocks\": 3,\n          \"Shared Read Blocks\": 0,\n          \"Shared Dirtied Blocks\": 0,\n          \"Shared Written Blocks\": 0,\n          \"Local Hit Blocks\": 0,\n          \"Local Read Blocks\": 0,\n          \"Local Dirtied Blocks\": 0,\n          \"Local Written Blocks\": 0,\n          \"Temp Read Blocks\": 0,\n          \"Temp Written Blocks\": 0\n        }\n      ]\n    },\n    \"Planning\": {\n      \"Shared Hit Blocks\": 0,\n      \"Shared Read Blocks\": 0,\n      \"Shared Dirtied Blocks\": 0,\n      \"Shared Written Blocks\": 0,\n      \"Local Hit Blocks\": 0,\n      \"Local Read Blocks\": 0,\n      \"Local Dirtied Blocks\": 0,\n      \"Local Written Blocks\": 0,\n      \"Temp Read Blocks\": 0,\n      \"Temp Written Blocks\": 0\n    },\n    \"Planning Time\": 0.010,\n    \"Triggers\": [\n    ],\n    \"Execution Time\": 0.109\n  }\n]",
+              "text": "Update on users  (cost=0.29..8.30 rows=0 width=0) (actual time=0.017..0.017 rows=0.00 loops=1)\n  Buffers: shared hit=17\n  ->  Index Scan using users_pkey on users  (cost=0.29..8.30 rows=1 width=38) (actual time=0.006..0.007 rows=1.00 loops=1)\n        Index Cond: (id = 1)\n        Index Searches: 1\n        Buffers: shared hit=5\nPlanning Time: 0.009 ms\nExecution Time: 0.020 ms"
+            }
+          }
+        ],
+        "reading": {
+          "summary": "Updates users; index lookup on users using users_pkey",
+          "verdict": {
+            "kind": "stays_fast"
+          },
+          "indexes": []
+        }
+      },
+      {
+        "sequences": [18],
+        "sql": "select \"id\", \"title\" from \"posts\" limit $1",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": 5
+          }
+        ],
+        "raw": [
+          {
+            "database": "postgresql",
+            "size": "seed",
+            "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"Limit\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Startup Cost\": 0.00,\n      \"Total Cost\": 1.03,\n      \"Plan Rows\": 3,\n      \"Plan Width\": 10,\n      \"Disabled\": false,\n      \"Plans\": [\n        {\n          \"Node Type\": \"Seq Scan\",\n          \"Parent Relationship\": \"Outer\",\n          \"Parallel Aware\": false,\n          \"Async Capable\": false,\n          \"Relation Name\": \"posts\",\n          \"Alias\": \"posts\",\n          \"Startup Cost\": 0.00,\n          \"Total Cost\": 1.03,\n          \"Plan Rows\": 3,\n          \"Plan Width\": 10,\n          \"Disabled\": false\n        }\n      ]\n    }\n  }\n]",
+            "text": "Limit  (cost=0.00..1.03 rows=3 width=10)\n  ->  Seq Scan on posts  (cost=0.00..1.03 rows=3 width=10)"
+          },
+          {
+            "database": "postgresql",
+            "size": "10k",
+            "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"Limit\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Startup Cost\": 0.00,\n      \"Total Cost\": 0.09,\n      \"Plan Rows\": 5,\n      \"Plan Width\": 13,\n      \"Disabled\": false,\n      \"Plans\": [\n        {\n          \"Node Type\": \"Seq Scan\",\n          \"Parent Relationship\": \"Outer\",\n          \"Parallel Aware\": false,\n          \"Async Capable\": false,\n          \"Relation Name\": \"posts\",\n          \"Alias\": \"posts\",\n          \"Startup Cost\": 0.00,\n          \"Total Cost\": 18.00,\n          \"Plan Rows\": 1000,\n          \"Plan Width\": 13,\n          \"Disabled\": false\n        }\n      ]\n    }\n  }\n]",
+            "text": "Limit  (cost=0.00..0.09 rows=5 width=13)\n  ->  Seq Scan on posts  (cost=0.00..18.00 rows=1000 width=13)"
+          },
+          {
+            "database": "postgresql",
+            "size": "1m",
+            "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"Limit\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Startup Cost\": 0.00,\n      \"Total Cost\": 0.09,\n      \"Plan Rows\": 5,\n      \"Plan Width\": 15,\n      \"Disabled\": false,\n      \"Plans\": [\n        {\n          \"Node Type\": \"Seq Scan\",\n          \"Parent Relationship\": \"Outer\",\n          \"Parallel Aware\": false,\n          \"Async Capable\": false,\n          \"Relation Name\": \"posts\",\n          \"Alias\": \"posts\",\n          \"Startup Cost\": 0.00,\n          \"Total Cost\": 1736.00,\n          \"Plan Rows\": 100000,\n          \"Plan Width\": 15,\n          \"Disabled\": false\n        }\n      ]\n    }\n  }\n]",
+            "text": "Limit  (cost=0.00..0.09 rows=5 width=15)\n  ->  Seq Scan on posts  (cost=0.00..1736.00 rows=100000 width=15)",
+            "analyze": {
+              "json": "[\n  {\n    \"Plan\": {\n      \"Node Type\": \"Limit\",\n      \"Parallel Aware\": false,\n      \"Async Capable\": false,\n      \"Startup Cost\": 0.00,\n      \"Total Cost\": 0.09,\n      \"Plan Rows\": 5,\n      \"Plan Width\": 15,\n      \"Actual Startup Time\": 0.006,\n      \"Actual Total Time\": 0.007,\n      \"Actual Rows\": 5.00,\n      \"Actual Loops\": 1,\n      \"Disabled\": false,\n      \"Shared Hit Blocks\": 2,\n      \"Shared Read Blocks\": 0,\n      \"Shared Dirtied Blocks\": 0,\n      \"Shared Written Blocks\": 0,\n      \"Local Hit Blocks\": 0,\n      \"Local Read Blocks\": 0,\n      \"Local Dirtied Blocks\": 0,\n      \"Local Written Blocks\": 0,\n      \"Temp Read Blocks\": 0,\n      \"Temp Written Blocks\": 0,\n      \"Plans\": [\n        {\n          \"Node Type\": \"Seq Scan\",\n          \"Parent Relationship\": \"Outer\",\n          \"Parallel Aware\": false,\n          \"Async Capable\": false,\n          \"Relation Name\": \"posts\",\n          \"Alias\": \"posts\",\n          \"Startup Cost\": 0.00,\n          \"Total Cost\": 1736.00,\n          \"Plan Rows\": 100000,\n          \"Plan Width\": 15,\n          \"Actual Startup Time\": 0.005,\n          \"Actual Total Time\": 0.005,\n          \"Actual Rows\": 5.00,\n          \"Actual Loops\": 1,\n          \"Disabled\": false,\n          \"Shared Hit Blocks\": 2,\n          \"Shared Read Blocks\": 0,\n          \"Shared Dirtied Blocks\": 0,\n          \"Shared Written Blocks\": 0,\n          \"Local Hit Blocks\": 0,\n          \"Local Read Blocks\": 0,\n          \"Local Dirtied Blocks\": 0,\n          \"Local Written Blocks\": 0,\n          \"Temp Read Blocks\": 0,\n          \"Temp Written Blocks\": 0\n        }\n      ]\n    },\n    \"Planning\": {\n      \"Shared Hit Blocks\": 0,\n      \"Shared Read Blocks\": 0,\n      \"Shared Dirtied Blocks\": 0,\n      \"Shared Written Blocks\": 0,\n      \"Local Hit Blocks\": 0,\n      \"Local Read Blocks\": 0,\n      \"Local Dirtied Blocks\": 0,\n      \"Local Written Blocks\": 0,\n      \"Temp Read Blocks\": 0,\n      \"Temp Written Blocks\": 0\n    },\n    \"Planning Time\": 0.004,\n    \"Triggers\": [\n    ],\n    \"Execution Time\": 0.010\n  }\n]",
+              "text": "Limit  (cost=0.00..0.09 rows=5 width=15) (actual time=0.002..0.004 rows=5.00 loops=1)\n  Buffers: shared hit=2\n  ->  Seq Scan on posts  (cost=0.00..1736.00 rows=100000 width=15) (actual time=0.002..0.003 rows=5.00 loops=1)\n        Buffers: shared hit=2\nPlanning Time: 0.004 ms\nExecution Time: 0.006 ms"
+            }
+          }
+        ],
+        "reading": {
+          "summary": "Reads the first rows of posts and stops to return 5 rows",
+          "verdict": {
+            "kind": "stays_fast"
+          },
+          "indexes": []
+        }
+      }
+    ],
+    "skipped": [],
+    "durationMs": 3501
+  }
+}

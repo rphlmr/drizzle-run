@@ -1,0 +1,24 @@
+{
+  "id": "887e92ba-9673-4542-b09b-17e944186b4b",
+  "slug": "jsonb-product-filters",
+  "status": "published",
+  "title": "Filter products by JSONB attributes",
+  "description": "Read nested attributes, filter by containment, and distinguish missing keys from JSON null.",
+  "topic": "Queries",
+  "featured": false,
+  "order": 85,
+  "dialect": "postgresql",
+  "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+  "links": [
+    {
+      "kind": "docs",
+      "label": "JSONB columns",
+      "url": "https://orm.drizzle.team/docs/column-types/pg#jsonb"
+    },
+    {
+      "kind": "docs",
+      "label": "SQL expressions",
+      "url": "https://orm.drizzle.team/docs/sql"
+    }
+  ]
+}

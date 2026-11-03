@@ -1,0 +1,13 @@
+{
+  "id": "fb6102ff-4e70-45b3-95bf-2534dfdcf5e5",
+  "slug": "quick-start-sqlite",
+  "status": "published",
+  "title": "SQLite quick start",
+  "description": "The same starter on SQLite: a users table, seed rows, and a select.",
+  "topic": "Queries",
+  "featured": false,
+  "order": 20,
+  "dialect": "sqlite",
+  "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+  "links": [{ "kind": "docs", "label": "Select", "url": "https://orm.drizzle.team/docs/sqlite/select" }]
+}

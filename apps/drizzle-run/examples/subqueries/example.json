@@ -1,0 +1,24 @@
+{
+  "id": "6b987a32-95f9-44a7-ace1-6b568a521d8d",
+  "slug": "subqueries",
+  "status": "published",
+  "title": "Use one query inside another",
+  "description": "Learn membership, existence, grouped subqueries, scalar counts and CTEs with one author report.",
+  "topic": "Queries",
+  "featured": false,
+  "order": 68,
+  "dialect": "postgresql",
+  "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+  "links": [
+    {
+      "kind": "docs",
+      "label": "Subqueries and CTEs",
+      "url": "https://orm.drizzle.team/docs/select"
+    },
+    {
+      "kind": "example",
+      "label": "Fork the author report",
+      "slug": "author-report"
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "name": "@drizzle-run/test-fixtures",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Test data shared by the Drizzle Run tests: never a dependency of shipped code",
+  "homepage": "https://github.com/rphlmr/drizzle-run/tree/main/testing/test-fixtures#readme",
+  "bugs": {
+    "url": "https://github.com/rphlmr/drizzle-run/issues"
+  },
+  "license": "AGPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rphlmr/drizzle-run.git",
+    "directory": "testing/test-fixtures"
+  },
+  "type": "module",
+  "exports": {
+    ".": "./src/run.ts",
+    "./pair": "./src/pair.ts",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@drizzle-run/core": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "7.0.2",
+    "vitest": "5.0.5"
+  }
+}

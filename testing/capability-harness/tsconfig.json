@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "allowJs": true,
+    "checkJs": false,
+    "noEmit": true,
+    "types": ["node"],
+    "paths": {
+      "esbuild": ["../../packages/runtime/node_modules/esbuild/lib/main.d.ts"],
+      "quickjs-wasi": ["../../packages/runtime/node_modules/quickjs-wasi"]
+    }
+  },
+  "include": ["src/gates/*.ts", "scripts/*.ts"]
+}
