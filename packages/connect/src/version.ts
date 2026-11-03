@@ -1,2 +1,4 @@
-/** The package version, said in the companion's hello. A test keeps it equal to package.json. */
-export const VERSION = "0.1.0";
+import manifest from "../package.json" with { type: "json" };
+
+/** The package version reported by the CLI, MCP server, and companion handshake. */
+export const VERSION = manifest.version;
