@@ -511,7 +511,7 @@ function EmbedSidePane({
       </div>
       <section
         className={cn(
-          "flex min-h-70 flex-1 flex-col overflow-hidden rounded-lg border border-border bg-surface",
+          "flex min-h-70 flex-1 flex-col overflow-hidden rounded-lg border border-border bg-panel",
           dotGrid,
         )}
         aria-label={`${release.label} output`}

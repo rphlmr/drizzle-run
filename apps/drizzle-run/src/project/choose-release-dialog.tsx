@@ -33,7 +33,7 @@ export interface ChooseReleaseDialogProps {
 
 /** The release dialogs: New project and Choose a Drizzle release. */
 export const releaseDialogClass = cn(
-  "max-h-[calc(100dvh-32px)] w-[min(460px,calc(100vw-24px))] overflow-y-auto rounded-[18px] bg-bg p-6 max-phone:w-[min(460px,calc(100vw-24px))]",
+  "max-h-[calc(100dvh-32px)] w-[min(460px,calc(100vw-24px))] overflow-y-auto rounded-[18px] bg-surface p-6 max-phone:w-[min(460px,calc(100vw-24px))]",
 );
 export const releaseFormClass = cn("flex flex-col gap-[18px] text-[14px]");
 export const releaseTitleClass = cn("text-[24px] font-extrabold tracking-[-0.02em]");

@@ -295,8 +295,8 @@ export function CommunityPage() {
       <SiteMain className="gap-4.5 pt-7">
         <div className="flex items-end gap-6 max-phone:flex-col max-phone:items-start max-phone:gap-2">
           <div className="flex flex-1 flex-col gap-2">
-            <h1 className="font-display text-[38px] font-extrabold tracking-[-0.02em] max-phone:text-[30px]">
-              Community <mark>shares</mark>
+            <h1 className="font-display text-[28px] font-bold tracking-[-0.02em] max-phone:text-[24px]">
+              Community shares
             </h1>
             <p className="max-w-150 text-[15px] leading-[1.6] text-muted">
               Playgrounds people chose to list when they shared them. The Drizzle team doesn't review them. Each one

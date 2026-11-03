@@ -368,7 +368,7 @@ function SharedNotFound() {
           className="m-auto flex w-140 max-w-full flex-col gap-4 rounded-[18px] border-[1.5px] border-card-border bg-surface p-7 shadow-sticker-card max-phone:p-5"
         >
           <span
-            className="grid size-11 place-items-center rounded-[12px] border-[1.5px] border-run-border bg-lime text-on-lime"
+            className="grid size-11 place-items-center rounded-[12px] border-[1.5px] border-run-border bg-lime text-on-lime shadow-action"
             aria-hidden="true"
           >
             <UnlinkIcon className="size-5" />

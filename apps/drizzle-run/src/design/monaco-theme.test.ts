@@ -13,7 +13,7 @@ const tokens = {
   fn: "#1d4ed8",
   com: "#4b5563",
   border: "#e5e7eb",
-  markBg: "#eef6d9",
+  lineHighlight: "#edf0f5",
 };
 
 describe("Monaco theme", () => {
@@ -22,6 +22,8 @@ describe("Monaco theme", () => {
 
     expect(theme.base).toBe("vs");
     expect(theme.colors["editor.background"]).toBe("#ffffff");
+    expect(theme.colors["editor.lineHighlightBackground"]).toBe(tokens.lineHighlight);
+    expect(theme.colors["editorWidget.background"]).toBe(tokens.bg);
     expect(theme.rules).toContainEqual({ token: "keyword", foreground: "7c3aed" });
     expect(theme.rules).toContainEqual({ token: "string", foreground: "0f6b4a" });
   });

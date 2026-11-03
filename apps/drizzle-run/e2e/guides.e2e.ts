@@ -188,8 +188,8 @@ test("should apply each step's edit in a guided example, run it, and show what c
   const card = page
     .getByRole("list", { name: "Example list" })
     .getByRole("link", { name: /Transactions and savepoints/ });
-  await expect(card).toContainText("Open guide →");
-  await expect(card.locator("[data-slot=guide-progress]")).toContainText("Guide done");
+  await expect(card).toContainText("Revisit guide →");
+  await expect(card.locator("[data-slot=guide-status]")).toContainText("Completed");
 });
 
 test("should finish the guide with an editable query that finds Grace's seeded post", async ({ page }) => {
@@ -451,9 +451,9 @@ test("should tell guided examples and examples apart in the gallery", async ({ p
   const featured = page.getByRole("region", { name: "Featured example" }).getByRole("link");
 
   await expect(featured).toContainText("Start here");
-  await expect(featured).toContainText("Guided · 7 steps");
+  await expect(featured).toContainText("Guide · 7 steps");
   await expect(featured).toContainText("Start guide →");
-  await expect(page.getByRole("region", { name: "Featured example" }).getByRole("heading")).toHaveCount(0);
+  await expect(featured.getByRole("heading", { name: "Drizzle in five minutes" })).toBeVisible();
   await expect(page.getByRole("group", { name: "Kind" }).getByRole("button")).toHaveText([
     "Any kind",
     "Guided",
@@ -461,20 +461,14 @@ test("should tell guided examples and examples apart in the gallery", async ({ p
   ]);
 
   const cards = page.getByRole("list", { name: "Example list" }).getByRole("link");
-  const pair = cards.first().getByText(/^orm \S+/);
-  // A web font swapping in moves the list out from under the pointer.
-  await page.evaluate(async () => {
-    await document.fonts.ready;
-  });
-  await pair.hover();
-  await expect(page.locator("[data-slot=tooltip-content]")).toHaveText(/^ORM .+ with Kit .+$/);
+  await expect(cards.first()).not.toContainText(/orm \S+/);
 
   await page.getByRole("group", { name: "Kind" }).getByRole("button", { name: "Guided" }).click();
   await expect(page).toHaveURL(/kind=guided/);
   await expect(cards).toHaveCount(9);
 
   for (const card of await cards.all()) {
-    await expect(card).toContainText(/Guided · \d steps/);
+    await expect(card).toContainText(/Guide · \d steps/);
     await expect(card).toContainText("Start guide →");
   }
 
@@ -484,7 +478,7 @@ test("should tell guided examples and examples apart in the gallery", async ({ p
 
   for (const card of await cards.all()) {
     await expect(card).toContainText("Example");
-    await expect(card).not.toContainText("Guided ·");
+    await expect(card).not.toContainText("Guide ·");
     await expect(card).toContainText("Open example →");
   }
 });

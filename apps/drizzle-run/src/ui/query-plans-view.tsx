@@ -473,7 +473,7 @@ export function PlansNotice({ flag, planned, onRun, canRun = false }: PlansNotic
       {onRun && (
         <button
           type="button"
-          className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-md border-[1.5px] border-run-border bg-lime px-3.5 text-[13px] font-semibold text-on-lime shadow-sticker enabled:hover:brightness-97 disabled:opacity-55 max-phone:h-touch [&_svg]:size-3.25 [&_svg]:fill-current"
+          className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-md border-[1.5px] border-run-border bg-lime px-3.5 text-[13px] font-semibold text-on-lime shadow-action enabled:hover:brightness-97 enabled:active:translate-0.5 enabled:active:shadow-none disabled:opacity-55 disabled:shadow-none max-phone:h-touch [&_svg]:size-3.25 [&_svg]:fill-current"
           disabled={!canRun}
           onClick={onRun}
         >

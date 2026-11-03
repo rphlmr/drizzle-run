@@ -97,7 +97,7 @@ export function ProjectSwitcher({
       <PopoverContent className="flex w-[min(340px,calc(100vw-24px))] flex-col gap-0.5 p-2" aria-label="Your projects">
         <PopoverTitle className="sr-only">Your projects</PopoverTitle>
         <input
-          className="mb-1.5 h-9 w-full rounded-base border border-border bg-bg px-2.5 text-text focus-visible:border-accent-text focus-visible:outline-transparent"
+          className="mb-1.5 h-9 w-full rounded-base border border-border bg-panel px-2.5 text-text focus-visible:border-accent-text focus-visible:outline-transparent"
           type="search"
           placeholder="Search projects"
           aria-label="Search projects"

@@ -72,7 +72,7 @@ export function RunningDuration({ startedAt }: { startedAt: number | undefined }
 export function RunningNote({ detail = "You can keep editing." }: { detail?: ReactNode }) {
   return (
     <div className="flex min-h-40 flex-1 flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-border p-6 text-center">
-      <span className="mb-1 grid size-11 shrink-0 place-items-center rounded-[12px] border-[1.5px] border-run-border bg-lime shadow-sticker">
+      <span className="mb-1 grid size-11 shrink-0 place-items-center rounded-[12px] border-[1.5px] border-run-border bg-lime shadow-action">
         <WavingMark />
       </span>
       <p className="max-w-70 font-medium">

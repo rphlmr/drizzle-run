@@ -658,7 +658,7 @@ export function GuideRail({ guide, controls, leave: leaveMode, done, collapsed, 
         {heading}
       </div>
       <ol
-        className="m-0 flex min-h-0 flex-1 list-none flex-col gap-3.5 overflow-y-auto px-4 py-3.5 *:shrink-0"
+        className="m-0 flex min-h-0 flex-1 list-none flex-col gap-3.5 overflow-y-auto bg-panel px-4 py-3.5 *:shrink-0"
         aria-label="Guide steps"
         aria-busy={stage === "loading"}
       >

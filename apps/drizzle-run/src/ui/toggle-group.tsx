@@ -30,10 +30,7 @@ export function ToggleGroup<T extends string>({ label, options, value, onChange,
         <button
           key={option.value}
           type="button"
-          className={cn(
-            "relative rounded-sm border-0 bg-transparent px-2.75 py-1.25 text-[13px] whitespace-nowrap text-text max-phone:min-h-9.5 max-phone:flex-1",
-            option.value === value && "font-medium",
-          )}
+          className="relative rounded-sm border-0 bg-transparent px-2.75 py-1.25 text-[13px] font-medium whitespace-nowrap text-text max-phone:min-h-9.5 max-phone:flex-1"
           aria-pressed={option.value === value}
           data-option={option.value}
           onClick={() => onChange(option.value)}

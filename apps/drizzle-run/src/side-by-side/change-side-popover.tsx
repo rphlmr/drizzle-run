@@ -52,7 +52,7 @@ export function ChangeSidePopover({ manifest, side, trigger, open, onOpenChange,
       <PopoverContent
         sideOffset={12}
         alignOffset={44}
-        className="grid w-100 max-w-[calc(100vw-32px)] gap-3 rounded-lg border-[1.5px] border-card-border bg-bg p-3.5 shadow-sticker-lg"
+        className="grid w-100 max-w-[calc(100vw-32px)] gap-3 rounded-lg border-[1.5px] border-card-border bg-surface p-3.5 shadow-sticker-lg"
       >
         <ChangeSideForm manifest={manifest} side={side} onConfirm={onConfirm} surface="popover" />
       </PopoverContent>

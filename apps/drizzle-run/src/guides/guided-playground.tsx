@@ -295,7 +295,7 @@ function GuidedSession({
 
   const editorBar = locked ? (
     <p
-      className="m-0 flex h-9.5 shrink-0 items-center gap-2 overflow-hidden border-b border-border bg-surface-2 px-3.5 text-[12.5px] whitespace-nowrap text-muted [&>svg]:size-3.5 [&>svg]:shrink-0"
+      className="m-0 flex h-9.5 shrink-0 items-center gap-2 overflow-hidden border-b border-border bg-panel px-3.5 text-[12.5px] whitespace-nowrap text-muted [&>svg]:size-3.5 [&>svg]:shrink-0"
       data-slot="editor-bar"
     >
       <LockIcon aria-hidden="true" />

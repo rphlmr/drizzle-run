@@ -154,7 +154,7 @@ function RunTile({ status, compact }: Pick<FirstRunCardProps, "status" | "compac
   return (
     <span
       className={cn(
-        "grid size-11 shrink-0 place-items-center overflow-hidden rounded-[12px] border-[1.5px] border-run-border bg-lime text-on-lime shadow-sticker",
+        "grid size-11 shrink-0 place-items-center overflow-hidden rounded-[12px] border-[1.5px] border-run-border bg-lime text-on-lime shadow-action",
         compact && "size-8 rounded-[9px]",
       )}
     >

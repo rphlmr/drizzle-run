@@ -1,16 +1,14 @@
 import type { GuideProgress } from "@drizzle-run/runtime/machines";
+import { BookOpenIcon, CheckCircle2Icon, Code2Icon, Columns2Icon } from "lucide-react";
 import { Link } from "react-router";
 
 import { cn } from "../lib/utils";
-import { formatProjectDialects, isPairManifest } from "../project/projects";
-import { Hint } from "../ui/hint";
-import { KindBadge } from "../ui/kind-badge";
-import { SideBySideTag } from "../ui/side-by-side-tag";
-import { getPairLabel, resolveExampleSides, type OfficialExample } from "./catalog";
+import { formatProjectDialects } from "../project/projects";
+import { resolveExampleSides, type OfficialExample } from "./catalog";
 
 export interface ExampleCardProps {
   example: OfficialExample;
-  /** The featured gallery card: a sticker card with "Start here". */
+  /** The featured gallery card, with a prominent action and "Start here" for new readers. */
   featured?: boolean;
   /** Saved progress, for a guide the reader started in this browser. */
   progress?: GuideProgress;
@@ -23,56 +21,86 @@ function getCallToAction(guided: boolean, progress: GuideProgress | undefined): 
   }
 
   if (progress?.finished) {
-    return "Open guide";
+    return "Revisit guide";
   }
 
-  return progress && progress.completed.length > 0 ? "Continue guide" : "Start guide";
+  return progress ? "Continue guide" : "Start guide";
 }
 
-/** A gallery card for an official example; a guided one shows its steps and the reader's progress. */
+/** An example library row, or its featured panel, with saved guide progress. */
 export function ExampleCard({ example, featured = false, progress, className }: ExampleCardProps) {
   const steps = example.guide?.steps.length;
   const done = progress?.finished ? (steps ?? 0) : (progress?.completed.length ?? 0);
-  const started = steps !== undefined && done > 0;
-  const pair = isPairManifest(example.manifest) ? null : getPairLabel(example.manifest);
-  const sides = resolveExampleSides(example);
-  const versions = sides && (
-    <ul className="flex flex-wrap gap-1.5" aria-label="Versions">
-      {sides.map((side, index) => (
-        <li key={index} className="rounded-[6px] bg-surface-2 px-1.75 py-0.5 font-mono text-[11.5px]">
-          {side.name !== undefined && `${side.name} · `}
-          orm {side.ormVersion}
-        </li>
-      ))}
-    </ul>
+  const started = steps !== undefined && progress !== undefined;
+  const progressBadge = started && (
+    <span
+      className={cn(
+        "inline-flex items-center gap-1 rounded-[4px] px-2 py-0.5 text-[11px] font-semibold whitespace-nowrap",
+        progress.finished ? "bg-ok-bg text-ok" : "bg-surface-2 text-muted",
+      )}
+      data-slot="guide-status"
+    >
+      {progress.finished && <CheckCircle2Icon className="size-3.5" aria-hidden="true" />}
+      {progress.finished ? "Completed" : "In progress"}
+    </span>
   );
+  const sides = resolveExampleSides(example);
+  const comparison = sides
+    ?.map((side) => {
+      if (side.name === undefined) {
+        return `Drizzle ${side.ormVersion}`;
+      }
+
+      return sides[0].ormVersion === sides[1].ormVersion ? side.name : `${side.name} (${side.ormVersion})`;
+    })
+    .join(" vs ");
   const cta = `${getCallToAction(steps !== undefined, progress)} →`;
-  const kind =
-    steps === undefined ? (
-      <KindBadge tone="neutral">Example</KindBadge>
-    ) : (
-      <KindBadge tone={featured ? "neutral" : "lime"}>Guided · {steps} steps</KindBadge>
-    );
+  const EntryIcon = steps === undefined ? Code2Icon : BookOpenIcon;
+  const guideProgress = started && (
+    <span className="flex flex-wrap items-center justify-end gap-1.5">
+      {progressBadge}
+      {!progress.finished && (
+        <span
+          className="text-[12px] text-muted"
+          data-slot="guide-progress"
+          aria-label={`${done} of ${steps} steps completed`}
+        >
+          {done}/{steps} steps
+        </span>
+      )}
+    </span>
+  );
 
   if (featured) {
     return (
       <Link
         to={`/examples/${example.slug}`}
         className={cn(
-          "flex min-w-0 flex-col gap-2 rounded-[16px] border-[1.5px] border-card-border bg-surface p-4.5 text-text no-underline shadow-sticker-lg hover:brightness-99",
+          "group grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-8 gap-y-4 rounded-lg border border-card-border bg-surface px-5 py-4 text-text no-underline shadow-sticker-card transition-colors hover:border-muted focus-visible:border-muted max-phone:grid-cols-1 max-phone:px-4",
           className,
         )}
       >
-        <span className="flex items-center gap-2">
-          <KindBadge tone="lime">Start here</KindBadge>
-          {kind}
-          {sides && <SideBySideTag />}
-          <span className="text-[12px] text-muted">{formatProjectDialects(example.manifest)}</span>
-        </span>
-        <span className="font-display text-[22px] font-extrabold">{example.title}</span>
-        <span className="text-[13px]/[1.5] text-muted">{example.description}</span>
-        {versions}
-        <span className="text-[14px] font-semibold">{cta}</span>
+        <div className="flex min-w-0 items-start gap-3.5">
+          <span className="flex size-10 shrink-0 items-center justify-center rounded-md bg-surface-2 text-muted max-phone:hidden">
+            <EntryIcon className="size-5" aria-hidden="true" />
+          </span>
+          <div className="flex min-w-0 flex-col gap-1.5">
+            <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+              {!started && <span className="text-[12px] font-semibold text-muted">Start here</span>}
+              <h2 className="font-display text-[20px]/[1.3] font-bold">{example.title}</h2>
+            </div>
+            <p className="max-w-170 text-[13px]/[1.5] text-soft">{example.description}</p>
+            <p className="text-[12px] text-muted">
+              {steps === undefined ? "Example" : `Guide · ${steps} steps`} · {formatProjectDialects(example.manifest)}
+            </p>
+          </div>
+        </div>
+        <div className="flex flex-col items-end gap-2 max-phone:flex-row max-phone:justify-between">
+          {guideProgress}
+          <span className="ml-auto rounded-sm border border-run-border bg-lime px-3 py-2 text-[13px] font-semibold whitespace-nowrap text-on-lime shadow-action transition-all group-active:translate-0.5 group-active:shadow-none">
+            {cta}
+          </span>
+        </div>
       </Link>
     );
   }
@@ -81,40 +109,39 @@ export function ExampleCard({ example, featured = false, progress, className }: 
     <Link
       to={`/examples/${example.slug}`}
       className={cn(
-        "relative flex min-w-0 flex-col gap-2 rounded-[14px] border border-border bg-surface p-4 text-text no-underline hover:border-muted",
+        "group grid min-w-0 grid-cols-[minmax(0,1fr)_108px_128px_148px] items-center gap-x-6 gap-y-3 px-5 py-4 text-text no-underline transition-colors hover:bg-surface-2 focus-visible:bg-surface-2 max-wide:grid-cols-[minmax(0,1fr)_128px_148px] max-phone:grid-cols-[minmax(0,1fr)_auto] max-phone:gap-x-3 max-phone:px-4",
         className,
       )}
     >
-      <span className="flex items-center gap-2">
-        {kind}
-        {sides || pair === null ? (
-          <SideBySideTag />
-        ) : (
-          <Hint content={pair.title}>
-            <span className="ml-auto font-mono text-[12px] text-muted">
-              {pair.label}
-              <span className="sr-only">, {pair.title}</span>
-            </span>
-          </Hint>
-        )}
-      </span>
-      <span className="font-display text-[18px] font-bold">{example.title}</span>
-      <span className="text-[13px]/[1.5] text-muted">{example.description}</span>
-      {versions}
-      <span className="mt-auto flex items-center gap-2 text-[12px] text-muted">
-        <span className="font-semibold text-text">{example.topic}</span>
-        <span aria-hidden="true">·</span>
-        <span>{formatProjectDialects(example.manifest)}</span>
-        <span className="ml-auto text-[13px] font-semibold whitespace-nowrap text-text">{cta}</span>
-      </span>
-      {started && (
-        <span className="flex items-center gap-2 text-[12px] text-muted" data-slot="guide-progress">
-          <span className="h-1 flex-1 overflow-hidden rounded-pill bg-surface-2" aria-hidden="true">
-            <span className="block h-full bg-accent-text" style={{ width: `${Math.round((done / steps) * 100)}%` }} />
-          </span>
-          {progress?.finished ? "Guide done" : `Step ${Math.min(done + 1, steps)} of ${steps}`}
+      <div className="flex min-w-0 items-start gap-3 max-phone:col-span-2">
+        <span className="flex size-8 shrink-0 items-center justify-center rounded-sm border border-border text-muted max-phone:hidden">
+          <EntryIcon className="size-4" aria-hidden="true" />
         </span>
-      )}
+        <div className="flex min-w-0 flex-col gap-1">
+          <div className="flex flex-wrap items-baseline gap-x-2.5 gap-y-0.5">
+            <h2 className="text-[15px]/[1.5] font-semibold decoration-border underline-offset-4 group-hover:underline">
+              {example.title}
+            </h2>
+            <span className="text-[11px] text-muted">{example.topic}</span>
+          </div>
+          <p className="text-[13px]/[1.5] text-soft">{example.description}</p>
+          {comparison && (
+            <p className="mt-0.5 flex items-start gap-1.5 text-[12px]/[1.5] text-muted">
+              <Columns2Icon className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
+              <span>{comparison}</span>
+            </p>
+          )}
+        </div>
+      </div>
+      <div className="flex flex-col gap-1 text-[12px]/[1.5] text-muted">
+        <p>{steps === undefined ? "Example" : `Guide · ${steps} steps`}</p>
+        <p className="hidden max-wide:block">{formatProjectDialects(example.manifest)}</p>
+      </div>
+      <p className="text-[12px]/[1.5] text-muted max-wide:hidden">{formatProjectDialects(example.manifest)}</p>
+      <div className="flex flex-col items-end gap-2">
+        {guideProgress}
+        <span className="text-[13px] font-semibold whitespace-nowrap">{cta}</span>
+      </div>
     </Link>
   );
 }

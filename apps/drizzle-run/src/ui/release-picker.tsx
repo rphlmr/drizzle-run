@@ -104,7 +104,7 @@ export interface ReleaseDialogProps extends Omit<ReleasePickerProps, "readOnly" 
 export function ReleaseDialog({ target, current, files, onChange, open, onOpenChange }: ReleaseDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="flex max-h-[calc(100dvh-32px)] w-[min(400px,calc(100vw-24px))] flex-col gap-0.5 overflow-y-auto rounded-[18px] bg-bg p-2 text-[14px]">
+      <DialogContent className="flex max-h-[calc(100dvh-32px)] w-[min(400px,calc(100vw-24px))] flex-col gap-0.5 overflow-y-auto rounded-[18px] bg-surface p-2 text-[14px]">
         <DialogHeader className="flex-row items-baseline gap-2 px-2.5 pt-2 pb-1.5">
           <DialogTitle className="font-display text-[17px] font-bold">Drizzle release</DialogTitle>
           <span className="text-[12px] text-muted">Tested ORM and Kit pairs</span>

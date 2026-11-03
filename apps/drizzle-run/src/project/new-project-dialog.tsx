@@ -519,7 +519,7 @@ function ImportProjectFile() {
       </span>
       <label
         className={cn(
-          "relative inline-flex h-9 shrink-0 cursor-pointer items-center rounded-[9px] border border-border bg-bg px-3 font-medium hover:bg-surface-2 max-phone:after:absolute max-phone:after:inset-x-0 max-phone:after:-inset-y-1",
+          "relative inline-flex h-9 shrink-0 cursor-pointer items-center rounded-[9px] border border-border bg-surface px-3 font-medium hover:bg-surface-2 max-phone:after:absolute max-phone:after:inset-x-0 max-phone:after:-inset-y-1",
           "has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-accent-text",
           busy && "pointer-events-none opacity-50",
         )}
