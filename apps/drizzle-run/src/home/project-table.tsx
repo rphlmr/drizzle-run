@@ -56,7 +56,7 @@ const thClass = cn(
 const tdClass = cn("border-b border-surface-2 p-2");
 const mutedCellClass = cn(tdClass, "whitespace-nowrap text-muted");
 const checkClass = cn("w-10 pl-3.5");
-const actionsClass = cn("w-12 text-right");
+const actionsClass = cn("w-px text-right");
 const frameClass = cn("flex flex-col overflow-hidden rounded-lg border border-border bg-surface");
 
 const phoneShareLabels: Record<ProjectShare["visibility"], string> = {
@@ -235,7 +235,7 @@ export function ProjectTable({
 
   if (page.matched === 0) {
     return (
-      <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed border-border px-4 py-10 text-muted">
+      <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed border-border bg-surface px-4 py-10 text-muted">
         <p>{filtered ? "No project matches these filters." : "No projects yet."}</p>
         {filtered ? (
           <Button variant="outline" onClick={onClearFilters}>
@@ -417,7 +417,19 @@ export function ProjectTable({
                   <time dateTime={project.updatedAt}>{formatEditedLabel(project.updatedAt, now)}</time>
                 </td>
                 <td className={cn(tdClass, actionsClass, "py-1.25")}>
-                  <RowActions project={project} />
+                  <div className="flex items-center justify-end gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      nativeButton={false}
+                      role="link"
+                      render={<Link to={`/p/${project.id}`} className="no-underline" />}
+                      aria-label={`Open ${project.name}`}
+                    >
+                      Open
+                    </Button>
+                    <RowActions project={project} />
+                  </div>
                 </td>
               </tr>
             ))}

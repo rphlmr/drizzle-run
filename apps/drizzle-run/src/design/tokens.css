@@ -9,14 +9,15 @@
 :root {
   color-scheme: light;
 
-  --bg: #ffffff;
+  --bg: #eef0f3;
+  --panel: #f8f9fb;
   --surface: #ffffff;
-  --surface-2: #f3f4f6;
-  --border: #e5e7eb;
-  --text: #0a0a0a;
-  --text-soft: #3b3f4b;
-  --text-muted: #4b5563;
-  --text-faint: #9ca3af;
+  --surface-2: #f0f2f5;
+  --border: #dce0e6;
+  --text: #191b23;
+  --text-soft: #383e4c;
+  --text-muted: #555d6e;
+  --text-faint: #606979;
   --accent-text: #4a7a0c;
   --lime: #c5f74f;
   /* The darker stripe of the striped lime progress bar, the same in both themes. */
@@ -45,8 +46,9 @@
   --segment-active-bg: #0a0a0a;
   --segment-active-fg: #ffffff;
   --run-border: #0a0a0a;
+  --action-edge: #0a0a0a;
   /* Cards, dialogs, popovers, inputs and selected choices; run-border stays on lime controls. */
-  --card-border: #0a0a0a;
+  --card-border: #c7cdd6;
   --kbd-bg: #0a0a0a20;
   --overlay: #11111166;
   --scroll-thumb: #9ca3af;
@@ -58,15 +60,17 @@
   --term-dim: #a3a3a3;
 
   --code-bg: #ffffff;
+  --code-line: #f0f2f6;
   --c-key: #7c3aed;
   --c-str: #0f6b4a;
   --c-fn: #1d4ed8;
   --c-com: #4b5563;
 
-  --shadow-sticker: 2px 2px 0 var(--ink);
-  --shadow-sticker-card: 3px 3px 0 var(--ink);
-  --shadow-sticker-lg: 4px 4px 0 var(--ink);
-  --shadow-pop: 0 12px 32px #1111111f;
+  --shadow-action: 2px 2px 0 var(--action-edge);
+  --shadow-sticker: 0 1px 2px #19202c14;
+  --shadow-sticker-card: 0 1px 3px #19202c0a, 0 4px 12px #19202c05;
+  --shadow-sticker-lg: 0 2px 4px #19202c08, 0 8px 24px #19202c08;
+  --shadow-pop: 0 4px 12px #19202c0a, 0 16px 40px #19202c14;
 
   --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
@@ -98,14 +102,15 @@
 :root[data-theme="dark"] {
   color-scheme: dark;
 
-  --bg: #111111;
-  --surface: #1a1a1a;
-  --surface-2: #242424;
-  --border: #303030;
-  --text: #f3f4f6;
-  --text-soft: #d1d1d1;
-  --text-muted: #a3a3a3;
-  --text-faint: #525252;
+  --bg: #111318;
+  --panel: #171a21;
+  --surface: #1c1f26;
+  --surface-2: #272b34;
+  --border: #373d49;
+  --text: #f1f2f5;
+  --text-soft: #d5d8e0;
+  --text-muted: #b2b7c4;
+  --text-faint: #9aa2b2;
   --accent-text: #c5f74f;
   --ok: #c5f74f;
   --ok-bg: #1e2a10;
@@ -122,23 +127,25 @@
   --progress-fill: #c5f74f;
   --segment-active-bg: #f3f4f6;
   --segment-active-fg: #0a0a0a;
-  /* Dark keeps the light construction: lime controls and cards both take the pale ink, never lime. */
   --run-border: #e5e5e5;
-  --card-border: #e5e5e5;
+  --action-edge: #e5e5e5;
+  --card-border: #4c5360;
   --overlay: #000000a6;
   --scroll-thumb: #525252;
   --scroll-thumb-hover: #a3a3a3;
   --dot-grid: #242424;
   --term-bg: #0a0a0a;
 
-  --code-bg: #141414;
+  --code-bg: #17191f;
+  --code-line: #252a34;
   --c-key: #c4a7ff;
   --c-str: #8fdcb4;
   --c-fn: #8ab4ff;
   --c-com: #a3a3a3;
 
-  --shadow-sticker: 2px 2px 0 var(--run-border);
-  --shadow-sticker-card: 3px 3px 0 var(--card-border);
-  --shadow-sticker-lg: 4px 4px 0 var(--card-border);
-  --shadow-pop: 0 12px 32px #00000066;
+  --shadow-action: 2px 2px 0 var(--action-edge);
+  --shadow-sticker: 0 1px 2px #00000033;
+  --shadow-sticker-card: 0 1px 3px #00000026, 0 4px 12px #0000001a;
+  --shadow-sticker-lg: 0 2px 4px #00000026, 0 8px 24px #00000033;
+  --shadow-pop: 0 4px 12px #00000033, 0 16px 40px #00000066;
 }

@@ -162,6 +162,7 @@ test("my projects: 45 projects with search, filter, and pages", async ({ page })
   const footer = page.getByText(/^Showing \d+ to \d+ of \d+$/);
   await expect(footer).toHaveText("Showing 1 to 20 of 45");
   await expect(page.getByRole("link", { name: "Stored 1", exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: /^Open Stored / })).toHaveCount(20);
 
   await page.getByRole("button", { name: "Next", exact: true }).click();
   await page.getByRole("button", { name: "Next", exact: true }).click();
@@ -182,7 +183,7 @@ test("my projects: 45 projects with search, filter, and pages", async ({ page })
   await page.getByRole("dialog").getByRole("button", { name: "Delete project" }).click();
   await expect(page.getByRole("heading", { name: "My projects 44" })).toBeVisible();
 
-  await page.getByRole("link", { name: "Stored 43", exact: true }).click();
+  await page.getByRole("link", { name: "Open Stored 43", exact: true }).click();
   await expect(page).toHaveURL(/\/p\/00000000-0000-4000-8000-000000000042$/);
   await expect(page.getByRole("button", { name: "Switch project" })).toContainText("Stored 43");
 });
@@ -253,7 +254,7 @@ test("phone: my projects fits 375 px with a project list", async ({ page }) => {
   await expect(page.getByRole("list", { name: "Projects" }).getByRole("link")).toHaveCount(5);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   await page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "Examples & Guides" }).click();
-  await expect(page.getByRole("heading", { name: "Official Examples & Guides" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Examples & guides", exact: true })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   await page.goto("/");
   await expect(
@@ -279,6 +280,49 @@ test("gallery filters by topic and database", async ({ page }) => {
   }
 });
 
+for (const scrollTop of [0, 140]) {
+  test(`gallery filters retain control and column positions at scroll ${scrollTop}`, async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 1000 });
+    await page.goto("/examples");
+    await expect(page.getByText("Start here")).toBeVisible();
+    await page.evaluate(async () => {
+      await document.fonts.ready;
+    });
+
+    const main = page.getByRole("main");
+    const database = page.getByRole("group", { name: "Database" });
+    const readPositions = () =>
+      page
+        .locator(
+          'main h1, main section, main fieldset, main fieldset button, [aria-label="Example list"], [aria-label="Example list"] > li:first-child > a > *',
+        )
+        .evaluateAll((elements) =>
+          elements.map((element) => {
+            const { x, y, width } = element.getBoundingClientRect();
+
+            return { x, y, width };
+          }),
+        );
+
+    await main.evaluate((element, top) => {
+      element.scrollTop = top;
+    }, scrollTop);
+    await expect.poll(() => main.evaluate((element) => element.scrollTop)).toBe(scrollTop);
+    const initialPositions = await readPositions();
+    await database.getByRole("button", { name: "SQLite", exact: true }).click();
+    await expect(page).toHaveURL(/db=sqlite/);
+    await expect(page.getByRole("list", { name: "Example list" }).getByRole("link")).toHaveCount(
+      examples.filter((example) => example.dialects.has("sqlite")).length,
+    );
+    await expect.poll(() => main.evaluate((element) => element.scrollTop)).toBe(scrollTop);
+    await expect.poll(readPositions).toEqual(initialPositions);
+
+    await database.getByRole("button", { name: "Any database", exact: true }).click();
+    await expect.poll(() => main.evaluate((element) => element.scrollTop)).toBe(scrollTop);
+    await expect.poll(readPositions).toEqual(initialPositions);
+  });
+}
+
 for (const example of examples.filter((item) => !item.guided && item.sideNames === undefined)) {
   test(`official example ${example.slug} opens, runs, and saves`, async ({ page }) => {
     await page.goto(`/examples/${example.slug}`);
@@ -303,9 +347,7 @@ for (const example of examples.filter((item) => !item.guided && item.sideNames !
 
     await page.goto("/examples");
     const card = page.getByRole("list", { name: "Example list" }).getByRole("link", { name: example.title });
-    await expect(card.getByRole("list", { name: "Versions" }).getByRole("listitem")).toHaveText(
-      sideNames.map((name) => `${name} · orm ${example.ormVersion}`),
-    );
+    await expect(card).toContainText(sideNames.join(" vs "));
     await card.click();
     await expect(page).toHaveURL(new RegExp(`/examples/${example.slug}$`));
 

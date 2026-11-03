@@ -13,7 +13,7 @@ export function LogoTile({ small = false, className }: { small?: boolean; classN
   return (
     <span
       className={cn(
-        "grid size-7.5 shrink-0 place-items-center rounded-base border-[1.5px] border-run-border bg-logo shadow-sticker",
+        "grid size-7.5 shrink-0 place-items-center rounded-base border-[1.5px] border-run-border bg-logo shadow-action",
         small && "size-5.5 rounded-[6px]",
         className,
       )}

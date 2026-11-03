@@ -122,10 +122,7 @@ export function ProjectsPage() {
   return (
     <section className="flex min-w-0 flex-col gap-2.5 max-phone:gap-3.5" aria-labelledby="projects-title">
       <div className="flex flex-wrap items-center gap-2.5 max-phone:gap-3.5">
-        <h1
-          id="projects-title"
-          className="font-display text-[30px] font-extrabold tracking-[-0.02em] max-phone:text-[24px]"
-        >
+        <h1 id="projects-title" className="font-display text-[28px] font-bold tracking-[-0.02em] max-phone:text-[24px]">
           My projects <span className="ml-1 font-sans text-[15px] font-medium tracking-normal text-muted">{total}</span>
         </h1>
         <div className="ml-auto flex flex-wrap items-center gap-2 max-phone:ml-0 max-phone:w-full">

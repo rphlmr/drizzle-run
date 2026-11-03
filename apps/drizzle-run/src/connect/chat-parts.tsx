@@ -32,7 +32,7 @@ const titleClass = cn("m-0 font-display text-[22px]/[1.15] font-[750] tracking-[
 const copyClass = cn("m-0 text-[13px] leading-[1.55] text-muted");
 const smallCopyClass = cn("m-0 text-[12px] leading-[1.5] text-muted");
 const smallButtonClass = cn("h-7 min-h-7 px-2.5 text-[12px]");
-const cardClass = cn("rounded-[12px] border border-border bg-bg p-3");
+const cardClass = cn("rounded-[12px] border border-border bg-surface p-3");
 const stickerCardClass = cn(
   "flex flex-col gap-2 rounded-[12px] border-[1.5px] border-card-border bg-surface p-3 shadow-sticker-card",
 );
@@ -422,7 +422,7 @@ export function EmptyBody({
           <button
             key={suggestion}
             type="button"
-            className="min-h-10 cursor-pointer rounded-md border border-border bg-bg px-3 py-2.25 text-left text-[13px] leading-[1.4] text-text hover:border-muted"
+            className="min-h-10 cursor-pointer rounded-md border border-border bg-surface px-3 py-2.25 text-left text-[13px] leading-[1.4] text-text hover:border-muted"
             onClick={() => onSuggestion(suggestion)}
           >
             {suggestion}
@@ -503,7 +503,7 @@ export function ToolRow({ item }: { item: Extract<ChatItem, { kind: "tool" }> })
   const headClass = "grid min-h-8 w-full grid-cols-[18px_minmax(0,1fr)_auto] items-center gap-x-2 px-2.5 text-left";
 
   return (
-    <div className="rounded-md border border-border bg-bg text-[12.5px]" data-slot="tool-row">
+    <div className="rounded-md border border-border bg-surface text-[12.5px]" data-slot="tool-row">
       {expandable ? (
         <button
           type="button"

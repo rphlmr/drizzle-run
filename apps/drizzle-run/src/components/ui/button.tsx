@@ -16,8 +16,8 @@ const buttonVariants = cva(
         destructive: "border border-err-bg bg-err-bg text-err",
         link: "text-accent-text underline",
         sticker:
-          "border-[1.5px] border-run-border bg-lime font-semibold text-on-lime shadow-sticker hover:brightness-97 active:translate-px active:shadow-none disabled:border-border disabled:bg-surface-2 disabled:text-muted disabled:opacity-100 disabled:shadow-none",
-        run: "border-[1.5px] border-run-border bg-lime font-semibold text-on-lime shadow-sticker enabled:hover:brightness-97 enabled:active:translate-px enabled:active:shadow-none disabled:border-border disabled:bg-surface-2 disabled:text-muted disabled:opacity-100 disabled:shadow-none data-[state=preparing]:disabled:cursor-progress data-[state=preparing]:disabled:border-run-border data-[state=preparing]:disabled:bg-lime data-[state=preparing]:disabled:text-on-lime data-[state=preparing]:disabled:opacity-55 data-[state=preparing]:disabled:shadow-sticker data-[state=running]:bg-surface data-[state=running]:text-text [&>svg]:size-3.5 [&>svg]:fill-current",
+          "border-[1.5px] border-run-border bg-lime font-semibold text-on-lime shadow-action hover:brightness-97 active:translate-0.5 active:shadow-none disabled:border-border disabled:bg-surface-2 disabled:text-muted disabled:opacity-100 disabled:shadow-none",
+        run: "border-[1.5px] border-run-border bg-lime font-semibold text-on-lime shadow-action enabled:hover:brightness-97 enabled:active:translate-0.5 enabled:active:shadow-none disabled:border-border disabled:bg-surface-2 disabled:text-muted disabled:opacity-100 disabled:shadow-none data-[state=preparing]:disabled:cursor-progress data-[state=preparing]:disabled:border-run-border data-[state=preparing]:disabled:bg-lime data-[state=preparing]:disabled:text-on-lime data-[state=preparing]:disabled:opacity-55 data-[state=preparing]:disabled:shadow-action data-[state=running]:bg-surface data-[state=running]:text-text [&>svg]:size-3.5 [&>svg]:fill-current",
       },
       size: {
         default: "min-h-9 px-3.5",

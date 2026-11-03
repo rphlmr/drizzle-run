@@ -43,14 +43,16 @@ export function SiteMain({ className, children }: { className?: string; children
 
   return (
     <>
-      <main
-        className={cn(
-          "mx-auto flex min-h-0 w-full max-w-308 flex-1 flex-col gap-5.5 overflow-y-auto px-6 pt-5.5 pb-8 max-phone:gap-3.5 max-phone:p-4",
-          className,
-        )}
-      >
-        {children}
-        {phone && <SiteFooter className="-mx-4 mt-auto -mb-4 self-stretch" />}
+      <main className="min-h-0 w-full flex-1 [scrollbar-gutter:stable] overflow-y-auto">
+        <div
+          className={cn(
+            "mx-auto flex min-h-full w-full max-w-308 flex-col gap-5.5 px-6 pt-5.5 pb-8 max-phone:gap-3.5 max-phone:p-4",
+            className,
+          )}
+        >
+          {children}
+          {phone && <SiteFooter className="-mx-4 mt-auto -mb-4 self-stretch" />}
+        </div>
       </main>
       {!phone && <SiteFooter />}
     </>

@@ -319,7 +319,7 @@ ${statePalette}
 .head{display:flex;align-items:center;gap:8px;min-width:0;padding:10px 14px;border-bottom:1px solid var(--border);font-size:13px;color:var(--text-muted)}
 .logo{flex:none;display:flex;align-items:center;gap:6px;font-weight:800;font-size:14px;letter-spacing:-0.02em;color:var(--text)}
 .wordmark-run{padding:0 4px;border-radius:3px;background:var(--lime);color:var(--on-lime)}
-.tile{flex:none;box-sizing:border-box;width:22px;height:22px;display:grid;place-items:center;border:1.5px solid var(--card-border);border-radius:6px;background:var(--lime);box-shadow:2px 2px 0 var(--card-border)}
+.tile{flex:none;box-sizing:border-box;width:22px;height:22px;display:grid;place-items:center;border:1.5px solid var(--run-border);border-radius:6px;background:var(--lime);box-shadow:2px 2px 0 var(--action-edge)}
 .tile svg{width:14px;height:7px}
 .body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:18px;text-align:center}
 .foot{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:14px;background:var(--surface-2)}
@@ -327,6 +327,9 @@ p,h2{margin:0}
 h2{font-size:20px;line-height:1.2;font-weight:700}
 .panel p{max-width:460px;color:var(--text-muted)}
 button,.cta{box-sizing:border-box;margin:0;display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 16px;border:1.5px solid var(--run-border);border-radius:10px;background:var(--lime);color:var(--on-lime);font:inherit;font-weight:600;text-decoration:none;cursor:pointer}
+button:not(.load),.cta{box-shadow:2px 2px 0 var(--action-edge)}
+button:not(.load):enabled:active,.cta:active{translate:2px 2px;box-shadow:none}
+button:disabled{box-shadow:none}
 .foot a{font-size:13px;font-weight:600;color:var(--text)}
 :focus-visible{outline:2px solid var(--accent-text);outline-offset:2px}
 .cover{display:flex;flex-direction:column;gap:clamp(14px,2.4cqi,20px);overflow:hidden;padding:clamp(16px,3.4cqi,40px);border:1.5px solid var(--border);background:radial-gradient(circle,color-mix(in srgb,var(--text-muted) 40%,transparent) 1px,transparent 1.5px) 0 0/18px 18px,var(--bg);color:var(--text)}
@@ -347,7 +350,8 @@ button,.cta{box-sizing:border-box;margin:0;display:inline-flex;align-items:cente
 .runtime svg{flex:none;width:14px;height:14px}
 .chip{padding:2px 10px;border:1px solid var(--border);border-radius:999px;background:var(--bg);color:var(--text-muted);font-size:12px;font-weight:600;white-space:nowrap}
 .version{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--text)}
-.play{flex:none;box-sizing:border-box;width:clamp(44px,3.2cqi,56px);height:clamp(44px,3.2cqi,56px);display:grid;place-items:center;border:2px solid var(--run-border);border-radius:12px;background:var(--lime);color:var(--on-lime);box-shadow:3px 3px 0 var(--run-border)}
+.play{flex:none;box-sizing:border-box;width:clamp(44px,3.2cqi,56px);height:clamp(44px,3.2cqi,56px);display:grid;place-items:center;border:2px solid var(--run-border);border-radius:12px;background:var(--lime);color:var(--on-lime);box-shadow:2px 2px 0 var(--action-edge)}
+.load:active .play{translate:2px 2px;box-shadow:none}
 .play svg{width:45%;height:45%}
 .cover :focus-visible{outline-offset:4px}
 .cover.over-frame{position:absolute;inset:0}

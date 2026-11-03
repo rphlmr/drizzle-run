@@ -41,7 +41,7 @@ export interface ForkDialogProps {
 export function ForkDialog({ project, open, onOpenChange, onFork }: ForkDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="flex max-h-[calc(100dvh-32px)] max-w-150 flex-col overflow-hidden rounded-[18px] border-run-border p-0">
+      <DialogContent className="flex max-h-[calc(100dvh-32px)] max-w-150 flex-col overflow-hidden rounded-[18px] p-0">
         {open && <ForkForm project={project} onCancel={() => onOpenChange(false)} onFork={onFork} />}
       </DialogContent>
     </Dialog>
@@ -135,7 +135,7 @@ function ForkForm({
     >
       <div className="flex items-start gap-3 px-5.5 pt-5 pr-12">
         <span
-          className="grid size-9 shrink-0 place-items-center rounded-md border-[1.5px] border-run-border bg-lime text-on-lime"
+          className="grid size-9 shrink-0 place-items-center rounded-md border-[1.5px] border-run-border bg-lime text-on-lime shadow-action"
           aria-hidden="true"
         >
           <CopyIcon className="size-4" />
@@ -156,7 +156,7 @@ function ForkForm({
               className={cn(
                 "row-start-1 min-w-0 rounded-[12px] border border-border bg-surface px-3.5 py-3",
                 index === 0 ? "col-start-1" : "col-start-3",
-                !side.own && "border-[1.5px] border-run-border shadow-sticker-card",
+                !side.own && "border-[1.5px] border-card-border shadow-sticker-card",
               )}
             >
               <div className="text-[11.5px] text-muted">{DIALECTS[side.tuple.target.dialect].label}</div>
@@ -179,7 +179,7 @@ function ForkForm({
               </div>
               <Input
                 aria-label={`Name of the ${index === 0 ? "left" : "right"} side`}
-                className="mt-2.5 mb-0 h-9 min-h-9 bg-bg px-2.5 py-0 text-[13px]"
+                className="mt-2.5 mb-0 h-9 min-h-9 bg-panel px-2.5 py-0 text-[13px]"
                 placeholder="Name, optional"
                 maxLength={PAIR_SIDE_NAME_MAX_LENGTH}
                 value={sideNames[nameKeyOf(side)]}
@@ -194,7 +194,7 @@ function ForkForm({
           <Hint content="Swap which side shows first">
             <button
               type="button"
-              className="relative col-start-2 row-start-1 grid size-7.5 place-items-center self-center justify-self-center rounded-full border-[1.5px] border-run-border bg-surface text-text after:absolute after:-inset-1.75"
+              className="relative col-start-2 row-start-1 grid size-7.5 place-items-center self-center justify-self-center rounded-full border-[1.5px] border-card-border bg-surface text-text after:absolute after:-inset-1.75"
               aria-label="Swap sides"
               onClick={() => setSwapped((value) => !value)}
             >

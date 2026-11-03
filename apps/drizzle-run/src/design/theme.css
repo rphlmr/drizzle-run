@@ -7,6 +7,7 @@
 
 @theme inline {
   --color-bg: var(--bg);
+  --color-panel: var(--panel);
   --color-surface: var(--surface);
   --color-surface-2: var(--surface-2);
   --color-border: var(--border);
@@ -70,6 +71,7 @@
   --radius-lg: var(--radius-lg);
   --radius-pill: var(--radius-pill);
 
+  --shadow-action: var(--shadow-action);
   --shadow-sticker: var(--shadow-sticker);
   --shadow-sticker-card: var(--shadow-sticker-card);
   --shadow-sticker-lg: var(--shadow-sticker-lg);

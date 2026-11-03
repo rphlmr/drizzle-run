@@ -268,10 +268,7 @@ function ShareTableRow({ share, source, now }: ShareRowProps) {
 function MySharesHeading({ search }: { search?: ReactNode }) {
   return (
     <div className="flex flex-wrap items-center gap-2.5 max-phone:gap-3.5">
-      <h1
-        id="my-shares-title"
-        className="font-display text-[30px] font-extrabold tracking-[-0.02em] max-phone:text-[24px]"
-      >
+      <h1 id="my-shares-title" className="font-display text-[28px] font-bold tracking-[-0.02em] max-phone:text-[24px]">
         My shares
       </h1>
       {search}

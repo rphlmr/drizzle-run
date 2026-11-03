@@ -404,7 +404,7 @@ export function OutputPanel({
   return (
     <section
       className={cn(
-        "@container relative flex h-full min-h-0 flex-col overflow-clip rounded-lg border border-border bg-surface max-phone:rounded-none max-phone:border-0 max-phone:bg-bg",
+        "@container relative flex h-full min-h-0 flex-col overflow-clip rounded-lg border border-border bg-panel max-phone:rounded-none max-phone:border-0",
         !framed && "rounded-none border-0",
       )}
       aria-label={label === undefined ? "Execution output" : `${label} output`}
@@ -433,7 +433,7 @@ export function OutputPanel({
             aria-label={label === undefined ? "Output views" : `${label} output`}
             indicatorClassName="rounded-[8px] bg-segment shadow-none max-phone:rounded-pill"
             className={cn(
-              "max-w-full min-w-0 shrink scrollbar-none gap-0.5 overflow-x-auto rounded-[10px] bg-surface-2 p-0.75 max-phone:max-w-none max-phone:shrink-0 max-phone:basis-full max-phone:gap-1.5 max-phone:rounded-none max-phone:bg-transparent max-phone:px-3 max-phone:pt-1.25 max-phone:pb-2.5 [&::-webkit-scrollbar]:hidden",
+              "max-w-full min-w-0 shrink scrollbar-none gap-0.5 overflow-x-auto rounded-[10px] bg-transparent p-0.75 max-phone:max-w-none max-phone:shrink-0 max-phone:basis-full max-phone:gap-1.5 max-phone:rounded-none max-phone:px-3 max-phone:pt-1.25 max-phone:pb-2.5 [&::-webkit-scrollbar]:hidden",
               stacked.tabs,
               !bar && "hidden",
             )}
@@ -512,7 +512,7 @@ export function OutputPanel({
                 scrollClass,
                 !firstRunStatus && viewMotionClass,
                 dotted ? cn(dotGrid, "py-0") : listed ? phoneRows : phoneDotGrid,
-                filter === "logs" && listed && "pt-0 pb-0 max-phone:bg-bg",
+                filter === "logs" && listed && "pt-0 pb-0 max-phone:bg-panel",
                 "max-phone:py-0",
               )}
             >

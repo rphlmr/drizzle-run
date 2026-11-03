@@ -367,7 +367,7 @@ function ChatPanel({
           <XIcon className="size-3.5 stroke-[2.2]" aria-hidden="true" />
         </Button>
       </div>
-      <div className="min-h-0 flex-1 overflow-auto" ref={attachScroller} onScroll={onScroll}>
+      <div className="min-h-0 flex-1 overflow-auto bg-panel" ref={attachScroller} onScroll={onScroll}>
         {body === "loading" && (
           <div className="flex flex-col gap-3 px-4 py-5">
             <Skeleton className="h-7 w-48" />

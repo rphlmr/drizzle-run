@@ -34,7 +34,7 @@ export function PreparationFailedDialog({ error, note, onRetry }: PreparationFai
       aria-labelledby={titleId}
       aria-describedby={descriptionId}
       tabIndex={-1}
-      className="fixed top-1/2 left-1/2 z-50 w-full max-w-100 -translate-1/2 rounded-lg border-[1.5px] border-card-border bg-bg p-6.5 text-text shadow-sticker-lg focus-visible:outline-transparent max-phone:w-[calc(100vw-28px)]"
+      className="fixed top-1/2 left-1/2 z-50 w-full max-w-100 -translate-1/2 rounded-lg border-[1.5px] border-card-border bg-surface p-6.5 text-text shadow-sticker-lg focus-visible:outline-transparent max-phone:w-[calc(100vw-28px)]"
     >
       <h2 id={titleId} className="font-display text-[24px] font-extrabold tracking-[-0.02em]">
         Preparation didn't finish

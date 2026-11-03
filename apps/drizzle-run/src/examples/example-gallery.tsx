@@ -112,23 +112,21 @@ function Gallery({ progress }: { progress: Readonly<Record<string, GuideProgress
   return (
     <>
       {workspace.banners}
-      <SiteMain className="gap-4.5 pt-7">
-        <div className="flex items-stretch gap-6 max-phone:flex-col">
-          <div className="flex flex-1 flex-col justify-center gap-2">
-            <h1 className="font-display text-[38px] font-extrabold tracking-[-0.02em] max-phone:text-[30px]">
-              Official <mark>Examples &amp; Guides</mark>
-            </h1>
-            <p className="max-w-130 text-[15px] leading-[1.6] text-muted">
-              Each one opens as a scratch copy you can edit and run. Fork it to keep it. Guided ones walk you through it
-              first, then unlock the code.
-            </p>
-          </div>
-          {featured && (
-            <section className="flex w-115 shrink-0 max-phone:w-auto" aria-label="Featured example">
-              <ExampleCard example={featured} featured progress={progress[featured.slug]} className="flex-1" />
-            </section>
-          )}
+      <SiteMain className="gap-5 pt-7">
+        <div className="flex flex-col gap-2">
+          <h1 className="font-display text-[28px] font-bold tracking-[-0.02em] max-phone:text-[24px]">
+            Examples &amp; guides
+          </h1>
+          <p className="text-[14px]/[1.6] text-muted">
+            Learn a pattern, run the code, then make it yours. Every example opens as an editable scratch copy. Fork it
+            to keep your changes.
+          </p>
         </div>
+        {featured && (
+          <section aria-label="Featured example">
+            <ExampleCard example={featured} featured progress={progress[featured.slug]} />
+          </section>
+        )}
         <div className="flex flex-wrap items-center gap-2">
           <fieldset
             className="flex min-w-auto flex-wrap gap-1.5 max-phone:w-full max-phone:scrollbar-none max-phone:flex-nowrap max-phone:overflow-x-auto"
@@ -158,22 +156,31 @@ function Gallery({ progress }: { progress: Readonly<Record<string, GuideProgress
             className={filterGroupClass}
           />
         </div>
-        {visible.length === 0 ? (
-          <p className="my-6 text-muted">No example matches these filters yet.</p>
-        ) : (
-          // role="list" because Safari drops list semantics from a list without bullets.
-          <ul
-            className="grid grid-cols-3 gap-3.5 max-wide:grid-cols-2 max-phone:grid-cols-1"
-            role="list"
-            aria-label="Example list"
-          >
-            {visible.map((example) => (
-              <li key={example.slug} className="flex min-w-0">
-                <ExampleCard example={example} progress={progress[example.slug]} className="flex-1" />
-              </li>
-            ))}
-          </ul>
-        )}
+        <div className="min-h-dvh">
+          {visible.length === 0 ? (
+            <p className="my-6 text-muted">No example matches these filters yet.</p>
+          ) : (
+            <div className="overflow-hidden rounded-lg border border-border bg-surface">
+              <div
+                className="grid grid-cols-[minmax(0,1fr)_108px_128px_148px] items-center gap-x-6 border-b border-border bg-surface-2 px-5 py-2.5 text-[11px] font-medium text-muted max-wide:grid-cols-[minmax(0,1fr)_128px_148px] max-phone:hidden"
+                aria-hidden="true"
+              >
+                <span>{visible.length} examples &amp; guides</span>
+                <span>Format</span>
+                <span className="max-wide:hidden">Database</span>
+                <span className="text-right">Open &amp; continue</span>
+              </div>
+              {/* role="list" because Safari drops list semantics from a list without bullets. */}
+              <ul className="divide-y divide-border" role="list" aria-label="Example list">
+                {visible.map((example) => (
+                  <li key={example.slug}>
+                    <ExampleCard example={example} progress={progress[example.slug]} />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
       </SiteMain>
     </>
   );

@@ -3,12 +3,12 @@ import type * as Monaco from "monaco-editor";
 
 /** The design tokens the editor theme reads, by role, as CSS color values. */
 export type MonacoThemeTokens = Record<
-  "bg" | "text" | "textMuted" | "codeBg" | "key" | "str" | "fn" | "com" | "border" | "markBg",
+  "bg" | "text" | "textMuted" | "codeBg" | "key" | "str" | "fn" | "com" | "border" | "lineHighlight",
   string
 >;
 
 const TOKEN_PROPERTIES: Record<keyof MonacoThemeTokens, string> = {
-  bg: "--bg",
+  bg: "--surface",
   text: "--text",
   textMuted: "--text-muted",
   codeBg: "--code-bg",
@@ -17,7 +17,7 @@ const TOKEN_PROPERTIES: Record<keyof MonacoThemeTokens, string> = {
   fn: "--c-fn",
   com: "--c-com",
   border: "--border",
-  markBg: "--mark-bg",
+  lineHighlight: "--code-line",
 };
 
 // The production CSS minifier shortens six-digit hex to three digits; Monaco accepts only
@@ -57,8 +57,8 @@ export function buildMonacoTheme(
       "editor.foreground": tokens.text,
       "editorLineNumber.foreground": tokens.textMuted,
       "editorLineNumber.activeForeground": tokens.text,
-      "editor.lineHighlightBackground": tokens.markBg,
-      "editor.lineHighlightBorder": tokens.markBg,
+      "editor.lineHighlightBackground": tokens.lineHighlight,
+      "editor.lineHighlightBorder": tokens.lineHighlight,
       "editorWidget.background": tokens.bg,
       "editorWidget.border": tokens.border,
       "editorGutter.background": tokens.codeBg,
