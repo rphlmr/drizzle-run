@@ -2,6 +2,7 @@ import { afterAll, describe, expect, it, vi } from "vitest";
 
 import { makeExecutionManifest } from "../../test/quickjs/execution-fixture.ts";
 import { makeSqliteWorkerManifest, runWorkerFixture } from "../../test/quickjs/worker-run-fixture.ts";
+import * as databaseEngine from "../database/database-engine.ts";
 import * as planner from "../query-plans/planner.ts";
 import { stopCompiler } from "./compiler.ts";
 import { decodeResult } from "./contract.ts";
@@ -16,6 +17,41 @@ afterAll(async () => {
 });
 
 describe("executeWorkerRun real execution", () => {
+  it("should report an interrupt during a database reply and release its database", async () => {
+    const createDatabase = databaseEngine.createDatabaseEngine;
+    const clock = vi.spyOn(performance, "now");
+    const databaseFactory = vi.spyOn(databaseEngine, "createDatabaseEngine").mockImplementation(async (...args) => {
+      const database = await createDatabase(...args);
+
+      return {
+        ...database,
+        async call(operation, value) {
+          const reply = await database.call(operation, value);
+          clock.mockReturnValue(performance.now() + 21_000);
+
+          return reply;
+        },
+      };
+    });
+
+    try {
+      const { result, messages, databaseClosed } = await runWorkerFixture({ manifest: makeSqliteWorkerManifest() });
+
+      expect(result).toMatchObject({ status: "error", error: { code: "run_timeout" } });
+      expect(databaseClosed).toBe(true);
+      expect(messages).toContainEqual(
+        expect.objectContaining({
+          kind: "report",
+          outcome: "failed",
+          error: expect.objectContaining({ code: "run_timeout" }),
+        }),
+      );
+    } finally {
+      clock.mockRestore();
+      databaseFactory.mockRestore();
+    }
+  }, 10_000);
+
   it("should preserve a failed query's database cause", async () => {
     const manifest = makeSqliteWorkerManifest();
     manifest.files["run.ts"] =

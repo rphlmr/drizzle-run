@@ -43,7 +43,7 @@ try {
     "pnpm",
     [
       "add",
-      "--offline",
+      "--prefer-offline",
       "--ignore-scripts",
       "--config.node-linker=hoisted",
       core.filename,

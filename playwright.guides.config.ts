@@ -9,6 +9,8 @@ import base from "./playwright.config";
 export default defineConfig({
   ...base,
   testMatch: "**/*.generate.ts",
+  // Replays boot Wasm guests; CI shards provide parallelism without sharing a runner's CPU between guides.
+  workers: 1,
   reporter: [["list"]],
   projects: [{ name: "chromium", use: { browserName: "chromium", launchOptions: { chromiumSandbox: true } } }],
 });

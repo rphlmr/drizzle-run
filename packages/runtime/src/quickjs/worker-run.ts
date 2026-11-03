@@ -320,20 +320,23 @@ export async function executeWorkerRun({
 
         const deferred = vm.newPromise();
         pending.add(deferred);
-        database.call(operation.toString(), decodeDatabaseValue(JSON.parse(encoded.toString()))).then(
-          (reply) =>
-            settle({
-              deferred,
-              result: JSON.stringify({ ok: true, value: encodeDatabaseValue(reply) }),
-              status: "fulfilled",
-            }),
-          (cause) =>
-            settle({
-              deferred,
-              result: JSON.stringify({ ok: false, error: serializeDatabaseError(cause) }),
-              status: "fulfilled",
-            }),
-        );
+        database
+          .call(operation.toString(), decodeDatabaseValue(JSON.parse(encoded.toString())))
+          .then(
+            (reply) =>
+              settle({
+                deferred,
+                result: JSON.stringify({ ok: true, value: encodeDatabaseValue(reply) }),
+                status: "fulfilled",
+              }),
+            (cause) =>
+              settle({
+                deferred,
+                result: JSON.stringify({ ok: false, error: serializeDatabaseError(cause) }),
+                status: "fulfilled",
+              }),
+          )
+          .catch(failAsynchronously);
 
         return deferred.handle;
       });

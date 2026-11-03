@@ -118,9 +118,13 @@ try {
     join(consumer, "package.json"),
     JSON.stringify({ name: "core-consumer", private: true, type: "module" }),
   );
-  // Offline, from pnpm's store. The hoisted linker lays node_modules out flat, as npm does, so the check below sees
-  // every installed package.
-  run({ command: "pnpm", args: ["add", "--offline", "--config.node-linker=hoisted", packed.filename], cwd: consumer });
+  // A frozen workspace install need not cache registry metadata for a new consumer's dependency resolution.
+  // The hoisted linker lays node_modules out flat, so the check below sees every installed package.
+  run({
+    command: "pnpm",
+    args: ["add", "--prefer-offline", "--config.node-linker=hoisted", packed.filename],
+    cwd: consumer,
+  });
 
   const installed = await getInstalledPackages(join(consumer, "node_modules"));
   const expectedPackages = [packageManifest.name, ...ALLOWED_DEPENDENCIES].toSorted((left, right) =>
@@ -147,12 +151,12 @@ console.log(${exportPaths.length});
 
   const loaded = run({ command: "node", args: ["check.mjs"], cwd: consumer }).trim();
 
-  // The peer at the version core is built and tested with, from pnpm's store.
+  // The peer at the version core is built and tested with.
   run({
     command: "pnpm",
     args: [
       "add",
-      "--offline",
+      "--prefer-offline",
       "--config.node-linker=hoisted",
       `${OPTIONAL_PEER}@${packageManifest.devDependencies[OPTIONAL_PEER]}`,
     ],

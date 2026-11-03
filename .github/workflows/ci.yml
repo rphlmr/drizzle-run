@@ -73,7 +73,7 @@ jobs:
       - run: pnpm --filter @drizzle-run/core run build
       - run: pnpm db:check
 
-  # One guide per job: each replay boots its wasm guests for minutes, and five in one job took half an hour.
+  # Shards run in parallel; each replays its guides serially so their Wasm guests do not compete for the runner's CPU.
   guides:
     name: Guide replay (${{ matrix.shard }}/5)
     runs-on: ubuntu-latest
