@@ -1,0 +1,453 @@
+{
+  "recordingVersion": 1,
+  "snapshotDigest": "6cb5064aa447b7502944f8aa4367588fd22dfffaca6a5cb27e400d0101ce4428",
+  "recordedAt": "2026-10-21T20:18:20.730Z",
+  "result": {
+    "version": 1,
+    "target": {
+      "dialect": "sqlite"
+    },
+    "tuple": {
+      "id": "sqlite-wasm__orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+      "target": {
+        "dialect": "sqlite"
+      },
+      "ormVersion": "1.0.0-rc.5",
+      "kitVersion": "1.0.0-rc.5"
+    },
+    "random": {
+      "effectiveSeed": 1651922036,
+      "source": "derived",
+      "derivation": "run-manifest-sha256-u32-v1",
+      "generator": "mulberry32-v1"
+    },
+    "phases": [
+      {
+        "phase": "validate",
+        "status": "succeeded",
+        "startedAt": "2026-10-21T20:18:19.834Z",
+        "durationMs": 0.06499993801116943
+      },
+      {
+        "phase": "resolve",
+        "status": "succeeded",
+        "startedAt": "2026-10-21T20:18:19.834Z",
+        "durationMs": 0.004999995231628418
+      },
+      {
+        "phase": "load_artifacts",
+        "status": "succeeded",
+        "startedAt": "2026-10-21T20:18:19.834Z",
+        "durationMs": 0.034999966621398926
+      },
+      {
+        "phase": "compile",
+        "status": "succeeded",
+        "startedAt": "2026-10-21T20:18:20.072Z",
+        "durationMs": 3
+      },
+      {
+        "phase": "evaluate_schema",
+        "status": "succeeded",
+        "startedAt": "2026-10-21T20:18:20.077Z",
+        "durationMs": 1
+      },
+      {
+        "phase": "generate_bootstrap",
+        "status": "succeeded",
+        "startedAt": "2026-10-21T20:18:20.080Z",
+        "durationMs": 2
+      },
+      {
+        "phase": "open_database",
+        "status": "succeeded",
+        "startedAt": "2026-10-21T20:18:20.081Z",
+        "durationMs": 0
+      },
+      {
+        "phase": "apply_bootstrap",
+        "status": "succeeded",
+        "startedAt": "2026-10-21T20:18:20.082Z",
+        "durationMs": 8
+      },
+      {
+        "phase": "initialize_context",
+        "status": "succeeded",
+        "startedAt": "2026-10-21T20:18:20.087Z",
+        "durationMs": 0
+      },
+      {
+        "phase": "seed",
+        "status": "succeeded",
+        "startedAt": "2026-10-21T20:18:20.088Z",
+        "durationMs": 4
+      },
+      {
+        "phase": "run",
+        "status": "succeeded",
+        "startedAt": "2026-10-21T20:18:20.094Z",
+        "durationMs": 2
+      },
+      {
+        "phase": "inspect",
+        "status": "succeeded",
+        "startedAt": "2026-10-21T20:18:20.096Z",
+        "durationMs": 6
+      }
+    ],
+    "diagnostics": [],
+    "sql": [
+      {
+        "sequence": 1,
+        "phase": "bootstrap",
+        "origin": "kit",
+        "kind": "generated",
+        "sql": "CREATE TABLE `users` (\n\t`id` integer PRIMARY KEY,\n\t`name` text NOT NULL\n);\n",
+        "parameters": [],
+        "outcome": "succeeded"
+      },
+      {
+        "sequence": 2,
+        "phase": "bootstrap",
+        "origin": "adapter",
+        "kind": "executed",
+        "sql": "CREATE TABLE `users` (\n\t`id` integer PRIMARY KEY,\n\t`name` text NOT NULL\n);\n",
+        "parameters": [],
+        "outcome": "succeeded"
+      },
+      {
+        "sequence": 3,
+        "phase": "seed",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "insert into \"users\" (\"id\", \"name\") values (?, ?), (?, ?)",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": 1
+          },
+          {
+            "type": "primitive",
+            "value": "Ada"
+          },
+          {
+            "type": "primitive",
+            "value": 2
+          },
+          {
+            "type": "primitive",
+            "value": "Grace"
+          }
+        ],
+        "outcome": "succeeded",
+        "source": "seed.ts",
+        "line": 4,
+        "durationMs": 3,
+        "rowCount": 2
+      },
+      {
+        "sequence": 4,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "select \"id\", \"name\" from \"users\"",
+        "parameters": [],
+        "outcome": "succeeded",
+        "source": "query.ts",
+        "line": 4,
+        "durationMs": 2,
+        "rowCount": 2
+      }
+    ],
+    "logs": [
+      {
+        "sequence": 1,
+        "phase": "run",
+        "level": "log",
+        "values": [
+          {
+            "type": "primitive",
+            "value": "Found"
+          },
+          {
+            "type": "primitive",
+            "value": 2
+          },
+          {
+            "type": "primitive",
+            "value": "users"
+          }
+        ],
+        "source": "query.ts",
+        "line": 5
+      }
+    ],
+    "value": {
+      "type": "undefined"
+    },
+    "displays": [
+      {
+        "label": "Users",
+        "values": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "id": {
+                    "type": "primitive",
+                    "value": 1
+                  },
+                  "name": {
+                    "type": "primitive",
+                    "value": "Ada"
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "id": {
+                    "type": "primitive",
+                    "value": 2
+                  },
+                  "name": {
+                    "type": "primitive",
+                    "value": "Grace"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "source": "query.ts",
+        "line": 6
+      },
+      {
+        "label": "Summary",
+        "values": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "total": {
+                    "type": "primitive",
+                    "value": 2
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "source": "query.ts",
+        "line": 7
+      }
+    ],
+    "events": [
+      {
+        "type": "sql",
+        "sequence": 1,
+        "payload": {
+          "sequence": 1,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "CREATE TABLE `users` (\n\t`id` integer PRIMARY KEY,\n\t`name` text NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 2,
+        "payload": {
+          "sequence": 2,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "CREATE TABLE `users` (\n\t`id` integer PRIMARY KEY,\n\t`name` text NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 3,
+        "payload": {
+          "sequence": 3,
+          "phase": "seed",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "insert into \"users\" (\"id\", \"name\") values (?, ?), (?, ?)",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": 1
+            },
+            {
+              "type": "primitive",
+              "value": "Ada"
+            },
+            {
+              "type": "primitive",
+              "value": 2
+            },
+            {
+              "type": "primitive",
+              "value": "Grace"
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "seed.ts",
+          "line": 4,
+          "durationMs": 3,
+          "rowCount": 2
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 4,
+        "payload": {
+          "sequence": 4,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "select \"id\", \"name\" from \"users\"",
+          "parameters": [],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 4,
+          "durationMs": 2,
+          "rowCount": 2
+        }
+      },
+      {
+        "type": "log",
+        "sequence": 5,
+        "payload": {
+          "sequence": 1,
+          "phase": "run",
+          "level": "log",
+          "values": [
+            {
+              "type": "primitive",
+              "value": "Found"
+            },
+            {
+              "type": "primitive",
+              "value": 2
+            },
+            {
+              "type": "primitive",
+              "value": "users"
+            }
+          ],
+          "source": "query.ts",
+          "line": 5
+        }
+      },
+      {
+        "type": "display",
+        "sequence": 6,
+        "payload": {
+          "label": "Users",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 1
+                    },
+                    "name": {
+                      "type": "primitive",
+                      "value": "Ada"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 2
+                    },
+                    "name": {
+                      "type": "primitive",
+                      "value": "Grace"
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 6
+        }
+      },
+      {
+        "type": "display",
+        "sequence": 7,
+        "payload": {
+          "label": "Summary",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "total": {
+                      "type": "primitive",
+                      "value": 2
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 7
+        }
+      }
+    ],
+    "cleanupErrors": [],
+    "cleanup": {
+      "guest": {
+        "mode": "graceful"
+      },
+      "database": {
+        "mode": "graceful"
+      }
+    },
+    "timings": {
+      "total": 488,
+      "validate": 0.06499993801116943,
+      "resolve": 0.004999995231628418,
+      "load_artifacts": 0.034999966621398926,
+      "compile": 3,
+      "evaluate_schema": 1,
+      "generate_bootstrap": 2,
+      "open_database": 0,
+      "apply_bootstrap": 8,
+      "initialize_context": 0,
+      "seed": 4,
+      "run": 2,
+      "inspect": 6
+    },
+    "ok": true,
+    "outcome": "succeeded"
+  },
+  "guests": [
+    {
+      "imageId": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+      "lockDigest": "sha256-173d5c06268596c4f200f2c55999d19e7020ea73b9767d6f1cb6c8b2851731b1"
+    }
+  ]
+}

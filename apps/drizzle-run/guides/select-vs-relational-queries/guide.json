@@ -1,0 +1,205 @@
+{
+  "kind": "drizzle-run-guide",
+  "manifestVersion": 1,
+  "id": "9948aa48-d380-49ed-a697-b0b718945a1b",
+  "title": "SQL-like or RQB: authors with their posts",
+  "description": "Load the same authors with a join and a relational query, then compare the results you get.",
+  "project": {
+    "kind": "drizzle-run-pair",
+    "manifestVersion": 1,
+    "entrypoints": {
+      "schema": "schema.ts",
+      "seed": "seed.ts",
+      "run": "query.ts"
+    },
+    "files": {
+      "schema.ts": "import { defineRelations } from \"drizzle-orm\";\nimport { integer, pgTable, serial, text } from \"drizzle-orm/pg-core\";\n\nexport const users = pgTable(\"users\", {\n  id: serial(\"id\").primaryKey(),\n  name: text(\"name\").notNull(),\n});\n\nexport const posts = pgTable(\"posts\", {\n  id: serial(\"id\").primaryKey(),\n  authorId: integer(\"author_id\").notNull().references(() => users.id),\n  title: text(\"title\").notNull(),\n});\n\n// Only db.query reads these relations; a select with a join names its join condition itself.\nexport const relations = defineRelations({ users, posts }, (r) => ({\n  users: {\n    posts: r.many.posts(),\n  },\n  posts: {\n    author: r.one.users({ from: r.posts.authorId, to: r.users.id }),\n  },\n}));\n",
+      "seed.ts": "import { db } from \"@drizzle-run/runtime/context\";\nimport { posts, users } from \"./schema\";\n\nconst [ada, grace] = await db\n  .insert(users)\n  .values([{ name: \"Ada\" }, { name: \"Grace\" }, { name: \"Linus\" }])\n  .returning();\n\nawait db.insert(posts).values([\n  { authorId: ada.id, title: \"Hello, Drizzle\" },\n  { authorId: ada.id, title: \"Joins without the boilerplate\" },\n  { authorId: grace.id, title: \"Types all the way down\" },\n]);\n"
+    },
+    "sides": [
+      {
+        "name": "SQL-like",
+        "target": {
+          "dialect": "postgresql"
+        },
+        "dependencies": {
+          "drizzle-orm": "1.0.0-rc.5",
+          "drizzle-kit": "1.0.0-rc.5"
+        },
+        "files": {
+          "query.ts": "import { db } from \"@drizzle-run/runtime/context\";\nimport { asc, eq } from \"drizzle-orm\";\nimport { posts, users } from \"./schema\";\n\n// One flat row per user and post. The left join keeps Linus, who has no posts, with a null title.\nconst rows = await db\n  .select({ userId: users.id, name: users.name, title: posts.title })\n  .from(users)\n  .leftJoin(posts, eq(posts.authorId, users.id))\n  .orderBy(asc(users.id), asc(posts.id));\n\n$.display(\"Joined rows\", rows);\n\n// Nesting is up to you: group the rows by user.\nconst authors = new Map<number, { name: string; posts: { title: string }[] }>();\n\nfor (const row of rows) {\n  const author = authors.get(row.userId) ?? { name: row.name, posts: [] };\n\n  if (row.title !== null) {\n    author.posts.push({ title: row.title });\n  }\n\n  authors.set(row.userId, author);\n}\n\n$.display(\"Authors with posts\", [...authors.values()]);\n"
+        }
+      },
+      {
+        "name": "RQB",
+        "target": {
+          "dialect": "postgresql"
+        },
+        "dependencies": {
+          "drizzle-orm": "1.0.0-rc.5",
+          "drizzle-kit": "1.0.0-rc.5"
+        },
+        "files": {
+          "query.ts": "import { db } from \"@drizzle-run/runtime/context\";\n\n// One call returns the nested result: each user with their posts, grouped by Drizzle from the relations.\n// Linus has no posts, so his list is empty.\nconst authors = await db.query.users.findMany({\n  columns: { name: true },\n  with: {\n    posts: {\n      columns: { title: true },\n      orderBy: { id: \"asc\" },\n    },\n  },\n  orderBy: { id: \"asc\" },\n});\n\n$.display(\"Authors with posts\", authors);\n"
+        }
+      }
+    ]
+  },
+  "steps": [
+    {
+      "type": "walkthrough",
+      "id": "01-load",
+      "label": "Two APIs",
+      "title": "Load authors with their posts",
+      "body": "You need authors and their posts for a page. Drizzle gives you two APIs: the **SQL-like query builder**, with `select` and joins, and the **relational query builder (RQB)**, with `db.query` and `with`. Both sides here use Drizzle ORM **1.0.0-rc.5** and the same data.\n\nOn the SQL-like side, `leftJoin` connects each post's `authorId` to a user's `id`. On the RQB side, `with: { posts: ... }` uses the relations declared in `schema.ts`. Those relations describe how tables connect; the foreign key in the schema enforces the link in the database.\n\nPress **Run**. Compare **Joined rows** on the SQL-like side with **Authors with posts** on the RQB side. The data is the same, but its shape differs.",
+      "edits": [
+        {
+          "file": "query.ts",
+          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { asc, eq } from \"drizzle-orm\";\nimport { posts, users } from \"./schema\";\n\n// One flat row per user and post. The left join keeps Linus, who has no posts, with a null title.\nconst rows = await db\n  .select({ userId: users.id, name: users.name, title: posts.title })\n  .from(users)\n  .leftJoin(posts, eq(posts.authorId, users.id))\n  .orderBy(asc(users.id), asc(posts.id));\n\n$.display(\"Joined rows\", rows);\n\n",
+          "side": 0
+        }
+      ],
+      "focus": {
+        "file": "query.ts",
+        "lines": [
+          7,
+          11
+        ],
+        "side": 0
+      },
+      "run": "required",
+      "links": [
+        {
+          "label": "Joins",
+          "href": "https://orm.drizzle.team/docs/joins"
+        },
+        {
+          "label": "Relational queries",
+          "href": "https://orm.drizzle.team/docs/rqb"
+        }
+      ],
+      "meta": {
+        "summary": "One join and one relational query load the same data.",
+        "changed": "The join returned four rows. RQB returned three authors, each with a posts array."
+      }
+    },
+    {
+      "type": "walkthrough",
+      "id": "02-ada",
+      "label": "Two posts",
+      "title": "Why does Ada appear twice?",
+      "body": "Ada wrote **Hello, Drizzle** and **Joins without the boilerplate**. The join returns one row for each matching user and post, so Ada's name appears twice. `select` chooses `userId`, `name` and `title` for each row.\n\nRQB returns Ada once, with both titles inside her `posts` array. `columns` chooses the fields at each level: `name` for the user, `title` for each post.\n\nBoth queries order by user ID and post ID, so you can compare the same records in the same order.",
+      "focus": {
+        "file": "query.ts",
+        "lines": [
+          5,
+          13
+        ],
+        "side": 1
+      },
+      "run": "none",
+      "links": [
+        {
+          "label": "Relational queries",
+          "href": "https://orm.drizzle.team/docs/rqb"
+        }
+      ],
+      "meta": {
+        "summary": "Two joined rows become one author with two nested posts."
+      }
+    },
+    {
+      "type": "walkthrough",
+      "id": "03-linus",
+      "label": "No posts",
+      "title": "Keep Linus, even without a post",
+      "body": "Linus has no posts. The **left join** still returns his user row, with `title: null` because no post matched. An `innerJoin` would leave him out.\n\nRQB also keeps Linus, with `posts: []`. Asking for posts with `with` does not require the user to have any.\n\nFor an author card, that empty array is useful: you can show the author's name and an empty state without removing the author from the page.",
+      "focus": {
+        "file": "query.ts",
+        "lines": [
+          7,
+          11
+        ],
+        "side": 0
+      },
+      "run": "none",
+      "links": [
+        {
+          "label": "Joins",
+          "href": "https://orm.drizzle.team/docs/joins"
+        }
+      ],
+      "meta": {
+        "summary": "No matching post means a null title in the join and an empty array in RQB."
+      }
+    },
+    {
+      "type": "walkthrough",
+      "id": "04-group",
+      "label": "Same shape",
+      "title": "Build the same nested result",
+      "body": "You can return nested authors from the SQL-like query too. The query stays the same; the new code groups its rows in JavaScript.\n\nThe `Map` keeps one author per **user ID**, so two people with the same name stay separate. Each non-null title becomes a post. Linus still gets an author entry, but the null check leaves his posts array empty.\n\nPress **Run**, then compare **Authors with posts** on both sides. The results now match. RQB already did this grouping for you.",
+      "edits": [
+        {
+          "file": "query.ts",
+          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { asc, eq } from \"drizzle-orm\";\nimport { posts, users } from \"./schema\";\n\n// One flat row per user and post. The left join keeps Linus, who has no posts, with a null title.\nconst rows = await db\n  .select({ userId: users.id, name: users.name, title: posts.title })\n  .from(users)\n  .leftJoin(posts, eq(posts.authorId, users.id))\n  .orderBy(asc(users.id), asc(posts.id));\n\n$.display(\"Joined rows\", rows);\n\n// Nesting is up to you: group the rows by user.\nconst authors = new Map<number, { name: string; posts: { title: string }[] }>();\n\nfor (const row of rows) {\n  const author = authors.get(row.userId) ?? { name: row.name, posts: [] };\n\n  if (row.title !== null) {\n    author.posts.push({ title: row.title });\n  }\n\n  authors.set(row.userId, author);\n}\n\n$.display(\"Authors with posts\", [...authors.values()]);\n",
+          "side": 0
+        }
+      ],
+      "focus": {
+        "file": "query.ts",
+        "lines": [
+          15,
+          27
+        ],
+        "side": 0
+      },
+      "run": "required",
+      "highlight": {
+        "displays": [
+          "Authors with posts"
+        ]
+      },
+      "links": [
+        {
+          "label": "Joins",
+          "href": "https://orm.drizzle.team/docs/joins"
+        },
+        {
+          "label": "Relational queries",
+          "href": "https://orm.drizzle.team/docs/rqb"
+        }
+      ],
+      "meta": {
+        "summary": "Group the joined rows by user ID to match the RQB result.",
+        "changed": "Both sides returned Ada with two posts, Grace with one, and Linus with an empty posts array."
+      }
+    },
+    {
+      "type": "walkthrough",
+      "id": "05-choose",
+      "label": "Which API?",
+      "title": "Choose the result your page needs",
+      "body": "For a report with one row per author and post, the **SQL-like query** already returns the shape you need. You choose the selected fields and the join condition directly.\n\nFor author cards with a list of posts under each name, **RQB** returns that nested shape through your declared relations. You choose the fields and related records without writing the grouping loop.\n\nYou can use both APIs in the same application. Choose per query, based on the result you need. Here, both approaches returned the same authors and posts; the difference was who assembled the nested objects.",
+      "run": "none",
+      "links": [
+        {
+          "label": "Joins",
+          "href": "https://orm.drizzle.team/docs/joins"
+        },
+        {
+          "label": "Relational queries",
+          "href": "https://orm.drizzle.team/docs/rqb"
+        }
+      ],
+      "meta": {
+        "summary": "Flat rows for a report; nested authors for cards with posts."
+      }
+    }
+  ],
+  "meta": {
+    "slug": "select-vs-relational-queries",
+    "status": "published",
+    "example": "2962c124-0d08-4088-905d-3d695002ff8e"
+  }
+}

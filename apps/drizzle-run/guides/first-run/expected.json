@@ -1,0 +1,93 @@
+{
+  "steps": {
+    "02-run": {
+      "Users": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 1
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Ada"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 2
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Grace"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "Summary": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "total": {
+                  "type": "primitive",
+                  "value": 2
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "03-filter": {
+      "Users": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 1
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Ada"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "Summary": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "total": {
+                  "type": "primitive",
+                  "value": 1
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

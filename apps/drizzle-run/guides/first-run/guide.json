@@ -1,0 +1,142 @@
+{
+  "kind": "drizzle-run-guide",
+  "manifestVersion": 1,
+  "id": "c43b63a4-08a7-4a90-81f3-96e6fdfe2ed4",
+  "title": "First run",
+  "description": "The project files, what Run does, and where results appear.",
+  "project": {
+    "kind": "drizzle-run",
+    "manifestVersion": 1,
+    "target": {
+      "dialect": "postgresql"
+    },
+    "dependencies": {
+      "drizzle-orm": "1.0.0-rc.5",
+      "drizzle-kit": "1.0.0-rc.5"
+    },
+    "files": {
+      "schema.ts": "import { pgTable, integer, text } from \"drizzle-orm/pg-core\";\n\nexport const users = pgTable(\"users\", {\n  id: integer(\"id\").primaryKey(),\n  name: text(\"name\").notNull(),\n});\n",
+      "seed.ts": "import { db } from \"@drizzle-run/runtime/context\";\nimport { users } from \"./schema\";\n\nawait db.insert(users).values([\n  { id: 1, name: \"Ada\" },\n  { id: 2, name: \"Grace\" },\n]);\n",
+      "query.ts": "import { db } from \"@drizzle-run/runtime/context\";\nimport { users } from \"./schema\";\n\nconst rows = await db.select().from(users);\nconsole.log(\"Found\", rows.length, \"users\");\n$.display(\"Users\", rows);\n$.display(\"Summary\", [{ total: rows.length }]);\n"
+    },
+    "entrypoints": {
+      "schema": "schema.ts",
+      "seed": "seed.ts",
+      "run": "query.ts"
+    }
+  },
+  "steps": [
+    {
+      "type": "walkthrough",
+      "id": "01-files",
+      "label": "Files",
+      "title": "The three project files",
+      "body": "`schema.ts` defines the tables, `seed.ts` inserts the data, and `query.ts` runs the queries. Each file has a tab above the editor.",
+      "focus": {
+        "file": "query.ts",
+        "lines": [
+          4,
+          6
+        ]
+      },
+      "run": "none",
+      "links": [
+        {
+          "label": "Schema declaration",
+          "href": "https://orm.drizzle.team/docs/sql-schema-declaration"
+        }
+      ],
+      "meta": {
+        "summary": "`schema.ts` defines tables, `seed.ts` inserts data, `query.ts` runs queries."
+      }
+    },
+    {
+      "type": "walkthrough",
+      "id": "02-run",
+      "label": "Run",
+      "title": "Run the project",
+      "body": "Each run starts from a **fresh database**: it creates the tables from `schema.ts`, fills them with `seed.ts`, then runs `query.ts`.",
+      "focus": {
+        "file": "query.ts",
+        "lines": [
+          4,
+          6
+        ]
+      },
+      "run": "required",
+      "highlight": {
+        "displays": [
+          "Users"
+        ]
+      },
+      "links": [
+        {
+          "label": "Select",
+          "href": "https://orm.drizzle.team/docs/select"
+        }
+      ],
+      "meta": {
+        "summary": "The query returns the seeded users.",
+        "lineNotes": [
+          {
+            "file": "query.ts",
+            "match": "$.display(",
+            "text": "shows up in Results"
+          }
+        ],
+        "changed": "Ada and Grace are inserted by `seed.ts`. Each `$.display` call in `query.ts` adds a result card."
+      }
+    },
+    {
+      "type": "walkthrough",
+      "id": "03-filter",
+      "label": "Filter",
+      "title": "Filter the users",
+      "body": "This step adds a `where` clause that keeps the users whose name starts with A. Press **Run** to compare the result.",
+      "edits": [
+        {
+          "file": "query.ts",
+          "replace": {
+            "anchor": "import { users } from \"./schema\";",
+            "with": "import { like } from \"drizzle-orm\";\nimport { users } from \"./schema\";"
+          }
+        },
+        {
+          "file": "query.ts",
+          "replace": {
+            "anchor": "await db.select().from(users);",
+            "with": "await db.select().from(users).where(like(users.name, \"A%\"));"
+          }
+        }
+      ],
+      "focus": {
+        "file": "query.ts",
+        "lines": [
+          5,
+          5
+        ]
+      },
+      "run": "required",
+      "highlight": {
+        "displays": [
+          "Users"
+        ]
+      },
+      "links": [
+        {
+          "label": "Operators",
+          "href": "https://orm.drizzle.team/docs/operators"
+        }
+      ],
+      "meta": {
+        "summary": "A `where` clause filters the users.",
+        "changed": "The `where` clause keeps the names that start with A, so Grace is no longer returned."
+      }
+    }
+  ],
+  "meta": {
+    "slug": "first-run",
+    "status": "published",
+    "mark": "run"
+  }
+}

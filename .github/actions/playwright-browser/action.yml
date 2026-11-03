@@ -1,0 +1,20 @@
+name: Playwright browser
+description: Install one Playwright browser with its system dependencies, and let Chromium run with its sandbox.
+
+inputs:
+  browser:
+    description: The Playwright browser to install, such as chromium, firefox or webkit
+    default: chromium
+
+runs:
+  using: composite
+  steps:
+    - run: pnpm exec playwright install --with-deps "$BROWSER"
+      shell: bash
+      env:
+        BROWSER: ${{ inputs.browser }}
+    # Chromium runs with its sandbox, which needs unprivileged user namespaces; Ubuntu 24.04 blocks them through
+    # AppArmor unless this is lifted.
+    - if: inputs.browser == 'chromium'
+      run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+      shell: bash

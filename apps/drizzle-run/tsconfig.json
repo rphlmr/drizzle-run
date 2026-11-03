@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "lib": ["ES2025", "DOM", "WebWorker"],
+    "noEmit": true,
+    "types": ["vite/client"]
+  },
+  "include": ["src", "test"],
+  // Worker test helpers run on Node and typecheck with the worker (worker/tsconfig.json).
+  "exclude": ["test/worker"]
+}

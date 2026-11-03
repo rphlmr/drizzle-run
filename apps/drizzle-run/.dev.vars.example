@@ -1,0 +1,15 @@
+# Local values for the Worker under `pnpm dev` and `pnpm preview`. Copy this file to `.dev.vars` (git-ignored),
+# uncomment what you need, and restart the server. Every value is optional; `pnpm test:e2e` ignores this file.
+
+# GitHub sign-in (publishing, Community listing, Cloud sync). Without both, local projects and runs still work,
+# and existing shares remain readable, but sign-in answers 503.
+# Create your own dev GitHub App; register http://127.0.0.1:4173/api/auth/github/callback
+# (use your server's actual origin). See docs/cloudflare.md#sign-in-with-github.
+# GITHUB_CLIENT_ID=Iv23li...
+# GITHUB_CLIENT_SECRET=...
+
+# AI chat relay: messages forwarded per UTC day across all rooms (wrangler.jsonc sets 400000). A low value such as
+# 50 shows the daily limit after a reply or two.
+# CONNECT_DAILY_MESSAGES=50
+
+# GITHUB_OAUTH_URL and GITHUB_API_URL point sign-in at a mock GitHub. Only the e2e server sets them; leave them unset.

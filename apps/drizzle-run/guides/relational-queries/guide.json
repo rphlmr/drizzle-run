@@ -1,0 +1,208 @@
+{
+  "kind": "drizzle-run-guide",
+  "manifestVersion": 1,
+  "id": "58b9a8cb-aa44-44a5-ace3-0824b87f2b71",
+  "title": "Relational queries, 0.45 to 1.0",
+  "description": "Compare relational queries on Drizzle ORM 0.45.4 and 1.0.0-rc.5, side by side.",
+  "project": {
+    "kind": "drizzle-run-pair",
+    "manifestVersion": 1,
+    "entrypoints": {
+      "schema": "schema.ts",
+      "seed": "seed.ts",
+      "run": "query.ts"
+    },
+    "files": {
+      "seed.ts": "import { db } from \"@drizzle-run/runtime/context\";\nimport { comments, posts, users } from \"./schema\";\n\nconst [ada, grace] = await db.insert(users).values([{ name: \"Ada\" }, { name: \"Grace\" }]).returning();\n\nconst [hello, relations, types] = await db.insert(posts).values([\n  { authorId: ada.id, title: \"Hello, Drizzle\" },\n  { authorId: ada.id, title: \"Relations in one query\" },\n  { authorId: grace.id, title: \"Types all the way down\" },\n]).returning();\n\nawait db.insert(comments).values([\n  { postId: hello.id, authorId: grace.id, body: \"Welcome aboard.\" },\n  { postId: relations.id, authorId: grace.id, body: \"One round trip, nice.\" },\n  { postId: types.id, authorId: ada.id, body: \"Inferred from the schema, nice.\" },\n  { postId: types.id, authorId: grace.id, body: \"No codegen step either.\" },\n]);\n"
+    },
+    "sides": [
+      {
+        "target": {
+          "dialect": "postgresql"
+        },
+        "dependencies": {
+          "drizzle-orm": "0.45.4",
+          "drizzle-kit": "0.31.11"
+        },
+        "files": {
+          "schema.ts": "import { relations } from \"drizzle-orm\";\nimport { integer, pgTable, serial, text } from \"drizzle-orm/pg-core\";\n\nexport const users = pgTable(\"users\", {\n  id: serial(\"id\").primaryKey(),\n  name: text(\"name\").notNull(),\n});\n\nexport const posts = pgTable(\"posts\", {\n  id: serial(\"id\").primaryKey(),\n  authorId: integer(\"author_id\").notNull().references(() => users.id),\n  title: text(\"title\").notNull(),\n});\n\nexport const comments = pgTable(\"comments\", {\n  id: serial(\"id\").primaryKey(),\n  postId: integer(\"post_id\").notNull().references(() => posts.id),\n  authorId: integer(\"author_id\").notNull().references(() => users.id),\n  body: text(\"body\").notNull(),\n});\n\n// Relations are declared per table, each with relations().\nexport const usersRelations = relations(users, ({ many }) => ({\n  posts: many(posts),\n  comments: many(comments),\n}));\nexport const postsRelations = relations(posts, ({ one, many }) => ({\n  author: one(users, { fields: [posts.authorId], references: [users.id] }),\n  comments: many(comments),\n}));\nexport const commentsRelations = relations(comments, ({ one }) => ({\n  post: one(posts, { fields: [comments.postId], references: [posts.id] }),\n  author: one(users, { fields: [comments.authorId], references: [users.id] }),\n}));\n",
+          "query.ts": "import { db } from \"@drizzle-run/runtime/context\";\n\n// One call returns nested objects: each user with their posts, and each post with its comments.\nconst authors = await db.query.users.findMany({\n  columns: { name: true },\n  with: {\n    posts: {\n      columns: { title: true },\n      orderBy: (posts, { asc }) => [asc(posts.id)],\n      with: {\n        comments: {\n          columns: { body: true },\n          orderBy: (comments, { asc }) => [asc(comments.id)],\n          with: { author: { columns: { name: true } } },\n        },\n      },\n    },\n  },\n  orderBy: (users, { asc }) => [asc(users.id)],\n});\n\n$.display(\"Authors with posts and comments\", authors);\n"
+        }
+      },
+      {
+        "target": {
+          "dialect": "postgresql"
+        },
+        "dependencies": {
+          "drizzle-orm": "1.0.0-rc.5",
+          "drizzle-kit": "1.0.0-rc.5"
+        },
+        "files": {
+          "schema.ts": "import { defineRelations } from \"drizzle-orm\";\nimport { integer, pgTable, serial, text } from \"drizzle-orm/pg-core\";\n\nexport const users = pgTable(\"users\", {\n  id: serial(\"id\").primaryKey(),\n  name: text(\"name\").notNull(),\n});\n\nexport const posts = pgTable(\"posts\", {\n  id: serial(\"id\").primaryKey(),\n  authorId: integer(\"author_id\").notNull().references(() => users.id),\n  title: text(\"title\").notNull(),\n});\n\nexport const comments = pgTable(\"comments\", {\n  id: serial(\"id\").primaryKey(),\n  postId: integer(\"post_id\").notNull().references(() => posts.id),\n  authorId: integer(\"author_id\").notNull().references(() => users.id),\n  body: text(\"body\").notNull(),\n});\n\n// Relations are declared once for the whole schema and exported as `relations`.\nexport const relations = defineRelations({ users, posts, comments }, (r) => ({\n  users: {\n    posts: r.many.posts(),\n    comments: r.many.comments(),\n  },\n  posts: {\n    author: r.one.users({ from: r.posts.authorId, to: r.users.id }),\n    comments: r.many.comments(),\n  },\n  comments: {\n    post: r.one.posts({ from: r.comments.postId, to: r.posts.id }),\n    author: r.one.users({ from: r.comments.authorId, to: r.users.id }),\n  },\n}));\n",
+          "query.ts": "import { db } from \"@drizzle-run/runtime/context\";\n\n// One call returns nested objects: each user with their posts, and each post with its comments.\nconst authors = await db.query.users.findMany({\n  columns: { name: true },\n  with: {\n    posts: {\n      columns: { title: true },\n      orderBy: { id: \"asc\" },\n      with: {\n        comments: {\n          columns: { body: true },\n          orderBy: { id: \"asc\" },\n          with: { author: { columns: { name: true } } },\n        },\n      },\n    },\n  },\n  orderBy: { id: \"asc\" },\n});\n\n$.display(\"Authors with posts and comments\", authors);\n\n// Filters are objects too, and can follow a relation: posts with at least one comment by Ada.\nconst commentedByAda = await db.query.posts.findMany({\n  columns: { title: true },\n  where: { comments: { author: { name: \"Ada\" } } },\n  with: { author: { columns: { name: true } } },\n});\n\n$.display(\"Posts Ada commented on\", commentedByAda);\n"
+        }
+      }
+    ]
+  },
+  "steps": [
+    {
+      "type": "walkthrough",
+      "id": "01-relations",
+      "label": "Relations",
+      "title": "Relations in one place",
+      "body": "This guide compares Drizzle ORM **0.45.4** with **1.0.0-rc.5**. In 0.45.4, each table gets its own `relations()` call. In 1.0.0-rc.5, `defineRelations` groups the relations in one declaration.\n\nThe query on each side loads the same authors, posts and comments. Press **Run** to compare them. If you are learning relations for the first time, start with [Drizzle in five minutes](/examples/drizzle-in-five-minutes).",
+      "focus": {
+        "file": "schema.ts",
+        "lines": [
+          22,
+          36
+        ],
+        "side": 1
+      },
+      "run": "required",
+      "highlight": {
+        "displays": [
+          "Authors with posts and comments"
+        ]
+      },
+      "links": [
+        {
+          "label": "Relational queries docs",
+          "href": "https://orm.drizzle.team/docs/rqb"
+        }
+      ],
+      "meta": {
+        "summary": "Two ways to declare the same relations.",
+        "changed": "Both sides returned the same authors, posts, and comments."
+      }
+    },
+    {
+      "type": "walkthrough",
+      "id": "02-filters",
+      "label": "Filters",
+      "title": "Filters become objects",
+      "body": "In 0.45, `where` takes a callback with operators. In 1.0 it takes a plain object keyed by column.\n\nSame query, same rows. Only the filter syntax differs.",
+      "edits": [
+        {
+          "file": "query.ts",
+          "replace": {
+            "anchor": "$.display(\"Authors with posts and comments\", authors);\n",
+            "with": "$.display(\"Authors with posts and comments\", authors);\n\n// 0.45: where is a callback that receives the columns and the operators.\nconst named = await db.query.users.findMany({\n  columns: { name: true },\n  where: (users, { like }) => like(users.name, \"A%\"),\n});\n\n$.display(\"Names starting with A\", named);\n"
+          },
+          "side": 0
+        },
+        {
+          "file": "query.ts",
+          "replace": {
+            "anchor": "$.display(\"Posts Ada commented on\", commentedByAda);\n",
+            "with": "$.display(\"Posts Ada commented on\", commentedByAda);\n\n// 1.0: where is a plain object, keyed by column.\nconst named = await db.query.users.findMany({\n  columns: { name: true },\n  where: { name: { like: \"A%\" } },\n});\n\n$.display(\"Names starting with A\", named);\n"
+          },
+          "side": 1
+        }
+      ],
+      "run": "required",
+      "highlight": {
+        "displays": [
+          "Names starting with A"
+        ]
+      },
+      "links": [
+        {
+          "label": "Relational queries docs",
+          "href": "https://orm.drizzle.team/docs/rqb"
+        }
+      ],
+      "meta": {
+        "summary": "Filter by name on both sides.",
+        "changed": "Both sides found Ada."
+      }
+    },
+    {
+      "type": "walkthrough",
+      "id": "03-nested",
+      "label": "Nested",
+      "title": "Nested with, limit, orderBy",
+      "body": "`with` nests the same way on both releases. `orderBy` is a callback in 0.45 and an object in 1.0; `limit` works the same.\n\nThe name filter still selects Ada. Inside her posts, descending ID order and `limit: 1` keep only the post with the highest ID. This limits her posts, not the number of users.",
+      "edits": [
+        {
+          "file": "query.ts",
+          "replace": {
+            "anchor": "  where: (users, { like }) => like(users.name, \"A%\"),\n",
+            "with": "  where: (users, { like }) => like(users.name, \"A%\"),\n  with: { posts: { columns: { title: true }, orderBy: (posts, { desc }) => [desc(posts.id)], limit: 1 } },\n"
+          },
+          "side": 0
+        },
+        {
+          "file": "query.ts",
+          "replace": {
+            "anchor": "  where: { name: { like: \"A%\" } },\n",
+            "with": "  where: { name: { like: \"A%\" } },\n  with: { posts: { columns: { title: true }, orderBy: { id: \"desc\" }, limit: 1 } },\n"
+          },
+          "side": 1
+        }
+      ],
+      "run": "required",
+      "highlight": {
+        "displays": [
+          "Names starting with A"
+        ]
+      },
+      "links": [
+        {
+          "label": "Relational queries docs",
+          "href": "https://orm.drizzle.team/docs/rqb"
+        }
+      ],
+      "meta": {
+        "summary": "Load Ada with just her highest-ID post.",
+        "changed": "Both sides returned Ada with one post: Relations in one query."
+      }
+    },
+    {
+      "type": "walkthrough",
+      "id": "04-columns",
+      "label": "Columns",
+      "title": "Partial columns",
+      "body": "`columns` reads the same on both releases: `true` picks a column, `false` leaves it out and keeps the rest.",
+      "edits": [
+        {
+          "file": "query.ts",
+          "replace": {
+            "anchor": "  columns: { name: true },\n  where: (users",
+            "with": "  columns: { id: false },\n  where: (users"
+          },
+          "side": 0
+        },
+        {
+          "file": "query.ts",
+          "replace": {
+            "anchor": "  columns: { name: true },\n  where: { name",
+            "with": "  columns: { id: false },\n  where: { name"
+          },
+          "side": 1
+        }
+      ],
+      "run": "required",
+      "highlight": {
+        "displays": [
+          "Names starting with A"
+        ]
+      },
+      "links": [
+        {
+          "label": "Relational queries docs",
+          "href": "https://orm.drizzle.team/docs/rqb"
+        }
+      ],
+      "meta": {
+        "summary": "Leave out a column instead of picking one.",
+        "changed": "Both sides omitted `id` and returned the other columns."
+      }
+    }
+  ],
+  "meta": {
+    "slug": "relational-queries",
+    "status": "published",
+    "example": "b77031e5-1ac6-4750-8533-ca4006ba60df"
+  }
+}

@@ -1,0 +1,6 @@
+# Vite's build files, which skip the Worker (wrangler.jsonc run_worker_first). COEP lets an isolated page start the
+# workers among them. A missing file falls back to the app shell, which only Drizzle Run may frame. No long cache:
+# that fallback would stay cached under a file name a rollback brings back.
+/assets/*
+  Cross-Origin-Embedder-Policy: require-corp
+  Content-Security-Policy: frame-ancestors 'self'

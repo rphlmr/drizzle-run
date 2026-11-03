@@ -1,0 +1,1088 @@
+{
+  "recordingVersion": 1,
+  "snapshotDigest": "4f86213551578d7c7ce1d0b74789f495d124bd4c4adfbb79b2823944037826b9",
+  "recordedAt": "2026-10-28T19:45:49.191Z",
+  "result": {
+    "version": 1,
+    "target": {
+      "dialect": "sqlite"
+    },
+    "tuple": {
+      "id": "sqlite-wasm__orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+      "target": {
+        "dialect": "sqlite"
+      },
+      "ormVersion": "1.0.0-rc.5",
+      "kitVersion": "1.0.0-rc.5"
+    },
+    "random": {
+      "effectiveSeed": 1155822122,
+      "source": "derived",
+      "derivation": "run-manifest-sha256-u32-v1",
+      "generator": "mulberry32-v1"
+    },
+    "phases": [
+      {
+        "phase": "validate",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T19:45:48.416Z",
+        "durationMs": 0.07500000298023224
+      },
+      {
+        "phase": "resolve",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T19:45:48.416Z",
+        "durationMs": 0.004999995231628418
+      },
+      {
+        "phase": "load_artifacts",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T19:45:48.417Z",
+        "durationMs": 0.47999998927116394
+      },
+      {
+        "phase": "compile",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T19:45:48.612Z",
+        "durationMs": 3
+      },
+      {
+        "phase": "evaluate_schema",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T19:45:48.616Z",
+        "durationMs": 0
+      },
+      {
+        "phase": "generate_bootstrap",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T19:45:48.616Z",
+        "durationMs": 4
+      },
+      {
+        "phase": "open_database",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T19:45:48.621Z",
+        "durationMs": 0
+      },
+      {
+        "phase": "apply_bootstrap",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T19:45:48.622Z",
+        "durationMs": 8
+      },
+      {
+        "phase": "initialize_context",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T19:45:48.629Z",
+        "durationMs": 1
+      },
+      {
+        "phase": "seed",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T19:45:48.629Z",
+        "durationMs": 10
+      },
+      {
+        "phase": "run",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T19:45:48.640Z",
+        "durationMs": 10
+      },
+      {
+        "phase": "inspect",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T19:45:48.866Z",
+        "durationMs": 3
+      }
+    ],
+    "diagnostics": [],
+    "sql": [
+      {
+        "sequence": 1,
+        "phase": "bootstrap",
+        "origin": "kit",
+        "kind": "generated",
+        "sql": "CREATE TABLE `authors` (\n\t`id` integer PRIMARY KEY,\n\t`name` text NOT NULL\n);\n",
+        "parameters": [],
+        "outcome": "succeeded"
+      },
+      {
+        "sequence": 2,
+        "phase": "bootstrap",
+        "origin": "kit",
+        "kind": "generated",
+        "sql": "CREATE TABLE `books` (\n\t`id` integer PRIMARY KEY,\n\t`author_id` integer,\n\t`title` text NOT NULL,\n\t`genre` text NOT NULL,\n\t`year` integer NOT NULL,\n\tCONSTRAINT `fk_books_author_id_authors_id_fk` FOREIGN KEY (`author_id`) REFERENCES `authors`(`id`)\n);\n",
+        "parameters": [],
+        "outcome": "succeeded"
+      },
+      {
+        "sequence": 3,
+        "phase": "bootstrap",
+        "origin": "adapter",
+        "kind": "executed",
+        "sql": "CREATE TABLE `authors` (\n\t`id` integer PRIMARY KEY,\n\t`name` text NOT NULL\n);\n",
+        "parameters": [],
+        "outcome": "succeeded"
+      },
+      {
+        "sequence": 4,
+        "phase": "bootstrap",
+        "origin": "adapter",
+        "kind": "executed",
+        "sql": "CREATE TABLE `books` (\n\t`id` integer PRIMARY KEY,\n\t`author_id` integer,\n\t`title` text NOT NULL,\n\t`genre` text NOT NULL,\n\t`year` integer NOT NULL,\n\tCONSTRAINT `fk_books_author_id_authors_id_fk` FOREIGN KEY (`author_id`) REFERENCES `authors`(`id`)\n);\n",
+        "parameters": [],
+        "outcome": "succeeded"
+      },
+      {
+        "sequence": 5,
+        "phase": "seed",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "insert into \"authors\" (\"id\", \"name\") values (?, ?), (?, ?), (?, ?), (?, ?)",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": 1
+          },
+          {
+            "type": "primitive",
+            "value": "Ursula K. Le Guin"
+          },
+          {
+            "type": "primitive",
+            "value": 2
+          },
+          {
+            "type": "primitive",
+            "value": "Octavia E. Butler"
+          },
+          {
+            "type": "primitive",
+            "value": 3
+          },
+          {
+            "type": "primitive",
+            "value": "Italo Calvino"
+          },
+          {
+            "type": "primitive",
+            "value": 4
+          },
+          {
+            "type": "primitive",
+            "value": "Toni Morrison"
+          }
+        ],
+        "outcome": "succeeded",
+        "source": "seed.ts",
+        "line": 4,
+        "durationMs": 3,
+        "rowCount": 4
+      },
+      {
+        "sequence": 6,
+        "phase": "seed",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "insert into \"books\" (\"id\", \"author_id\", \"title\", \"genre\", \"year\") values (null, ?, ?, ?, ?), (null, ?, ?, ?, ?), (null, ?, ?, ?, ?), (null, ?, ?, ?, ?), (null, ?, ?, ?, ?), (null, ?, ?, ?, ?)",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": 1
+          },
+          {
+            "type": "primitive",
+            "value": "The Left Hand of Darkness"
+          },
+          {
+            "type": "primitive",
+            "value": "Science fiction"
+          },
+          {
+            "type": "primitive",
+            "value": 1969
+          },
+          {
+            "type": "primitive",
+            "value": 1
+          },
+          {
+            "type": "primitive",
+            "value": "A Wizard of Earthsea"
+          },
+          {
+            "type": "primitive",
+            "value": "Fantasy"
+          },
+          {
+            "type": "primitive",
+            "value": 1968
+          },
+          {
+            "type": "primitive",
+            "value": 2
+          },
+          {
+            "type": "primitive",
+            "value": "Kindred"
+          },
+          {
+            "type": "primitive",
+            "value": "Science fiction"
+          },
+          {
+            "type": "primitive",
+            "value": 1979
+          },
+          {
+            "type": "primitive",
+            "value": 2
+          },
+          {
+            "type": "primitive",
+            "value": "Parable of the Sower"
+          },
+          {
+            "type": "primitive",
+            "value": "Science fiction"
+          },
+          {
+            "type": "primitive",
+            "value": 1993
+          },
+          {
+            "type": "primitive",
+            "value": 3
+          },
+          {
+            "type": "primitive",
+            "value": "Invisible Cities"
+          },
+          {
+            "type": "primitive",
+            "value": "Fiction"
+          },
+          {
+            "type": "primitive",
+            "value": 1972
+          },
+          {
+            "type": "primitive",
+            "value": null
+          },
+          {
+            "type": "primitive",
+            "value": "Beowulf"
+          },
+          {
+            "type": "primitive",
+            "value": "Poetry"
+          },
+          {
+            "type": "primitive",
+            "value": 1000
+          }
+        ],
+        "outcome": "succeeded",
+        "source": "seed.ts",
+        "line": 11,
+        "durationMs": 4,
+        "rowCount": 6
+      },
+      {
+        "sequence": 7,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "select \"title\", \"year\" from \"books\" where ((\"books\".\"year\" >= ?) and (((\"books\".\"genre\" = ?) or (\"books\".\"title\" like ?)))) order by \"books\".\"year\" desc",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": 1970
+          },
+          {
+            "type": "primitive",
+            "value": "Science fiction"
+          },
+          {
+            "type": "primitive",
+            "value": "%Cities%"
+          }
+        ],
+        "outcome": "succeeded",
+        "source": "query.ts",
+        "line": 5,
+        "durationMs": 3,
+        "rowCount": 3
+      },
+      {
+        "sequence": 8,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "select \"books\".\"title\", \"authors\".\"name\" from \"books\" left join \"authors\" on \"books\".\"author_id\" = \"authors\".\"id\"",
+        "parameters": [],
+        "outcome": "succeeded",
+        "source": "query.ts",
+        "line": 14,
+        "durationMs": 2,
+        "rowCount": 6
+      },
+      {
+        "sequence": 9,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "select \"authors\".\"name\", count(\"books\".\"id\") from \"authors\" left join \"books\" on \"books\".\"author_id\" = \"authors\".\"id\" group by \"authors\".\"id\" order by count(\"books\".\"id\") desc, \"authors\".\"id\"",
+        "parameters": [],
+        "outcome": "succeeded",
+        "source": "query.ts",
+        "line": 22,
+        "durationMs": 3,
+        "rowCount": 4
+      }
+    ],
+    "logs": [],
+    "value": {
+      "type": "undefined"
+    },
+    "displays": [
+      {
+        "label": "Science fiction or cities, since 1970",
+        "values": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "title": {
+                    "type": "primitive",
+                    "value": "Parable of the Sower"
+                  },
+                  "year": {
+                    "type": "primitive",
+                    "value": 1993
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "title": {
+                    "type": "primitive",
+                    "value": "Kindred"
+                  },
+                  "year": {
+                    "type": "primitive",
+                    "value": 1979
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "title": {
+                    "type": "primitive",
+                    "value": "Invisible Cities"
+                  },
+                  "year": {
+                    "type": "primitive",
+                    "value": 1972
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "source": "query.ts",
+        "line": 11
+      },
+      {
+        "label": "Books and authors",
+        "values": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "title": {
+                    "type": "primitive",
+                    "value": "The Left Hand of Darkness"
+                  },
+                  "author": {
+                    "type": "primitive",
+                    "value": "Ursula K. Le Guin"
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "title": {
+                    "type": "primitive",
+                    "value": "A Wizard of Earthsea"
+                  },
+                  "author": {
+                    "type": "primitive",
+                    "value": "Ursula K. Le Guin"
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "title": {
+                    "type": "primitive",
+                    "value": "Kindred"
+                  },
+                  "author": {
+                    "type": "primitive",
+                    "value": "Octavia E. Butler"
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "title": {
+                    "type": "primitive",
+                    "value": "Parable of the Sower"
+                  },
+                  "author": {
+                    "type": "primitive",
+                    "value": "Octavia E. Butler"
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "title": {
+                    "type": "primitive",
+                    "value": "Invisible Cities"
+                  },
+                  "author": {
+                    "type": "primitive",
+                    "value": "Italo Calvino"
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "title": {
+                    "type": "primitive",
+                    "value": "Beowulf"
+                  },
+                  "author": {
+                    "type": "primitive",
+                    "value": null
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "source": "query.ts",
+        "line": 19
+      },
+      {
+        "label": "Books per author",
+        "values": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "author": {
+                    "type": "primitive",
+                    "value": "Ursula K. Le Guin"
+                  },
+                  "books": {
+                    "type": "primitive",
+                    "value": 2
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "author": {
+                    "type": "primitive",
+                    "value": "Octavia E. Butler"
+                  },
+                  "books": {
+                    "type": "primitive",
+                    "value": 2
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "author": {
+                    "type": "primitive",
+                    "value": "Italo Calvino"
+                  },
+                  "books": {
+                    "type": "primitive",
+                    "value": 1
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "author": {
+                    "type": "primitive",
+                    "value": "Toni Morrison"
+                  },
+                  "books": {
+                    "type": "primitive",
+                    "value": 0
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "source": "query.ts",
+        "line": 29
+      }
+    ],
+    "events": [
+      {
+        "type": "sql",
+        "sequence": 1,
+        "payload": {
+          "sequence": 1,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "CREATE TABLE `authors` (\n\t`id` integer PRIMARY KEY,\n\t`name` text NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 2,
+        "payload": {
+          "sequence": 2,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "CREATE TABLE `books` (\n\t`id` integer PRIMARY KEY,\n\t`author_id` integer,\n\t`title` text NOT NULL,\n\t`genre` text NOT NULL,\n\t`year` integer NOT NULL,\n\tCONSTRAINT `fk_books_author_id_authors_id_fk` FOREIGN KEY (`author_id`) REFERENCES `authors`(`id`)\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 3,
+        "payload": {
+          "sequence": 3,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "CREATE TABLE `authors` (\n\t`id` integer PRIMARY KEY,\n\t`name` text NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 4,
+        "payload": {
+          "sequence": 4,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "CREATE TABLE `books` (\n\t`id` integer PRIMARY KEY,\n\t`author_id` integer,\n\t`title` text NOT NULL,\n\t`genre` text NOT NULL,\n\t`year` integer NOT NULL,\n\tCONSTRAINT `fk_books_author_id_authors_id_fk` FOREIGN KEY (`author_id`) REFERENCES `authors`(`id`)\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 5,
+        "payload": {
+          "sequence": 5,
+          "phase": "seed",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "insert into \"authors\" (\"id\", \"name\") values (?, ?), (?, ?), (?, ?), (?, ?)",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": 1
+            },
+            {
+              "type": "primitive",
+              "value": "Ursula K. Le Guin"
+            },
+            {
+              "type": "primitive",
+              "value": 2
+            },
+            {
+              "type": "primitive",
+              "value": "Octavia E. Butler"
+            },
+            {
+              "type": "primitive",
+              "value": 3
+            },
+            {
+              "type": "primitive",
+              "value": "Italo Calvino"
+            },
+            {
+              "type": "primitive",
+              "value": 4
+            },
+            {
+              "type": "primitive",
+              "value": "Toni Morrison"
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "seed.ts",
+          "line": 4,
+          "durationMs": 3,
+          "rowCount": 4
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 6,
+        "payload": {
+          "sequence": 6,
+          "phase": "seed",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "insert into \"books\" (\"id\", \"author_id\", \"title\", \"genre\", \"year\") values (null, ?, ?, ?, ?), (null, ?, ?, ?, ?), (null, ?, ?, ?, ?), (null, ?, ?, ?, ?), (null, ?, ?, ?, ?), (null, ?, ?, ?, ?)",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": 1
+            },
+            {
+              "type": "primitive",
+              "value": "The Left Hand of Darkness"
+            },
+            {
+              "type": "primitive",
+              "value": "Science fiction"
+            },
+            {
+              "type": "primitive",
+              "value": 1969
+            },
+            {
+              "type": "primitive",
+              "value": 1
+            },
+            {
+              "type": "primitive",
+              "value": "A Wizard of Earthsea"
+            },
+            {
+              "type": "primitive",
+              "value": "Fantasy"
+            },
+            {
+              "type": "primitive",
+              "value": 1968
+            },
+            {
+              "type": "primitive",
+              "value": 2
+            },
+            {
+              "type": "primitive",
+              "value": "Kindred"
+            },
+            {
+              "type": "primitive",
+              "value": "Science fiction"
+            },
+            {
+              "type": "primitive",
+              "value": 1979
+            },
+            {
+              "type": "primitive",
+              "value": 2
+            },
+            {
+              "type": "primitive",
+              "value": "Parable of the Sower"
+            },
+            {
+              "type": "primitive",
+              "value": "Science fiction"
+            },
+            {
+              "type": "primitive",
+              "value": 1993
+            },
+            {
+              "type": "primitive",
+              "value": 3
+            },
+            {
+              "type": "primitive",
+              "value": "Invisible Cities"
+            },
+            {
+              "type": "primitive",
+              "value": "Fiction"
+            },
+            {
+              "type": "primitive",
+              "value": 1972
+            },
+            {
+              "type": "primitive",
+              "value": null
+            },
+            {
+              "type": "primitive",
+              "value": "Beowulf"
+            },
+            {
+              "type": "primitive",
+              "value": "Poetry"
+            },
+            {
+              "type": "primitive",
+              "value": 1000
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "seed.ts",
+          "line": 11,
+          "durationMs": 4,
+          "rowCount": 6
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 7,
+        "payload": {
+          "sequence": 7,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "select \"title\", \"year\" from \"books\" where ((\"books\".\"year\" >= ?) and (((\"books\".\"genre\" = ?) or (\"books\".\"title\" like ?)))) order by \"books\".\"year\" desc",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": 1970
+            },
+            {
+              "type": "primitive",
+              "value": "Science fiction"
+            },
+            {
+              "type": "primitive",
+              "value": "%Cities%"
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 5,
+          "durationMs": 3,
+          "rowCount": 3
+        }
+      },
+      {
+        "type": "display",
+        "sequence": 8,
+        "payload": {
+          "label": "Science fiction or cities, since 1970",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "title": {
+                      "type": "primitive",
+                      "value": "Parable of the Sower"
+                    },
+                    "year": {
+                      "type": "primitive",
+                      "value": 1993
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "title": {
+                      "type": "primitive",
+                      "value": "Kindred"
+                    },
+                    "year": {
+                      "type": "primitive",
+                      "value": 1979
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "title": {
+                      "type": "primitive",
+                      "value": "Invisible Cities"
+                    },
+                    "year": {
+                      "type": "primitive",
+                      "value": 1972
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 11
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 9,
+        "payload": {
+          "sequence": 8,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "select \"books\".\"title\", \"authors\".\"name\" from \"books\" left join \"authors\" on \"books\".\"author_id\" = \"authors\".\"id\"",
+          "parameters": [],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 14,
+          "durationMs": 2,
+          "rowCount": 6
+        }
+      },
+      {
+        "type": "display",
+        "sequence": 10,
+        "payload": {
+          "label": "Books and authors",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "title": {
+                      "type": "primitive",
+                      "value": "The Left Hand of Darkness"
+                    },
+                    "author": {
+                      "type": "primitive",
+                      "value": "Ursula K. Le Guin"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "title": {
+                      "type": "primitive",
+                      "value": "A Wizard of Earthsea"
+                    },
+                    "author": {
+                      "type": "primitive",
+                      "value": "Ursula K. Le Guin"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "title": {
+                      "type": "primitive",
+                      "value": "Kindred"
+                    },
+                    "author": {
+                      "type": "primitive",
+                      "value": "Octavia E. Butler"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "title": {
+                      "type": "primitive",
+                      "value": "Parable of the Sower"
+                    },
+                    "author": {
+                      "type": "primitive",
+                      "value": "Octavia E. Butler"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "title": {
+                      "type": "primitive",
+                      "value": "Invisible Cities"
+                    },
+                    "author": {
+                      "type": "primitive",
+                      "value": "Italo Calvino"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "title": {
+                      "type": "primitive",
+                      "value": "Beowulf"
+                    },
+                    "author": {
+                      "type": "primitive",
+                      "value": null
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 19
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 11,
+        "payload": {
+          "sequence": 9,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "select \"authors\".\"name\", count(\"books\".\"id\") from \"authors\" left join \"books\" on \"books\".\"author_id\" = \"authors\".\"id\" group by \"authors\".\"id\" order by count(\"books\".\"id\") desc, \"authors\".\"id\"",
+          "parameters": [],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 22,
+          "durationMs": 3,
+          "rowCount": 4
+        }
+      },
+      {
+        "type": "display",
+        "sequence": 12,
+        "payload": {
+          "label": "Books per author",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "author": {
+                      "type": "primitive",
+                      "value": "Ursula K. Le Guin"
+                    },
+                    "books": {
+                      "type": "primitive",
+                      "value": 2
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "author": {
+                      "type": "primitive",
+                      "value": "Octavia E. Butler"
+                    },
+                    "books": {
+                      "type": "primitive",
+                      "value": 2
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "author": {
+                      "type": "primitive",
+                      "value": "Italo Calvino"
+                    },
+                    "books": {
+                      "type": "primitive",
+                      "value": 1
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "author": {
+                      "type": "primitive",
+                      "value": "Toni Morrison"
+                    },
+                    "books": {
+                      "type": "primitive",
+                      "value": 0
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 29
+        }
+      }
+    ],
+    "cleanupErrors": [],
+    "cleanup": {
+      "guest": {
+        "mode": "graceful"
+      },
+      "database": {
+        "mode": "graceful"
+      }
+    },
+    "timings": {
+      "total": 458,
+      "validate": 0.07500000298023224,
+      "resolve": 0.004999995231628418,
+      "load_artifacts": 0.47999998927116394,
+      "compile": 3,
+      "evaluate_schema": 0,
+      "generate_bootstrap": 4,
+      "open_database": 0,
+      "apply_bootstrap": 8,
+      "initialize_context": 1,
+      "seed": 10,
+      "run": 10,
+      "inspect": 3
+    },
+    "ok": true,
+    "outcome": "succeeded"
+  },
+  "guests": [
+    {
+      "imageId": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+      "lockDigest": "sha256-173d5c06268596c4f200f2c55999d19e7020ea73b9767d6f1cb6c8b2851731b1"
+    }
+  ]
+}

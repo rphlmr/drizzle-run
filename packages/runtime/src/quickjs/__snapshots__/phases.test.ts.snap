@@ -1,0 +1,149 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`createPhaseMachine > should replay every bounded shortest path with controlled phase actors 1`] = `
+{
+  "cleanup": {
+    "invoke": {
+      "id": "executionPhase",
+      "input": "cleanup",
+      "onDone": "settled",
+      "onError": {
+        "actions": {
+          "type": "recordFailure",
+        },
+        "target": "settled",
+      },
+      "src": "executePhase",
+    },
+  },
+  "compile": {
+    "invoke": {
+      "id": "executionPhase",
+      "input": "compile",
+      "onDone": "setup",
+      "onError": {
+        "actions": {
+          "type": "recordFailure",
+        },
+        "target": "cleanup",
+      },
+      "src": "executePhase",
+    },
+  },
+  "database": {
+    "invoke": {
+      "id": "executionPhase",
+      "input": "database",
+      "onDone": "seed",
+      "onError": {
+        "actions": {
+          "type": "recordFailure",
+        },
+        "target": "cleanup",
+      },
+      "src": "executePhase",
+    },
+  },
+  "inspect": {
+    "invoke": {
+      "id": "executionPhase",
+      "input": "inspect",
+      "onDone": "plan",
+      "onError": {
+        "actions": {
+          "type": "recordFailure",
+        },
+        "target": "cleanup",
+      },
+      "src": "executePhase",
+    },
+  },
+  "plan": {
+    "invoke": {
+      "id": "executionPhase",
+      "input": "plan",
+      "onDone": "cleanup",
+      "onError": {
+        "actions": {
+          "type": "recordFailure",
+        },
+        "target": "cleanup",
+      },
+      "src": "executePhase",
+    },
+  },
+  "run": {
+    "invoke": {
+      "id": "executionPhase",
+      "input": "run",
+      "onDone": "inspect",
+      "onError": {
+        "actions": {
+          "type": "recordFailure",
+        },
+        "target": "cleanup",
+      },
+      "src": "executePhase",
+    },
+  },
+  "schema": {
+    "invoke": {
+      "id": "executionPhase",
+      "input": "schema",
+      "onDone": "sql",
+      "onError": {
+        "actions": {
+          "type": "recordFailure",
+        },
+        "target": "cleanup",
+      },
+      "src": "executePhase",
+    },
+  },
+  "seed": {
+    "invoke": {
+      "id": "executionPhase",
+      "input": "seed",
+      "onDone": "run",
+      "onError": {
+        "actions": {
+          "type": "recordFailure",
+        },
+        "target": "cleanup",
+      },
+      "src": "executePhase",
+    },
+  },
+  "settled": {
+    "type": "final",
+  },
+  "setup": {
+    "invoke": {
+      "id": "executionPhase",
+      "input": "setup",
+      "onDone": "schema",
+      "onError": {
+        "actions": {
+          "type": "recordFailure",
+        },
+        "target": "cleanup",
+      },
+      "src": "executePhase",
+    },
+  },
+  "sql": {
+    "invoke": {
+      "id": "executionPhase",
+      "input": "sql",
+      "onDone": "database",
+      "onError": {
+        "actions": {
+          "type": "recordFailure",
+        },
+        "target": "cleanup",
+      },
+      "src": "executePhase",
+    },
+  },
+}
+`;

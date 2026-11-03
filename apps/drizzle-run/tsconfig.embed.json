@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2025", "DOM", "DOM.Iterable"],
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "outDir": ".cache/embed",
+    "rootDir": "src/embed-loader"
+  },
+  "include": ["src/embed-loader/**/*.ts"],
+  "exclude": ["src/embed-loader/**/*.test.ts"]
+}

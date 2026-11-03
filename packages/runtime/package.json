@@ -1,0 +1,132 @@
+{
+  "name": "@drizzle-run/runtime",
+  "version": "0.1.0",
+  "description": "Drizzle Run manifest, compiler, and browser runtime API",
+  "homepage": "https://github.com/rphlmr/drizzle-run/tree/main/packages/runtime#readme",
+  "bugs": {
+    "url": "https://github.com/rphlmr/drizzle-run/issues"
+  },
+  "license": "AGPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rphlmr/drizzle-run.git",
+    "directory": "packages/runtime"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    "./quickjs/node": {
+      "types": "./dist/quickjs/node.d.ts",
+      "import": "./dist/quickjs/node.js",
+      "default": "./dist/quickjs/node.js"
+    },
+    "./quickjs/browser": {
+      "types": "./dist/quickjs/browser.d.ts",
+      "import": "./dist/quickjs/browser.js",
+      "default": "./dist/quickjs/browser.js"
+    },
+    "./quickjs": {
+      "types": "./dist/quickjs/index.d.ts",
+      "import": "./dist/quickjs/index.js",
+      "default": "./dist/quickjs/index.js"
+    },
+    "./guides": {
+      "types": "./dist/guides.d.ts",
+      "import": "./dist/guides.js",
+      "default": "./dist/guides.js"
+    },
+    "./node": {
+      "types": "./dist/node/index.d.ts",
+      "import": "./dist/node/index.js",
+      "default": "./dist/node/index.js"
+    },
+    "./assets": {
+      "types": "./dist/node/assets.d.ts",
+      "import": "./dist/node/assets.js",
+      "default": "./dist/node/assets.js"
+    },
+    "./asset-inventory": {
+      "types": "./dist/assets/inventory.generated.d.ts",
+      "import": "./dist/assets/inventory.generated.js",
+      "default": "./dist/assets/inventory.generated.js"
+    },
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./context": {
+      "types": "./dist/context.d.ts",
+      "import": "./dist/context.js",
+      "default": "./dist/context.js"
+    },
+    "./type-environment": {
+      "types": "./dist/type-environment/index.d.ts",
+      "import": "./dist/type-environment/index.js",
+      "default": "./dist/type-environment/index.js"
+    },
+    "./browser": {
+      "types": "./dist/browser/index.d.ts",
+      "import": "./dist/browser/index.js",
+      "default": "./dist/browser/index.js"
+    },
+    "./machines": {
+      "types": "./dist/machines/index.d.ts",
+      "import": "./dist/machines/index.js",
+      "default": "./dist/machines/index.js"
+    },
+    "./query-plans": {
+      "types": "./dist/query-plans/index.d.ts",
+      "import": "./dist/query-plans/index.js",
+      "default": "./dist/query-plans/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "node --experimental-strip-types scripts/build-quickjs.ts && node --experimental-strip-types scripts/prepare-runtime-assets.ts && tsc -p tsconfig.build.json && node --experimental-strip-types scripts/stage-assets.ts",
+    "build:quickjs": "pnpm build",
+    "capture:query-plans": "CAPTURE_QUERY_PLAN_FIXTURES=1 vitest run test/query-plans/fixtures/capture.test.ts",
+    "generate:types": "node --experimental-strip-types scripts/generate-type-artifacts.ts",
+    "prebuild": "node --experimental-strip-types scripts/clean-dist.ts",
+    "test": "vitest run --coverage && node --experimental-strip-types scripts/audit-pack.ts",
+    "test:node": "node --test --test-timeout=300000 test/node-sdk.acceptance.ts",
+    "test:pack": "publint --strict && attw --pack . --profile esm-only && node --experimental-strip-types scripts/audit-pack.ts",
+    "test:quickjs": "vitest run src/quickjs",
+    "test:quickjs:acceptance": "node --experimental-strip-types test/quickjs/run-acceptance.ts",
+    "test:sdk": "node --experimental-strip-types scripts/audit-node-consumer.ts",
+    "test:types": "vitest run src/type-environment",
+    "typecheck": "tsc -p tsconfig.json && tsc -p test/tsconfig.sdk-node.json && pnpm typecheck:quickjs",
+    "typecheck:quickjs": "node --experimental-strip-types scripts/build-quickjs.ts --typecheck && tsc -p test/quickjs/tsconfig.node.json"
+  },
+  "dependencies": {
+    "@drizzle-run/core": "workspace:*",
+    "@electric-sql/pglite": "0.5.11",
+    "@electric-sql/pglite-pgvector": "0.0.12",
+    "@libsql/client": "0.18.0",
+    "@sqlite.org/sqlite-wasm": "3.54.1-build1",
+    "es-toolkit": "1.52.0",
+    "esbuild-wasm": "0.28.2",
+    "quickjs-wasi": "3.6.3",
+    "xstate": "5.33.3",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "0.18.5",
+    "@drizzle-run/machine-paths": "workspace:*",
+    "@drizzle-run/test-fixtures": "workspace:*",
+    "@types/node": "24.19.2",
+    "@vitest/coverage-v8": "5.0.5",
+    "esbuild": "0.28.2",
+    "publint": "0.3.25",
+    "typescript": "7.0.2",
+    "unenv": "2.0.0-rc.24",
+    "vitest": "5.0.5"
+  },
+  "peerDependencies": {}
+}

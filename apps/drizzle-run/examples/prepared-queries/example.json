@@ -1,0 +1,24 @@
+{
+  "id": "41a44dd1-eeb7-4241-85fd-493b9f281a08",
+  "slug": "prepared-queries",
+  "status": "published",
+  "title": "Reuse queries with named placeholders",
+  "description": "Learn bound values, prepared query reuse, named filters and limits, and missing-value errors.",
+  "topic": "Queries",
+  "featured": false,
+  "order": 60,
+  "dialect": "postgresql",
+  "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+  "links": [
+    {
+      "kind": "docs",
+      "label": "Prepared queries",
+      "url": "https://orm.drizzle.team/docs/perf-queries"
+    },
+    {
+      "kind": "example",
+      "label": "Fork the product search",
+      "slug": "prepared-product-search"
+    }
+  ]
+}

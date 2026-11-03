@@ -1,0 +1,181 @@
+/*
+ * Named classes built with Tailwind. Allowed only for DOM a library renders, class
+ * names passed as strings to a non-React API, or text from a renderer. Anything
+ * repeated in our own JSX is a React component instead. styles.test.ts lists them.
+ */
+
+/*
+ * Monaco decorations: the class names are passed as strings in editor/environment.ts. Line bands use the
+ * see-through washes, so a selection on them stays visible.
+ */
+@utility guide-highlight {
+  background: var(--mark-wash);
+}
+
+@utility guide-highlight-gutter {
+  background: var(--accent-text);
+  /* Monaco sets the decoration width inline. */
+  width: 3px !important;
+  margin-left: 3px;
+}
+
+@utility run-error-line {
+  background: var(--err-wash);
+}
+
+@utility run-error-line-number {
+  color: var(--err) !important;
+  font-weight: 700;
+}
+
+/* The band under the failed line that holds its message, in the code and in the gutter. */
+@utility run-error-zone {
+  display: flex;
+  align-items: flex-start;
+  padding-top: 1px;
+  background: var(--err-bg);
+}
+
+/* A border, not a ring: at indent 0 the pill touches Monaco's clipped content edge, which would cut a ring outside it. */
+@utility run-error-pill {
+  display: inline-block;
+  box-sizing: border-box;
+  height: 20px;
+  padding: 0 7px;
+  border: 1px solid var(--err);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--err);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 18px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* A run note in the code: a chip after a line (or under it on phones), such as "committed · 4 queries". */
+@utility run-note-chip {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 5px;
+  box-sizing: border-box;
+  height: 20px;
+  padding: 0 8px;
+  border-radius: 999px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 20px;
+  white-space: nowrap;
+}
+
+@utility run-note-ok {
+  background: var(--ok-bg);
+  color: var(--ok);
+}
+
+@utility run-note-err {
+  background: var(--err-bg);
+  color: var(--err);
+}
+
+/* A hint before a run, such as "shows up in Results": no outcome, so no fill. */
+@utility run-note-plain {
+  background: var(--surface);
+  color: var(--text-muted);
+  box-shadow: 0 0 0 1px var(--border);
+}
+
+@utility run-note-lime {
+  border: 0;
+  background: var(--lime);
+  color: var(--on-lime);
+}
+
+/* "removed when you run step 2", on the struck line it names. */
+@utility run-note-removed-pill {
+  margin-left: 14px;
+  background: var(--surface);
+  color: var(--err);
+  box-shadow: 0 0 0 1px var(--err);
+}
+
+/* A chip after its line's last character. `pre` keeps the space the time part starts with. */
+@utility run-note-eol {
+  margin-left: 14px;
+  white-space: pre;
+}
+
+/* A chip followed by its time: the two parts read as one pill. */
+@utility run-note-joined {
+  padding-right: 0;
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
+}
+
+@utility run-note-detail {
+  padding-left: 0;
+  border-start-start-radius: 0;
+  border-end-start-radius: 0;
+  white-space: pre;
+}
+
+/* A band under a line: its chip on a phone. */
+@utility run-note-zone {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  box-sizing: border-box;
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* Lines a guide step takes out, drawn where they were until the step runs. */
+@utility run-note-removed {
+  background: var(--err-bg);
+  white-space: pre;
+}
+
+@utility run-note-removed-text {
+  text-decoration: line-through;
+  text-decoration-color: var(--err);
+  text-decoration-thickness: 1.5px;
+}
+
+@utility run-note-removed-number {
+  box-sizing: border-box;
+  color: var(--err);
+  font-weight: 700;
+  text-align: right;
+  white-space: pre;
+}
+
+/* Where a step took lines out, once it ran: a lime rule with its chip on it. */
+@utility run-note-separator {
+  position: relative;
+  display: flex;
+  align-items: center;
+  &::before {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    top: 50%;
+    border-top: 2px solid var(--lime);
+    transform: translateY(-50%);
+  }
+}
+
+/* Inline code in guide text, rendered by RichText. Containers may override the background. */
+@utility rich-code {
+  font-family: var(--font-mono);
+  font-size: 0.93em;
+  color: var(--text);
+  background: var(--surface-2);
+  padding: 1px 5px;
+  border-radius: 4px;
+}

@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2025", "ESNext.Disposable", "DOM", "WebWorker"],
+    "noEmit": true,
+    "allowJs": true,
+    "checkJs": false,
+    "allowImportingTsExtensions": true,
+    "paths": {
+      "@libsql/client": ["./node_modules/@libsql/client/lib-esm/node.d.ts"],
+      "zod/mini": ["./node_modules/zod/mini/index.d.ts"]
+    }
+  },
+  "include": ["src/**/*.ts", "test/**/*.ts", "scripts/**/*.ts"]
+}

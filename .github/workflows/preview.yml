@@ -1,0 +1,126 @@
+name: Preview
+
+# Every pull request gets its own Worker, pr-<number> on workers.dev, with its own D1 and the shared
+# preview R2 buckets (apps/drizzle-run/scripts/deploy-environment.ts), deleted when the pull request closes. Its AI
+# chat pairs with the companion this commit publishes to pkg.pr.new, never the npm release.
+#
+# The Version Packages pull request is skipped: the Release workflow deploys what it holds to next.drizzle.run.
+# Secrets never reach a fork's pull request, so those are skipped too.
+#
+# A pull request's own code runs here with the `preview` environment's CLOUDFLARE_API_TOKEN, so that environment
+# points at a Cloudflare account of its own (its CLOUDFLARE_ACCOUNT_ID and WORKERS_SUBDOMAIN variables), where the
+# token can reach previews and nothing else (docs/cloudflare.md). Third-party actions are pinned by commit.
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+
+permissions:
+  contents: read
+
+# A deploy and the cleanup of the same pull request never overlap, and a deploy is never cancelled halfway.
+concurrency:
+  group: preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy the preview
+    if: >-
+      github.event.action != 'closed' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      !startsWith(github.head_ref, 'changeset-release/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    # Reading pull requests lists the open previews whose runtime assets the prune keeps.
+    permissions:
+      contents: read
+      pull-requests: read
+    environment:
+      name: preview
+      url: https://pr-${{ github.event.pull_request.number }}.${{ vars.WORKERS_SUBDOMAIN }}.workers.dev
+    # Only the steps that call Cloudflare get CLOUDFLARE_API_TOKEN, never the install, the builds or pkg.pr.new.
+    env:
+      CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+      PREVIEW_NAME: pr-${{ github.event.pull_request.number }}
+      PREVIEW_URL: https://pr-${{ github.event.pull_request.number }}.${{ vars.WORKERS_SUBDOMAIN }}.workers.dev
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup
+      # pkg.pr.new names a pull request's build by its head commit, not the merge commit the workflow checks out.
+      - uses: ./.github/actions/publish-companion
+        with:
+          sha: ${{ github.event.pull_request.head.sha }}
+      - run: node apps/drizzle-run/scripts/manage-deploy-environment.ts prepare --name "$PREVIEW_NAME" --account-id "$CLOUDFLARE_ACCOUNT_ID"
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      # Every open pull request's preview, such as pr-3,pr-7. Any failure stops the job before the release, so the prune
+      # never runs on a partial list; the check that this pull request is listed catches an empty or truncated one.
+      - id: open-previews
+        run: |
+          names="$(gh pr list --repo "$GITHUB_REPOSITORY" --state open --limit 1000 --json number --jq 'map("pr-\(.number)") | join(",")')"
+          if [[ ",$names," != *",$PREVIEW_NAME,"* ]]; then
+            echo "Expected the open pull requests to include $PREVIEW_NAME, but got '$names'" >&2
+            exit 1
+          fi
+          echo "names=$names" >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ github.token }}
+      # Other previews serve their runtime assets from the shared bucket. Each upload records its inventory under this
+      # preview's name, and the prune keeps the newest 10 records plus the newest record of every open pull request, so
+      # an open preview keeps its assets however many others deploy. A new workers.dev host may take a few minutes to
+      # answer.
+      - run: >-
+          pnpm --filter @drizzle-run/app run release
+          --config wrangler.deploy.json
+          --bucket assets
+          --account-id "$CLOUDFLARE_ACCOUNT_ID"
+          --url "$PREVIEW_URL"
+          --keep 10
+          --preview "$PREVIEW_NAME"
+          --open-previews "$OPEN_PREVIEWS"
+          --verify-timeout 180
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          OPEN_PREVIEWS: ${{ steps.open-previews.outputs.names }}
+      # The deployed preview in a real browser, from the build the release just deployed (playwright.deployed.config.ts).
+      - uses: ./.github/actions/playwright-browser
+      - run: pnpm test:deployed
+        env:
+          DRIZZLE_RUN_DEPLOYED_URL: ${{ env.PREVIEW_URL }}
+          DRIZZLE_RUN_DEPLOYED_SEARCH_INDEXING: "off"
+      - if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: deployed-test-results-preview
+          path: test-results
+          if-no-files-found: ignore
+          retention-days: 7
+
+  cleanup:
+    name: Delete the preview
+    if: >-
+      github.event.action == 'closed' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      !startsWith(github.head_ref, 'changeset-release/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: preview
+    steps:
+      # The base branch's script, never the pull request's: closing a pull request must not run its code with the token.
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version-file: .node-version
+      # The delete only calls the Cloudflare API, so it needs no install.
+      - run: >-
+          node apps/drizzle-run/scripts/manage-deploy-environment.ts delete
+          --name "pr-${{ github.event.pull_request.number }}"
+          --account-id "${{ vars.CLOUDFLARE_ACCOUNT_ID }}"
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

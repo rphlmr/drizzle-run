@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DevRel blog embed fixture</title>
+    <script>
+      // ?scheme=<value> declares the host page's color-scheme, which the embed placeholder follows.
+      const scheme = new URLSearchParams(location.search).get("scheme");
+      if (scheme !== null) {
+        const meta = document.createElement("meta");
+        meta.name = "color-scheme";
+        meta.content = scheme;
+        document.head.append(meta);
+      }
+
+      // ?hostile=1 adds Tailwind-style preflight rules and colliding class names, so the e2e
+      // suite can prove the embed placeholder ignores host page CSS.
+      if (new URLSearchParams(location.search).get("hostile") === "1") {
+        const style = document.createElement("style");
+        style.textContent = `
+          *, ::before, ::after { margin: 0; padding: 0; border: 0 solid; }
+          button { background: transparent; font: inherit; }
+          p { margin: 0; }
+          .flex { display: none !important; }
+          .hidden { display: block; }
+          .panel, .status { display: none !important; }
+          .drizzle-run-embed button { color: red; }
+        `;
+        document.head.append(style);
+      }
+    </script>
+  </head>
+  <body>
+    <main>
+      <h1>Drizzle DevRel blog</h1>
+      <p>This ordinary, non-isolated host page exercises click-to-load embeds.</p>
+      <div id="playgrounds"></div>
+    </main>
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>

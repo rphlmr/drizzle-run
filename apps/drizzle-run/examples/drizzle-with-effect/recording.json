@@ -1,0 +1,454 @@
+{
+  "recordingVersion": 1,
+  "snapshotDigest": "f6ca5dd349757236db69c3b7375a742d9f4ed24adba88eb3f6b922774d5bd23b",
+  "recordedAt": "2026-10-22T08:03:36.958Z",
+  "result": {
+    "version": 1,
+    "target": {
+      "dialect": "postgresql"
+    },
+    "tuple": {
+      "id": "postgresql-pglite__orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+      "target": {
+        "dialect": "postgresql"
+      },
+      "ormVersion": "1.0.0-rc.5",
+      "kitVersion": "1.0.0-rc.5"
+    },
+    "random": {
+      "effectiveSeed": 4140208308,
+      "source": "derived",
+      "derivation": "run-manifest-sha256-u32-v1",
+      "generator": "mulberry32-v1"
+    },
+    "phases": [
+      {
+        "phase": "validate",
+        "status": "succeeded",
+        "startedAt": "2026-10-22T08:03:35.994Z",
+        "durationMs": 0.10500001907348633
+      },
+      {
+        "phase": "resolve",
+        "status": "succeeded",
+        "startedAt": "2026-10-22T08:03:35.994Z",
+        "durationMs": 0
+      },
+      {
+        "phase": "load_artifacts",
+        "status": "succeeded",
+        "startedAt": "2026-10-22T08:03:35.995Z",
+        "durationMs": 0.03000009059906006
+      },
+      {
+        "phase": "compile",
+        "status": "succeeded",
+        "startedAt": "2026-10-22T08:03:36.206Z",
+        "durationMs": 2
+      },
+      {
+        "phase": "evaluate_schema",
+        "status": "succeeded",
+        "startedAt": "2026-10-22T08:03:36.210Z",
+        "durationMs": 1
+      },
+      {
+        "phase": "generate_bootstrap",
+        "status": "succeeded",
+        "startedAt": "2026-10-22T08:03:36.211Z",
+        "durationMs": 23
+      },
+      {
+        "phase": "open_database",
+        "status": "succeeded",
+        "startedAt": "2026-10-22T08:03:36.236Z",
+        "durationMs": 3
+      },
+      {
+        "phase": "apply_bootstrap",
+        "status": "succeeded",
+        "startedAt": "2026-10-22T08:03:36.238Z",
+        "durationMs": 12
+      },
+      {
+        "phase": "initialize_context",
+        "status": "succeeded",
+        "startedAt": "2026-10-22T08:03:36.251Z",
+        "durationMs": 0
+      },
+      {
+        "phase": "seed",
+        "status": "succeeded",
+        "startedAt": "2026-10-22T08:03:36.252Z",
+        "durationMs": 5
+      },
+      {
+        "phase": "run",
+        "status": "succeeded",
+        "startedAt": "2026-10-22T08:03:36.258Z",
+        "durationMs": 119
+      },
+      {
+        "phase": "inspect",
+        "status": "succeeded",
+        "startedAt": "2026-10-22T08:03:36.379Z",
+        "durationMs": 76
+      }
+    ],
+    "diagnostics": [],
+    "sql": [
+      {
+        "sequence": 1,
+        "phase": "bootstrap",
+        "origin": "kit",
+        "kind": "generated",
+        "sql": "CREATE TABLE \"users\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"email\" text NOT NULL UNIQUE,\n\t\"credits\" integer NOT NULL\n);\n",
+        "parameters": [],
+        "outcome": "succeeded"
+      },
+      {
+        "sequence": 2,
+        "phase": "bootstrap",
+        "origin": "adapter",
+        "kind": "executed",
+        "sql": "BEGIN",
+        "parameters": [],
+        "outcome": "succeeded",
+        "durationMs": 3
+      },
+      {
+        "sequence": 3,
+        "phase": "bootstrap",
+        "origin": "adapter",
+        "kind": "executed",
+        "sql": "CREATE TABLE \"users\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"email\" text NOT NULL UNIQUE,\n\t\"credits\" integer NOT NULL\n);\n",
+        "parameters": [],
+        "outcome": "succeeded",
+        "durationMs": 6
+      },
+      {
+        "sequence": 4,
+        "phase": "bootstrap",
+        "origin": "adapter",
+        "kind": "executed",
+        "sql": "COMMIT",
+        "parameters": [],
+        "outcome": "succeeded",
+        "durationMs": 2
+      },
+      {
+        "sequence": 5,
+        "phase": "seed",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "insert into \"users\" (\"id\", \"name\", \"email\", \"credits\") values (default, $1, $2, $3), (default, $4, $5, $6)",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": "Ada"
+          },
+          {
+            "type": "primitive",
+            "value": "ada@example.com"
+          },
+          {
+            "type": "primitive",
+            "value": 10
+          },
+          {
+            "type": "primitive",
+            "value": "Grace"
+          },
+          {
+            "type": "primitive",
+            "value": "grace@example.com"
+          },
+          {
+            "type": "primitive",
+            "value": 5
+          }
+        ],
+        "outcome": "succeeded",
+        "source": "seed.ts",
+        "line": 4,
+        "durationMs": 4,
+        "rowCount": 2
+      },
+      {
+        "sequence": 6,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "select \"id\", \"name\", \"email\", \"credits\" from \"users\" order by \"users\".\"id\" asc",
+        "parameters": [],
+        "outcome": "succeeded",
+        "durationMs": 10,
+        "rowCount": 2
+      }
+    ],
+    "logs": [],
+    "value": {
+      "type": "undefined"
+    },
+    "displays": [
+      {
+        "label": "Users",
+        "values": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "id": {
+                    "type": "primitive",
+                    "value": 1
+                  },
+                  "name": {
+                    "type": "primitive",
+                    "value": "Ada"
+                  },
+                  "email": {
+                    "type": "primitive",
+                    "value": "ada@example.com"
+                  },
+                  "credits": {
+                    "type": "primitive",
+                    "value": 10
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "id": {
+                    "type": "primitive",
+                    "value": 2
+                  },
+                  "name": {
+                    "type": "primitive",
+                    "value": "Grace"
+                  },
+                  "email": {
+                    "type": "primitive",
+                    "value": "grace@example.com"
+                  },
+                  "credits": {
+                    "type": "primitive",
+                    "value": 5
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "source": "query.ts",
+        "line": 19
+      }
+    ],
+    "events": [
+      {
+        "type": "sql",
+        "sequence": 1,
+        "payload": {
+          "sequence": 1,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "CREATE TABLE \"users\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"email\" text NOT NULL UNIQUE,\n\t\"credits\" integer NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 2,
+        "payload": {
+          "sequence": 2,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "BEGIN",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 3
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 3,
+        "payload": {
+          "sequence": 3,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "CREATE TABLE \"users\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"email\" text NOT NULL UNIQUE,\n\t\"credits\" integer NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 6
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 4,
+        "payload": {
+          "sequence": 4,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "COMMIT",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 2
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 5,
+        "payload": {
+          "sequence": 5,
+          "phase": "seed",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "insert into \"users\" (\"id\", \"name\", \"email\", \"credits\") values (default, $1, $2, $3), (default, $4, $5, $6)",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": "Ada"
+            },
+            {
+              "type": "primitive",
+              "value": "ada@example.com"
+            },
+            {
+              "type": "primitive",
+              "value": 10
+            },
+            {
+              "type": "primitive",
+              "value": "Grace"
+            },
+            {
+              "type": "primitive",
+              "value": "grace@example.com"
+            },
+            {
+              "type": "primitive",
+              "value": 5
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "seed.ts",
+          "line": 4,
+          "durationMs": 4,
+          "rowCount": 2
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 6,
+        "payload": {
+          "sequence": 6,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "select \"id\", \"name\", \"email\", \"credits\" from \"users\" order by \"users\".\"id\" asc",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 10,
+          "rowCount": 2
+        }
+      },
+      {
+        "type": "display",
+        "sequence": 7,
+        "payload": {
+          "label": "Users",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 1
+                    },
+                    "name": {
+                      "type": "primitive",
+                      "value": "Ada"
+                    },
+                    "email": {
+                      "type": "primitive",
+                      "value": "ada@example.com"
+                    },
+                    "credits": {
+                      "type": "primitive",
+                      "value": 10
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 2
+                    },
+                    "name": {
+                      "type": "primitive",
+                      "value": "Grace"
+                    },
+                    "email": {
+                      "type": "primitive",
+                      "value": "grace@example.com"
+                    },
+                    "credits": {
+                      "type": "primitive",
+                      "value": 5
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 19
+        }
+      }
+    ],
+    "cleanupErrors": [],
+    "cleanup": {
+      "guest": {
+        "mode": "graceful"
+      },
+      "database": {
+        "mode": "graceful"
+      }
+    },
+    "timings": {
+      "total": 693,
+      "validate": 0.10500001907348633,
+      "resolve": 0,
+      "load_artifacts": 0.03000009059906006,
+      "compile": 2,
+      "evaluate_schema": 1,
+      "generate_bootstrap": 23,
+      "open_database": 3,
+      "apply_bootstrap": 12,
+      "initialize_context": 0,
+      "seed": 5,
+      "run": 119,
+      "inspect": 76
+    },
+    "ok": true,
+    "outcome": "succeeded"
+  },
+  "guests": [
+    {
+      "imageId": "orm-1.0.0-rc.5__kit-1.0.0-rc.5+effect",
+      "lockDigest": "sha256-295491eea02e1d7393ffb59b89a4ddacc0574730e2948ed799e46592d9d6f3ec"
+    }
+  ]
+}

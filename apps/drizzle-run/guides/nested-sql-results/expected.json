@@ -1,0 +1,1444 @@
+{
+  "steps": {
+    "01-multiplication": {
+      "Joined rows": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "file": {
+                  "type": "primitive",
+                  "value": "Launch notes"
+                },
+                "commentId": {
+                  "type": "primitive",
+                  "value": 1
+                },
+                "text": {
+                  "type": "primitive",
+                  "value": "Ready to review"
+                },
+                "tag": {
+                  "type": "primitive",
+                  "value": "release"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "file": {
+                  "type": "primitive",
+                  "value": "Launch notes"
+                },
+                "commentId": {
+                  "type": "primitive",
+                  "value": 1
+                },
+                "text": {
+                  "type": "primitive",
+                  "value": "Ready to review"
+                },
+                "tag": {
+                  "type": "primitive",
+                  "value": "review"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "file": {
+                  "type": "primitive",
+                  "value": "Launch notes"
+                },
+                "commentId": {
+                  "type": "primitive",
+                  "value": 1
+                },
+                "text": {
+                  "type": "primitive",
+                  "value": "Ready to review"
+                },
+                "tag": {
+                  "type": "primitive",
+                  "value": "team"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "file": {
+                  "type": "primitive",
+                  "value": "Launch notes"
+                },
+                "commentId": {
+                  "type": "primitive",
+                  "value": 2
+                },
+                "text": {
+                  "type": "primitive",
+                  "value": null
+                },
+                "tag": {
+                  "type": "primitive",
+                  "value": "release"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "file": {
+                  "type": "primitive",
+                  "value": "Launch notes"
+                },
+                "commentId": {
+                  "type": "primitive",
+                  "value": 2
+                },
+                "text": {
+                  "type": "primitive",
+                  "value": null
+                },
+                "tag": {
+                  "type": "primitive",
+                  "value": "review"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "file": {
+                  "type": "primitive",
+                  "value": "Launch notes"
+                },
+                "commentId": {
+                  "type": "primitive",
+                  "value": 2
+                },
+                "text": {
+                  "type": "primitive",
+                  "value": null
+                },
+                "tag": {
+                  "type": "primitive",
+                  "value": "team"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "file": {
+                  "type": "primitive",
+                  "value": "Empty draft"
+                },
+                "commentId": {
+                  "type": "primitive",
+                  "value": null
+                },
+                "text": {
+                  "type": "primitive",
+                  "value": null
+                },
+                "tag": {
+                  "type": "primitive",
+                  "value": null
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "file": {
+                  "type": "primitive",
+                  "value": "Design sketch"
+                },
+                "commentId": {
+                  "type": "primitive",
+                  "value": 3
+                },
+                "text": {
+                  "type": "primitive",
+                  "value": "Keep this version"
+                },
+                "tag": {
+                  "type": "primitive",
+                  "value": "review"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "02-objects": {
+      "One object per comment": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "file": {
+                  "type": "primitive",
+                  "value": "Launch notes"
+                },
+                "comment": {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 1
+                    },
+                    "text": {
+                      "type": "primitive",
+                      "value": "Ready to review"
+                    },
+                    "author": {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 1
+                        },
+                        "name": {
+                          "type": "primitive",
+                          "value": "Ada"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "file": {
+                  "type": "primitive",
+                  "value": "Launch notes"
+                },
+                "comment": {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 2
+                    },
+                    "text": {
+                      "type": "primitive",
+                      "value": null
+                    },
+                    "author": {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 2
+                        },
+                        "name": {
+                          "type": "primitive",
+                          "value": "Grace"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "file": {
+                  "type": "primitive",
+                  "value": "Design sketch"
+                },
+                "comment": {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 3
+                    },
+                    "text": {
+                      "type": "primitive",
+                      "value": "Keep this version"
+                    },
+                    "author": {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 1
+                        },
+                        "name": {
+                          "type": "primitive",
+                          "value": "Ada"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "03-groups": {
+      "One row per file, before empty arrays": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 1
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Launch notes"
+                },
+                "comments": {
+                  "type": "array",
+                  "value": [
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 1
+                        },
+                        "text": {
+                          "type": "primitive",
+                          "value": "Ready to review"
+                        },
+                        "author": {
+                          "type": "object",
+                          "value": {
+                            "id": {
+                              "type": "primitive",
+                              "value": 1
+                            },
+                            "name": {
+                              "type": "primitive",
+                              "value": "Ada"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 2
+                        },
+                        "text": {
+                          "type": "primitive",
+                          "value": null
+                        },
+                        "author": {
+                          "type": "object",
+                          "value": {
+                            "id": {
+                              "type": "primitive",
+                              "value": 2
+                            },
+                            "name": {
+                              "type": "primitive",
+                              "value": "Grace"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "tags": {
+                  "type": "array",
+                  "value": [
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 1
+                        },
+                        "name": {
+                          "type": "primitive",
+                          "value": "release"
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 2
+                        },
+                        "name": {
+                          "type": "primitive",
+                          "value": "review"
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 3
+                        },
+                        "name": {
+                          "type": "primitive",
+                          "value": "team"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 2
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Empty draft"
+                },
+                "comments": {
+                  "type": "primitive",
+                  "value": null
+                },
+                "tags": {
+                  "type": "primitive",
+                  "value": null
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 3
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Design sketch"
+                },
+                "comments": {
+                  "type": "array",
+                  "value": [
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 3
+                        },
+                        "text": {
+                          "type": "primitive",
+                          "value": "Keep this version"
+                        },
+                        "author": {
+                          "type": "object",
+                          "value": {
+                            "id": {
+                              "type": "primitive",
+                              "value": 1
+                            },
+                            "name": {
+                              "type": "primitive",
+                              "value": "Ada"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "tags": {
+                  "type": "array",
+                  "value": [
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 2
+                        },
+                        "name": {
+                          "type": "primitive",
+                          "value": "review"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "04-empty": {
+      "Files with comments and tags": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 1
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Launch notes"
+                },
+                "comments": {
+                  "type": "array",
+                  "value": [
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 1
+                        },
+                        "text": {
+                          "type": "primitive",
+                          "value": "Ready to review"
+                        },
+                        "author": {
+                          "type": "object",
+                          "value": {
+                            "id": {
+                              "type": "primitive",
+                              "value": 1
+                            },
+                            "name": {
+                              "type": "primitive",
+                              "value": "Ada"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 2
+                        },
+                        "text": {
+                          "type": "primitive",
+                          "value": null
+                        },
+                        "author": {
+                          "type": "object",
+                          "value": {
+                            "id": {
+                              "type": "primitive",
+                              "value": 2
+                            },
+                            "name": {
+                              "type": "primitive",
+                              "value": "Grace"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "tags": {
+                  "type": "array",
+                  "value": [
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 1
+                        },
+                        "name": {
+                          "type": "primitive",
+                          "value": "release"
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 2
+                        },
+                        "name": {
+                          "type": "primitive",
+                          "value": "review"
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 3
+                        },
+                        "name": {
+                          "type": "primitive",
+                          "value": "team"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 2
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Empty draft"
+                },
+                "comments": {
+                  "type": "array",
+                  "value": []
+                },
+                "tags": {
+                  "type": "array",
+                  "value": []
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 3
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Design sketch"
+                },
+                "comments": {
+                  "type": "array",
+                  "value": [
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 3
+                        },
+                        "text": {
+                          "type": "primitive",
+                          "value": "Keep this version"
+                        },
+                        "author": {
+                          "type": "object",
+                          "value": {
+                            "id": {
+                              "type": "primitive",
+                              "value": 1
+                            },
+                            "name": {
+                              "type": "primitive",
+                              "value": "Ada"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "tags": {
+                  "type": "array",
+                  "value": [
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 2
+                        },
+                        "name": {
+                          "type": "primitive",
+                          "value": "review"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "05-filter": {
+      "Files with comments and tags": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 1
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Launch notes"
+                },
+                "comments": {
+                  "type": "array",
+                  "value": [
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 1
+                        },
+                        "text": {
+                          "type": "primitive",
+                          "value": "Ready to review"
+                        },
+                        "author": {
+                          "type": "object",
+                          "value": {
+                            "id": {
+                              "type": "primitive",
+                              "value": 1
+                            },
+                            "name": {
+                              "type": "primitive",
+                              "value": "Ada"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 2
+                        },
+                        "text": {
+                          "type": "primitive",
+                          "value": null
+                        },
+                        "author": {
+                          "type": "object",
+                          "value": {
+                            "id": {
+                              "type": "primitive",
+                              "value": 2
+                            },
+                            "name": {
+                              "type": "primitive",
+                              "value": "Grace"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "tags": {
+                  "type": "array",
+                  "value": [
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 1
+                        },
+                        "name": {
+                          "type": "primitive",
+                          "value": "release"
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 2
+                        },
+                        "name": {
+                          "type": "primitive",
+                          "value": "review"
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 3
+                        },
+                        "name": {
+                          "type": "primitive",
+                          "value": "team"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 2
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Empty draft"
+                },
+                "comments": {
+                  "type": "array",
+                  "value": []
+                },
+                "tags": {
+                  "type": "array",
+                  "value": []
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 3
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Design sketch"
+                },
+                "comments": {
+                  "type": "array",
+                  "value": [
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 3
+                        },
+                        "text": {
+                          "type": "primitive",
+                          "value": "Keep this version"
+                        },
+                        "author": {
+                          "type": "object",
+                          "value": {
+                            "id": {
+                              "type": "primitive",
+                              "value": 1
+                            },
+                            "name": {
+                              "type": "primitive",
+                              "value": "Ada"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "tags": {
+                  "type": "array",
+                  "value": [
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 2
+                        },
+                        "name": {
+                          "type": "primitive",
+                          "value": "review"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "Files tagged release, with all their tags": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 1
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Launch notes"
+                },
+                "comments": {
+                  "type": "array",
+                  "value": [
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 1
+                        },
+                        "text": {
+                          "type": "primitive",
+                          "value": "Ready to review"
+                        },
+                        "author": {
+                          "type": "object",
+                          "value": {
+                            "id": {
+                              "type": "primitive",
+                              "value": 1
+                            },
+                            "name": {
+                              "type": "primitive",
+                              "value": "Ada"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 2
+                        },
+                        "text": {
+                          "type": "primitive",
+                          "value": null
+                        },
+                        "author": {
+                          "type": "object",
+                          "value": {
+                            "id": {
+                              "type": "primitive",
+                              "value": 2
+                            },
+                            "name": {
+                              "type": "primitive",
+                              "value": "Grace"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "tags": {
+                  "type": "array",
+                  "value": [
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 1
+                        },
+                        "name": {
+                          "type": "primitive",
+                          "value": "release"
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 2
+                        },
+                        "name": {
+                          "type": "primitive",
+                          "value": "review"
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 3
+                        },
+                        "name": {
+                          "type": "primitive",
+                          "value": "team"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "06-rqb": {
+      "Files with comments and tags": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 1
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Launch notes"
+                },
+                "comments": {
+                  "type": "array",
+                  "value": [
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 1
+                        },
+                        "text": {
+                          "type": "primitive",
+                          "value": "Ready to review"
+                        },
+                        "author": {
+                          "type": "object",
+                          "value": {
+                            "id": {
+                              "type": "primitive",
+                              "value": 1
+                            },
+                            "name": {
+                              "type": "primitive",
+                              "value": "Ada"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 2
+                        },
+                        "text": {
+                          "type": "primitive",
+                          "value": null
+                        },
+                        "author": {
+                          "type": "object",
+                          "value": {
+                            "id": {
+                              "type": "primitive",
+                              "value": 2
+                            },
+                            "name": {
+                              "type": "primitive",
+                              "value": "Grace"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "tags": {
+                  "type": "array",
+                  "value": [
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 1
+                        },
+                        "name": {
+                          "type": "primitive",
+                          "value": "release"
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 2
+                        },
+                        "name": {
+                          "type": "primitive",
+                          "value": "review"
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 3
+                        },
+                        "name": {
+                          "type": "primitive",
+                          "value": "team"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 2
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Empty draft"
+                },
+                "comments": {
+                  "type": "array",
+                  "value": []
+                },
+                "tags": {
+                  "type": "array",
+                  "value": []
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 3
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Design sketch"
+                },
+                "comments": {
+                  "type": "array",
+                  "value": [
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 3
+                        },
+                        "text": {
+                          "type": "primitive",
+                          "value": "Keep this version"
+                        },
+                        "author": {
+                          "type": "object",
+                          "value": {
+                            "id": {
+                              "type": "primitive",
+                              "value": 1
+                            },
+                            "name": {
+                              "type": "primitive",
+                              "value": "Ada"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "tags": {
+                  "type": "array",
+                  "value": [
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 2
+                        },
+                        "name": {
+                          "type": "primitive",
+                          "value": "review"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "The same files with RQB": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 1
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Launch notes"
+                },
+                "comments": {
+                  "type": "array",
+                  "value": [
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 1
+                        },
+                        "text": {
+                          "type": "primitive",
+                          "value": "Ready to review"
+                        },
+                        "author": {
+                          "type": "object",
+                          "value": {
+                            "id": {
+                              "type": "primitive",
+                              "value": 1
+                            },
+                            "name": {
+                              "type": "primitive",
+                              "value": "Ada"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 2
+                        },
+                        "text": {
+                          "type": "primitive",
+                          "value": null
+                        },
+                        "author": {
+                          "type": "object",
+                          "value": {
+                            "id": {
+                              "type": "primitive",
+                              "value": 2
+                            },
+                            "name": {
+                              "type": "primitive",
+                              "value": "Grace"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "tags": {
+                  "type": "array",
+                  "value": [
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 1
+                        },
+                        "name": {
+                          "type": "primitive",
+                          "value": "release"
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 2
+                        },
+                        "name": {
+                          "type": "primitive",
+                          "value": "review"
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 3
+                        },
+                        "name": {
+                          "type": "primitive",
+                          "value": "team"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 2
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Empty draft"
+                },
+                "comments": {
+                  "type": "array",
+                  "value": []
+                },
+                "tags": {
+                  "type": "array",
+                  "value": []
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 3
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Design sketch"
+                },
+                "comments": {
+                  "type": "array",
+                  "value": [
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 3
+                        },
+                        "text": {
+                          "type": "primitive",
+                          "value": "Keep this version"
+                        },
+                        "author": {
+                          "type": "object",
+                          "value": {
+                            "id": {
+                              "type": "primitive",
+                              "value": 1
+                            },
+                            "name": {
+                              "type": "primitive",
+                              "value": "Ada"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "tags": {
+                  "type": "array",
+                  "value": [
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 2
+                        },
+                        "name": {
+                          "type": "primitive",
+                          "value": "review"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

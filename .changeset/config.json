@@ -1,0 +1,19 @@
+{
+  "$schema": "https://unpkg.com/@changesets/config@4.0.1/schema.json",
+  "baseBranch": "main",
+  "access": "public",
+  "privatePackages": {
+    "version": true,
+    "tag": false
+  },
+  "ignore": ["@drizzle-run/capability-harness"],
+  "fixed": [],
+  "linked": [],
+  "format": "auto",
+  "updateInternalDependencies": "patch",
+  "commit": false,
+  "changelog": "@changesets/cli/changelog",
+  "___experimentalUnsafeOptions_WILL_CHANGE_IN_PATCH": {
+    "updateInternalDependents": "always"
+  }
+}

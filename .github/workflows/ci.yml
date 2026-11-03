@@ -1,0 +1,119 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: Typecheck, unit and runtime gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      # Each turbo run writes a summary to .turbo/runs; the cache prune keeps only the entries they list.
+      TURBO_RUN_SUMMARY: "true"
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - id: setup
+        uses: ./.github/actions/setup
+      # Formatting and the guest catalog are checked against the working tree, outside Turborepo, so no cache hit can
+      # stand in for them.
+      - run: pnpm format:check
+      # Core builds on the committed guest catalog; it must match the guest packages it is generated from. The check
+      # installs the guests to read each drizzle-orm exports map.
+      - run: pnpm guests:check
+      # Every workspace check in one graph: each task runs at most once, and not at all when its inputs match a
+      # restored cache entry.
+      # Test suites use their own workers; overlapping suites and builds exhaust the private runner's two CPUs.
+      - run: pnpm exec turbo run build typecheck typecheck:worker typecheck:e2e lint:workspace test test:worker test:pack --concurrency=1
+      - run: pnpm test:runtime
+      # A cache hit restores generated files and a miss rewrites them, so a stale committed one shows up here either way.
+      - name: Committed generated files are current
+        run: |
+          git status --porcelain
+          test -z "$(git status --porcelain)"
+      - run: node scripts/prune-turbo-cache.ts
+      - if: steps.setup.outputs.guest-cache-hit != 'true'
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: |
+            .cache/guests
+            .cache/guest-runtime-installs
+            .cache/type-artifacts
+          key: ${{ steps.setup.outputs.guest-cache-key }}
+      - uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: .turbo/cache
+          key: ${{ steps.setup.outputs.turbo-cache-key }}
+
+  # For the Worker's D1 and the browser store: drizzle-kit check fails on clashing migrations from parallel branches,
+  # and each schema check fails on a schema change without a migration. Only dependencies are needed, so it skips
+  # restoring the guest and Turborepo caches from the shared setup.
+  migrations:
+    name: Drizzle migrations
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4.4.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # The Worker's schema imports @drizzle-run/core, which resolves to its build. Core builds on its committed guest
+      # catalog, so its own build is enough, without the guests Turborepo would install first.
+      - run: pnpm --filter @drizzle-run/core run build
+      - run: pnpm db:check
+
+  # Shards run in parallel; each replays its guides serially so their Wasm guests do not compete for the runner's CPU.
+  guides:
+    name: Guide replay (${{ matrix.shard }}/5)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4, 5]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: ./.github/actions/setup
+      - uses: ./.github/actions/playwright-browser
+      - run: pnpm check:guides --shard=${{ matrix.shard }}/5
+
+  # Each browser's suite runs in 4 shards at once, on a public repository only: a private one's runners have 2 CPUs,
+  # where timing-sensitive tests fail at random, and its Actions minutes are billed. Until then `pnpm test:e2e:all` runs
+  # the suite locally.
+  e2e:
+    name: E2E (${{ matrix.project }} ${{ matrix.shard }}/4)
+    if: ${{ !github.event.repository.private }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [chromium, firefox, webkit]
+        shard: [1, 2, 3, 4]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: ./.github/actions/setup
+      - uses: ./.github/actions/playwright-browser
+        with:
+          browser: ${{ matrix.project }}
+      - run: pnpm exec playwright test --project=${{ matrix.project }} --shard=${{ matrix.shard }}/4
+      - if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: playwright-report-${{ matrix.project }}-${{ matrix.shard }}
+          path: |
+            playwright-report
+            test-results
+          retention-days: 7

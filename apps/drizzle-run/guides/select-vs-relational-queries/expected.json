@@ -1,0 +1,391 @@
+{
+  "steps": {
+    "01-load": {
+      "SQL-like": {
+        "Joined rows": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "userId": {
+                    "type": "primitive",
+                    "value": 1
+                  },
+                  "name": {
+                    "type": "primitive",
+                    "value": "Ada"
+                  },
+                  "title": {
+                    "type": "primitive",
+                    "value": "Hello, Drizzle"
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "userId": {
+                    "type": "primitive",
+                    "value": 1
+                  },
+                  "name": {
+                    "type": "primitive",
+                    "value": "Ada"
+                  },
+                  "title": {
+                    "type": "primitive",
+                    "value": "Joins without the boilerplate"
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "userId": {
+                    "type": "primitive",
+                    "value": 2
+                  },
+                  "name": {
+                    "type": "primitive",
+                    "value": "Grace"
+                  },
+                  "title": {
+                    "type": "primitive",
+                    "value": "Types all the way down"
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "userId": {
+                    "type": "primitive",
+                    "value": 3
+                  },
+                  "name": {
+                    "type": "primitive",
+                    "value": "Linus"
+                  },
+                  "title": {
+                    "type": "primitive",
+                    "value": null
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "RQB": {
+        "Authors with posts": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Ada"
+                  },
+                  "posts": {
+                    "type": "array",
+                    "value": [
+                      {
+                        "type": "object",
+                        "value": {
+                          "title": {
+                            "type": "primitive",
+                            "value": "Hello, Drizzle"
+                          }
+                        }
+                      },
+                      {
+                        "type": "object",
+                        "value": {
+                          "title": {
+                            "type": "primitive",
+                            "value": "Joins without the boilerplate"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Grace"
+                  },
+                  "posts": {
+                    "type": "array",
+                    "value": [
+                      {
+                        "type": "object",
+                        "value": {
+                          "title": {
+                            "type": "primitive",
+                            "value": "Types all the way down"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Linus"
+                  },
+                  "posts": {
+                    "type": "array",
+                    "value": []
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "04-group": {
+      "SQL-like": {
+        "Joined rows": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "userId": {
+                    "type": "primitive",
+                    "value": 1
+                  },
+                  "name": {
+                    "type": "primitive",
+                    "value": "Ada"
+                  },
+                  "title": {
+                    "type": "primitive",
+                    "value": "Hello, Drizzle"
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "userId": {
+                    "type": "primitive",
+                    "value": 1
+                  },
+                  "name": {
+                    "type": "primitive",
+                    "value": "Ada"
+                  },
+                  "title": {
+                    "type": "primitive",
+                    "value": "Joins without the boilerplate"
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "userId": {
+                    "type": "primitive",
+                    "value": 2
+                  },
+                  "name": {
+                    "type": "primitive",
+                    "value": "Grace"
+                  },
+                  "title": {
+                    "type": "primitive",
+                    "value": "Types all the way down"
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "userId": {
+                    "type": "primitive",
+                    "value": 3
+                  },
+                  "name": {
+                    "type": "primitive",
+                    "value": "Linus"
+                  },
+                  "title": {
+                    "type": "primitive",
+                    "value": null
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "Authors with posts": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Ada"
+                  },
+                  "posts": {
+                    "type": "array",
+                    "value": [
+                      {
+                        "type": "object",
+                        "value": {
+                          "title": {
+                            "type": "primitive",
+                            "value": "Hello, Drizzle"
+                          }
+                        }
+                      },
+                      {
+                        "type": "object",
+                        "value": {
+                          "title": {
+                            "type": "primitive",
+                            "value": "Joins without the boilerplate"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Grace"
+                  },
+                  "posts": {
+                    "type": "array",
+                    "value": [
+                      {
+                        "type": "object",
+                        "value": {
+                          "title": {
+                            "type": "primitive",
+                            "value": "Types all the way down"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Linus"
+                  },
+                  "posts": {
+                    "type": "array",
+                    "value": []
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "RQB": {
+        "Authors with posts": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Ada"
+                  },
+                  "posts": {
+                    "type": "array",
+                    "value": [
+                      {
+                        "type": "object",
+                        "value": {
+                          "title": {
+                            "type": "primitive",
+                            "value": "Hello, Drizzle"
+                          }
+                        }
+                      },
+                      {
+                        "type": "object",
+                        "value": {
+                          "title": {
+                            "type": "primitive",
+                            "value": "Joins without the boilerplate"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Grace"
+                  },
+                  "posts": {
+                    "type": "array",
+                    "value": [
+                      {
+                        "type": "object",
+                        "value": {
+                          "title": {
+                            "type": "primitive",
+                            "value": "Types all the way down"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Linus"
+                  },
+                  "posts": {
+                    "type": "array",
+                    "value": []
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

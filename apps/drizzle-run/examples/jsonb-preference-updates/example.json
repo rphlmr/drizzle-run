@@ -1,0 +1,24 @@
+{
+  "id": "ebee8750-22da-468e-aae2-71cc8bec8c4c",
+  "slug": "jsonb-preference-updates",
+  "status": "published",
+  "title": "Update nested JSONB preferences",
+  "description": "Change a notification setting in SQL, preserve its siblings, and handle a missing parent object.",
+  "topic": "Queries",
+  "featured": false,
+  "order": 90,
+  "dialect": "postgresql",
+  "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+  "links": [
+    {
+      "kind": "docs",
+      "label": "Update",
+      "url": "https://orm.drizzle.team/docs/update"
+    },
+    {
+      "kind": "docs",
+      "label": "SQL expressions",
+      "url": "https://orm.drizzle.team/docs/sql"
+    }
+  ]
+}

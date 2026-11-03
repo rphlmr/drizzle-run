@@ -1,0 +1,51 @@
+{
+  "name": "@drizzle-run/connect",
+  "version": "0.1.0",
+  "description": "Links your Drizzle Run tabs to your own Claude Code, Codex or Grok CLI, with Drizzle Run tools only",
+  "homepage": "https://github.com/rphlmr/drizzle-run/tree/main/packages/connect#readme",
+  "bugs": {
+    "url": "https://github.com/rphlmr/drizzle-run/issues"
+  },
+  "license": "AGPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rphlmr/drizzle-run.git",
+    "directory": "packages/connect"
+  },
+  "bin": {
+    "drizzle-run-connect": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "node scripts/build.ts",
+    "prepublishOnly": "pnpm run build && pnpm run test:pack",
+    "test": "vitest run --coverage && node scripts/audit-pack.ts",
+    "test:pack": "publint --strict && attw --pack . --profile esm-only && node scripts/audit-pack.ts",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "0.18.5",
+    "@drizzle-run/core": "workspace:*",
+    "@drizzle-run/machine-paths": "workspace:*",
+    "@types/node": "24.19.2",
+    "@vitest/coverage-v8": "5.0.5",
+    "es-toolkit": "1.52.0",
+    "esbuild": "0.28.2",
+    "publint": "0.3.25",
+    "typescript": "7.0.2",
+    "vitest": "5.0.5",
+    "xstate": "5.33.3",
+    "zod": "4.6.7"
+  },
+  "engines": {
+    "node": ">=22.4"
+  }
+}

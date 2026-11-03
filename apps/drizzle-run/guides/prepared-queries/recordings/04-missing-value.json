@@ -1,0 +1,842 @@
+{
+  "recordingVersion": 1,
+  "snapshotDigest": "7eaca6b9aa002ac418ab780c779f312a6fe7a73a423f1cd425f99f659f1ea15b",
+  "recordedAt": "2026-10-28T20:44:11.811Z",
+  "result": {
+    "version": 1,
+    "target": {
+      "dialect": "postgresql"
+    },
+    "tuple": {
+      "id": "postgresql-pglite__orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+      "target": {
+        "dialect": "postgresql"
+      },
+      "ormVersion": "1.0.0-rc.5",
+      "kitVersion": "1.0.0-rc.5"
+    },
+    "random": {
+      "effectiveSeed": 3502925821,
+      "source": "derived",
+      "derivation": "run-manifest-sha256-u32-v1",
+      "generator": "mulberry32-v1"
+    },
+    "phases": [
+      {
+        "phase": "validate",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T20:44:10.975Z",
+        "durationMs": 0.06000000238418579
+      },
+      {
+        "phase": "resolve",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T20:44:10.975Z",
+        "durationMs": 0.004999995231628418
+      },
+      {
+        "phase": "load_artifacts",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T20:44:10.976Z",
+        "durationMs": 0.42499999701976776
+      },
+      {
+        "phase": "compile",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T20:44:11.157Z",
+        "durationMs": 2
+      },
+      {
+        "phase": "evaluate_schema",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T20:44:11.161Z",
+        "durationMs": 0
+      },
+      {
+        "phase": "generate_bootstrap",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T20:44:11.161Z",
+        "durationMs": 21
+      },
+      {
+        "phase": "open_database",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T20:44:11.184Z",
+        "durationMs": 5
+      },
+      {
+        "phase": "apply_bootstrap",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T20:44:11.189Z",
+        "durationMs": 10
+      },
+      {
+        "phase": "initialize_context",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T20:44:11.199Z",
+        "durationMs": 0
+      },
+      {
+        "phase": "seed",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T20:44:11.200Z",
+        "durationMs": 4
+      },
+      {
+        "phase": "run",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T20:44:11.205Z",
+        "durationMs": 8
+      },
+      {
+        "phase": "inspect",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T20:44:11.269Z",
+        "durationMs": 53
+      }
+    ],
+    "diagnostics": [],
+    "sql": [
+      {
+        "sequence": 1,
+        "phase": "bootstrap",
+        "origin": "kit",
+        "kind": "generated",
+        "sql": "CREATE TABLE \"products\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"category\" text NOT NULL,\n\t\"price_cents\" integer NOT NULL\n);\n",
+        "parameters": [],
+        "outcome": "succeeded"
+      },
+      {
+        "sequence": 2,
+        "phase": "bootstrap",
+        "origin": "adapter",
+        "kind": "executed",
+        "sql": "BEGIN",
+        "parameters": [],
+        "outcome": "succeeded",
+        "durationMs": 3
+      },
+      {
+        "sequence": 3,
+        "phase": "bootstrap",
+        "origin": "adapter",
+        "kind": "executed",
+        "sql": "CREATE TABLE \"products\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"category\" text NOT NULL,\n\t\"price_cents\" integer NOT NULL\n);\n",
+        "parameters": [],
+        "outcome": "succeeded",
+        "durationMs": 6
+      },
+      {
+        "sequence": 4,
+        "phase": "bootstrap",
+        "origin": "adapter",
+        "kind": "executed",
+        "sql": "COMMIT",
+        "parameters": [],
+        "outcome": "succeeded",
+        "durationMs": 1
+      },
+      {
+        "sequence": 5,
+        "phase": "seed",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "insert into \"products\" (\"id\", \"name\", \"category\", \"price_cents\") values ($1, $2, $3, $4), ($5, $6, $7, $8), ($9, $10, $11, $12), ($13, $14, $15, $16)",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": 1
+          },
+          {
+            "type": "primitive",
+            "value": "SQL handbook"
+          },
+          {
+            "type": "primitive",
+            "value": "books"
+          },
+          {
+            "type": "primitive",
+            "value": 2500
+          },
+          {
+            "type": "primitive",
+            "value": 2
+          },
+          {
+            "type": "primitive",
+            "value": "Pocket notes"
+          },
+          {
+            "type": "primitive",
+            "value": "books"
+          },
+          {
+            "type": "primitive",
+            "value": 800
+          },
+          {
+            "type": "primitive",
+            "value": 3
+          },
+          {
+            "type": "primitive",
+            "value": "Query notebook"
+          },
+          {
+            "type": "primitive",
+            "value": "books"
+          },
+          {
+            "type": "primitive",
+            "value": 1200
+          },
+          {
+            "type": "primitive",
+            "value": 4
+          },
+          {
+            "type": "primitive",
+            "value": "Debugging kit"
+          },
+          {
+            "type": "primitive",
+            "value": "tools"
+          },
+          {
+            "type": "primitive",
+            "value": 4500
+          }
+        ],
+        "outcome": "succeeded",
+        "source": "seed.ts",
+        "line": 4,
+        "durationMs": 3,
+        "rowCount": 4
+      },
+      {
+        "sequence": 6,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "select \"id\", \"name\", \"category\", \"price_cents\" from \"products\" where ((\"products\".\"category\" = $1) and (\"products\".\"price_cents\" >= $2)) order by \"products\".\"price_cents\", \"products\".\"id\" limit $3",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": "books"
+          },
+          {
+            "type": "primitive",
+            "value": 1000
+          },
+          {
+            "type": "primitive",
+            "value": 1
+          }
+        ],
+        "outcome": "succeeded",
+        "source": "query.ts",
+        "line": 6,
+        "durationMs": 3,
+        "rowCount": 1
+      },
+      {
+        "sequence": 7,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "select \"id\", \"name\", \"category\", \"price_cents\" from \"products\" where ((\"products\".\"category\" = $1) and (\"products\".\"price_cents\" >= $2)) order by \"products\".\"price_cents\", \"products\".\"id\" limit $3",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": "books"
+          },
+          {
+            "type": "primitive",
+            "value": 1000
+          },
+          {
+            "type": "primitive",
+            "value": 2
+          }
+        ],
+        "outcome": "succeeded",
+        "source": "query.ts",
+        "line": 6,
+        "durationMs": 2,
+        "rowCount": 2
+      },
+      {
+        "sequence": 8,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "select \"id\", \"name\", \"category\", \"price_cents\" from \"products\" where ((\"products\".\"category\" = $1) and (\"products\".\"price_cents\" >= $2)) order by \"products\".\"price_cents\", \"products\".\"id\" limit $3",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": "tools"
+          },
+          {
+            "type": "primitive",
+            "value": 1000
+          },
+          {
+            "type": "primitive",
+            "value": 2
+          }
+        ],
+        "outcome": "succeeded",
+        "source": "query.ts",
+        "line": 6,
+        "durationMs": 2,
+        "rowCount": 1
+      }
+    ],
+    "logs": [],
+    "value": {
+      "type": "undefined"
+    },
+    "displays": [
+      {
+        "label": "First book at or above 1000 cents",
+        "values": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "id": {
+                    "type": "primitive",
+                    "value": 3
+                  },
+                  "name": {
+                    "type": "primitive",
+                    "value": "Query notebook"
+                  },
+                  "category": {
+                    "type": "primitive",
+                    "value": "books"
+                  },
+                  "priceCents": {
+                    "type": "primitive",
+                    "value": 1200
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "source": "query.ts",
+        "line": 19
+      },
+      {
+        "label": "Two books at or above 1000 cents",
+        "values": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "id": {
+                    "type": "primitive",
+                    "value": 3
+                  },
+                  "name": {
+                    "type": "primitive",
+                    "value": "Query notebook"
+                  },
+                  "category": {
+                    "type": "primitive",
+                    "value": "books"
+                  },
+                  "priceCents": {
+                    "type": "primitive",
+                    "value": 1200
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "id": {
+                    "type": "primitive",
+                    "value": 1
+                  },
+                  "name": {
+                    "type": "primitive",
+                    "value": "SQL handbook"
+                  },
+                  "category": {
+                    "type": "primitive",
+                    "value": "books"
+                  },
+                  "priceCents": {
+                    "type": "primitive",
+                    "value": 2500
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "source": "query.ts",
+        "line": 27
+      },
+      {
+        "label": "Tools under the same query shape",
+        "values": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "id": {
+                    "type": "primitive",
+                    "value": 4
+                  },
+                  "name": {
+                    "type": "primitive",
+                    "value": "Debugging kit"
+                  },
+                  "category": {
+                    "type": "primitive",
+                    "value": "tools"
+                  },
+                  "priceCents": {
+                    "type": "primitive",
+                    "value": 4500
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "source": "query.ts",
+        "line": 35
+      },
+      {
+        "label": "Missing placeholder",
+        "values": [
+          {
+            "type": "primitive",
+            "value": "No value for placeholder \"minimumCents\" was provided"
+          }
+        ],
+        "source": "query.ts",
+        "line": 49
+      }
+    ],
+    "events": [
+      {
+        "type": "sql",
+        "sequence": 1,
+        "payload": {
+          "sequence": 1,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "CREATE TABLE \"products\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"category\" text NOT NULL,\n\t\"price_cents\" integer NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 2,
+        "payload": {
+          "sequence": 2,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "BEGIN",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 3
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 3,
+        "payload": {
+          "sequence": 3,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "CREATE TABLE \"products\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"category\" text NOT NULL,\n\t\"price_cents\" integer NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 6
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 4,
+        "payload": {
+          "sequence": 4,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "COMMIT",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 1
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 5,
+        "payload": {
+          "sequence": 5,
+          "phase": "seed",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "insert into \"products\" (\"id\", \"name\", \"category\", \"price_cents\") values ($1, $2, $3, $4), ($5, $6, $7, $8), ($9, $10, $11, $12), ($13, $14, $15, $16)",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": 1
+            },
+            {
+              "type": "primitive",
+              "value": "SQL handbook"
+            },
+            {
+              "type": "primitive",
+              "value": "books"
+            },
+            {
+              "type": "primitive",
+              "value": 2500
+            },
+            {
+              "type": "primitive",
+              "value": 2
+            },
+            {
+              "type": "primitive",
+              "value": "Pocket notes"
+            },
+            {
+              "type": "primitive",
+              "value": "books"
+            },
+            {
+              "type": "primitive",
+              "value": 800
+            },
+            {
+              "type": "primitive",
+              "value": 3
+            },
+            {
+              "type": "primitive",
+              "value": "Query notebook"
+            },
+            {
+              "type": "primitive",
+              "value": "books"
+            },
+            {
+              "type": "primitive",
+              "value": 1200
+            },
+            {
+              "type": "primitive",
+              "value": 4
+            },
+            {
+              "type": "primitive",
+              "value": "Debugging kit"
+            },
+            {
+              "type": "primitive",
+              "value": "tools"
+            },
+            {
+              "type": "primitive",
+              "value": 4500
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "seed.ts",
+          "line": 4,
+          "durationMs": 3,
+          "rowCount": 4
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 6,
+        "payload": {
+          "sequence": 6,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "select \"id\", \"name\", \"category\", \"price_cents\" from \"products\" where ((\"products\".\"category\" = $1) and (\"products\".\"price_cents\" >= $2)) order by \"products\".\"price_cents\", \"products\".\"id\" limit $3",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": "books"
+            },
+            {
+              "type": "primitive",
+              "value": 1000
+            },
+            {
+              "type": "primitive",
+              "value": 1
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 6,
+          "durationMs": 3,
+          "rowCount": 1
+        }
+      },
+      {
+        "type": "display",
+        "sequence": 7,
+        "payload": {
+          "label": "First book at or above 1000 cents",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 3
+                    },
+                    "name": {
+                      "type": "primitive",
+                      "value": "Query notebook"
+                    },
+                    "category": {
+                      "type": "primitive",
+                      "value": "books"
+                    },
+                    "priceCents": {
+                      "type": "primitive",
+                      "value": 1200
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 19
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 8,
+        "payload": {
+          "sequence": 7,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "select \"id\", \"name\", \"category\", \"price_cents\" from \"products\" where ((\"products\".\"category\" = $1) and (\"products\".\"price_cents\" >= $2)) order by \"products\".\"price_cents\", \"products\".\"id\" limit $3",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": "books"
+            },
+            {
+              "type": "primitive",
+              "value": 1000
+            },
+            {
+              "type": "primitive",
+              "value": 2
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 6,
+          "durationMs": 2,
+          "rowCount": 2
+        }
+      },
+      {
+        "type": "display",
+        "sequence": 9,
+        "payload": {
+          "label": "Two books at or above 1000 cents",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 3
+                    },
+                    "name": {
+                      "type": "primitive",
+                      "value": "Query notebook"
+                    },
+                    "category": {
+                      "type": "primitive",
+                      "value": "books"
+                    },
+                    "priceCents": {
+                      "type": "primitive",
+                      "value": 1200
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 1
+                    },
+                    "name": {
+                      "type": "primitive",
+                      "value": "SQL handbook"
+                    },
+                    "category": {
+                      "type": "primitive",
+                      "value": "books"
+                    },
+                    "priceCents": {
+                      "type": "primitive",
+                      "value": 2500
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 27
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 10,
+        "payload": {
+          "sequence": 8,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "select \"id\", \"name\", \"category\", \"price_cents\" from \"products\" where ((\"products\".\"category\" = $1) and (\"products\".\"price_cents\" >= $2)) order by \"products\".\"price_cents\", \"products\".\"id\" limit $3",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": "tools"
+            },
+            {
+              "type": "primitive",
+              "value": 1000
+            },
+            {
+              "type": "primitive",
+              "value": 2
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 6,
+          "durationMs": 2,
+          "rowCount": 1
+        }
+      },
+      {
+        "type": "display",
+        "sequence": 11,
+        "payload": {
+          "label": "Tools under the same query shape",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 4
+                    },
+                    "name": {
+                      "type": "primitive",
+                      "value": "Debugging kit"
+                    },
+                    "category": {
+                      "type": "primitive",
+                      "value": "tools"
+                    },
+                    "priceCents": {
+                      "type": "primitive",
+                      "value": 4500
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 35
+        }
+      },
+      {
+        "type": "display",
+        "sequence": 12,
+        "payload": {
+          "label": "Missing placeholder",
+          "values": [
+            {
+              "type": "primitive",
+              "value": "No value for placeholder \"minimumCents\" was provided"
+            }
+          ],
+          "source": "query.ts",
+          "line": 49
+        }
+      }
+    ],
+    "cleanupErrors": [],
+    "cleanup": {
+      "guest": {
+        "mode": "graceful"
+      },
+      "database": {
+        "mode": "graceful"
+      }
+    },
+    "timings": {
+      "total": 352,
+      "validate": 0.06000000238418579,
+      "resolve": 0.004999995231628418,
+      "load_artifacts": 0.42499999701976776,
+      "compile": 2,
+      "evaluate_schema": 0,
+      "generate_bootstrap": 21,
+      "open_database": 5,
+      "apply_bootstrap": 10,
+      "initialize_context": 0,
+      "seed": 4,
+      "run": 8,
+      "inspect": 53
+    },
+    "ok": true,
+    "outcome": "succeeded"
+  },
+  "guests": [
+    {
+      "imageId": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+      "lockDigest": "sha256-173d5c06268596c4f200f2c55999d19e7020ea73b9767d6f1cb6c8b2851731b1"
+    }
+  ]
+}

@@ -1,0 +1,1045 @@
+{
+  "recordingVersion": 1,
+  "snapshotDigest": "1a7c163c788147960774a0f95392a7723e6a9d45fd9219eacde1d85111b27d19",
+  "recordedAt": "2026-10-22T08:48:12.331Z",
+  "sides": [
+    {
+      "version": 1,
+      "target": {
+        "dialect": "postgresql"
+      },
+      "tuple": {
+        "id": "postgresql-pglite__orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+        "target": {
+          "dialect": "postgresql"
+        },
+        "ormVersion": "1.0.0-rc.5",
+        "kitVersion": "1.0.0-rc.5"
+      },
+      "random": {
+        "effectiveSeed": 469025698,
+        "source": "derived",
+        "derivation": "run-manifest-sha256-u32-v1",
+        "generator": "mulberry32-v1"
+      },
+      "phases": [
+        {
+          "phase": "validate",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:48:08.393Z",
+          "durationMs": 0.0700000524520874
+        },
+        {
+          "phase": "resolve",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:48:08.393Z",
+          "durationMs": 0
+        },
+        {
+          "phase": "load_artifacts",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:48:08.393Z",
+          "durationMs": 0.05500006675720215
+        },
+        {
+          "phase": "compile",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:48:08.568Z",
+          "durationMs": 2
+        },
+        {
+          "phase": "evaluate_schema",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:48:08.572Z",
+          "durationMs": 0
+        },
+        {
+          "phase": "generate_bootstrap",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:48:08.572Z",
+          "durationMs": 19
+        },
+        {
+          "phase": "open_database",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:48:08.592Z",
+          "durationMs": 3
+        },
+        {
+          "phase": "apply_bootstrap",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:48:08.594Z",
+          "durationMs": 8
+        },
+        {
+          "phase": "initialize_context",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:48:08.602Z",
+          "durationMs": 0
+        },
+        {
+          "phase": "seed",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:48:08.602Z",
+          "durationMs": 4
+        },
+        {
+          "phase": "run",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:48:08.607Z",
+          "durationMs": 5
+        },
+        {
+          "phase": "inspect",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:48:08.611Z",
+          "durationMs": 58
+        }
+      ],
+      "diagnostics": [],
+      "sql": [
+        {
+          "sequence": 1,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "CREATE TABLE \"tasks\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"title\" text NOT NULL,\n\t\"done\" boolean DEFAULT false NOT NULL,\n\t\"dueAt\" timestamp NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        },
+        {
+          "sequence": 2,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "BEGIN",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 3
+        },
+        {
+          "sequence": 3,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "CREATE TABLE \"tasks\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"title\" text NOT NULL,\n\t\"done\" boolean DEFAULT false NOT NULL,\n\t\"dueAt\" timestamp NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 3
+        },
+        {
+          "sequence": 4,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "COMMIT",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 1
+        },
+        {
+          "sequence": 5,
+          "phase": "seed",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "insert into \"tasks\" (\"id\", \"title\", \"done\", \"dueAt\") values (default, $1, $2, $3), (default, $4, default, $5), (default, $6, default, $7)",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": "Write the schema"
+            },
+            {
+              "type": "primitive",
+              "value": true
+            },
+            {
+              "type": "primitive",
+              "value": "2026-10-01T09:00:00.000Z"
+            },
+            {
+              "type": "primitive",
+              "value": "Seed the database"
+            },
+            {
+              "type": "primitive",
+              "value": "2026-10-02T09:00:00.000Z"
+            },
+            {
+              "type": "primitive",
+              "value": "Ship it"
+            },
+            {
+              "type": "primitive",
+              "value": "2026-10-03T09:00:00.000Z"
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "seed.ts",
+          "line": 4,
+          "durationMs": 3,
+          "rowCount": 3
+        },
+        {
+          "sequence": 6,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "update \"tasks\" set \"done\" = $1 where \"tasks\".\"title\" = $2 returning \"id\", \"title\", \"done\", \"dueAt\"",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": true
+            },
+            {
+              "type": "primitive",
+              "value": "Ship it"
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 6,
+          "durationMs": 2,
+          "rowCount": 1
+        },
+        {
+          "sequence": 7,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "select \"id\", \"title\", \"done\", \"dueAt\" from \"tasks\" where \"tasks\".\"done\" = $1 order by \"tasks\".\"dueAt\" asc",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": false
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 11,
+          "durationMs": 2,
+          "rowCount": 1
+        }
+      ],
+      "logs": [],
+      "value": {
+        "type": "undefined"
+      },
+      "displays": [
+        {
+          "label": "Updated task",
+          "values": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 3
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Ship it"
+                },
+                "done": {
+                  "type": "primitive",
+                  "value": true
+                },
+                "dueAt": {
+                  "type": "date",
+                  "value": "2026-10-03T09:00:00.000Z"
+                }
+              }
+            }
+          ],
+          "source": "query.ts",
+          "line": 8
+        },
+        {
+          "label": "Open tasks",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 2
+                    },
+                    "title": {
+                      "type": "primitive",
+                      "value": "Seed the database"
+                    },
+                    "done": {
+                      "type": "primitive",
+                      "value": false
+                    },
+                    "dueAt": {
+                      "type": "date",
+                      "value": "2026-10-02T09:00:00.000Z"
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 13
+        }
+      ],
+      "events": [
+        {
+          "type": "sql",
+          "sequence": 1,
+          "payload": {
+            "sequence": 1,
+            "phase": "bootstrap",
+            "origin": "kit",
+            "kind": "generated",
+            "sql": "CREATE TABLE \"tasks\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"title\" text NOT NULL,\n\t\"done\" boolean DEFAULT false NOT NULL,\n\t\"dueAt\" timestamp NOT NULL\n);\n",
+            "parameters": [],
+            "outcome": "succeeded"
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 2,
+          "payload": {
+            "sequence": 2,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "BEGIN",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 3
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 3,
+          "payload": {
+            "sequence": 3,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "CREATE TABLE \"tasks\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"title\" text NOT NULL,\n\t\"done\" boolean DEFAULT false NOT NULL,\n\t\"dueAt\" timestamp NOT NULL\n);\n",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 3
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 4,
+          "payload": {
+            "sequence": 4,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "COMMIT",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 1
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 5,
+          "payload": {
+            "sequence": 5,
+            "phase": "seed",
+            "origin": "drizzle",
+            "kind": "executed",
+            "sql": "insert into \"tasks\" (\"id\", \"title\", \"done\", \"dueAt\") values (default, $1, $2, $3), (default, $4, default, $5), (default, $6, default, $7)",
+            "parameters": [
+              {
+                "type": "primitive",
+                "value": "Write the schema"
+              },
+              {
+                "type": "primitive",
+                "value": true
+              },
+              {
+                "type": "primitive",
+                "value": "2026-10-01T09:00:00.000Z"
+              },
+              {
+                "type": "primitive",
+                "value": "Seed the database"
+              },
+              {
+                "type": "primitive",
+                "value": "2026-10-02T09:00:00.000Z"
+              },
+              {
+                "type": "primitive",
+                "value": "Ship it"
+              },
+              {
+                "type": "primitive",
+                "value": "2026-10-03T09:00:00.000Z"
+              }
+            ],
+            "outcome": "succeeded",
+            "source": "seed.ts",
+            "line": 4,
+            "durationMs": 3,
+            "rowCount": 3
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 6,
+          "payload": {
+            "sequence": 6,
+            "phase": "run",
+            "origin": "drizzle",
+            "kind": "executed",
+            "sql": "update \"tasks\" set \"done\" = $1 where \"tasks\".\"title\" = $2 returning \"id\", \"title\", \"done\", \"dueAt\"",
+            "parameters": [
+              {
+                "type": "primitive",
+                "value": true
+              },
+              {
+                "type": "primitive",
+                "value": "Ship it"
+              }
+            ],
+            "outcome": "succeeded",
+            "source": "query.ts",
+            "line": 6,
+            "durationMs": 2,
+            "rowCount": 1
+          }
+        },
+        {
+          "type": "display",
+          "sequence": 7,
+          "payload": {
+            "label": "Updated task",
+            "values": [
+              {
+                "type": "object",
+                "value": {
+                  "id": {
+                    "type": "primitive",
+                    "value": 3
+                  },
+                  "title": {
+                    "type": "primitive",
+                    "value": "Ship it"
+                  },
+                  "done": {
+                    "type": "primitive",
+                    "value": true
+                  },
+                  "dueAt": {
+                    "type": "date",
+                    "value": "2026-10-03T09:00:00.000Z"
+                  }
+                }
+              }
+            ],
+            "source": "query.ts",
+            "line": 8
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 8,
+          "payload": {
+            "sequence": 7,
+            "phase": "run",
+            "origin": "drizzle",
+            "kind": "executed",
+            "sql": "select \"id\", \"title\", \"done\", \"dueAt\" from \"tasks\" where \"tasks\".\"done\" = $1 order by \"tasks\".\"dueAt\" asc",
+            "parameters": [
+              {
+                "type": "primitive",
+                "value": false
+              }
+            ],
+            "outcome": "succeeded",
+            "source": "query.ts",
+            "line": 11,
+            "durationMs": 2,
+            "rowCount": 1
+          }
+        },
+        {
+          "type": "display",
+          "sequence": 9,
+          "payload": {
+            "label": "Open tasks",
+            "values": [
+              {
+                "type": "array",
+                "value": [
+                  {
+                    "type": "object",
+                    "value": {
+                      "id": {
+                        "type": "primitive",
+                        "value": 2
+                      },
+                      "title": {
+                        "type": "primitive",
+                        "value": "Seed the database"
+                      },
+                      "done": {
+                        "type": "primitive",
+                        "value": false
+                      },
+                      "dueAt": {
+                        "type": "date",
+                        "value": "2026-10-02T09:00:00.000Z"
+                      }
+                    }
+                  }
+                ]
+              }
+            ],
+            "source": "query.ts",
+            "line": 13
+          }
+        }
+      ],
+      "cleanupErrors": [],
+      "cleanup": {
+        "guest": {
+          "mode": "graceful"
+        },
+        "database": {
+          "mode": "graceful"
+        }
+      },
+      "timings": {
+        "total": 404,
+        "validate": 0.0700000524520874,
+        "resolve": 0,
+        "load_artifacts": 0.05500006675720215,
+        "compile": 2,
+        "evaluate_schema": 0,
+        "generate_bootstrap": 19,
+        "open_database": 3,
+        "apply_bootstrap": 8,
+        "initialize_context": 0,
+        "seed": 4,
+        "run": 5,
+        "inspect": 58
+      },
+      "ok": true,
+      "outcome": "succeeded"
+    },
+    {
+      "version": 1,
+      "target": {
+        "dialect": "sqlite"
+      },
+      "tuple": {
+        "id": "sqlite-wasm__orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+        "target": {
+          "dialect": "sqlite"
+        },
+        "ormVersion": "1.0.0-rc.5",
+        "kitVersion": "1.0.0-rc.5"
+      },
+      "random": {
+        "effectiveSeed": 2857211934,
+        "source": "derived",
+        "derivation": "run-manifest-sha256-u32-v1",
+        "generator": "mulberry32-v1"
+      },
+      "phases": [
+        {
+          "phase": "validate",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:48:11.996Z",
+          "durationMs": 0.06500005722045898
+        },
+        {
+          "phase": "resolve",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:48:11.996Z",
+          "durationMs": 0
+        },
+        {
+          "phase": "load_artifacts",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:48:11.996Z",
+          "durationMs": 0.014999985694885254
+        },
+        {
+          "phase": "compile",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:48:12.096Z",
+          "durationMs": 2
+        },
+        {
+          "phase": "evaluate_schema",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:48:12.097Z",
+          "durationMs": 0
+        },
+        {
+          "phase": "generate_bootstrap",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:48:12.098Z",
+          "durationMs": 1
+        },
+        {
+          "phase": "open_database",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:48:12.100Z",
+          "durationMs": 0
+        },
+        {
+          "phase": "apply_bootstrap",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:48:12.100Z",
+          "durationMs": 4
+        },
+        {
+          "phase": "initialize_context",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:48:12.104Z",
+          "durationMs": 0
+        },
+        {
+          "phase": "seed",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:48:12.104Z",
+          "durationMs": 2
+        },
+        {
+          "phase": "run",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:48:12.106Z",
+          "durationMs": 3
+        },
+        {
+          "phase": "inspect",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:48:12.109Z",
+          "durationMs": 2
+        }
+      ],
+      "diagnostics": [],
+      "sql": [
+        {
+          "sequence": 1,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "CREATE TABLE `tasks` (\n\t`id` integer PRIMARY KEY AUTOINCREMENT,\n\t`title` text NOT NULL,\n\t`done` integer DEFAULT false NOT NULL,\n\t`dueAt` integer NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        },
+        {
+          "sequence": 2,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "CREATE TABLE `tasks` (\n\t`id` integer PRIMARY KEY AUTOINCREMENT,\n\t`title` text NOT NULL,\n\t`done` integer DEFAULT false NOT NULL,\n\t`dueAt` integer NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        },
+        {
+          "sequence": 3,
+          "phase": "seed",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "insert into \"tasks\" (\"id\", \"title\", \"done\", \"dueAt\") values (null, ?, ?, ?), (null, ?, ?, ?), (null, ?, ?, ?)",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": "Write the schema"
+            },
+            {
+              "type": "primitive",
+              "value": 1
+            },
+            {
+              "type": "primitive",
+              "value": 1790845200
+            },
+            {
+              "type": "primitive",
+              "value": "Seed the database"
+            },
+            {
+              "type": "primitive",
+              "value": 0
+            },
+            {
+              "type": "primitive",
+              "value": 1790931600
+            },
+            {
+              "type": "primitive",
+              "value": "Ship it"
+            },
+            {
+              "type": "primitive",
+              "value": 0
+            },
+            {
+              "type": "primitive",
+              "value": 1791018000
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "seed.ts",
+          "line": 4,
+          "durationMs": 2,
+          "rowCount": 3
+        },
+        {
+          "sequence": 4,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "update \"tasks\" set \"done\" = ? where \"tasks\".\"title\" = ? returning \"id\", \"title\", \"done\", \"dueAt\"",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": 1
+            },
+            {
+              "type": "primitive",
+              "value": "Ship it"
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 6,
+          "durationMs": 2,
+          "rowCount": 1
+        },
+        {
+          "sequence": 5,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "select \"id\", \"title\", \"done\", \"dueAt\" from \"tasks\" where \"tasks\".\"done\" = ? order by \"tasks\".\"dueAt\" asc",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": 0
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 11,
+          "durationMs": 1,
+          "rowCount": 1
+        }
+      ],
+      "logs": [],
+      "value": {
+        "type": "undefined"
+      },
+      "displays": [
+        {
+          "label": "Updated task",
+          "values": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 3
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Ship it"
+                },
+                "done": {
+                  "type": "primitive",
+                  "value": true
+                },
+                "dueAt": {
+                  "type": "date",
+                  "value": "2026-10-03T09:00:00.000Z"
+                }
+              }
+            }
+          ],
+          "source": "query.ts",
+          "line": 8
+        },
+        {
+          "label": "Open tasks",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 2
+                    },
+                    "title": {
+                      "type": "primitive",
+                      "value": "Seed the database"
+                    },
+                    "done": {
+                      "type": "primitive",
+                      "value": false
+                    },
+                    "dueAt": {
+                      "type": "date",
+                      "value": "2026-10-02T09:00:00.000Z"
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 13
+        }
+      ],
+      "events": [
+        {
+          "type": "sql",
+          "sequence": 1,
+          "payload": {
+            "sequence": 1,
+            "phase": "bootstrap",
+            "origin": "kit",
+            "kind": "generated",
+            "sql": "CREATE TABLE `tasks` (\n\t`id` integer PRIMARY KEY AUTOINCREMENT,\n\t`title` text NOT NULL,\n\t`done` integer DEFAULT false NOT NULL,\n\t`dueAt` integer NOT NULL\n);\n",
+            "parameters": [],
+            "outcome": "succeeded"
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 2,
+          "payload": {
+            "sequence": 2,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "CREATE TABLE `tasks` (\n\t`id` integer PRIMARY KEY AUTOINCREMENT,\n\t`title` text NOT NULL,\n\t`done` integer DEFAULT false NOT NULL,\n\t`dueAt` integer NOT NULL\n);\n",
+            "parameters": [],
+            "outcome": "succeeded"
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 3,
+          "payload": {
+            "sequence": 3,
+            "phase": "seed",
+            "origin": "drizzle",
+            "kind": "executed",
+            "sql": "insert into \"tasks\" (\"id\", \"title\", \"done\", \"dueAt\") values (null, ?, ?, ?), (null, ?, ?, ?), (null, ?, ?, ?)",
+            "parameters": [
+              {
+                "type": "primitive",
+                "value": "Write the schema"
+              },
+              {
+                "type": "primitive",
+                "value": 1
+              },
+              {
+                "type": "primitive",
+                "value": 1790845200
+              },
+              {
+                "type": "primitive",
+                "value": "Seed the database"
+              },
+              {
+                "type": "primitive",
+                "value": 0
+              },
+              {
+                "type": "primitive",
+                "value": 1790931600
+              },
+              {
+                "type": "primitive",
+                "value": "Ship it"
+              },
+              {
+                "type": "primitive",
+                "value": 0
+              },
+              {
+                "type": "primitive",
+                "value": 1791018000
+              }
+            ],
+            "outcome": "succeeded",
+            "source": "seed.ts",
+            "line": 4,
+            "durationMs": 2,
+            "rowCount": 3
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 4,
+          "payload": {
+            "sequence": 4,
+            "phase": "run",
+            "origin": "drizzle",
+            "kind": "executed",
+            "sql": "update \"tasks\" set \"done\" = ? where \"tasks\".\"title\" = ? returning \"id\", \"title\", \"done\", \"dueAt\"",
+            "parameters": [
+              {
+                "type": "primitive",
+                "value": 1
+              },
+              {
+                "type": "primitive",
+                "value": "Ship it"
+              }
+            ],
+            "outcome": "succeeded",
+            "source": "query.ts",
+            "line": 6,
+            "durationMs": 2,
+            "rowCount": 1
+          }
+        },
+        {
+          "type": "display",
+          "sequence": 5,
+          "payload": {
+            "label": "Updated task",
+            "values": [
+              {
+                "type": "object",
+                "value": {
+                  "id": {
+                    "type": "primitive",
+                    "value": 3
+                  },
+                  "title": {
+                    "type": "primitive",
+                    "value": "Ship it"
+                  },
+                  "done": {
+                    "type": "primitive",
+                    "value": true
+                  },
+                  "dueAt": {
+                    "type": "date",
+                    "value": "2026-10-03T09:00:00.000Z"
+                  }
+                }
+              }
+            ],
+            "source": "query.ts",
+            "line": 8
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 6,
+          "payload": {
+            "sequence": 5,
+            "phase": "run",
+            "origin": "drizzle",
+            "kind": "executed",
+            "sql": "select \"id\", \"title\", \"done\", \"dueAt\" from \"tasks\" where \"tasks\".\"done\" = ? order by \"tasks\".\"dueAt\" asc",
+            "parameters": [
+              {
+                "type": "primitive",
+                "value": 0
+              }
+            ],
+            "outcome": "succeeded",
+            "source": "query.ts",
+            "line": 11,
+            "durationMs": 1,
+            "rowCount": 1
+          }
+        },
+        {
+          "type": "display",
+          "sequence": 7,
+          "payload": {
+            "label": "Open tasks",
+            "values": [
+              {
+                "type": "array",
+                "value": [
+                  {
+                    "type": "object",
+                    "value": {
+                      "id": {
+                        "type": "primitive",
+                        "value": 2
+                      },
+                      "title": {
+                        "type": "primitive",
+                        "value": "Seed the database"
+                      },
+                      "done": {
+                        "type": "primitive",
+                        "value": false
+                      },
+                      "dueAt": {
+                        "type": "date",
+                        "value": "2026-10-02T09:00:00.000Z"
+                      }
+                    }
+                  }
+                ]
+              }
+            ],
+            "source": "query.ts",
+            "line": 13
+          }
+        }
+      ],
+      "cleanupErrors": [],
+      "cleanup": {
+        "guest": {
+          "mode": "graceful"
+        },
+        "database": {
+          "mode": "graceful"
+        }
+      },
+      "timings": {
+        "total": 223,
+        "validate": 0.06500005722045898,
+        "resolve": 0,
+        "load_artifacts": 0.014999985694885254,
+        "compile": 2,
+        "evaluate_schema": 0,
+        "generate_bootstrap": 1,
+        "open_database": 0,
+        "apply_bootstrap": 4,
+        "initialize_context": 0,
+        "seed": 2,
+        "run": 3,
+        "inspect": 2
+      },
+      "ok": true,
+      "outcome": "succeeded"
+    }
+  ],
+  "guests": [
+    {
+      "imageId": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+      "lockDigest": "sha256-173d5c06268596c4f200f2c55999d19e7020ea73b9767d6f1cb6c8b2851731b1"
+    },
+    {
+      "imageId": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+      "lockDigest": "sha256-173d5c06268596c4f200f2c55999d19e7020ea73b9767d6f1cb6c8b2851731b1"
+    }
+  ]
+}

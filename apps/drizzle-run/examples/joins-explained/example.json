@@ -1,0 +1,24 @@
+{
+  "id": "c6e643b3-0bd2-4418-aa66-84b46f8c4239",
+  "slug": "joins-explained",
+  "status": "published",
+  "title": "Choose which rows a join keeps",
+  "description": "Compare five joins and learn where to put filters when unmatched rows matter.",
+  "topic": "Queries",
+  "featured": false,
+  "order": 33,
+  "dialect": "postgresql",
+  "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+  "links": [
+    {
+      "kind": "docs",
+      "label": "Joins",
+      "url": "https://orm.drizzle.team/docs/joins"
+    },
+    {
+      "kind": "example",
+      "label": "Filters, joins, and counts starter",
+      "slug": "filters-and-joins"
+    }
+  ]
+}

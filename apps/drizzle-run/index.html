@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script>
+      // Before first paint. Mirrors readEmbedTheme, readPreference and resolveTheme in src/design/theme.ts.
+      (function () {
+        var preference = "system";
+        try {
+          var stored = window.localStorage.getItem("theme");
+          if (stored === "light" || stored === "dark" || stored === "system") preference = stored;
+        } catch (error) {}
+        var embedTheme = new URLSearchParams(window.location.search).get("theme");
+        if (window.location.pathname.indexOf("/embed/") === 0 && (embedTheme === "light" || embedTheme === "dark")) {
+          preference = embedTheme;
+        }
+        var dark =
+          preference === "dark" ||
+          (preference === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+        var root = document.documentElement;
+        root.dataset.theme = dark ? "dark" : "light";
+        root.style.colorScheme = dark ? "dark" : "light";
+        document.querySelector('meta[name="theme-color"]').setAttribute("content", dark ? "#111111" : "#ffffff");
+      })();
+    </script>
+    <title>Drizzle Run</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

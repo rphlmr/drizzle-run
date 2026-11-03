@@ -1,0 +1,32 @@
+{
+  "name": "@drizzle-run/machine-paths",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Walks every transition of an XState machine and replays it on a running actor: never a dependency of shipped code",
+  "homepage": "https://github.com/rphlmr/drizzle-run/tree/main/testing/machine-paths#readme",
+  "bugs": {
+    "url": "https://github.com/rphlmr/drizzle-run/issues"
+  },
+  "license": "AGPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rphlmr/drizzle-run.git",
+    "directory": "testing/machine-paths"
+  },
+  "type": "module",
+  "exports": {
+    ".": "./src/machine-paths.ts",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "xstate": "5.33.3"
+  },
+  "devDependencies": {
+    "typescript": "7.0.2",
+    "vitest": "5.0.5"
+  }
+}

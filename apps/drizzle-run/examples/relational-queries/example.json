@@ -1,0 +1,16 @@
+{
+  "id": "b77031e5-1ac6-4750-8533-ca4006ba60df",
+  "slug": "relational-queries",
+  "status": "published",
+  "title": "Relational queries",
+  "description": "Users, posts, and comments declared with defineRelations, loaded in one query with db.query and nested with.",
+  "topic": "Queries",
+  "featured": false,
+  "order": 30,
+  "dialect": "postgresql",
+  "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+  "links": [
+    { "kind": "docs", "label": "Relations", "url": "https://orm.drizzle.team/docs/relations" },
+    { "kind": "docs", "label": "Relational queries", "url": "https://orm.drizzle.team/docs/rqb" }
+  ]
+}

@@ -1,0 +1,231 @@
+{
+  "kind": "drizzle-run-guide",
+  "manifestVersion": 1,
+  "id": "aad68b0b-6a48-4612-b17a-b53cb6f3e7a1",
+  "title": "Drizzle with Effect",
+  "description": "Query with Effect, catch a failed insert by its tag, roll back a transaction with your own error, and retry.",
+  "project": {
+    "kind": "drizzle-run",
+    "manifestVersion": 1,
+    "target": {
+      "dialect": "postgresql"
+    },
+    "dependencies": {
+      "drizzle-orm": "1.0.0-rc.5",
+      "drizzle-kit": "1.0.0-rc.5"
+    },
+    "guestFlavor": "effect",
+    "files": {
+      "schema.ts": "import { integer, pgTable, serial, text } from \"drizzle-orm/pg-core\";\n\nexport const users = pgTable(\"users\", {\n  id: serial(\"id\").primaryKey(),\n  name: text(\"name\").notNull(),\n  email: text(\"email\").notNull().unique(),\n  credits: integer(\"credits\").notNull(),\n});\n",
+      "seed.ts": "import { db } from \"@drizzle-run/runtime/context\";\nimport { users } from \"./schema\";\n\nawait db.insert(users).values([\n  { name: \"Ada\", email: \"ada@example.com\", credits: 10 },\n  { name: \"Grace\", email: \"grace@example.com\", credits: 5 },\n]);\n",
+      "query.ts": "import { postgresConnection } from \"@drizzle-run/runtime/context\";\nimport * as PgClient from \"@effect/sql-pg/PgClient\";\nimport { asc } from \"drizzle-orm\";\nimport * as PgDrizzle from \"drizzle-orm/effect-postgres\";\nimport { Effect } from \"effect\";\nimport { users } from \"./schema\";\n\n// A program is a plan: nothing in it runs until Effect.runPromise below.\nconst program = Effect.gen(function* () {\n  // yield* works like await: it waits for the result and hands it back.\n  const db = yield* PgDrizzle.makeWithDefaults({ paramsInErrors: true });\n\n  return yield* db.select().from(users).orderBy(asc(users.id));\n});\n\n// The program needs a PostgreSQL client, and this layer is the one for Drizzle Run's database.\nconst DatabaseLive = PgClient.layerFrom(PgClient.makeClient(postgresConnection));\n\n$.display(\"Users\", await Effect.runPromise(program.pipe(Effect.provide(DatabaseLive))));\n"
+    },
+    "entrypoints": {
+      "schema": "schema.ts",
+      "seed": "seed.ts",
+      "run": "query.ts"
+    }
+  },
+  "steps": [
+    {
+      "type": "walkthrough",
+      "id": "01-plan",
+      "label": "A plan",
+      "title": "Write the query as a plan",
+      "body": "This is the Drizzle query you know, written with **Effect**. `Effect.gen` and `yield*` read like `async` and `await`, but `program` is only a plan: nothing touches the database until `Effect.runPromise`.\n\nHover `program`. Its type says what it returns, how it can fail, and what it needs to run (`PgClient`), which `Effect.provide` hands it.\n\nPress **Run** to see the users.",
+      "focus": {
+        "file": "query.ts",
+        "lines": [
+          9,
+          19
+        ]
+      },
+      "run": "required",
+      "highlight": {
+        "displays": [
+          "Users"
+        ]
+      },
+      "links": [
+        {
+          "label": "Drizzle with Effect Postgres",
+          "href": "https://orm.drizzle.team/docs/connect-effect-postgres"
+        },
+        {
+          "label": "Effect docs",
+          "href": "https://effect.website/docs"
+        }
+      ],
+      "meta": {
+        "summary": "Select the users inside an Effect program.",
+        "changed": "The plan ran once `Effect.runPromise` started it, and returned Ada and Grace."
+      }
+    },
+    {
+      "type": "walkthrough",
+      "id": "02-typed-errors",
+      "label": "Errors",
+      "title": "Catch a failed insert by its tag",
+      "body": "This example deliberately inserts Ada's email twice. The unique constraint rejects the second insert.\n\nA **tag** identifies an error type. `Effect.catchTag` handles every failure tagged `EffectDrizzleQueryError` from this insert, not just duplicate emails. Errors with other tags remain unhandled.\n\nHere we log the query error and continue. In your application, inspect its cause before treating it as a duplicate email.",
+      "edits": [
+        {
+          "file": "query.ts",
+          "replace": {
+            "anchor": "import { Effect } from \"effect\";\n",
+            "with": "import { Console, Effect } from \"effect\";\n"
+          }
+        },
+        {
+          "file": "query.ts",
+          "replace": {
+            "anchor": "  return yield* db.select()",
+            "with": "  // This tag covers query errors, not only duplicate emails.\n  yield* db\n    .insert(users)\n    .values({ name: \"Ada again\", email: \"ada@example.com\", credits: 0 })\n    .pipe(Effect.catchTag(\"EffectDrizzleQueryError\", (error) => Console.log(\"Insert failed:\", error.cause)));\n\n  return yield* db.select()"
+          }
+        }
+      ],
+      "focus": {
+        "file": "query.ts",
+        "lines": [
+          13,
+          17
+        ]
+      },
+      "run": "required",
+      "highlight": {
+        "displays": [
+          "Users"
+        ]
+      },
+      "links": [
+        {
+          "label": "Drizzle with Effect Postgres",
+          "href": "https://orm.drizzle.team/docs/connect-effect-postgres"
+        },
+        {
+          "label": "Effect docs",
+          "href": "https://effect.website/docs"
+        }
+      ],
+      "meta": {
+        "summary": "Insert a taken email, and handle the failure by its tag.",
+        "changed": "The insert failed, `catchTag` logged it, and the program went on: still two users."
+      }
+    },
+    {
+      "type": "walkthrough",
+      "id": "03-transaction",
+      "label": "Transaction",
+      "title": "Roll back with your own error",
+      "body": "`NotEnoughCredits` is an error of your own, tagged like Drizzle's. Inside `db.transaction`, an Effect that **fails** rolls the transaction back: no `try`, no `throw`.\n\nAda spends 3 credits. Grace tries to spend 50, so her update is undone and `catchTag` logs why.",
+      "edits": [
+        {
+          "file": "query.ts",
+          "replace": {
+            "anchor": "import { asc } from \"drizzle-orm\";\n",
+            "with": "import { asc, eq, sql } from \"drizzle-orm\";\n"
+          }
+        },
+        {
+          "file": "query.ts",
+          "replace": {
+            "anchor": "import { Console, Effect } from \"effect\";\n",
+            "with": "import { Console, Data, Effect } from \"effect\";\n"
+          }
+        },
+        {
+          "file": "query.ts",
+          "replace": {
+            "anchor": "// A program is a plan",
+            "with": "// An error of your own, with a tag like Drizzle's.\nclass NotEnoughCredits extends Data.TaggedError(\"NotEnoughCredits\")<{ readonly name: string }> {}\n\n// A program is a plan"
+          }
+        },
+        {
+          "file": "query.ts",
+          "replace": {
+            "anchor": "  return yield* db.select()",
+            "with": "  // A failed Effect inside the transaction rolls it back.\n  const spend = (name: string, amount: number) =>\n    db.transaction((tx) =>\n      Effect.gen(function* () {\n        const [user] = yield* tx\n          .update(users)\n          .set({ credits: sql`${users.credits} - ${amount}` })\n          .where(eq(users.name, name))\n          .returning();\n\n        if (user === undefined || user.credits < 0) {\n          return yield* new NotEnoughCredits({ name });\n        }\n      }),\n    );\n\n  yield* spend(\"Ada\", 3);\n  yield* spend(\"Grace\", 50).pipe(\n    Effect.catchTag(\"NotEnoughCredits\", (error) => Console.log(`${error.name} can't spend 50: rolled back`)),\n  );\n\n  return yield* db.select()"
+          }
+        }
+      ],
+      "focus": {
+        "file": "query.ts",
+        "lines": [
+          22,
+          41
+        ]
+      },
+      "run": "required",
+      "highlight": {
+        "displays": [
+          "Users"
+        ]
+      },
+      "links": [
+        {
+          "label": "Drizzle with Effect Postgres",
+          "href": "https://orm.drizzle.team/docs/connect-effect-postgres"
+        },
+        {
+          "label": "Effect docs",
+          "href": "https://effect.website/docs"
+        }
+      ],
+      "meta": {
+        "summary": "Spend credits in a transaction that fails with your own error.",
+        "changed": "Ada went from `10` to `7`. Grace's update went below zero, so it was **rolled back** and she kept `5`."
+      }
+    },
+    {
+      "type": "walkthrough",
+      "id": "04-retry",
+      "label": "Retry",
+      "title": "Retry a temporary failure",
+      "body": "This simulation reports a busy mail server twice, then succeeds. No email is sent. `Effect.retry({ times: 3 })` allows up to three retries after the first attempt; this simulation succeeds on attempt three.\n\n**Retrying runs the operation again.** Only retry temporary failures when repeating the operation is safe. An insert or an email may already have succeeded even if you did not receive its acknowledgement. Keep retries around the operation you intend to repeat, not the whole program.",
+      "edits": [
+        {
+          "file": "query.ts",
+          "replace": {
+            "anchor": "<{ readonly name: string }> {}\n",
+            "with": "<{ readonly name: string }> {}\nclass MailerBusy extends Data.TaggedError(\"MailerBusy\")<{ readonly attempt: number }> {}\n"
+          }
+        },
+        {
+          "file": "query.ts",
+          "replace": {
+            "anchor": "  return yield* db.select()",
+            "with": "  // Simulate a temporary failure; no email is sent.\n  let attempts = 0;\n  const sendWelcome = Effect.gen(function* () {\n    attempts += 1;\n\n    if (attempts < 3) {\n      return yield* new MailerBusy({ attempt: attempts });\n    }\n\n    return `Simulated email succeeded on attempt ${attempts}`;\n  });\n\n  yield* Console.log(yield* sendWelcome.pipe(Effect.retry({ times: 3 })));\n\n  return yield* db.select()"
+          }
+        }
+      ],
+      "focus": {
+        "file": "query.ts",
+        "lines": [
+          44,
+          56
+        ]
+      },
+      "run": "required",
+      "highlight": {
+        "displays": [
+          "Users"
+        ]
+      },
+      "links": [
+        {
+          "label": "Effect docs",
+          "href": "https://effect.website/docs"
+        }
+      ],
+      "meta": {
+        "summary": "Retry a simulated temporary failure, without repeating the database writes.",
+        "changed": "The simulation failed twice and succeeded on attempt three. No email was sent. Check **Logs**."
+      }
+    }
+  ],
+  "meta": {
+    "slug": "drizzle-with-effect",
+    "status": "published",
+    "example": "c35eace2-ed1b-4c11-beb2-a305a267da17",
+    "mark": "Effect"
+  }
+}

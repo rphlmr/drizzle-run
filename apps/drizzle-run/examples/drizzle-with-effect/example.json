@@ -1,0 +1,20 @@
+{
+  "id": "c35eace2-ed1b-4c11-beb2-a305a267da17",
+  "slug": "drizzle-with-effect",
+  "status": "published",
+  "title": "Drizzle with Effect",
+  "description": "Query with Effect, catch a failed insert by its tag, roll back a transaction with your own error, and retry.",
+  "topic": "Effect",
+  "featured": false,
+  "order": 80,
+  "dialect": "postgresql",
+  "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+  "guestFlavor": "effect",
+  "links": [
+    {
+      "kind": "docs",
+      "label": "Drizzle with Effect Postgres",
+      "url": "https://orm.drizzle.team/docs/connect-effect-postgres"
+    }
+  ]
+}

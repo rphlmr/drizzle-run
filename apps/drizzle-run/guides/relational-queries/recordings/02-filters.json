@@ -1,0 +1,2427 @@
+{
+  "recordingVersion": 1,
+  "snapshotDigest": "5ef0209a10d942f6a27919a1a31d4bcbe86106988aacdba0ab6125904601fd3f",
+  "recordedAt": "2026-10-22T08:48:03.313Z",
+  "sides": [
+    {
+      "version": 1,
+      "target": {
+        "dialect": "postgresql"
+      },
+      "tuple": {
+        "id": "postgresql-pglite__orm-0.45.4__kit-0.31.11",
+        "target": {
+          "dialect": "postgresql"
+        },
+        "ormVersion": "0.45.4",
+        "kitVersion": "0.31.11"
+      },
+      "random": {
+        "effectiveSeed": 3081743484,
+        "source": "derived",
+        "derivation": "run-manifest-sha256-u32-v1",
+        "generator": "mulberry32-v1"
+      },
+      "phases": [
+        {
+          "phase": "validate",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:47:51.488Z",
+          "durationMs": 0.08500003814697266
+        },
+        {
+          "phase": "resolve",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:47:51.488Z",
+          "durationMs": 0.004999995231628418
+        },
+        {
+          "phase": "load_artifacts",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:47:51.490Z",
+          "durationMs": 0.10000002384185791
+        },
+        {
+          "phase": "compile",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:47:51.775Z",
+          "durationMs": 5
+        },
+        {
+          "phase": "evaluate_schema",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:47:51.776Z",
+          "durationMs": 1
+        },
+        {
+          "phase": "generate_bootstrap",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:47:51.777Z",
+          "durationMs": 4
+        },
+        {
+          "phase": "open_database",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:47:51.781Z",
+          "durationMs": 27
+        },
+        {
+          "phase": "apply_bootstrap",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:47:51.783Z",
+          "durationMs": 36
+        },
+        {
+          "phase": "initialize_context",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:47:51.820Z",
+          "durationMs": 1
+        },
+        {
+          "phase": "seed",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:47:51.821Z",
+          "durationMs": 11
+        },
+        {
+          "phase": "run",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:47:51.834Z",
+          "durationMs": 10
+        },
+        {
+          "phase": "inspect",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:47:51.847Z",
+          "durationMs": 75
+        }
+      ],
+      "diagnostics": [],
+      "sql": [
+        {
+          "sequence": 1,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "CREATE TABLE \"comments\" (\n\t\"id\" serial PRIMARY KEY NOT NULL,\n\t\"post_id\" integer NOT NULL,\n\t\"author_id\" integer NOT NULL,\n\t\"body\" text NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        },
+        {
+          "sequence": 2,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "CREATE TABLE \"posts\" (\n\t\"id\" serial PRIMARY KEY NOT NULL,\n\t\"author_id\" integer NOT NULL,\n\t\"title\" text NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        },
+        {
+          "sequence": 3,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "CREATE TABLE \"users\" (\n\t\"id\" serial PRIMARY KEY NOT NULL,\n\t\"name\" text NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        },
+        {
+          "sequence": 4,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "ALTER TABLE \"comments\" ADD CONSTRAINT \"comments_post_id_posts_id_fk\" FOREIGN KEY (\"post_id\") REFERENCES \"public\".\"posts\"(\"id\") ON DELETE no action ON UPDATE no action;",
+          "parameters": [],
+          "outcome": "succeeded"
+        },
+        {
+          "sequence": 5,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "ALTER TABLE \"comments\" ADD CONSTRAINT \"comments_author_id_users_id_fk\" FOREIGN KEY (\"author_id\") REFERENCES \"public\".\"users\"(\"id\") ON DELETE no action ON UPDATE no action;",
+          "parameters": [],
+          "outcome": "succeeded"
+        },
+        {
+          "sequence": 6,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "ALTER TABLE \"posts\" ADD CONSTRAINT \"posts_author_id_users_id_fk\" FOREIGN KEY (\"author_id\") REFERENCES \"public\".\"users\"(\"id\") ON DELETE no action ON UPDATE no action;",
+          "parameters": [],
+          "outcome": "succeeded"
+        },
+        {
+          "sequence": 7,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "BEGIN",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 4
+        },
+        {
+          "sequence": 8,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "CREATE TABLE \"comments\" (\n\t\"id\" serial PRIMARY KEY NOT NULL,\n\t\"post_id\" integer NOT NULL,\n\t\"author_id\" integer NOT NULL,\n\t\"body\" text NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 12
+        },
+        {
+          "sequence": 9,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "CREATE TABLE \"posts\" (\n\t\"id\" serial PRIMARY KEY NOT NULL,\n\t\"author_id\" integer NOT NULL,\n\t\"title\" text NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 3
+        },
+        {
+          "sequence": 10,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "CREATE TABLE \"users\" (\n\t\"id\" serial PRIMARY KEY NOT NULL,\n\t\"name\" text NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 5
+        },
+        {
+          "sequence": 11,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "ALTER TABLE \"comments\" ADD CONSTRAINT \"comments_post_id_posts_id_fk\" FOREIGN KEY (\"post_id\") REFERENCES \"public\".\"posts\"(\"id\") ON DELETE no action ON UPDATE no action;",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 4
+        },
+        {
+          "sequence": 12,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "ALTER TABLE \"comments\" ADD CONSTRAINT \"comments_author_id_users_id_fk\" FOREIGN KEY (\"author_id\") REFERENCES \"public\".\"users\"(\"id\") ON DELETE no action ON UPDATE no action;",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 2
+        },
+        {
+          "sequence": 13,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "ALTER TABLE \"posts\" ADD CONSTRAINT \"posts_author_id_users_id_fk\" FOREIGN KEY (\"author_id\") REFERENCES \"public\".\"users\"(\"id\") ON DELETE no action ON UPDATE no action;",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 2
+        },
+        {
+          "sequence": 14,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "COMMIT",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 2
+        },
+        {
+          "sequence": 15,
+          "phase": "seed",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "insert into \"users\" (\"id\", \"name\") values (default, $1), (default, $2) returning \"id\", \"name\"",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": "Ada"
+            },
+            {
+              "type": "primitive",
+              "value": "Grace"
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "seed.ts",
+          "line": 4,
+          "durationMs": 2,
+          "rowCount": 2
+        },
+        {
+          "sequence": 16,
+          "phase": "seed",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "insert into \"posts\" (\"id\", \"author_id\", \"title\") values (default, $1, $2), (default, $3, $4), (default, $5, $6) returning \"id\", \"author_id\", \"title\"",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": 1
+            },
+            {
+              "type": "primitive",
+              "value": "Hello, Drizzle"
+            },
+            {
+              "type": "primitive",
+              "value": 1
+            },
+            {
+              "type": "primitive",
+              "value": "Relations in one query"
+            },
+            {
+              "type": "primitive",
+              "value": 2
+            },
+            {
+              "type": "primitive",
+              "value": "Types all the way down"
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "seed.ts",
+          "line": 9,
+          "durationMs": 4,
+          "rowCount": 3
+        },
+        {
+          "sequence": 17,
+          "phase": "seed",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "insert into \"comments\" (\"id\", \"post_id\", \"author_id\", \"body\") values (default, $1, $2, $3), (default, $4, $5, $6), (default, $7, $8, $9), (default, $10, $11, $12)",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": 1
+            },
+            {
+              "type": "primitive",
+              "value": 2
+            },
+            {
+              "type": "primitive",
+              "value": "Welcome aboard."
+            },
+            {
+              "type": "primitive",
+              "value": 2
+            },
+            {
+              "type": "primitive",
+              "value": 2
+            },
+            {
+              "type": "primitive",
+              "value": "One round trip, nice."
+            },
+            {
+              "type": "primitive",
+              "value": 3
+            },
+            {
+              "type": "primitive",
+              "value": 1
+            },
+            {
+              "type": "primitive",
+              "value": "Inferred from the schema, nice."
+            },
+            {
+              "type": "primitive",
+              "value": 3
+            },
+            {
+              "type": "primitive",
+              "value": 2
+            },
+            {
+              "type": "primitive",
+              "value": "No codegen step either."
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "seed.ts",
+          "line": 18,
+          "durationMs": 3,
+          "rowCount": 4
+        },
+        {
+          "sequence": 18,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "select \"users\".\"name\", \"users_posts\".\"data\" as \"posts\" from \"users\" \"users\" left join lateral (select coalesce(json_agg(json_build_array(\"users_posts\".\"title\", \"users_posts_comments\".\"data\") order by \"users_posts\".\"id\" asc), '[]'::json) as \"data\" from (select * from \"posts\" \"users_posts\" where \"users_posts\".\"author_id\" = \"users\".\"id\" order by \"users_posts\".\"id\" asc) \"users_posts\" left join lateral (select coalesce(json_agg(json_build_array(\"users_posts_comments\".\"body\", \"users_posts_comments_author\".\"data\") order by \"users_posts_comments\".\"id\" asc), '[]'::json) as \"data\" from (select * from \"comments\" \"users_posts_comments\" where \"users_posts_comments\".\"post_id\" = \"users_posts\".\"id\" order by \"users_posts_comments\".\"id\" asc) \"users_posts_comments\" left join lateral (select json_build_array(\"users_posts_comments_author\".\"name\") as \"data\" from (select * from \"users\" \"users_posts_comments_author\" where \"users_posts_comments_author\".\"id\" = \"users_posts_comments\".\"author_id\" limit $1) \"users_posts_comments_author\") \"users_posts_comments_author\" on true) \"users_posts_comments\" on true) \"users_posts\" on true order by \"users\".\"id\" asc",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": 1
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 4,
+          "durationMs": 5,
+          "rowCount": 2
+        },
+        {
+          "sequence": 19,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "select \"name\" from \"users\" \"users\" where \"users\".\"name\" like $1",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": "A%"
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 25,
+          "durationMs": 2,
+          "rowCount": 1
+        }
+      ],
+      "logs": [],
+      "value": {
+        "type": "undefined"
+      },
+      "displays": [
+        {
+          "label": "Authors with posts and comments",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "name": {
+                      "type": "primitive",
+                      "value": "Ada"
+                    },
+                    "posts": {
+                      "type": "array",
+                      "value": [
+                        {
+                          "type": "object",
+                          "value": {
+                            "title": {
+                              "type": "primitive",
+                              "value": "Hello, Drizzle"
+                            },
+                            "comments": {
+                              "type": "array",
+                              "value": [
+                                {
+                                  "type": "object",
+                                  "value": {
+                                    "body": {
+                                      "type": "primitive",
+                                      "value": "Welcome aboard."
+                                    },
+                                    "author": {
+                                      "type": "object",
+                                      "value": {
+                                        "name": {
+                                          "type": "primitive",
+                                          "value": "Grace"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        },
+                        {
+                          "type": "object",
+                          "value": {
+                            "title": {
+                              "type": "primitive",
+                              "value": "Relations in one query"
+                            },
+                            "comments": {
+                              "type": "array",
+                              "value": [
+                                {
+                                  "type": "object",
+                                  "value": {
+                                    "body": {
+                                      "type": "primitive",
+                                      "value": "One round trip, nice."
+                                    },
+                                    "author": {
+                                      "type": "object",
+                                      "value": {
+                                        "name": {
+                                          "type": "primitive",
+                                          "value": "Grace"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "name": {
+                      "type": "primitive",
+                      "value": "Grace"
+                    },
+                    "posts": {
+                      "type": "array",
+                      "value": [
+                        {
+                          "type": "object",
+                          "value": {
+                            "title": {
+                              "type": "primitive",
+                              "value": "Types all the way down"
+                            },
+                            "comments": {
+                              "type": "array",
+                              "value": [
+                                {
+                                  "type": "object",
+                                  "value": {
+                                    "body": {
+                                      "type": "primitive",
+                                      "value": "Inferred from the schema, nice."
+                                    },
+                                    "author": {
+                                      "type": "object",
+                                      "value": {
+                                        "name": {
+                                          "type": "primitive",
+                                          "value": "Ada"
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                {
+                                  "type": "object",
+                                  "value": {
+                                    "body": {
+                                      "type": "primitive",
+                                      "value": "No codegen step either."
+                                    },
+                                    "author": {
+                                      "type": "object",
+                                      "value": {
+                                        "name": {
+                                          "type": "primitive",
+                                          "value": "Grace"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 22
+        },
+        {
+          "label": "Names starting with A",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "name": {
+                      "type": "primitive",
+                      "value": "Ada"
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 30
+        }
+      ],
+      "events": [
+        {
+          "type": "sql",
+          "sequence": 1,
+          "payload": {
+            "sequence": 1,
+            "phase": "bootstrap",
+            "origin": "kit",
+            "kind": "generated",
+            "sql": "CREATE TABLE \"comments\" (\n\t\"id\" serial PRIMARY KEY NOT NULL,\n\t\"post_id\" integer NOT NULL,\n\t\"author_id\" integer NOT NULL,\n\t\"body\" text NOT NULL\n);\n",
+            "parameters": [],
+            "outcome": "succeeded"
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 2,
+          "payload": {
+            "sequence": 2,
+            "phase": "bootstrap",
+            "origin": "kit",
+            "kind": "generated",
+            "sql": "CREATE TABLE \"posts\" (\n\t\"id\" serial PRIMARY KEY NOT NULL,\n\t\"author_id\" integer NOT NULL,\n\t\"title\" text NOT NULL\n);\n",
+            "parameters": [],
+            "outcome": "succeeded"
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 3,
+          "payload": {
+            "sequence": 3,
+            "phase": "bootstrap",
+            "origin": "kit",
+            "kind": "generated",
+            "sql": "CREATE TABLE \"users\" (\n\t\"id\" serial PRIMARY KEY NOT NULL,\n\t\"name\" text NOT NULL\n);\n",
+            "parameters": [],
+            "outcome": "succeeded"
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 4,
+          "payload": {
+            "sequence": 4,
+            "phase": "bootstrap",
+            "origin": "kit",
+            "kind": "generated",
+            "sql": "ALTER TABLE \"comments\" ADD CONSTRAINT \"comments_post_id_posts_id_fk\" FOREIGN KEY (\"post_id\") REFERENCES \"public\".\"posts\"(\"id\") ON DELETE no action ON UPDATE no action;",
+            "parameters": [],
+            "outcome": "succeeded"
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 5,
+          "payload": {
+            "sequence": 5,
+            "phase": "bootstrap",
+            "origin": "kit",
+            "kind": "generated",
+            "sql": "ALTER TABLE \"comments\" ADD CONSTRAINT \"comments_author_id_users_id_fk\" FOREIGN KEY (\"author_id\") REFERENCES \"public\".\"users\"(\"id\") ON DELETE no action ON UPDATE no action;",
+            "parameters": [],
+            "outcome": "succeeded"
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 6,
+          "payload": {
+            "sequence": 6,
+            "phase": "bootstrap",
+            "origin": "kit",
+            "kind": "generated",
+            "sql": "ALTER TABLE \"posts\" ADD CONSTRAINT \"posts_author_id_users_id_fk\" FOREIGN KEY (\"author_id\") REFERENCES \"public\".\"users\"(\"id\") ON DELETE no action ON UPDATE no action;",
+            "parameters": [],
+            "outcome": "succeeded"
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 7,
+          "payload": {
+            "sequence": 7,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "BEGIN",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 4
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 8,
+          "payload": {
+            "sequence": 8,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "CREATE TABLE \"comments\" (\n\t\"id\" serial PRIMARY KEY NOT NULL,\n\t\"post_id\" integer NOT NULL,\n\t\"author_id\" integer NOT NULL,\n\t\"body\" text NOT NULL\n);\n",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 12
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 9,
+          "payload": {
+            "sequence": 9,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "CREATE TABLE \"posts\" (\n\t\"id\" serial PRIMARY KEY NOT NULL,\n\t\"author_id\" integer NOT NULL,\n\t\"title\" text NOT NULL\n);\n",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 3
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 10,
+          "payload": {
+            "sequence": 10,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "CREATE TABLE \"users\" (\n\t\"id\" serial PRIMARY KEY NOT NULL,\n\t\"name\" text NOT NULL\n);\n",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 5
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 11,
+          "payload": {
+            "sequence": 11,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "ALTER TABLE \"comments\" ADD CONSTRAINT \"comments_post_id_posts_id_fk\" FOREIGN KEY (\"post_id\") REFERENCES \"public\".\"posts\"(\"id\") ON DELETE no action ON UPDATE no action;",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 4
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 12,
+          "payload": {
+            "sequence": 12,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "ALTER TABLE \"comments\" ADD CONSTRAINT \"comments_author_id_users_id_fk\" FOREIGN KEY (\"author_id\") REFERENCES \"public\".\"users\"(\"id\") ON DELETE no action ON UPDATE no action;",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 2
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 13,
+          "payload": {
+            "sequence": 13,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "ALTER TABLE \"posts\" ADD CONSTRAINT \"posts_author_id_users_id_fk\" FOREIGN KEY (\"author_id\") REFERENCES \"public\".\"users\"(\"id\") ON DELETE no action ON UPDATE no action;",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 2
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 14,
+          "payload": {
+            "sequence": 14,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "COMMIT",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 2
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 15,
+          "payload": {
+            "sequence": 15,
+            "phase": "seed",
+            "origin": "drizzle",
+            "kind": "executed",
+            "sql": "insert into \"users\" (\"id\", \"name\") values (default, $1), (default, $2) returning \"id\", \"name\"",
+            "parameters": [
+              {
+                "type": "primitive",
+                "value": "Ada"
+              },
+              {
+                "type": "primitive",
+                "value": "Grace"
+              }
+            ],
+            "outcome": "succeeded",
+            "source": "seed.ts",
+            "line": 4,
+            "durationMs": 2,
+            "rowCount": 2
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 16,
+          "payload": {
+            "sequence": 16,
+            "phase": "seed",
+            "origin": "drizzle",
+            "kind": "executed",
+            "sql": "insert into \"posts\" (\"id\", \"author_id\", \"title\") values (default, $1, $2), (default, $3, $4), (default, $5, $6) returning \"id\", \"author_id\", \"title\"",
+            "parameters": [
+              {
+                "type": "primitive",
+                "value": 1
+              },
+              {
+                "type": "primitive",
+                "value": "Hello, Drizzle"
+              },
+              {
+                "type": "primitive",
+                "value": 1
+              },
+              {
+                "type": "primitive",
+                "value": "Relations in one query"
+              },
+              {
+                "type": "primitive",
+                "value": 2
+              },
+              {
+                "type": "primitive",
+                "value": "Types all the way down"
+              }
+            ],
+            "outcome": "succeeded",
+            "source": "seed.ts",
+            "line": 9,
+            "durationMs": 4,
+            "rowCount": 3
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 17,
+          "payload": {
+            "sequence": 17,
+            "phase": "seed",
+            "origin": "drizzle",
+            "kind": "executed",
+            "sql": "insert into \"comments\" (\"id\", \"post_id\", \"author_id\", \"body\") values (default, $1, $2, $3), (default, $4, $5, $6), (default, $7, $8, $9), (default, $10, $11, $12)",
+            "parameters": [
+              {
+                "type": "primitive",
+                "value": 1
+              },
+              {
+                "type": "primitive",
+                "value": 2
+              },
+              {
+                "type": "primitive",
+                "value": "Welcome aboard."
+              },
+              {
+                "type": "primitive",
+                "value": 2
+              },
+              {
+                "type": "primitive",
+                "value": 2
+              },
+              {
+                "type": "primitive",
+                "value": "One round trip, nice."
+              },
+              {
+                "type": "primitive",
+                "value": 3
+              },
+              {
+                "type": "primitive",
+                "value": 1
+              },
+              {
+                "type": "primitive",
+                "value": "Inferred from the schema, nice."
+              },
+              {
+                "type": "primitive",
+                "value": 3
+              },
+              {
+                "type": "primitive",
+                "value": 2
+              },
+              {
+                "type": "primitive",
+                "value": "No codegen step either."
+              }
+            ],
+            "outcome": "succeeded",
+            "source": "seed.ts",
+            "line": 18,
+            "durationMs": 3,
+            "rowCount": 4
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 18,
+          "payload": {
+            "sequence": 18,
+            "phase": "run",
+            "origin": "drizzle",
+            "kind": "executed",
+            "sql": "select \"users\".\"name\", \"users_posts\".\"data\" as \"posts\" from \"users\" \"users\" left join lateral (select coalesce(json_agg(json_build_array(\"users_posts\".\"title\", \"users_posts_comments\".\"data\") order by \"users_posts\".\"id\" asc), '[]'::json) as \"data\" from (select * from \"posts\" \"users_posts\" where \"users_posts\".\"author_id\" = \"users\".\"id\" order by \"users_posts\".\"id\" asc) \"users_posts\" left join lateral (select coalesce(json_agg(json_build_array(\"users_posts_comments\".\"body\", \"users_posts_comments_author\".\"data\") order by \"users_posts_comments\".\"id\" asc), '[]'::json) as \"data\" from (select * from \"comments\" \"users_posts_comments\" where \"users_posts_comments\".\"post_id\" = \"users_posts\".\"id\" order by \"users_posts_comments\".\"id\" asc) \"users_posts_comments\" left join lateral (select json_build_array(\"users_posts_comments_author\".\"name\") as \"data\" from (select * from \"users\" \"users_posts_comments_author\" where \"users_posts_comments_author\".\"id\" = \"users_posts_comments\".\"author_id\" limit $1) \"users_posts_comments_author\") \"users_posts_comments_author\" on true) \"users_posts_comments\" on true) \"users_posts\" on true order by \"users\".\"id\" asc",
+            "parameters": [
+              {
+                "type": "primitive",
+                "value": 1
+              }
+            ],
+            "outcome": "succeeded",
+            "source": "query.ts",
+            "line": 4,
+            "durationMs": 5,
+            "rowCount": 2
+          }
+        },
+        {
+          "type": "display",
+          "sequence": 19,
+          "payload": {
+            "label": "Authors with posts and comments",
+            "values": [
+              {
+                "type": "array",
+                "value": [
+                  {
+                    "type": "object",
+                    "value": {
+                      "name": {
+                        "type": "primitive",
+                        "value": "Ada"
+                      },
+                      "posts": {
+                        "type": "array",
+                        "value": [
+                          {
+                            "type": "object",
+                            "value": {
+                              "title": {
+                                "type": "primitive",
+                                "value": "Hello, Drizzle"
+                              },
+                              "comments": {
+                                "type": "array",
+                                "value": [
+                                  {
+                                    "type": "object",
+                                    "value": {
+                                      "body": {
+                                        "type": "primitive",
+                                        "value": "Welcome aboard."
+                                      },
+                                      "author": {
+                                        "type": "object",
+                                        "value": {
+                                          "name": {
+                                            "type": "primitive",
+                                            "value": "Grace"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          },
+                          {
+                            "type": "object",
+                            "value": {
+                              "title": {
+                                "type": "primitive",
+                                "value": "Relations in one query"
+                              },
+                              "comments": {
+                                "type": "array",
+                                "value": [
+                                  {
+                                    "type": "object",
+                                    "value": {
+                                      "body": {
+                                        "type": "primitive",
+                                        "value": "One round trip, nice."
+                                      },
+                                      "author": {
+                                        "type": "object",
+                                        "value": {
+                                          "name": {
+                                            "type": "primitive",
+                                            "value": "Grace"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "value": {
+                      "name": {
+                        "type": "primitive",
+                        "value": "Grace"
+                      },
+                      "posts": {
+                        "type": "array",
+                        "value": [
+                          {
+                            "type": "object",
+                            "value": {
+                              "title": {
+                                "type": "primitive",
+                                "value": "Types all the way down"
+                              },
+                              "comments": {
+                                "type": "array",
+                                "value": [
+                                  {
+                                    "type": "object",
+                                    "value": {
+                                      "body": {
+                                        "type": "primitive",
+                                        "value": "Inferred from the schema, nice."
+                                      },
+                                      "author": {
+                                        "type": "object",
+                                        "value": {
+                                          "name": {
+                                            "type": "primitive",
+                                            "value": "Ada"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "type": "object",
+                                    "value": {
+                                      "body": {
+                                        "type": "primitive",
+                                        "value": "No codegen step either."
+                                      },
+                                      "author": {
+                                        "type": "object",
+                                        "value": {
+                                          "name": {
+                                            "type": "primitive",
+                                            "value": "Grace"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            ],
+            "source": "query.ts",
+            "line": 22
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 20,
+          "payload": {
+            "sequence": 19,
+            "phase": "run",
+            "origin": "drizzle",
+            "kind": "executed",
+            "sql": "select \"name\" from \"users\" \"users\" where \"users\".\"name\" like $1",
+            "parameters": [
+              {
+                "type": "primitive",
+                "value": "A%"
+              }
+            ],
+            "outcome": "succeeded",
+            "source": "query.ts",
+            "line": 25,
+            "durationMs": 2,
+            "rowCount": 1
+          }
+        },
+        {
+          "type": "display",
+          "sequence": 21,
+          "payload": {
+            "label": "Names starting with A",
+            "values": [
+              {
+                "type": "array",
+                "value": [
+                  {
+                    "type": "object",
+                    "value": {
+                      "name": {
+                        "type": "primitive",
+                        "value": "Ada"
+                      }
+                    }
+                  }
+                ]
+              }
+            ],
+            "source": "query.ts",
+            "line": 30
+          }
+        }
+      ],
+      "cleanupErrors": [],
+      "cleanup": {
+        "guest": {
+          "mode": "graceful"
+        },
+        "database": {
+          "mode": "graceful"
+        }
+      },
+      "timings": {
+        "total": 576,
+        "validate": 0.08500003814697266,
+        "resolve": 0.004999995231628418,
+        "load_artifacts": 0.10000002384185791,
+        "compile": 5,
+        "evaluate_schema": 1,
+        "generate_bootstrap": 4,
+        "open_database": 27,
+        "apply_bootstrap": 36,
+        "initialize_context": 1,
+        "seed": 11,
+        "run": 10,
+        "inspect": 75
+      },
+      "ok": true,
+      "outcome": "succeeded"
+    },
+    {
+      "version": 1,
+      "target": {
+        "dialect": "postgresql"
+      },
+      "tuple": {
+        "id": "postgresql-pglite__orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+        "target": {
+          "dialect": "postgresql"
+        },
+        "ormVersion": "1.0.0-rc.5",
+        "kitVersion": "1.0.0-rc.5"
+      },
+      "random": {
+        "effectiveSeed": 2513843946,
+        "source": "derived",
+        "derivation": "run-manifest-sha256-u32-v1",
+        "generator": "mulberry32-v1"
+      },
+      "phases": [
+        {
+          "phase": "validate",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:48:02.296Z",
+          "durationMs": 0.04499995708465576
+        },
+        {
+          "phase": "resolve",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:48:02.296Z",
+          "durationMs": 0.004999995231628418
+        },
+        {
+          "phase": "load_artifacts",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:48:02.297Z",
+          "durationMs": 0.02500009536743164
+        },
+        {
+          "phase": "compile",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:48:02.543Z",
+          "durationMs": 5
+        },
+        {
+          "phase": "evaluate_schema",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:48:02.548Z",
+          "durationMs": 1
+        },
+        {
+          "phase": "generate_bootstrap",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:48:02.551Z",
+          "durationMs": 30
+        },
+        {
+          "phase": "open_database",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:48:02.584Z",
+          "durationMs": 4
+        },
+        {
+          "phase": "apply_bootstrap",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:48:02.585Z",
+          "durationMs": 30
+        },
+        {
+          "phase": "initialize_context",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:48:02.616Z",
+          "durationMs": 0
+        },
+        {
+          "phase": "seed",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:48:02.616Z",
+          "durationMs": 13
+        },
+        {
+          "phase": "run",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:48:02.629Z",
+          "durationMs": 12
+        },
+        {
+          "phase": "inspect",
+          "status": "succeeded",
+          "startedAt": "2026-10-22T08:48:02.641Z",
+          "durationMs": 99
+        }
+      ],
+      "diagnostics": [],
+      "sql": [
+        {
+          "sequence": 1,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "CREATE TABLE \"comments\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"post_id\" integer NOT NULL,\n\t\"author_id\" integer NOT NULL,\n\t\"body\" text NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        },
+        {
+          "sequence": 2,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "CREATE TABLE \"posts\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"author_id\" integer NOT NULL,\n\t\"title\" text NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        },
+        {
+          "sequence": 3,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "CREATE TABLE \"users\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"name\" text NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        },
+        {
+          "sequence": 4,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "ALTER TABLE \"comments\" ADD CONSTRAINT \"comments_post_id_posts_id_fkey\" FOREIGN KEY (\"post_id\") REFERENCES \"posts\"(\"id\");",
+          "parameters": [],
+          "outcome": "succeeded"
+        },
+        {
+          "sequence": 5,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "ALTER TABLE \"comments\" ADD CONSTRAINT \"comments_author_id_users_id_fkey\" FOREIGN KEY (\"author_id\") REFERENCES \"users\"(\"id\");",
+          "parameters": [],
+          "outcome": "succeeded"
+        },
+        {
+          "sequence": 6,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "ALTER TABLE \"posts\" ADD CONSTRAINT \"posts_author_id_users_id_fkey\" FOREIGN KEY (\"author_id\") REFERENCES \"users\"(\"id\");",
+          "parameters": [],
+          "outcome": "succeeded"
+        },
+        {
+          "sequence": 7,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "BEGIN",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 4
+        },
+        {
+          "sequence": 8,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "CREATE TABLE \"comments\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"post_id\" integer NOT NULL,\n\t\"author_id\" integer NOT NULL,\n\t\"body\" text NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 7
+        },
+        {
+          "sequence": 9,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "CREATE TABLE \"posts\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"author_id\" integer NOT NULL,\n\t\"title\" text NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 3
+        },
+        {
+          "sequence": 10,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "CREATE TABLE \"users\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"name\" text NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 3
+        },
+        {
+          "sequence": 11,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "ALTER TABLE \"comments\" ADD CONSTRAINT \"comments_post_id_posts_id_fkey\" FOREIGN KEY (\"post_id\") REFERENCES \"posts\"(\"id\");",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 6
+        },
+        {
+          "sequence": 12,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "ALTER TABLE \"comments\" ADD CONSTRAINT \"comments_author_id_users_id_fkey\" FOREIGN KEY (\"author_id\") REFERENCES \"users\"(\"id\");",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 3
+        },
+        {
+          "sequence": 13,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "ALTER TABLE \"posts\" ADD CONSTRAINT \"posts_author_id_users_id_fkey\" FOREIGN KEY (\"author_id\") REFERENCES \"users\"(\"id\");",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 2
+        },
+        {
+          "sequence": 14,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "COMMIT",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 2
+        },
+        {
+          "sequence": 15,
+          "phase": "seed",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "insert into \"users\" (\"id\", \"name\") values (default, $1), (default, $2) returning \"id\", \"name\"",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": "Ada"
+            },
+            {
+              "type": "primitive",
+              "value": "Grace"
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "seed.ts",
+          "line": 4,
+          "durationMs": 4,
+          "rowCount": 2
+        },
+        {
+          "sequence": 16,
+          "phase": "seed",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "insert into \"posts\" (\"id\", \"author_id\", \"title\") values (default, $1, $2), (default, $3, $4), (default, $5, $6) returning \"id\", \"author_id\", \"title\"",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": 1
+            },
+            {
+              "type": "primitive",
+              "value": "Hello, Drizzle"
+            },
+            {
+              "type": "primitive",
+              "value": 1
+            },
+            {
+              "type": "primitive",
+              "value": "Relations in one query"
+            },
+            {
+              "type": "primitive",
+              "value": 2
+            },
+            {
+              "type": "primitive",
+              "value": "Types all the way down"
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "seed.ts",
+          "line": 9,
+          "durationMs": 5,
+          "rowCount": 3
+        },
+        {
+          "sequence": 17,
+          "phase": "seed",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "insert into \"comments\" (\"id\", \"post_id\", \"author_id\", \"body\") values (default, $1, $2, $3), (default, $4, $5, $6), (default, $7, $8, $9), (default, $10, $11, $12)",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": 1
+            },
+            {
+              "type": "primitive",
+              "value": 2
+            },
+            {
+              "type": "primitive",
+              "value": "Welcome aboard."
+            },
+            {
+              "type": "primitive",
+              "value": 2
+            },
+            {
+              "type": "primitive",
+              "value": 2
+            },
+            {
+              "type": "primitive",
+              "value": "One round trip, nice."
+            },
+            {
+              "type": "primitive",
+              "value": 3
+            },
+            {
+              "type": "primitive",
+              "value": 1
+            },
+            {
+              "type": "primitive",
+              "value": "Inferred from the schema, nice."
+            },
+            {
+              "type": "primitive",
+              "value": 3
+            },
+            {
+              "type": "primitive",
+              "value": 2
+            },
+            {
+              "type": "primitive",
+              "value": "No codegen step either."
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "seed.ts",
+          "line": 18,
+          "durationMs": 3,
+          "rowCount": 4
+        },
+        {
+          "sequence": 18,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "select \"d0\".\"name\" as \"name\", \"posts\".\"r\" as \"posts\" from \"users\" as \"d0\" left join lateral(select coalesce(json_agg(row_to_json(\"t\".*)), '[]') as \"r\" from (select \"d1\".\"title\" as \"title\", \"comments\".\"r\" as \"comments\" from \"posts\" as \"d1\" left join lateral(select coalesce(json_agg(row_to_json(\"t\".*)), '[]') as \"r\" from (select \"d2\".\"body\" as \"body\", \"author\".\"r\" as \"author\" from \"comments\" as \"d2\" left join lateral(select row_to_json(\"t\".*) \"r\" from (select \"d3\".\"name\" as \"name\" from \"users\" as \"d3\" where \"d2\".\"author_id\" = \"d3\".\"id\" limit $1) as \"t\") as \"author\" on true where \"d1\".\"id\" = \"d2\".\"post_id\" order by \"d2\".\"id\" asc) as \"t\") as \"comments\" on true where \"d0\".\"id\" = \"d1\".\"author_id\" order by \"d1\".\"id\" asc) as \"t\") as \"posts\" on true order by \"d0\".\"id\" asc",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": 1
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 4,
+          "durationMs": 4,
+          "rowCount": 2
+        },
+        {
+          "sequence": 19,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "select \"d0\".\"title\" as \"title\", \"author\".\"r\" as \"author\" from (select \"d0\".* from \"posts\" as \"d0\" where exists (select * from \"comments\" as \"f0\" where ((\"d0\".\"id\" = \"f0\".\"post_id\") and (exists (select * from \"users\" as \"f1\" where ((\"f0\".\"author_id\" = \"f1\".\"id\") and (\"f1\".\"name\" = $1))))))) as \"d0\" left join lateral(select row_to_json(\"t\".*) \"r\" from (select \"d1\".\"name\" as \"name\" from \"users\" as \"d1\" where \"d0\".\"author_id\" = \"d1\".\"id\" limit $2) as \"t\") as \"author\" on true",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": "Ada"
+            },
+            {
+              "type": "primitive",
+              "value": 1
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 25,
+          "durationMs": 3,
+          "rowCount": 1
+        },
+        {
+          "sequence": 20,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "select \"d0\".\"name\" as \"name\" from \"users\" as \"d0\" where \"d0\".\"name\" like $1",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": "A%"
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 34,
+          "durationMs": 2,
+          "rowCount": 1
+        }
+      ],
+      "logs": [],
+      "value": {
+        "type": "undefined"
+      },
+      "displays": [
+        {
+          "label": "Authors with posts and comments",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "name": {
+                      "type": "primitive",
+                      "value": "Ada"
+                    },
+                    "posts": {
+                      "type": "array",
+                      "value": [
+                        {
+                          "type": "object",
+                          "value": {
+                            "title": {
+                              "type": "primitive",
+                              "value": "Hello, Drizzle"
+                            },
+                            "comments": {
+                              "type": "array",
+                              "value": [
+                                {
+                                  "type": "object",
+                                  "value": {
+                                    "body": {
+                                      "type": "primitive",
+                                      "value": "Welcome aboard."
+                                    },
+                                    "author": {
+                                      "type": "object",
+                                      "value": {
+                                        "name": {
+                                          "type": "primitive",
+                                          "value": "Grace"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        },
+                        {
+                          "type": "object",
+                          "value": {
+                            "title": {
+                              "type": "primitive",
+                              "value": "Relations in one query"
+                            },
+                            "comments": {
+                              "type": "array",
+                              "value": [
+                                {
+                                  "type": "object",
+                                  "value": {
+                                    "body": {
+                                      "type": "primitive",
+                                      "value": "One round trip, nice."
+                                    },
+                                    "author": {
+                                      "type": "object",
+                                      "value": {
+                                        "name": {
+                                          "type": "primitive",
+                                          "value": "Grace"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "name": {
+                      "type": "primitive",
+                      "value": "Grace"
+                    },
+                    "posts": {
+                      "type": "array",
+                      "value": [
+                        {
+                          "type": "object",
+                          "value": {
+                            "title": {
+                              "type": "primitive",
+                              "value": "Types all the way down"
+                            },
+                            "comments": {
+                              "type": "array",
+                              "value": [
+                                {
+                                  "type": "object",
+                                  "value": {
+                                    "body": {
+                                      "type": "primitive",
+                                      "value": "Inferred from the schema, nice."
+                                    },
+                                    "author": {
+                                      "type": "object",
+                                      "value": {
+                                        "name": {
+                                          "type": "primitive",
+                                          "value": "Ada"
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                {
+                                  "type": "object",
+                                  "value": {
+                                    "body": {
+                                      "type": "primitive",
+                                      "value": "No codegen step either."
+                                    },
+                                    "author": {
+                                      "type": "object",
+                                      "value": {
+                                        "name": {
+                                          "type": "primitive",
+                                          "value": "Grace"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 22
+        },
+        {
+          "label": "Posts Ada commented on",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "title": {
+                      "type": "primitive",
+                      "value": "Types all the way down"
+                    },
+                    "author": {
+                      "type": "object",
+                      "value": {
+                        "name": {
+                          "type": "primitive",
+                          "value": "Grace"
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 31
+        },
+        {
+          "label": "Names starting with A",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "name": {
+                      "type": "primitive",
+                      "value": "Ada"
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 39
+        }
+      ],
+      "events": [
+        {
+          "type": "sql",
+          "sequence": 1,
+          "payload": {
+            "sequence": 1,
+            "phase": "bootstrap",
+            "origin": "kit",
+            "kind": "generated",
+            "sql": "CREATE TABLE \"comments\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"post_id\" integer NOT NULL,\n\t\"author_id\" integer NOT NULL,\n\t\"body\" text NOT NULL\n);\n",
+            "parameters": [],
+            "outcome": "succeeded"
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 2,
+          "payload": {
+            "sequence": 2,
+            "phase": "bootstrap",
+            "origin": "kit",
+            "kind": "generated",
+            "sql": "CREATE TABLE \"posts\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"author_id\" integer NOT NULL,\n\t\"title\" text NOT NULL\n);\n",
+            "parameters": [],
+            "outcome": "succeeded"
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 3,
+          "payload": {
+            "sequence": 3,
+            "phase": "bootstrap",
+            "origin": "kit",
+            "kind": "generated",
+            "sql": "CREATE TABLE \"users\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"name\" text NOT NULL\n);\n",
+            "parameters": [],
+            "outcome": "succeeded"
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 4,
+          "payload": {
+            "sequence": 4,
+            "phase": "bootstrap",
+            "origin": "kit",
+            "kind": "generated",
+            "sql": "ALTER TABLE \"comments\" ADD CONSTRAINT \"comments_post_id_posts_id_fkey\" FOREIGN KEY (\"post_id\") REFERENCES \"posts\"(\"id\");",
+            "parameters": [],
+            "outcome": "succeeded"
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 5,
+          "payload": {
+            "sequence": 5,
+            "phase": "bootstrap",
+            "origin": "kit",
+            "kind": "generated",
+            "sql": "ALTER TABLE \"comments\" ADD CONSTRAINT \"comments_author_id_users_id_fkey\" FOREIGN KEY (\"author_id\") REFERENCES \"users\"(\"id\");",
+            "parameters": [],
+            "outcome": "succeeded"
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 6,
+          "payload": {
+            "sequence": 6,
+            "phase": "bootstrap",
+            "origin": "kit",
+            "kind": "generated",
+            "sql": "ALTER TABLE \"posts\" ADD CONSTRAINT \"posts_author_id_users_id_fkey\" FOREIGN KEY (\"author_id\") REFERENCES \"users\"(\"id\");",
+            "parameters": [],
+            "outcome": "succeeded"
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 7,
+          "payload": {
+            "sequence": 7,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "BEGIN",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 4
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 8,
+          "payload": {
+            "sequence": 8,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "CREATE TABLE \"comments\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"post_id\" integer NOT NULL,\n\t\"author_id\" integer NOT NULL,\n\t\"body\" text NOT NULL\n);\n",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 7
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 9,
+          "payload": {
+            "sequence": 9,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "CREATE TABLE \"posts\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"author_id\" integer NOT NULL,\n\t\"title\" text NOT NULL\n);\n",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 3
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 10,
+          "payload": {
+            "sequence": 10,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "CREATE TABLE \"users\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"name\" text NOT NULL\n);\n",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 3
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 11,
+          "payload": {
+            "sequence": 11,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "ALTER TABLE \"comments\" ADD CONSTRAINT \"comments_post_id_posts_id_fkey\" FOREIGN KEY (\"post_id\") REFERENCES \"posts\"(\"id\");",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 6
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 12,
+          "payload": {
+            "sequence": 12,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "ALTER TABLE \"comments\" ADD CONSTRAINT \"comments_author_id_users_id_fkey\" FOREIGN KEY (\"author_id\") REFERENCES \"users\"(\"id\");",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 3
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 13,
+          "payload": {
+            "sequence": 13,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "ALTER TABLE \"posts\" ADD CONSTRAINT \"posts_author_id_users_id_fkey\" FOREIGN KEY (\"author_id\") REFERENCES \"users\"(\"id\");",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 2
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 14,
+          "payload": {
+            "sequence": 14,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "COMMIT",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 2
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 15,
+          "payload": {
+            "sequence": 15,
+            "phase": "seed",
+            "origin": "drizzle",
+            "kind": "executed",
+            "sql": "insert into \"users\" (\"id\", \"name\") values (default, $1), (default, $2) returning \"id\", \"name\"",
+            "parameters": [
+              {
+                "type": "primitive",
+                "value": "Ada"
+              },
+              {
+                "type": "primitive",
+                "value": "Grace"
+              }
+            ],
+            "outcome": "succeeded",
+            "source": "seed.ts",
+            "line": 4,
+            "durationMs": 4,
+            "rowCount": 2
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 16,
+          "payload": {
+            "sequence": 16,
+            "phase": "seed",
+            "origin": "drizzle",
+            "kind": "executed",
+            "sql": "insert into \"posts\" (\"id\", \"author_id\", \"title\") values (default, $1, $2), (default, $3, $4), (default, $5, $6) returning \"id\", \"author_id\", \"title\"",
+            "parameters": [
+              {
+                "type": "primitive",
+                "value": 1
+              },
+              {
+                "type": "primitive",
+                "value": "Hello, Drizzle"
+              },
+              {
+                "type": "primitive",
+                "value": 1
+              },
+              {
+                "type": "primitive",
+                "value": "Relations in one query"
+              },
+              {
+                "type": "primitive",
+                "value": 2
+              },
+              {
+                "type": "primitive",
+                "value": "Types all the way down"
+              }
+            ],
+            "outcome": "succeeded",
+            "source": "seed.ts",
+            "line": 9,
+            "durationMs": 5,
+            "rowCount": 3
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 17,
+          "payload": {
+            "sequence": 17,
+            "phase": "seed",
+            "origin": "drizzle",
+            "kind": "executed",
+            "sql": "insert into \"comments\" (\"id\", \"post_id\", \"author_id\", \"body\") values (default, $1, $2, $3), (default, $4, $5, $6), (default, $7, $8, $9), (default, $10, $11, $12)",
+            "parameters": [
+              {
+                "type": "primitive",
+                "value": 1
+              },
+              {
+                "type": "primitive",
+                "value": 2
+              },
+              {
+                "type": "primitive",
+                "value": "Welcome aboard."
+              },
+              {
+                "type": "primitive",
+                "value": 2
+              },
+              {
+                "type": "primitive",
+                "value": 2
+              },
+              {
+                "type": "primitive",
+                "value": "One round trip, nice."
+              },
+              {
+                "type": "primitive",
+                "value": 3
+              },
+              {
+                "type": "primitive",
+                "value": 1
+              },
+              {
+                "type": "primitive",
+                "value": "Inferred from the schema, nice."
+              },
+              {
+                "type": "primitive",
+                "value": 3
+              },
+              {
+                "type": "primitive",
+                "value": 2
+              },
+              {
+                "type": "primitive",
+                "value": "No codegen step either."
+              }
+            ],
+            "outcome": "succeeded",
+            "source": "seed.ts",
+            "line": 18,
+            "durationMs": 3,
+            "rowCount": 4
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 18,
+          "payload": {
+            "sequence": 18,
+            "phase": "run",
+            "origin": "drizzle",
+            "kind": "executed",
+            "sql": "select \"d0\".\"name\" as \"name\", \"posts\".\"r\" as \"posts\" from \"users\" as \"d0\" left join lateral(select coalesce(json_agg(row_to_json(\"t\".*)), '[]') as \"r\" from (select \"d1\".\"title\" as \"title\", \"comments\".\"r\" as \"comments\" from \"posts\" as \"d1\" left join lateral(select coalesce(json_agg(row_to_json(\"t\".*)), '[]') as \"r\" from (select \"d2\".\"body\" as \"body\", \"author\".\"r\" as \"author\" from \"comments\" as \"d2\" left join lateral(select row_to_json(\"t\".*) \"r\" from (select \"d3\".\"name\" as \"name\" from \"users\" as \"d3\" where \"d2\".\"author_id\" = \"d3\".\"id\" limit $1) as \"t\") as \"author\" on true where \"d1\".\"id\" = \"d2\".\"post_id\" order by \"d2\".\"id\" asc) as \"t\") as \"comments\" on true where \"d0\".\"id\" = \"d1\".\"author_id\" order by \"d1\".\"id\" asc) as \"t\") as \"posts\" on true order by \"d0\".\"id\" asc",
+            "parameters": [
+              {
+                "type": "primitive",
+                "value": 1
+              }
+            ],
+            "outcome": "succeeded",
+            "source": "query.ts",
+            "line": 4,
+            "durationMs": 4,
+            "rowCount": 2
+          }
+        },
+        {
+          "type": "display",
+          "sequence": 19,
+          "payload": {
+            "label": "Authors with posts and comments",
+            "values": [
+              {
+                "type": "array",
+                "value": [
+                  {
+                    "type": "object",
+                    "value": {
+                      "name": {
+                        "type": "primitive",
+                        "value": "Ada"
+                      },
+                      "posts": {
+                        "type": "array",
+                        "value": [
+                          {
+                            "type": "object",
+                            "value": {
+                              "title": {
+                                "type": "primitive",
+                                "value": "Hello, Drizzle"
+                              },
+                              "comments": {
+                                "type": "array",
+                                "value": [
+                                  {
+                                    "type": "object",
+                                    "value": {
+                                      "body": {
+                                        "type": "primitive",
+                                        "value": "Welcome aboard."
+                                      },
+                                      "author": {
+                                        "type": "object",
+                                        "value": {
+                                          "name": {
+                                            "type": "primitive",
+                                            "value": "Grace"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          },
+                          {
+                            "type": "object",
+                            "value": {
+                              "title": {
+                                "type": "primitive",
+                                "value": "Relations in one query"
+                              },
+                              "comments": {
+                                "type": "array",
+                                "value": [
+                                  {
+                                    "type": "object",
+                                    "value": {
+                                      "body": {
+                                        "type": "primitive",
+                                        "value": "One round trip, nice."
+                                      },
+                                      "author": {
+                                        "type": "object",
+                                        "value": {
+                                          "name": {
+                                            "type": "primitive",
+                                            "value": "Grace"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "value": {
+                      "name": {
+                        "type": "primitive",
+                        "value": "Grace"
+                      },
+                      "posts": {
+                        "type": "array",
+                        "value": [
+                          {
+                            "type": "object",
+                            "value": {
+                              "title": {
+                                "type": "primitive",
+                                "value": "Types all the way down"
+                              },
+                              "comments": {
+                                "type": "array",
+                                "value": [
+                                  {
+                                    "type": "object",
+                                    "value": {
+                                      "body": {
+                                        "type": "primitive",
+                                        "value": "Inferred from the schema, nice."
+                                      },
+                                      "author": {
+                                        "type": "object",
+                                        "value": {
+                                          "name": {
+                                            "type": "primitive",
+                                            "value": "Ada"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "type": "object",
+                                    "value": {
+                                      "body": {
+                                        "type": "primitive",
+                                        "value": "No codegen step either."
+                                      },
+                                      "author": {
+                                        "type": "object",
+                                        "value": {
+                                          "name": {
+                                            "type": "primitive",
+                                            "value": "Grace"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            ],
+            "source": "query.ts",
+            "line": 22
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 20,
+          "payload": {
+            "sequence": 19,
+            "phase": "run",
+            "origin": "drizzle",
+            "kind": "executed",
+            "sql": "select \"d0\".\"title\" as \"title\", \"author\".\"r\" as \"author\" from (select \"d0\".* from \"posts\" as \"d0\" where exists (select * from \"comments\" as \"f0\" where ((\"d0\".\"id\" = \"f0\".\"post_id\") and (exists (select * from \"users\" as \"f1\" where ((\"f0\".\"author_id\" = \"f1\".\"id\") and (\"f1\".\"name\" = $1))))))) as \"d0\" left join lateral(select row_to_json(\"t\".*) \"r\" from (select \"d1\".\"name\" as \"name\" from \"users\" as \"d1\" where \"d0\".\"author_id\" = \"d1\".\"id\" limit $2) as \"t\") as \"author\" on true",
+            "parameters": [
+              {
+                "type": "primitive",
+                "value": "Ada"
+              },
+              {
+                "type": "primitive",
+                "value": 1
+              }
+            ],
+            "outcome": "succeeded",
+            "source": "query.ts",
+            "line": 25,
+            "durationMs": 3,
+            "rowCount": 1
+          }
+        },
+        {
+          "type": "display",
+          "sequence": 21,
+          "payload": {
+            "label": "Posts Ada commented on",
+            "values": [
+              {
+                "type": "array",
+                "value": [
+                  {
+                    "type": "object",
+                    "value": {
+                      "title": {
+                        "type": "primitive",
+                        "value": "Types all the way down"
+                      },
+                      "author": {
+                        "type": "object",
+                        "value": {
+                          "name": {
+                            "type": "primitive",
+                            "value": "Grace"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            ],
+            "source": "query.ts",
+            "line": 31
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 22,
+          "payload": {
+            "sequence": 20,
+            "phase": "run",
+            "origin": "drizzle",
+            "kind": "executed",
+            "sql": "select \"d0\".\"name\" as \"name\" from \"users\" as \"d0\" where \"d0\".\"name\" like $1",
+            "parameters": [
+              {
+                "type": "primitive",
+                "value": "A%"
+              }
+            ],
+            "outcome": "succeeded",
+            "source": "query.ts",
+            "line": 34,
+            "durationMs": 2,
+            "rowCount": 1
+          }
+        },
+        {
+          "type": "display",
+          "sequence": 23,
+          "payload": {
+            "label": "Names starting with A",
+            "values": [
+              {
+                "type": "array",
+                "value": [
+                  {
+                    "type": "object",
+                    "value": {
+                      "name": {
+                        "type": "primitive",
+                        "value": "Ada"
+                      }
+                    }
+                  }
+                ]
+              }
+            ],
+            "source": "query.ts",
+            "line": 39
+          }
+        }
+      ],
+      "cleanupErrors": [],
+      "cleanup": {
+        "guest": {
+          "mode": "graceful"
+        },
+        "database": {
+          "mode": "graceful"
+        }
+      },
+      "timings": {
+        "total": 615,
+        "validate": 0.04499995708465576,
+        "resolve": 0.004999995231628418,
+        "load_artifacts": 0.02500009536743164,
+        "compile": 5,
+        "evaluate_schema": 1,
+        "generate_bootstrap": 30,
+        "open_database": 4,
+        "apply_bootstrap": 30,
+        "initialize_context": 0,
+        "seed": 13,
+        "run": 12,
+        "inspect": 99
+      },
+      "ok": true,
+      "outcome": "succeeded"
+    }
+  ],
+  "guests": [
+    {
+      "imageId": "orm-0.45.4__kit-0.31.11",
+      "lockDigest": "sha256-d67a8b7119a1915ab2bc3cd02e6369ddedd9ed19d154bee341af8e1b707da225"
+    },
+    {
+      "imageId": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+      "lockDigest": "sha256-173d5c06268596c4f200f2c55999d19e7020ea73b9767d6f1cb6c8b2851731b1"
+    }
+  ]
+}

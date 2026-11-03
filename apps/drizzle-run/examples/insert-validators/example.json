@@ -1,0 +1,13 @@
+{
+  "id": "46a6dba7-d765-4eb3-b304-de1040647a88",
+  "slug": "insert-validators",
+  "status": "published",
+  "title": "Insert validators",
+  "description": "Derive a Zod schema from a table and check rows before they reach the database.",
+  "topic": "Validation",
+  "featured": false,
+  "order": 60,
+  "dialect": "postgresql",
+  "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+  "links": [{ "kind": "docs", "label": "Zod", "url": "https://orm.drizzle.team/docs/zod" }]
+}

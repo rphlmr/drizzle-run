@@ -1,0 +1,38 @@
+name: Publish the companion
+description: Publish @drizzle-run/connect to pkg.pr.new under a commit, and point the job's later builds at it.
+
+inputs:
+  sha:
+    description: The full commit sha pkg.pr.new names the build by
+    required: true
+  comment:
+    description: pkg.pr.new's pull request comment, "update" to keep one up to date, or "off"
+    default: update
+
+runs:
+  using: composite
+  steps:
+    # pkg.pr.new names the build by the full sha without --compact, which needs the package on npm. Every build after
+    # this step, in this action and in the job, reads where it will be.
+    - run: echo "VITE_CONNECT_PACKAGE=https://pkg.pr.new/${GITHUB_REPOSITORY}/@drizzle-run/connect@${COMPANION_SHA}" >> "$GITHUB_ENV"
+      shell: bash
+      env:
+        COMPANION_SHA: ${{ inputs.sha }}
+    - run: pnpm exec turbo run build --filter=@drizzle-run/connect
+      shell: bash
+    # Through the pkg.pr.new GitHub App, which comments the install command on the pull request unless the comment is off.
+    - id: publish
+      run: pnpm exec pkg-pr-new publish ./packages/connect --pnpm --packageManager=pnpm --bin --no-compact "--comment=${COMMENT}"
+      shell: bash
+      env:
+        COMMENT: ${{ inputs.comment }}
+    - name: The companion is published where the builds point
+      shell: bash
+      env:
+        COMPANION_SHA: ${{ inputs.sha }}
+        PUBLISHED_SHA: ${{ steps.publish.outputs.sha }}
+      run: |
+        if [ "$PUBLISHED_SHA" != "$COMPANION_SHA" ]; then
+          echo "pkg.pr.new published the companion at ${PUBLISHED_SHA}, but the builds point at ${COMPANION_SHA}" >&2
+          exit 1
+        fi

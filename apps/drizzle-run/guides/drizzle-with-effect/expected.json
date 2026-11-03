@@ -1,0 +1,208 @@
+{
+  "steps": {
+    "01-plan": {
+      "Users": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 1
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Ada"
+                },
+                "email": {
+                  "type": "primitive",
+                  "value": "ada@example.com"
+                },
+                "credits": {
+                  "type": "primitive",
+                  "value": 10
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 2
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Grace"
+                },
+                "email": {
+                  "type": "primitive",
+                  "value": "grace@example.com"
+                },
+                "credits": {
+                  "type": "primitive",
+                  "value": 5
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "02-typed-errors": {
+      "Users": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 1
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Ada"
+                },
+                "email": {
+                  "type": "primitive",
+                  "value": "ada@example.com"
+                },
+                "credits": {
+                  "type": "primitive",
+                  "value": 10
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 2
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Grace"
+                },
+                "email": {
+                  "type": "primitive",
+                  "value": "grace@example.com"
+                },
+                "credits": {
+                  "type": "primitive",
+                  "value": 5
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "03-transaction": {
+      "Users": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 1
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Ada"
+                },
+                "email": {
+                  "type": "primitive",
+                  "value": "ada@example.com"
+                },
+                "credits": {
+                  "type": "primitive",
+                  "value": 7
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 2
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Grace"
+                },
+                "email": {
+                  "type": "primitive",
+                  "value": "grace@example.com"
+                },
+                "credits": {
+                  "type": "primitive",
+                  "value": 5
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "04-retry": {
+      "Users": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 1
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Ada"
+                },
+                "email": {
+                  "type": "primitive",
+                  "value": "ada@example.com"
+                },
+                "credits": {
+                  "type": "primitive",
+                  "value": 7
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 2
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Grace"
+                },
+                "email": {
+                  "type": "primitive",
+                  "value": "grace@example.com"
+                },
+                "credits": {
+                  "type": "primitive",
+                  "value": 5
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

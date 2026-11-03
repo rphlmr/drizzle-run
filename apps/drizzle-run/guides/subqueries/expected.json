@@ -1,0 +1,266 @@
+{
+  "steps": {
+    "01-membership": {
+      "Authors with published posts": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "name": {
+                  "type": "primitive",
+                  "value": "Ada"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "name": {
+                  "type": "primitive",
+                  "value": "Grace"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "02-exists": {
+      "Authors with published posts": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "name": {
+                  "type": "primitive",
+                  "value": "Ada"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "name": {
+                  "type": "primitive",
+                  "value": "Grace"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "Authors without published posts": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "name": {
+                  "type": "primitive",
+                  "value": "Linus"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "03-derived-table": {
+      "Author report": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "name": {
+                  "type": "primitive",
+                  "value": "Ada"
+                },
+                "publishedPosts": {
+                  "type": "primitive",
+                  "value": 2
+                },
+                "views": {
+                  "type": "primitive",
+                  "value": 40
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "name": {
+                  "type": "primitive",
+                  "value": "Grace"
+                },
+                "publishedPosts": {
+                  "type": "primitive",
+                  "value": 1
+                },
+                "views": {
+                  "type": "primitive",
+                  "value": 5
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "name": {
+                  "type": "primitive",
+                  "value": "Linus"
+                },
+                "publishedPosts": {
+                  "type": "primitive",
+                  "value": 0
+                },
+                "views": {
+                  "type": "primitive",
+                  "value": 0
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "04-scalar": {
+      "One count per author": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "name": {
+                  "type": "primitive",
+                  "value": "Ada"
+                },
+                "publishedPosts": {
+                  "type": "primitive",
+                  "value": 2
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "name": {
+                  "type": "primitive",
+                  "value": "Grace"
+                },
+                "publishedPosts": {
+                  "type": "primitive",
+                  "value": 1
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "name": {
+                  "type": "primitive",
+                  "value": "Linus"
+                },
+                "publishedPosts": {
+                  "type": "primitive",
+                  "value": 0
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "05-cte": {
+      "Author report": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "name": {
+                  "type": "primitive",
+                  "value": "Ada"
+                },
+                "publishedPosts": {
+                  "type": "primitive",
+                  "value": 2
+                },
+                "views": {
+                  "type": "primitive",
+                  "value": 40
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "name": {
+                  "type": "primitive",
+                  "value": "Grace"
+                },
+                "publishedPosts": {
+                  "type": "primitive",
+                  "value": 1
+                },
+                "views": {
+                  "type": "primitive",
+                  "value": 5
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "name": {
+                  "type": "primitive",
+                  "value": "Linus"
+                },
+                "publishedPosts": {
+                  "type": "primitive",
+                  "value": 0
+                },
+                "views": {
+                  "type": "primitive",
+                  "value": 0
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "Authors with at least 30 published views": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "name": {
+                  "type": "primitive",
+                  "value": "Ada"
+                },
+                "publishedPosts": {
+                  "type": "primitive",
+                  "value": 2
+                },
+                "views": {
+                  "type": "primitive",
+                  "value": 40
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

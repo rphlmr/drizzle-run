@@ -1,0 +1,24 @@
+{
+  "id": "4220b8e4-5b43-48d5-b630-54c346283aec",
+  "slug": "prepared-product-search",
+  "status": "published",
+  "title": "Prepared product search",
+  "description": "Reuse one query with category, minimum price and result-limit placeholders.",
+  "topic": "Queries",
+  "featured": false,
+  "order": 65,
+  "dialect": "postgresql",
+  "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+  "links": [
+    {
+      "kind": "docs",
+      "label": "Prepared queries",
+      "url": "https://orm.drizzle.team/docs/perf-queries"
+    },
+    {
+      "kind": "example",
+      "label": "Learn placeholders",
+      "slug": "prepared-queries"
+    }
+  ]
+}

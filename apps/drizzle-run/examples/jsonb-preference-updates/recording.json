@@ -1,0 +1,1274 @@
+{
+  "recordingVersion": 1,
+  "snapshotDigest": "32c17dd23393b63ae8fa4e8d6c787371fb9e4fef5550f5dac4cedf0ff5c1c296",
+  "recordedAt": "2026-10-28T20:30:22.764Z",
+  "result": {
+    "version": 1,
+    "target": {
+      "dialect": "postgresql"
+    },
+    "tuple": {
+      "id": "postgresql-pglite__orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+      "target": {
+        "dialect": "postgresql"
+      },
+      "ormVersion": "1.0.0-rc.5",
+      "kitVersion": "1.0.0-rc.5"
+    },
+    "random": {
+      "effectiveSeed": 2829987350,
+      "source": "derived",
+      "derivation": "run-manifest-sha256-u32-v1",
+      "generator": "mulberry32-v1"
+    },
+    "phases": [
+      {
+        "phase": "validate",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T20:30:21.903Z",
+        "durationMs": 0.030000001192092896
+      },
+      {
+        "phase": "resolve",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T20:30:21.903Z",
+        "durationMs": 0.005000010132789612
+      },
+      {
+        "phase": "load_artifacts",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T20:30:21.903Z",
+        "durationMs": 0.3400000035762787
+      },
+      {
+        "phase": "compile",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T20:30:22.073Z",
+        "durationMs": 2
+      },
+      {
+        "phase": "evaluate_schema",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T20:30:22.076Z",
+        "durationMs": 1
+      },
+      {
+        "phase": "generate_bootstrap",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T20:30:22.076Z",
+        "durationMs": 18
+      },
+      {
+        "phase": "open_database",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T20:30:22.096Z",
+        "durationMs": 4
+      },
+      {
+        "phase": "apply_bootstrap",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T20:30:22.099Z",
+        "durationMs": 9
+      },
+      {
+        "phase": "initialize_context",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T20:30:22.109Z",
+        "durationMs": 1
+      },
+      {
+        "phase": "seed",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T20:30:22.110Z",
+        "durationMs": 3
+      },
+      {
+        "phase": "run",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T20:30:22.115Z",
+        "durationMs": 12
+      },
+      {
+        "phase": "inspect",
+        "status": "succeeded",
+        "startedAt": "2026-10-28T20:30:22.176Z",
+        "durationMs": 51
+      }
+    ],
+    "diagnostics": [],
+    "sql": [
+      {
+        "sequence": 1,
+        "phase": "bootstrap",
+        "origin": "kit",
+        "kind": "generated",
+        "sql": "CREATE TABLE \"users\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"preferences\" jsonb DEFAULT '{}' NOT NULL\n);\n",
+        "parameters": [],
+        "outcome": "succeeded"
+      },
+      {
+        "sequence": 2,
+        "phase": "bootstrap",
+        "origin": "adapter",
+        "kind": "executed",
+        "sql": "BEGIN",
+        "parameters": [],
+        "outcome": "succeeded",
+        "durationMs": 2
+      },
+      {
+        "sequence": 3,
+        "phase": "bootstrap",
+        "origin": "adapter",
+        "kind": "executed",
+        "sql": "CREATE TABLE \"users\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"preferences\" jsonb DEFAULT '{}' NOT NULL\n);\n",
+        "parameters": [],
+        "outcome": "succeeded",
+        "durationMs": 5
+      },
+      {
+        "sequence": 4,
+        "phase": "bootstrap",
+        "origin": "adapter",
+        "kind": "executed",
+        "sql": "COMMIT",
+        "parameters": [],
+        "outcome": "succeeded",
+        "durationMs": 1
+      },
+      {
+        "sequence": 5,
+        "phase": "seed",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "insert into \"users\" (\"id\", \"name\", \"preferences\") values ($1, $2, $3), ($4, $5, $6), ($7, $8, $9)",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": 1
+          },
+          {
+            "type": "primitive",
+            "value": "Ada"
+          },
+          {
+            "type": "object",
+            "value": {
+              "theme": {
+                "type": "primitive",
+                "value": "dark"
+              },
+              "notifications": {
+                "type": "object",
+                "value": {
+                  "email": {
+                    "type": "primitive",
+                    "value": true
+                  },
+                  "sms": {
+                    "type": "primitive",
+                    "value": true
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "primitive",
+            "value": 2
+          },
+          {
+            "type": "primitive",
+            "value": "Grace"
+          },
+          {
+            "type": "object",
+            "value": {
+              "theme": {
+                "type": "primitive",
+                "value": "light"
+              },
+              "notifications": {
+                "type": "object",
+                "value": {}
+              }
+            }
+          },
+          {
+            "type": "primitive",
+            "value": 3
+          },
+          {
+            "type": "primitive",
+            "value": "Linus"
+          },
+          {
+            "type": "object",
+            "value": {
+              "theme": {
+                "type": "primitive",
+                "value": "dark"
+              }
+            }
+          }
+        ],
+        "outcome": "succeeded",
+        "source": "seed.ts",
+        "line": 4,
+        "durationMs": 3,
+        "rowCount": 3
+      },
+      {
+        "sequence": 6,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "select \"id\", \"name\", \"preferences\" from \"users\" order by \"users\".\"id\"",
+        "parameters": [],
+        "outcome": "succeeded",
+        "source": "query.ts",
+        "line": 5,
+        "durationMs": 2,
+        "rowCount": 3
+      },
+      {
+        "sequence": 7,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "update \"users\" set \"preferences\" = jsonb_set(\n    \"users\".\"preferences\", '{notifications,email}', to_jsonb($1::boolean), true\n  ) where \"users\".\"id\" = $2 returning \"id\", \"name\", \"preferences\"",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": false
+          },
+          {
+            "type": "primitive",
+            "value": 1
+          }
+        ],
+        "outcome": "succeeded",
+        "source": "query.ts",
+        "line": 9,
+        "durationMs": 2,
+        "rowCount": 1
+      },
+      {
+        "sequence": 8,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "update \"users\" set \"preferences\" = jsonb_set(\n    \"users\".\"preferences\", '{notifications,email}', to_jsonb($1::boolean), true\n  ) where \"users\".\"id\" = $2 returning \"id\", \"name\", \"preferences\"",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": false
+          },
+          {
+            "type": "primitive",
+            "value": 3
+          }
+        ],
+        "outcome": "succeeded",
+        "source": "query.ts",
+        "line": 22,
+        "durationMs": 1,
+        "rowCount": 1
+      },
+      {
+        "sequence": 9,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "update \"users\" set \"preferences\" = jsonb_set(\n    \"users\".\"preferences\",\n    '{notifications}',\n    coalesce(\"users\".\"preferences\"->'notifications', '{}'::jsonb)\n      || jsonb_build_object('email', $1::boolean),\n    true\n  ) where \"users\".\"id\" = $2 returning \"id\", \"name\", \"preferences\"",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": false
+          },
+          {
+            "type": "primitive",
+            "value": 3
+          }
+        ],
+        "outcome": "succeeded",
+        "source": "query.ts",
+        "line": 36,
+        "durationMs": 2,
+        "rowCount": 1
+      },
+      {
+        "sequence": 10,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "select \"id\", \"name\", \"preferences\" from \"users\" order by \"users\".\"id\"",
+        "parameters": [],
+        "outcome": "succeeded",
+        "source": "query.ts",
+        "line": 51,
+        "durationMs": 1,
+        "rowCount": 3
+      }
+    ],
+    "logs": [],
+    "value": {
+      "type": "undefined"
+    },
+    "displays": [
+      {
+        "label": "Before",
+        "values": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "id": {
+                    "type": "primitive",
+                    "value": 1
+                  },
+                  "name": {
+                    "type": "primitive",
+                    "value": "Ada"
+                  },
+                  "preferences": {
+                    "type": "object",
+                    "value": {
+                      "theme": {
+                        "type": "primitive",
+                        "value": "dark"
+                      },
+                      "notifications": {
+                        "type": "object",
+                        "value": {
+                          "sms": {
+                            "type": "primitive",
+                            "value": true
+                          },
+                          "email": {
+                            "type": "primitive",
+                            "value": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "id": {
+                    "type": "primitive",
+                    "value": 2
+                  },
+                  "name": {
+                    "type": "primitive",
+                    "value": "Grace"
+                  },
+                  "preferences": {
+                    "type": "object",
+                    "value": {
+                      "theme": {
+                        "type": "primitive",
+                        "value": "light"
+                      },
+                      "notifications": {
+                        "type": "object",
+                        "value": {}
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "id": {
+                    "type": "primitive",
+                    "value": 3
+                  },
+                  "name": {
+                    "type": "primitive",
+                    "value": "Linus"
+                  },
+                  "preferences": {
+                    "type": "object",
+                    "value": {
+                      "theme": {
+                        "type": "primitive",
+                        "value": "dark"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "source": "query.ts",
+        "line": 5
+      },
+      {
+        "label": "Ada keeps her other preferences",
+        "values": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "id": {
+                    "type": "primitive",
+                    "value": 1
+                  },
+                  "name": {
+                    "type": "primitive",
+                    "value": "Ada"
+                  },
+                  "preferences": {
+                    "type": "object",
+                    "value": {
+                      "theme": {
+                        "type": "primitive",
+                        "value": "dark"
+                      },
+                      "notifications": {
+                        "type": "object",
+                        "value": {
+                          "sms": {
+                            "type": "primitive",
+                            "value": true
+                          },
+                          "email": {
+                            "type": "primitive",
+                            "value": false
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "source": "query.ts",
+        "line": 19
+      },
+      {
+        "label": "Linus still has no notifications object",
+        "values": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "id": {
+                    "type": "primitive",
+                    "value": 3
+                  },
+                  "name": {
+                    "type": "primitive",
+                    "value": "Linus"
+                  },
+                  "preferences": {
+                    "type": "object",
+                    "value": {
+                      "theme": {
+                        "type": "primitive",
+                        "value": "dark"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "source": "query.ts",
+        "line": 32
+      },
+      {
+        "label": "Linus gets the missing parent",
+        "values": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "id": {
+                    "type": "primitive",
+                    "value": 3
+                  },
+                  "name": {
+                    "type": "primitive",
+                    "value": "Linus"
+                  },
+                  "preferences": {
+                    "type": "object",
+                    "value": {
+                      "theme": {
+                        "type": "primitive",
+                        "value": "dark"
+                      },
+                      "notifications": {
+                        "type": "object",
+                        "value": {
+                          "email": {
+                            "type": "primitive",
+                            "value": false
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "source": "query.ts",
+        "line": 50
+      },
+      {
+        "label": "After, including unchanged Grace",
+        "values": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "id": {
+                    "type": "primitive",
+                    "value": 1
+                  },
+                  "name": {
+                    "type": "primitive",
+                    "value": "Ada"
+                  },
+                  "preferences": {
+                    "type": "object",
+                    "value": {
+                      "theme": {
+                        "type": "primitive",
+                        "value": "dark"
+                      },
+                      "notifications": {
+                        "type": "object",
+                        "value": {
+                          "sms": {
+                            "type": "primitive",
+                            "value": true
+                          },
+                          "email": {
+                            "type": "primitive",
+                            "value": false
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "id": {
+                    "type": "primitive",
+                    "value": 2
+                  },
+                  "name": {
+                    "type": "primitive",
+                    "value": "Grace"
+                  },
+                  "preferences": {
+                    "type": "object",
+                    "value": {
+                      "theme": {
+                        "type": "primitive",
+                        "value": "light"
+                      },
+                      "notifications": {
+                        "type": "object",
+                        "value": {}
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "id": {
+                    "type": "primitive",
+                    "value": 3
+                  },
+                  "name": {
+                    "type": "primitive",
+                    "value": "Linus"
+                  },
+                  "preferences": {
+                    "type": "object",
+                    "value": {
+                      "theme": {
+                        "type": "primitive",
+                        "value": "dark"
+                      },
+                      "notifications": {
+                        "type": "object",
+                        "value": {
+                          "email": {
+                            "type": "primitive",
+                            "value": false
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "source": "query.ts",
+        "line": 51
+      }
+    ],
+    "events": [
+      {
+        "type": "sql",
+        "sequence": 1,
+        "payload": {
+          "sequence": 1,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "CREATE TABLE \"users\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"preferences\" jsonb DEFAULT '{}' NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 2,
+        "payload": {
+          "sequence": 2,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "BEGIN",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 2
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 3,
+        "payload": {
+          "sequence": 3,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "CREATE TABLE \"users\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"preferences\" jsonb DEFAULT '{}' NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 5
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 4,
+        "payload": {
+          "sequence": 4,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "COMMIT",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 1
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 5,
+        "payload": {
+          "sequence": 5,
+          "phase": "seed",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "insert into \"users\" (\"id\", \"name\", \"preferences\") values ($1, $2, $3), ($4, $5, $6), ($7, $8, $9)",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": 1
+            },
+            {
+              "type": "primitive",
+              "value": "Ada"
+            },
+            {
+              "type": "object",
+              "value": {
+                "theme": {
+                  "type": "primitive",
+                  "value": "dark"
+                },
+                "notifications": {
+                  "type": "object",
+                  "value": {
+                    "email": {
+                      "type": "primitive",
+                      "value": true
+                    },
+                    "sms": {
+                      "type": "primitive",
+                      "value": true
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "primitive",
+              "value": 2
+            },
+            {
+              "type": "primitive",
+              "value": "Grace"
+            },
+            {
+              "type": "object",
+              "value": {
+                "theme": {
+                  "type": "primitive",
+                  "value": "light"
+                },
+                "notifications": {
+                  "type": "object",
+                  "value": {}
+                }
+              }
+            },
+            {
+              "type": "primitive",
+              "value": 3
+            },
+            {
+              "type": "primitive",
+              "value": "Linus"
+            },
+            {
+              "type": "object",
+              "value": {
+                "theme": {
+                  "type": "primitive",
+                  "value": "dark"
+                }
+              }
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "seed.ts",
+          "line": 4,
+          "durationMs": 3,
+          "rowCount": 3
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 6,
+        "payload": {
+          "sequence": 6,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "select \"id\", \"name\", \"preferences\" from \"users\" order by \"users\".\"id\"",
+          "parameters": [],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 5,
+          "durationMs": 2,
+          "rowCount": 3
+        }
+      },
+      {
+        "type": "display",
+        "sequence": 7,
+        "payload": {
+          "label": "Before",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 1
+                    },
+                    "name": {
+                      "type": "primitive",
+                      "value": "Ada"
+                    },
+                    "preferences": {
+                      "type": "object",
+                      "value": {
+                        "theme": {
+                          "type": "primitive",
+                          "value": "dark"
+                        },
+                        "notifications": {
+                          "type": "object",
+                          "value": {
+                            "sms": {
+                              "type": "primitive",
+                              "value": true
+                            },
+                            "email": {
+                              "type": "primitive",
+                              "value": true
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 2
+                    },
+                    "name": {
+                      "type": "primitive",
+                      "value": "Grace"
+                    },
+                    "preferences": {
+                      "type": "object",
+                      "value": {
+                        "theme": {
+                          "type": "primitive",
+                          "value": "light"
+                        },
+                        "notifications": {
+                          "type": "object",
+                          "value": {}
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 3
+                    },
+                    "name": {
+                      "type": "primitive",
+                      "value": "Linus"
+                    },
+                    "preferences": {
+                      "type": "object",
+                      "value": {
+                        "theme": {
+                          "type": "primitive",
+                          "value": "dark"
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 5
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 8,
+        "payload": {
+          "sequence": 7,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "update \"users\" set \"preferences\" = jsonb_set(\n    \"users\".\"preferences\", '{notifications,email}', to_jsonb($1::boolean), true\n  ) where \"users\".\"id\" = $2 returning \"id\", \"name\", \"preferences\"",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": false
+            },
+            {
+              "type": "primitive",
+              "value": 1
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 9,
+          "durationMs": 2,
+          "rowCount": 1
+        }
+      },
+      {
+        "type": "display",
+        "sequence": 9,
+        "payload": {
+          "label": "Ada keeps her other preferences",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 1
+                    },
+                    "name": {
+                      "type": "primitive",
+                      "value": "Ada"
+                    },
+                    "preferences": {
+                      "type": "object",
+                      "value": {
+                        "theme": {
+                          "type": "primitive",
+                          "value": "dark"
+                        },
+                        "notifications": {
+                          "type": "object",
+                          "value": {
+                            "sms": {
+                              "type": "primitive",
+                              "value": true
+                            },
+                            "email": {
+                              "type": "primitive",
+                              "value": false
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 19
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 10,
+        "payload": {
+          "sequence": 8,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "update \"users\" set \"preferences\" = jsonb_set(\n    \"users\".\"preferences\", '{notifications,email}', to_jsonb($1::boolean), true\n  ) where \"users\".\"id\" = $2 returning \"id\", \"name\", \"preferences\"",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": false
+            },
+            {
+              "type": "primitive",
+              "value": 3
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 22,
+          "durationMs": 1,
+          "rowCount": 1
+        }
+      },
+      {
+        "type": "display",
+        "sequence": 11,
+        "payload": {
+          "label": "Linus still has no notifications object",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 3
+                    },
+                    "name": {
+                      "type": "primitive",
+                      "value": "Linus"
+                    },
+                    "preferences": {
+                      "type": "object",
+                      "value": {
+                        "theme": {
+                          "type": "primitive",
+                          "value": "dark"
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 32
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 12,
+        "payload": {
+          "sequence": 9,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "update \"users\" set \"preferences\" = jsonb_set(\n    \"users\".\"preferences\",\n    '{notifications}',\n    coalesce(\"users\".\"preferences\"->'notifications', '{}'::jsonb)\n      || jsonb_build_object('email', $1::boolean),\n    true\n  ) where \"users\".\"id\" = $2 returning \"id\", \"name\", \"preferences\"",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": false
+            },
+            {
+              "type": "primitive",
+              "value": 3
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 36,
+          "durationMs": 2,
+          "rowCount": 1
+        }
+      },
+      {
+        "type": "display",
+        "sequence": 13,
+        "payload": {
+          "label": "Linus gets the missing parent",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 3
+                    },
+                    "name": {
+                      "type": "primitive",
+                      "value": "Linus"
+                    },
+                    "preferences": {
+                      "type": "object",
+                      "value": {
+                        "theme": {
+                          "type": "primitive",
+                          "value": "dark"
+                        },
+                        "notifications": {
+                          "type": "object",
+                          "value": {
+                            "email": {
+                              "type": "primitive",
+                              "value": false
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 50
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 14,
+        "payload": {
+          "sequence": 10,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "select \"id\", \"name\", \"preferences\" from \"users\" order by \"users\".\"id\"",
+          "parameters": [],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 51,
+          "durationMs": 1,
+          "rowCount": 3
+        }
+      },
+      {
+        "type": "display",
+        "sequence": 15,
+        "payload": {
+          "label": "After, including unchanged Grace",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 1
+                    },
+                    "name": {
+                      "type": "primitive",
+                      "value": "Ada"
+                    },
+                    "preferences": {
+                      "type": "object",
+                      "value": {
+                        "theme": {
+                          "type": "primitive",
+                          "value": "dark"
+                        },
+                        "notifications": {
+                          "type": "object",
+                          "value": {
+                            "sms": {
+                              "type": "primitive",
+                              "value": true
+                            },
+                            "email": {
+                              "type": "primitive",
+                              "value": false
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 2
+                    },
+                    "name": {
+                      "type": "primitive",
+                      "value": "Grace"
+                    },
+                    "preferences": {
+                      "type": "object",
+                      "value": {
+                        "theme": {
+                          "type": "primitive",
+                          "value": "light"
+                        },
+                        "notifications": {
+                          "type": "object",
+                          "value": {}
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 3
+                    },
+                    "name": {
+                      "type": "primitive",
+                      "value": "Linus"
+                    },
+                    "preferences": {
+                      "type": "object",
+                      "value": {
+                        "theme": {
+                          "type": "primitive",
+                          "value": "dark"
+                        },
+                        "notifications": {
+                          "type": "object",
+                          "value": {
+                            "email": {
+                              "type": "primitive",
+                              "value": false
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 51
+        }
+      }
+    ],
+    "cleanupErrors": [],
+    "cleanup": {
+      "guest": {
+        "mode": "graceful"
+      },
+      "database": {
+        "mode": "graceful"
+      }
+    },
+    "timings": {
+      "total": 330,
+      "validate": 0.030000001192092896,
+      "resolve": 0.005000010132789612,
+      "load_artifacts": 0.3400000035762787,
+      "compile": 2,
+      "evaluate_schema": 1,
+      "generate_bootstrap": 18,
+      "open_database": 4,
+      "apply_bootstrap": 9,
+      "initialize_context": 1,
+      "seed": 3,
+      "run": 12,
+      "inspect": 51
+    },
+    "ok": true,
+    "outcome": "succeeded"
+  },
+  "guests": [
+    {
+      "imageId": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+      "lockDigest": "sha256-173d5c06268596c4f200f2c55999d19e7020ea73b9767d6f1cb6c8b2851731b1"
+    }
+  ]
+}

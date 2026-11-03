@@ -1,0 +1,100 @@
+{
+  "name": "@drizzle-run/core",
+  "version": "0.1.0",
+  "description": "Drizzle Run manifests, release catalog, contracts, guides, and checks, depending only on zod and es-toolkit",
+  "homepage": "https://github.com/rphlmr/drizzle-run/tree/main/packages/core#readme",
+  "bugs": {
+    "url": "https://github.com/rphlmr/drizzle-run/issues"
+  },
+  "license": "AGPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rphlmr/drizzle-run.git",
+    "directory": "packages/core"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    "./manifest": {
+      "types": "./dist/manifest/index.d.ts",
+      "import": "./dist/manifest/index.js",
+      "default": "./dist/manifest/index.js"
+    },
+    "./pair": {
+      "types": "./dist/pair/index.d.ts",
+      "import": "./dist/pair/index.js",
+      "default": "./dist/pair/index.js"
+    },
+    "./catalog": {
+      "types": "./dist/catalog/index.d.ts",
+      "import": "./dist/catalog/index.js",
+      "default": "./dist/catalog/index.js"
+    },
+    "./contracts": {
+      "types": "./dist/contracts/index.d.ts",
+      "import": "./dist/contracts/index.js",
+      "default": "./dist/contracts/index.js"
+    },
+    "./guide": {
+      "types": "./dist/guide/index.d.ts",
+      "import": "./dist/guide/index.js",
+      "default": "./dist/guide/index.js"
+    },
+    "./checks": {
+      "types": "./dist/checks/index.d.ts",
+      "import": "./dist/checks/index.js",
+      "default": "./dist/checks/index.js"
+    },
+    "./connect": {
+      "types": "./dist/connect/index.d.ts",
+      "import": "./dist/connect/index.js",
+      "default": "./dist/connect/index.js"
+    },
+    "./registry": {
+      "types": "./dist/registry/index.d.ts",
+      "import": "./dist/registry/index.js",
+      "default": "./dist/registry/index.js"
+    },
+    "./hash": {
+      "types": "./dist/hash/sha256.d.ts",
+      "import": "./dist/hash/sha256.js",
+      "default": "./dist/hash/sha256.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "prebuild": "node scripts/clean-dist.ts",
+    "test": "vitest run --coverage && node scripts/audit-pack.ts",
+    "test:pack": "publint --strict && attw --pack . --profile esm-only && node scripts/audit-pack.ts",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "es-toolkit": "1.52.0",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "0.18.5",
+    "@drizzle-run/machine-paths": "workspace:*",
+    "@types/node": "24.19.2",
+    "@vitest/coverage-v8": "5.0.5",
+    "publint": "0.3.25",
+    "typescript": "7.0.2",
+    "vitest": "5.0.5",
+    "xstate": "5.33.3"
+  },
+  "peerDependencies": {
+    "xstate": "^5.28.0"
+  },
+  "peerDependenciesMeta": {
+    "xstate": {
+      "optional": true
+    }
+  }
+}

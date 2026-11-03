@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security vulnerability
+    url: https://github.com/rphlmr/drizzle-run/security/advisories/new
+    about: Report it privately, never in a public issue. See SECURITY.md.
+  - name: Drizzle ORM or Drizzle Kit bug
+    url: https://github.com/drizzle-team/drizzle-orm/issues
+    about: A bug you can reproduce outside Drizzle Run belongs to Drizzle itself.

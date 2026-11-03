@@ -1,0 +1,396 @@
+{
+  "steps": {
+    "01-bound-values": {
+      "Books": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 2
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Pocket notes"
+                },
+                "category": {
+                  "type": "primitive",
+                  "value": "books"
+                },
+                "priceCents": {
+                  "type": "primitive",
+                  "value": 800
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 3
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Query notebook"
+                },
+                "category": {
+                  "type": "primitive",
+                  "value": "books"
+                },
+                "priceCents": {
+                  "type": "primitive",
+                  "value": 1200
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 1
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "SQL handbook"
+                },
+                "category": {
+                  "type": "primitive",
+                  "value": "books"
+                },
+                "priceCents": {
+                  "type": "primitive",
+                  "value": 2500
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "02-prepare": {
+      "Books": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 2
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Pocket notes"
+                },
+                "category": {
+                  "type": "primitive",
+                  "value": "books"
+                },
+                "priceCents": {
+                  "type": "primitive",
+                  "value": 800
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 3
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Query notebook"
+                },
+                "category": {
+                  "type": "primitive",
+                  "value": "books"
+                },
+                "priceCents": {
+                  "type": "primitive",
+                  "value": 1200
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 1
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "SQL handbook"
+                },
+                "category": {
+                  "type": "primitive",
+                  "value": "books"
+                },
+                "priceCents": {
+                  "type": "primitive",
+                  "value": 2500
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "Tools": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 4
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Debugging kit"
+                },
+                "category": {
+                  "type": "primitive",
+                  "value": "tools"
+                },
+                "priceCents": {
+                  "type": "primitive",
+                  "value": 4500
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "03-several-values": {
+      "First book at or above 1000 cents": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 3
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Query notebook"
+                },
+                "category": {
+                  "type": "primitive",
+                  "value": "books"
+                },
+                "priceCents": {
+                  "type": "primitive",
+                  "value": 1200
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "Two books at or above 1000 cents": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 3
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Query notebook"
+                },
+                "category": {
+                  "type": "primitive",
+                  "value": "books"
+                },
+                "priceCents": {
+                  "type": "primitive",
+                  "value": 1200
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 1
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "SQL handbook"
+                },
+                "category": {
+                  "type": "primitive",
+                  "value": "books"
+                },
+                "priceCents": {
+                  "type": "primitive",
+                  "value": 2500
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "Tools under the same query shape": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 4
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Debugging kit"
+                },
+                "category": {
+                  "type": "primitive",
+                  "value": "tools"
+                },
+                "priceCents": {
+                  "type": "primitive",
+                  "value": 4500
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "04-missing-value": {
+      "First book at or above 1000 cents": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 3
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Query notebook"
+                },
+                "category": {
+                  "type": "primitive",
+                  "value": "books"
+                },
+                "priceCents": {
+                  "type": "primitive",
+                  "value": 1200
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "Two books at or above 1000 cents": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 3
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Query notebook"
+                },
+                "category": {
+                  "type": "primitive",
+                  "value": "books"
+                },
+                "priceCents": {
+                  "type": "primitive",
+                  "value": 1200
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 1
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "SQL handbook"
+                },
+                "category": {
+                  "type": "primitive",
+                  "value": "books"
+                },
+                "priceCents": {
+                  "type": "primitive",
+                  "value": 2500
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "Tools under the same query shape": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 4
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Debugging kit"
+                },
+                "category": {
+                  "type": "primitive",
+                  "value": "tools"
+                },
+                "priceCents": {
+                  "type": "primitive",
+                  "value": 4500
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "Missing placeholder": [
+        {
+          "type": "primitive",
+          "value": "No value for placeholder \"minimumCents\" was provided"
+        }
+      ]
+    }
+  }
+}
