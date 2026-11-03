@@ -454,8 +454,8 @@ export function PlansNotice({ flag, planned, onRun, canRun = false }: PlansNotic
   return (
     <div
       className={cn(
-        "mx-4 mt-3.5 flex items-center gap-3 rounded-lg border-[1.5px] border-card-border bg-surface px-3.5 py-3 text-[13px] shadow-sticker-card [&>svg]:size-4 [&>svg]:shrink-0",
-        "max-phone:mx-3 max-phone:flex-col max-phone:gap-3 max-phone:border-0 max-phone:bg-transparent max-phone:px-5 max-phone:py-7 max-phone:text-center max-phone:shadow-none max-phone:[&>svg]:hidden",
+        "mx-4 mt-3.5 mb-1 flex items-center gap-3 rounded-lg border-[1.5px] border-card-border bg-surface px-3.5 py-3 text-[13px] shadow-sticker-card [&>svg]:size-4 [&>svg]:shrink-0",
+        "max-phone:mx-3 max-phone:mb-0 max-phone:flex-col max-phone:gap-3 max-phone:border-0 max-phone:bg-transparent max-phone:px-5 max-phone:py-7 max-phone:text-center max-phone:shadow-none max-phone:[&>svg]:hidden",
       )}
       data-slot="plans-notice"
     >
