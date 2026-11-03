@@ -17,7 +17,7 @@ const navLinkClass = ({ isActive }: { isActive: boolean }) =>
   );
 
 const NAV = [
-  { to: "/examples", label: "Examples", phoneLabel: "Examples" },
+  { to: "/examples", label: "Examples & Guides", phoneLabel: "Examples & Guides" },
   { to: "/projects", label: "My projects", phoneLabel: "Projects" },
   { to: "/community", label: "Community", phoneLabel: "Community" },
 ] as const;

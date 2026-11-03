@@ -116,7 +116,7 @@ function Gallery({ progress }: { progress: Readonly<Record<string, GuideProgress
         <div className="flex items-stretch gap-6 max-phone:flex-col">
           <div className="flex flex-1 flex-col justify-center gap-2">
             <h1 className="font-display text-[38px] font-extrabold tracking-[-0.02em] max-phone:text-[30px]">
-              Official <mark>examples</mark>
+              Official <mark>Examples &amp; Guides</mark>
             </h1>
             <p className="max-w-130 text-[15px] leading-[1.6] text-muted">
               Each one opens as a scratch copy you can edit and run. Fork it to keep it. Guided ones walk you through it

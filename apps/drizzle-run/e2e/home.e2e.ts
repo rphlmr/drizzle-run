@@ -48,7 +48,7 @@ test("zero projects: the welcome page creates a starter in one click", async ({ 
   );
   await expect(page.getByRole("link", { name: "All examples →" })).toBeVisible();
   await expect(page.getByRole("navigation", { name: "Main" }).getByRole("link")).toHaveText([
-    "Examples",
+    "Examples & Guides",
     "My projects",
     "Community",
   ]);
@@ -252,8 +252,8 @@ test("phone: my projects fits 375 px with a project list", async ({ page }) => {
 
   await expect(page.getByRole("list", { name: "Projects" }).getByRole("link")).toHaveCount(5);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
-  await page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "Examples" }).click();
-  await expect(page.getByRole("heading", { name: "Official examples" })).toBeVisible();
+  await page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "Examples & Guides" }).click();
+  await expect(page.getByRole("heading", { name: "Official Examples & Guides" })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   await page.goto("/");
   await expect(
@@ -353,7 +353,7 @@ test("site pages crossfade into each other, but not on a filter change or into a
 
   await page.getByRole("group", { name: "Topic" }).getByRole("button", { name: "Bug repros" }).click();
   await expect(page).toHaveURL(/topic=bug-repros/);
-  await nav.getByRole("link", { name: "Examples" }).click();
+  await nav.getByRole("link", { name: "Examples & Guides" }).click();
   await expect.poll(countTransitions).toBe(2);
 
   await page.locator('a[href="/examples/filters-and-joins"]').first().click();
