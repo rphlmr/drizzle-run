@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { experimental_readRawConfig } from "wrangler";
 
 import { appPages } from "../test/app-pages";
@@ -52,6 +52,102 @@ const appPagePaths = Object.values(appPages);
 
 beforeEach(() => {
   vi.stubGlobal("HTMLRewriter", PassThroughRewriter);
+});
+
+afterEach(() => {
+  vi.unstubAllGlobals();
+});
+
+describe("Worker analytics relay", () => {
+  it("should relay image beacons without forwarding credentials or caching events", async () => {
+    const collector = vi.fn().mockResolvedValue(
+      new Response(new Uint8Array([71, 73, 70]), {
+        headers: { "Content-Type": "image/gif", "Set-Cookie": "collector=secret", "Cache-Control": "public" },
+      }),
+    );
+    vi.stubGlobal("fetch", collector);
+
+    const response = await worker.fetch(
+      new Request("https://drizzle.run/api/analytics/events?data=abc%2B123%3D", {
+        headers: {
+          Cookie: "session=secret",
+          Authorization: "Bearer secret",
+          "User-Agent": "test-browser",
+          Referer: "https://drizzle.run/",
+          "CF-Connecting-IP": "192.0.2.1",
+          "X-Forwarded-For": "spoofed",
+        },
+      }),
+      makeEnvironment(),
+    );
+
+    expect(collector).toHaveBeenCalledOnce();
+    const [url, init] = collector.mock.calls[0] ?? [];
+    expect(String(url)).toBe("https://collector.onedollarstats.com/events?data=abc%2B123%3D");
+    expect(init.method).toBe("GET");
+    expect(init.redirect).toBe("manual");
+    expect(Object.fromEntries(init.headers)).toEqual({
+      referer: "https://drizzle.run/",
+      "user-agent": "test-browser",
+      "x-forwarded-for": "192.0.2.1",
+    });
+    expect(response.status).toBe(200);
+    expect(response.headers.get("content-type")).toBe("image/gif");
+    expect(response.headers.get("cache-control")).toBe("no-store");
+    expect(response.headers.get("cross-origin-resource-policy")).toBe("same-origin");
+    expect(response.headers.has("set-cookie")).toBe(false);
+    expect([...new Uint8Array(await response.arrayBuffer())]).toEqual([71, 73, 70]);
+  });
+
+  it.each(["text/plain;charset=UTF-8", "application/json"])(
+    "should relay the %s POST transport without changing its payload",
+    async (contentType) => {
+      const collector = vi.fn().mockResolvedValue(new Response(null, { status: 204 }));
+      vi.stubGlobal("fetch", collector);
+      const body = JSON.stringify({ u: "https://drizzle.run/", e: [{ t: "view" }] });
+
+      const response = await worker.fetch(
+        new Request("https://drizzle.run/api/analytics/events", {
+          method: "POST",
+          headers: { "Content-Type": contentType },
+          body,
+        }),
+        makeEnvironment(),
+      );
+
+      const [, init] = collector.mock.calls[0] ?? [];
+      expect(init.method).toBe("POST");
+      expect(init.headers.get("content-type")).toBe(contentType);
+      expect(new TextDecoder().decode(init.body)).toBe(body);
+      expect(response.status).toBe(204);
+    },
+  );
+
+  it("should refuse oversized POSTs before contacting the collector", async () => {
+    const collector = vi.fn();
+    vi.stubGlobal("fetch", collector);
+
+    const response = await worker.fetch(
+      new Request("https://drizzle.run/api/analytics/events", { method: "POST", body: "x".repeat(64 * 1024 + 1) }),
+      makeEnvironment(),
+    );
+
+    expect(response.status).toBe(413);
+    expect(collector).not.toHaveBeenCalled();
+  });
+
+  it("should leave the relay unavailable outside production", async () => {
+    const collector = vi.fn();
+    vi.stubGlobal("fetch", collector);
+
+    const response = await worker.fetch(
+      new Request("https://next.drizzle.run/api/analytics/events"),
+      makeEnvironment(),
+    );
+
+    expect(response.status).toBe(404);
+    expect(collector).not.toHaveBeenCalled();
+  });
 });
 
 describe("Worker first routes", () => {
@@ -146,12 +242,12 @@ describe("Worker application routes", () => {
   });
 
   it.each([
-    { origin: "https://drizzle.run", allowed: true },
+    { origin: "https://drizzle.run", allowed: false },
     { origin: "https://next.drizzle.run", allowed: false },
     { origin: "https://pr-5.example.workers.dev", allowed: false },
     { origin: "http://localhost:5173", allowed: false },
     { origin: "http://drizzle.run", allowed: false },
-  ])("should allow analytics requests on $origin only when released", async ({ origin, allowed }) => {
+  ])("should keep analytics requests same-origin on $origin", async ({ origin, allowed }) => {
     const response = await worker.fetch(new Request(`${origin}/`), makeEnvironment());
 
     expect(response.headers.get("content-security-policy")?.includes("https://collector.onedollarstats.com")).toBe(

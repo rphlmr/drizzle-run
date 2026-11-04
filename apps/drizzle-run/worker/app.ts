@@ -3,6 +3,7 @@ import { Hono, type MiddlewareHandler } from "hono";
 import { HTTPException } from "hono/http-exception";
 import type { RouterRoute } from "hono/types";
 
+import { relayAnalytics } from "./analytics";
 import {
   createD1AuthServices,
   finishGitHubSignIn,
@@ -173,6 +174,17 @@ export function createWorkerApp(services: WorkerServices) {
   app.use(markHiddenFromSearch);
   app.use("/runtime-assets/*", requireCorpEmbedders);
   app.onError((error, c) => answerError(error, c.req.raw));
+
+  app.on(
+    ["GET", "POST"],
+    "/api/analytics/events",
+    limitBody({
+      maxBytes: 64 * 1024,
+      code: "analytics_too_large",
+      message: "Analytics events must be at most 64 KiB.",
+    }),
+    (c) => relayAnalytics(c.req.raw),
+  );
 
   // GitHub sign-in
   for (const path of getOnlyPaths) {

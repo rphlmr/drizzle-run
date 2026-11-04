@@ -13,7 +13,7 @@ describe("initializeAnalytics", () => {
   it("should enable tracking on the production origin in a production build", () => {
     initializeAnalytics({ production: true, origin: "https://drizzle.run" });
 
-    expect(configure).toHaveBeenCalledExactlyOnceWith();
+    expect(configure).toHaveBeenCalledExactlyOnceWith({ collectorUrl: "https://drizzle.run/api/analytics/events" });
   });
 
   it.each([

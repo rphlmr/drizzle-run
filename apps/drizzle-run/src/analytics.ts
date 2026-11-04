@@ -6,5 +6,5 @@ export function initializeAnalytics({ production, origin }: { production: boolea
     return;
   }
 
-  configure();
+  configure({ collectorUrl: `${origin}/api/analytics/events` });
 }
