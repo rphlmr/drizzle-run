@@ -8,7 +8,7 @@ import { Hint } from "./hint";
  * Shared header action styling, with larger touch targets on phones.
  */
 export const projectActionClass = cn(
-  "relative inline-flex h-7.5 w-8 shrink-0 cursor-pointer items-center justify-center rounded-[8px] border-0 bg-transparent p-0 text-text hover:bg-surface-2 disabled:cursor-default disabled:text-muted disabled:hover:bg-transparent aria-busy:cursor-progress data-popup-open:bg-surface-2 data-popup-open:shadow-[0_0_0_2px_var(--lime)] max-phone:size-9 max-phone:after:absolute max-phone:after:-inset-1 [&>svg]:size-3.75",
+  "relative inline-flex size-8.5 shrink-0 cursor-pointer items-center justify-center rounded-[8px] border-0 bg-transparent p-0 text-text hover:bg-surface-2 disabled:cursor-default disabled:text-muted disabled:hover:bg-transparent aria-busy:cursor-progress data-popup-open:bg-surface-2 data-popup-open:shadow-[0_0_0_2px_var(--lime)] max-phone:size-9 max-phone:after:absolute max-phone:after:-inset-1 [&>svg]:size-3.75",
 );
 
 /**

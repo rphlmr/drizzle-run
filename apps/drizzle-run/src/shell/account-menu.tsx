@@ -35,7 +35,7 @@ export function AccountMenu() {
             <Button
               variant="outline"
               size="icon"
-              className={user === null ? "rounded-full" : "overflow-hidden rounded-full"}
+              className="overflow-hidden rounded-full max-phone:size-touch"
               aria-label={user === null ? "Account" : `Account: signed in as @${user.login}`}
             />
           }

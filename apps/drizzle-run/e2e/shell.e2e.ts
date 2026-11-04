@@ -31,6 +31,57 @@ async function waitForRun(page: Page): Promise<void> {
   await expect(page.getByRole("button", { name: "Run", exact: true })).toBeEnabled({ timeout: 120_000 });
 }
 
+test("should align site header buttons on desktop and phone", async ({ page }) => {
+  await page.goto("/");
+
+  const header = page.getByRole("banner");
+  const create = header.getByRole("button", { name: "New project", exact: true });
+  const account = header.getByRole("button", { name: "Account", exact: true });
+
+  await expect(create).toHaveCSS("height", "36px");
+  await expect(account).toHaveCSS("height", "36px");
+  await expect(account).toHaveCSS("width", "36px");
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(create).toHaveCSS("height", "44px");
+  await expect(account).toHaveCSS("height", "44px");
+  await expect(account).toHaveCSS("width", "44px");
+});
+
+test("should align the duplicate action with the other project header buttons", async ({ page }) => {
+  await createProject(page, "Header sizes");
+
+  const header = page.getByRole("banner");
+  const actions = header.getByRole("group", { name: "Project actions" });
+
+  await expect(actions.getByRole("button", { name: "Duplicate" })).toBeVisible();
+  await expect(actions).toHaveCSS("height", "36px");
+  await expect(actions).toHaveCSS("width", "36px");
+  await expect(header.getByRole("button", { name: "Share", exact: true })).toHaveCSS("height", "36px");
+  await expect(header.getByRole("button", { name: "More actions", exact: true })).toHaveCSS("height", "36px");
+});
+
+for (const slug of ["filters-and-joins", "postgresql-vs-sqlite"]) {
+  test(`should align docs and fork actions in the ${slug} header`, async ({ page }) => {
+    await page.goto(`/examples/${slug}`);
+
+    const header = page.getByRole("banner");
+    const actions = header.getByRole("group", { name: "Project actions" });
+    const fork = actions.getByRole("button", { name: "Fork to my projects" });
+
+    await expect(fork).toBeVisible();
+    await expect(actions).toHaveCSS("height", "36px");
+    await expect(fork).toHaveCSS("width", "34px");
+    await expect(header.getByRole("button", { name: "More actions", exact: true })).toHaveCSS("height", "36px");
+    await expect(header.getByRole("button", { name: "Account", exact: true })).toHaveCSS("height", "36px");
+
+    await page.setViewportSize({ width: 390, height: 844 });
+    await expect(fork).toHaveCSS("height", "36px");
+    await expect(fork).toHaveCSS("width", "36px");
+    await expect(header.getByRole("button", { name: "More actions", exact: true })).toHaveCSS("height", "36px");
+  });
+}
+
 test("should match layout C: switcher, tabs in file order, run, status bar", async ({ page }) => {
   await createProject(page, "Layout C");
 

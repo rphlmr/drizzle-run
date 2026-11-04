@@ -77,7 +77,7 @@ export function SiteHeader() {
         actions={
           <Button
             variant="sticker"
-            className="h-9.5 rounded-md px-4 max-phone:px-3.5"
+            className="h-9 rounded-md px-4 max-phone:px-3.5"
             onClick={workspace.openCreate}
             disabled={workspace.loading}
             aria-label={phone ? "New project" : undefined}
