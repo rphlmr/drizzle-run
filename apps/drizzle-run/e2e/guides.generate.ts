@@ -20,6 +20,25 @@ import { groupDisplaysByLabel, runStoredProject } from "./run-project";
 const guidesDirectory = resolve("apps/drizzle-run/guides");
 const checkOnly = process.env.GUIDES_CHECK === "1";
 
+function normalizePaginationTimestamps(json: string): string {
+  return json.replace(
+    /("createdAt":\s*\{\s*"type":\s*"primitive",\s*"value":\s*")(\d{4}-\d{2}-\d{2}) (\d{2}:\d{2}:\d{2})([+-]\d{2})(?::?(\d{2}))?("\s*\})/g,
+    (_match, prefix: string, date: string, time: string, hours: string, minutes: string | undefined, suffix: string) =>
+      `${prefix}${new Date(`${date}T${time}${hours}:${minutes ?? "00"}`).toISOString()}${suffix}`,
+  );
+}
+
+test("guide replay compares PostgreSQL timestamps by instant", () => {
+  const paris = '{"createdAt":{"type":"primitive","value":"2026-01-01 10:00:00+01"}}';
+
+  expect(normalizePaginationTimestamps(paris)).toBe(
+    normalizePaginationTimestamps('{"createdAt":{"type":"primitive","value":"2026-01-01 09:00:00+00"}}'),
+  );
+  expect(normalizePaginationTimestamps(paris)).not.toBe(
+    normalizePaginationTimestamps('{"createdAt":{"type":"primitive","value":"2026-01-01 10:00:00+00"}}'),
+  );
+});
+
 const guides = readdirSync(guidesDirectory, { withFileTypes: true })
   .filter((entry) => entry.isDirectory() && existsSync(join(guidesDirectory, entry.name, "guide.json")))
   .map((entry) => ({
@@ -85,10 +104,12 @@ for (const { name, folder, manifest } of guides) {
     const path = join(folder, "expected.json");
 
     if (checkOnly) {
+      const recorded = existsSync(path) ? readFileSync(path, "utf8") : "";
+      const timezoneDependent = name === "pagination-postgresql" || name === "pagination-apis-postgresql";
       expect(
-        existsSync(path) ? readFileSync(path, "utf8") : "",
+        timezoneDependent ? normalizePaginationTimestamps(recorded) : recorded,
         `guides/${name}/expected.json is stale. Run pnpm replay:guides.`,
-      ).toBe(output);
+      ).toBe(timezoneDependent ? normalizePaginationTimestamps(output) : output);
     } else {
       writeFileSync(path, output);
     }
