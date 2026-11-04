@@ -13,8 +13,8 @@ import { groupDisplaysByLabel, runStoredProject } from "./run-project";
  * `pnpm replay:guides` replays every guide: each step that runs is run twice
  * on its resolved files, and the displays go to `guides/<folder>/expected.json`. A side-by-side
  * guide runs each side, and its displays are kept per side, named by release.
- * With GUIDES_CHECK=1 (`pnpm check:guides`) it fails instead of writing when the committed file is stale.
- * It fails when a step's run errors, changes between two runs, or misses a highlighted display.
+ * With GUIDES_CHECK=1 (`pnpm check:guides`) each step runs once and it fails instead of writing when the
+ * committed file is stale. Both modes fail when a step's run errors or misses a highlighted display.
  */
 
 const guidesDirectory = resolve("apps/drizzle-run/guides");
@@ -70,7 +70,6 @@ for (const { name, folder, manifest } of guides) {
 
       for (const [label, sideProject] of runs) {
         const first = await runStoredProject(page, manifest.id, sideProject);
-        const second = await runStoredProject(page, manifest.id, sideProject);
         const where = `${manifest.id}/${step.id}${label === undefined ? "" : ` (${label})`}`;
 
         expect(first.outcome, `${where}: the step must run without an error (${first.error?.message ?? ""}).`).toBe(
@@ -79,7 +78,11 @@ for (const { name, folder, manifest } of guides) {
 
         const values = groupDisplaysByLabel(first);
 
-        expect(groupDisplaysByLabel(second), `${where}: the displays change between runs.`).toEqual(values);
+        if (!checkOnly) {
+          const second = await runStoredProject(page, manifest.id, sideProject);
+
+          expect(groupDisplaysByLabel(second), `${where}: the displays change between runs.`).toEqual(values);
+        }
 
         for (const display of step.highlight?.displays ?? []) {
           expect(
