@@ -1,6 +1,6 @@
 {
   "name": "@drizzle-run/runtime",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Drizzle Run manifest, compiler, and browser runtime API",
   "homepage": "https://github.com/rphlmr/drizzle-run/tree/main/packages/runtime#readme",
   "bugs": {

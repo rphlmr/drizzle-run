@@ -1,6 +1,6 @@
 {
   "name": "@drizzle-run/react",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "React providers and hooks for Drizzle Run controllers",
   "homepage": "https://github.com/rphlmr/drizzle-run/tree/main/packages/react#readme",
   "bugs": {

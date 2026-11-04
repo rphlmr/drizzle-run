@@ -1,6 +1,6 @@
 {
   "name": "@drizzle-run/connect",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Links your Drizzle Run tabs to your own Claude Code, Codex or Grok CLI, with Drizzle Run tools only",
   "homepage": "https://github.com/rphlmr/drizzle-run/tree/main/packages/connect#readme",
   "bugs": {

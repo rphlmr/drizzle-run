@@ -1,6 +1,6 @@
 {
   "name": "@drizzle-run/test-fixtures",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "description": "Test data shared by the Drizzle Run tests: never a dependency of shipped code",
   "homepage": "https://github.com/rphlmr/drizzle-run/tree/main/testing/test-fixtures#readme",

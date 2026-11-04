@@ -1,6 +1,6 @@
 {
   "name": "@drizzle-run/core",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Drizzle Run manifests, release catalog, contracts, guides, and checks, depending only on zod and es-toolkit",
   "homepage": "https://github.com/rphlmr/drizzle-run/tree/main/packages/core#readme",
   "bugs": {
