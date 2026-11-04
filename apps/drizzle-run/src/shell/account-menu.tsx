@@ -14,6 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu";
+import { ThemeMenuItems } from "../ui/theme-menu-items";
 
 /**
  * The account menu at the header's right end
@@ -56,6 +57,8 @@ export function AccountMenu() {
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <AccountAction signOut={cloudSync === null ? standaloneSignOut.start : cloudSync.signOut} />
+          <DropdownMenuSeparator />
+          <ThemeMenuItems />
         </DropdownMenuContent>
       </DropdownMenu>
       {cloudSync === null && standaloneSignOut.dialog}

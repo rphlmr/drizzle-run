@@ -9,7 +9,7 @@ function Segmented({ className, ...props }: TabsPrimitive.Root.Props) {
 }
 
 const segmentedIndicatorClass = cn(
-  "absolute top-(--active-tab-top) left-(--active-tab-left) h-(--active-tab-height) w-(--active-tab-width) rounded-sm bg-surface shadow-[0_0_0_1px_var(--border)] transition-[left,width] duration-(--motion-fast) ease-out",
+  "absolute top-(--active-tab-top) left-(--active-tab-left) h-(--active-tab-height) w-(--active-tab-width) rounded-sm bg-surface shadow-sticker transition-[left,width] duration-(--motion-fast) ease-out",
 );
 
 function SegmentedList({

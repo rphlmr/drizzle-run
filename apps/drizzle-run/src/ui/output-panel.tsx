@@ -431,7 +431,7 @@ export function OutputPanel({
         >
           <SegmentedList
             aria-label={label === undefined ? "Output views" : `${label} output`}
-            indicatorClassName="rounded-[8px] bg-segment shadow-none max-phone:rounded-pill"
+            indicatorClassName="rounded-base bg-surface-2 shadow-none max-phone:rounded-pill max-phone:bg-segment"
             className={cn(
               "max-w-full min-w-0 shrink scrollbar-none gap-0.5 overflow-x-auto rounded-[10px] bg-transparent p-0.75 max-phone:max-w-none max-phone:shrink-0 max-phone:basis-full max-phone:gap-1.5 max-phone:rounded-none max-phone:px-3 max-phone:pt-1.25 max-phone:pb-2.5 [&::-webkit-scrollbar]:hidden",
               stacked.tabs,
@@ -443,7 +443,7 @@ export function OutputPanel({
                 key={item}
                 value={item}
                 className={cn(
-                  "inline-flex h-7.5 items-center rounded-[8px] px-2.75 py-0 text-[13px] font-medium text-muted data-active:font-semibold data-active:text-segment-fg max-phone:relative max-phone:h-9 max-phone:min-w-11 max-phone:shrink-0 max-phone:rounded-pill max-phone:border max-phone:border-border max-phone:px-3 max-phone:py-0 max-phone:after:absolute max-phone:after:inset-x-0 max-phone:after:-inset-y-1.25 max-phone:data-active:border-segment",
+                  "inline-flex h-7.5 items-center rounded-base px-2.75 py-0 text-[13px] font-medium text-muted data-active:text-text max-phone:relative max-phone:h-9 max-phone:min-w-11 max-phone:shrink-0 max-phone:rounded-pill max-phone:border max-phone:border-border max-phone:px-3 max-phone:py-0 max-phone:after:absolute max-phone:after:inset-x-0 max-phone:after:-inset-y-1.25 max-phone:data-active:border-segment max-phone:data-active:text-segment-fg",
                   stacked.tab,
                 )}
               >

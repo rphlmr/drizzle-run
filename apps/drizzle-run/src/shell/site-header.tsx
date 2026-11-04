@@ -1,4 +1,4 @@
-import { PlusIcon } from "lucide-react";
+import { BookOpenIcon, FolderIcon, PlusIcon, UsersIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { NavLink } from "react-router";
 
@@ -11,15 +11,15 @@ import { AppHeader } from "./app-header";
 
 const navLinkClass = ({ isActive }: { isActive: boolean }) =>
   cn(
-    "rounded-base px-3 py-1.75 text-[14px] font-medium whitespace-nowrap text-text no-underline",
+    "inline-flex items-center justify-center gap-2 rounded-base px-3 py-1.75 text-[13px] font-medium whitespace-nowrap no-underline transition-colors",
     "max-phone:flex-1 max-phone:rounded-[9px] max-phone:py-2.5 max-phone:text-center max-phone:text-[13.5px]",
-    isActive ? "bg-segment text-segment-fg" : "hover:bg-surface-2",
+    isActive ? "bg-surface-2 text-text" : "text-muted hover:bg-surface-2 hover:text-text",
   );
 
 const NAV = [
-  { to: "/examples", label: "Examples & Guides", phoneLabel: "Examples & Guides" },
-  { to: "/projects", label: "My projects", phoneLabel: "Projects" },
-  { to: "/community", label: "Community", phoneLabel: "Community" },
+  { to: "/examples", label: "Examples & Guides", phoneLabel: "Examples & Guides", icon: BookOpenIcon },
+  { to: "/projects", label: "My projects", phoneLabel: "Projects", icon: FolderIcon },
+  { to: "/community", label: "Community", phoneLabel: "Community", icon: UsersIcon },
 ] as const;
 
 function SiteNav({ phone }: { phone: boolean }) {
@@ -30,6 +30,7 @@ function SiteNav({ phone }: { phone: boolean }) {
     >
       {NAV.map((item) => (
         <NavLink key={item.to} to={item.to} className={navLinkClass}>
+          <item.icon className="size-4 max-phone:hidden" aria-hidden="true" />
           {phone ? item.phoneLabel : item.label}
         </NavLink>
       ))}
@@ -46,7 +47,7 @@ export function SiteMain({ className, children }: { className?: string; children
       <main className="min-h-0 w-full flex-1 [scrollbar-gutter:stable] overflow-y-auto">
         <div
           className={cn(
-            "mx-auto flex min-h-full w-full max-w-308 flex-col gap-5.5 px-6 pt-5.5 pb-8 max-phone:gap-3.5 max-phone:p-4",
+            "mx-auto flex min-h-full w-full max-w-260 flex-col gap-5 px-8 pt-7 pb-8 max-phone:gap-3.5 max-phone:p-4",
             className,
           )}
         >
@@ -71,7 +72,7 @@ export function SiteHeader() {
   return (
     <>
       <AppHeader
-        className="relative z-1 gap-5 bg-bg/90 max-phone:gap-2.5"
+        className="relative z-1 gap-5 bg-surface max-phone:gap-2.5"
         phoneWordmark
         leading={phone ? undefined : <SiteNav phone={false} />}
         actions={

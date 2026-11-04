@@ -1,4 +1,4 @@
-import { ChevronDownIcon } from "lucide-react";
+import { ChevronDownIcon, SearchIcon } from "lucide-react";
 import { useEffect, useRef } from "react";
 import {
   useFetcher,
@@ -180,7 +180,7 @@ export async function communityAction({ request, context }: ActionFunctionArgs):
 
 const emptyPage: CommunitySharesPage = { shares: [], nextCursor: undefined };
 
-const shareGridClass = cn("grid grid-cols-3 gap-3.5 max-wide:grid-cols-2 max-phone:grid-cols-1");
+const shareGridClass = cn("grid grid-cols-1 gap-3");
 
 function LoadingShares() {
   return (
@@ -295,31 +295,32 @@ export function CommunityPage() {
       <SiteMain className="gap-4.5 pt-7">
         <div className="flex items-end gap-6 max-phone:flex-col max-phone:items-start max-phone:gap-2">
           <div className="flex flex-1 flex-col gap-2">
-            <h1 className="font-display text-[28px] font-bold tracking-[-0.02em] max-phone:text-[24px]">
-              Community shares
-            </h1>
-            <p className="max-w-150 text-[15px] leading-[1.6] text-muted">
-              Playgrounds people chose to list when they shared them. The Drizzle team doesn't review them. Each one
-              opens as your own copy.
-            </p>
+            <h1 className="font-display text-[24px] font-semibold tracking-[-0.03em]">Community shares</h1>
+            <p className="text-[13px] text-muted">Explore what others are building with Drizzle.</p>
           </div>
-          <p className="text-right text-[13px]/[1.5] text-muted max-phone:text-left">
+          <p className="max-w-60 text-right text-[12px]/[1.5] text-muted max-phone:text-left">
             {signedIn ? "Add yours: share a project" : "Add yours: sign in with GitHub, share a project"}
             <br className="max-phone:hidden" /> and tick <b className="font-semibold text-text">List in Community</b>.
           </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          <input
-            className="h-9 w-60 rounded-md border border-border bg-surface px-3 text-text focus-visible:border-accent-text focus-visible:outline-transparent max-phone:h-touch max-phone:w-full max-phone:rounded-[12px] max-phone:px-3.5"
-            type="search"
-            placeholder="Search shares"
-            aria-label="Search community shares"
-            maxLength={100}
-            ref={searchInput}
-            defaultValue={query.search}
-            onChange={searchAfterPause}
-          />
+          <div className="relative min-w-40 flex-1 max-phone:basis-full">
+            <SearchIcon
+              className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted"
+              aria-hidden="true"
+            />
+            <input
+              className="h-9 w-full rounded-md border border-border bg-surface pr-3 pl-9 text-[13px] text-text focus-visible:border-accent-text focus-visible:outline-transparent max-phone:h-touch"
+              type="search"
+              placeholder="Search shares"
+              aria-label="Search community shares"
+              maxLength={100}
+              ref={searchInput}
+              defaultValue={query.search}
+              onChange={searchAfterPause}
+            />
+          </div>
           <fieldset
             className="flex min-w-auto flex-wrap gap-1.5 max-phone:w-full max-phone:scrollbar-none max-phone:flex-nowrap max-phone:overflow-x-auto"
             aria-label="Topic"

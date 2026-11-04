@@ -12,8 +12,8 @@ export type EditorFontSize = (typeof EDITOR_FONT_SIZES)[number];
 
 /** Default editor font size and line height in pixels. */
 export const EDITOR_TEXT = {
-  desktop: { fontSize: 12, lineHeight: 22 },
-  phone: { fontSize: 12, lineHeight: 20 },
+  desktop: { fontSize: 12.5, lineHeight: 22 },
+  phone: { fontSize: 12.5, lineHeight: 20 },
 } as const satisfies Record<string, EditorText>;
 
 const STORAGE_KEY = "editor-font-size";

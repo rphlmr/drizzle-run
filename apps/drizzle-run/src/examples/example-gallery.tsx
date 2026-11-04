@@ -1,5 +1,5 @@
 import type { GuideProgress } from "@drizzle-run/runtime/machines";
-import { ChevronDownIcon } from "lucide-react";
+import { BookOpenIcon, ChevronDownIcon, SearchIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import {
   useLoaderData,
@@ -156,18 +156,19 @@ function Gallery({
   }
 
   function previewStarter(slug: string) {
-    const list = listRef.current;
-    const row = list?.querySelector<HTMLButtonElement>(`[data-example-slug="${slug}"]`);
-
-    if (list && row) {
-      list.scrollTo({
-        top: Math.floor(list.scrollTop + row.getBoundingClientRect().top - list.getBoundingClientRect().top),
-      });
-    }
-
     setParams(new URLSearchParams(), { replace: true, preventScrollReset: true });
     setSelectedSlug(slug);
     setMobileView("preview");
+    requestAnimationFrame(() => {
+      const list = listRef.current;
+      const row = list?.querySelector<HTMLButtonElement>(`[data-example-slug="${slug}"]`);
+
+      if (list && row) {
+        list.scrollTo({
+          top: Math.floor(list.scrollTop + row.getBoundingClientRect().top - list.getBoundingClientRect().top),
+        });
+      }
+    });
   }
 
   function closePreview() {
@@ -206,7 +207,9 @@ function Gallery({
         variant="ghost"
         className={cn(
           "rounded-md text-[12px] max-phone:min-h-touch",
-          filters.topics.length === 0 ? "bg-surface-2 text-text" : "text-muted",
+          filters.topics.length === 0
+            ? "bg-segment text-segment-fg hover:bg-segment hover:text-segment-fg"
+            : "text-muted",
         )}
         aria-pressed={filters.topics.length === 0}
         onClick={() => toggleTopic()}
@@ -220,7 +223,9 @@ function Gallery({
           variant="ghost"
           className={cn(
             "rounded-md text-[12px] max-phone:min-h-touch",
-            filters.topics.includes(topic) ? "bg-surface-2 text-text" : "text-muted",
+            filters.topics.includes(topic)
+              ? "bg-segment text-segment-fg hover:bg-segment hover:text-segment-fg"
+              : "text-muted",
           )}
           aria-pressed={filters.topics.includes(topic)}
           onClick={() => toggleTopic(topic)}
@@ -234,50 +239,56 @@ function Gallery({
   return (
     <>
       {workspace.banners}
-      <main className="[container-type:size] mx-auto flex min-h-0 w-full max-w-308 min-w-0 flex-1 flex-col gap-4.5 overflow-hidden px-6 pt-7 pb-4 max-phone:gap-3.5 max-phone:p-4">
+      <main className="[container-type:size] mx-auto flex min-h-0 w-full max-w-260 min-w-0 flex-1 flex-col gap-4 overflow-hidden px-8 pt-7 pb-5 max-phone:gap-3.5 max-phone:p-4">
         <div className="flex shrink-0 flex-col gap-2">
-          <h1 className="font-display text-[28px] font-bold tracking-[-0.02em] max-phone:text-[24px]">
-            Examples &amp; guides
-          </h1>
-          <p className="text-[15px]/[1.6] text-muted max-phone:hidden [@container(height<700px)]:hidden">
-            Learn a pattern, run real Drizzle code, then make it yours.
+          <h1 className="font-display text-[24px] font-semibold tracking-[-0.03em]">Examples &amp; guides</h1>
+          <p className="text-[13px] text-muted max-phone:hidden [@container(height<700px)]:hidden">
+            Learn a pattern. Make it yours.
           </p>
         </div>
-        {!filtered && featured && (
+        {featured && (
           <>
             <section
-              className="flex shrink-0 items-center justify-between gap-6 rounded-md border border-border bg-surface px-4 py-3 max-phone:hidden [@container(height<680px)]:hidden"
+              className="flex shrink-0 items-center gap-4 rounded-lg border border-border bg-surface px-4 py-3 max-phone:hidden [@container(height<680px)]:hidden"
               aria-label="Starting points"
             >
-              <div className="flex min-w-0 flex-1 items-center justify-between gap-4">
-                <div>
-                  <h2 className="text-[13px] font-medium">New to Drizzle?</h2>
-                  <p className="mt-0.5 text-[12px] text-muted">{featured.title}</p>
+              <div className="flex min-w-0 flex-1 items-center gap-3">
+                <span className="flex size-9 shrink-0 items-center justify-center rounded-md bg-surface-2 text-text">
+                  <BookOpenIcon className="size-4" aria-hidden="true" />
+                </span>
+                <div className="min-w-0">
+                  <h2 className="text-[13px] font-semibold">New to Drizzle?</h2>
+                  <p className="truncate text-[12px] text-muted">
+                    {featured.title} · {featured.guide?.steps.length} steps
+                  </p>
                 </div>
+              </div>
+              <div className="flex shrink-0 items-center gap-3">
                 <Button
                   size="sm"
-                  variant="outline"
+                  variant="sticker"
                   className="rounded-md"
+                  aria-label="Preview guide ↓"
                   onClick={() => previewStarter(featured.slug)}
                 >
-                  Preview guide ↓
+                  Preview guide
                 </Button>
-              </div>
-              <div className="flex items-center gap-3 border-l border-border pl-6">
-                <span className="text-[12px] text-muted">Quick starts</span>
-                <div className="grid grid-cols-2 gap-2">
-                  {starters.map((example) => (
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="rounded-md"
-                      key={example.slug}
-                      onClick={() => previewStarter(example.slug)}
-                      aria-label={`${example.title} Preview ↓`}
-                    >
-                      {formatProjectDialects(example.manifest)} ↓
-                    </Button>
-                  ))}
+                <div className="flex items-center gap-2 border-l border-border pl-3">
+                  <span className="text-[12px] text-muted">Quick starts</span>
+                  <div className="inline-flex rounded-md border border-border [&>button]:border-0 [&>button+button]:border-l [&>button:first-child]:rounded-r-none [&>button:last-child]:rounded-l-none">
+                    {starters.map((example) => (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="rounded-md"
+                        key={example.slug}
+                        onClick={() => previewStarter(example.slug)}
+                        aria-label={`${example.title} Preview ↓`}
+                      >
+                        {formatProjectDialects(example.manifest)}
+                      </Button>
+                    ))}
+                  </div>
                 </div>
               </div>
             </section>
@@ -305,14 +316,20 @@ function Gallery({
         )}
         <div className="flex shrink-0 flex-col gap-2.5">
           <div className="grid grid-cols-[minmax(180px,1fr)_auto_auto_auto] items-center gap-2 max-phone:grid-cols-[minmax(0,1fr)_auto]">
-            <Input
-              type="search"
-              aria-label="Search examples and guides"
-              placeholder="Search examples, topics, or APIs…"
-              className="m-0 h-9 min-h-9 rounded-md py-0 text-[14px] max-phone:h-touch max-phone:rounded-[12px]"
-              value={filters.search}
-              onChange={(event) => setFilter("q", event.target.value)}
-            />
+            <div className="relative min-w-0">
+              <SearchIcon
+                className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted"
+                aria-hidden="true"
+              />
+              <Input
+                type="search"
+                aria-label="Search examples and guides"
+                placeholder="Search examples, topics, or APIs…"
+                className="m-0 h-9 min-h-9 rounded-md py-0 pl-9 text-[13px] max-phone:h-touch"
+                value={filters.search}
+                onChange={(event) => setFilter("q", event.target.value)}
+              />
+            </div>
             {phone ? (
               <Drawer open={filtersExpanded} onOpenChange={setFiltersExpanded}>
                 <DrawerTrigger render={<Button variant="outline" className="h-touch" />}>
@@ -344,23 +361,28 @@ function Gallery({
             )}
           </div>
           {!phone && topicFilters}
-          <div className="flex items-center justify-between gap-2">
-            <output className="text-[12px] text-muted" aria-live="polite">
-              {matches.length} {matches.length === 1 ? "example or guide" : "examples & guides"}
-            </output>
-            <Button variant="ghost" size="sm" disabled={!filtered} onClick={() => updateFilters(new URLSearchParams())}>
-              Clear filters
-            </Button>
-          </div>
         </div>
         <div
-          className="group/gallery grid min-h-0 flex-1 grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] overflow-hidden rounded-lg border border-border bg-surface max-phone:grid-cols-1"
+          className="group/gallery grid min-h-0 flex-1 grid-cols-2 overflow-hidden rounded-lg border border-border bg-surface max-phone:grid-cols-1"
           data-preview={mobilePreview}
         >
           <section
             className="flex min-h-0 min-w-0 flex-col border-r border-border max-phone:border-0 max-phone:group-data-[preview=true]/gallery:hidden"
             aria-label="Browse examples"
           >
+            <div className="flex min-h-10 shrink-0 items-center justify-between gap-2 border-b border-border px-3.5">
+              <output className="text-[12px] text-muted" aria-live="polite">
+                {matches.length} {matches.length === 1 ? "example or guide" : "examples & guides"}
+              </output>
+              <Button
+                variant="ghost"
+                size="sm"
+                disabled={!filtered}
+                onClick={() => updateFilters(new URLSearchParams())}
+              >
+                Clear filters
+              </Button>
+            </div>
             <ul
               key={filterKey}
               className="min-h-0 flex-1 [scrollbar-gutter:stable] divide-y divide-border overflow-y-auto overscroll-contain"
@@ -448,7 +470,7 @@ function Gallery({
             </ul>
           </section>
           <section
-            className="flex min-h-0 min-w-0 flex-col max-phone:hidden max-phone:group-data-[preview=true]/gallery:flex"
+            className="flex min-h-0 min-w-0 flex-col bg-surface max-phone:hidden max-phone:group-data-[preview=true]/gallery:flex"
             id="example-preview"
             aria-label="Example preview"
           >

@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 
 import { cn } from "../lib/utils";
 
-/** A pill-shaped toggle, such as a topic filter. */
+/** A compact toggle, such as a topic filter. */
 export function Chip({
   pressed,
   disabled,
@@ -18,8 +18,8 @@ export function Chip({
     <button
       type="button"
       className={cn(
-        "h-8.5 rounded-full border px-3.5 font-medium whitespace-nowrap disabled:opacity-50 max-phone:min-h-touch",
-        pressed ? "border-segment bg-segment text-segment-fg" : "border-border bg-surface text-text",
+        "h-8 rounded-md border border-transparent px-2.5 text-[12px] font-medium whitespace-nowrap transition-colors disabled:opacity-50 max-phone:min-h-touch",
+        pressed ? "bg-surface-2 text-text" : "bg-transparent text-muted hover:bg-surface-2 hover:text-text",
       )}
       aria-pressed={pressed}
       disabled={disabled}

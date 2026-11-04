@@ -70,13 +70,14 @@ describe("writeEditorFontSize", () => {
 
 describe("resolveEditorText", () => {
   it("should keep the layout's text by default", () => {
-    expect(resolveEditorText(EDITOR_TEXT.desktop, null)).toEqual({ fontSize: 12, lineHeight: 22 });
+    expect(resolveEditorText(EDITOR_TEXT.desktop, null)).toEqual({ fontSize: 12.5, lineHeight: 22 });
+    expect(resolveEditorText(EDITOR_TEXT.phone, null)).toEqual({ fontSize: 12.5, lineHeight: 20 });
   });
 
   it("should keep each layout's line height in proportion, in whole pixels", () => {
-    expect(resolveEditorText(EDITOR_TEXT.desktop, 14)).toEqual({ fontSize: 14, lineHeight: 26 });
-    expect(resolveEditorText(EDITOR_TEXT.desktop, 16)).toEqual({ fontSize: 16, lineHeight: 29 });
-    expect(resolveEditorText(EDITOR_TEXT.phone, 14)).toEqual({ fontSize: 14, lineHeight: 23 });
+    expect(resolveEditorText(EDITOR_TEXT.desktop, 14)).toEqual({ fontSize: 14, lineHeight: 25 });
+    expect(resolveEditorText(EDITOR_TEXT.desktop, 16)).toEqual({ fontSize: 16, lineHeight: 28 });
+    expect(resolveEditorText(EDITOR_TEXT.phone, 14)).toEqual({ fontSize: 14, lineHeight: 22 });
     expect(resolveEditorText({ fontSize: 12.5, lineHeight: 22 }, 14)).toEqual({ fontSize: 14, lineHeight: 25 });
   });
 });

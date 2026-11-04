@@ -1135,12 +1135,30 @@ test("should show a shared link's badge, fork and banner, without auto-run", asy
   await expect(page.getByRole("button", { name: "Switch project" })).toContainText("Shared layout");
 });
 
+test("should choose a theme before opening a project", async ({ page }) => {
+  await page.emulateMedia({ colorScheme: "light" });
+  await page.setViewportSize({ width: 375, height: 844 });
+  await page.goto("/examples");
+  await page.getByRole("button", { name: "Account", exact: true }).click();
+  await page.getByRole("menuitemradio", { name: "Dark" }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.reload();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await page.goto("/examples/quick-start-postgresql");
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await page.goto("/community");
+  await page.getByRole("button", { name: "Account", exact: true }).click();
+  await page.getByRole("menuitemradio", { name: "System" }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+});
+
 test("should paint the dark theme before the app loads", async ({ page }) => {
   await page.addInitScript(() => window.localStorage.setItem("theme", "dark"));
   await page.goto("/", { waitUntil: "domcontentloaded" });
 
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
-  await expect(page.locator("body")).toHaveCSS("background-color", "rgb(17, 17, 17)");
+  await expect(page.locator("body")).toHaveCSS("background-color", "rgb(10, 10, 10)");
 });
 
 test("should follow the system theme when storage is blocked", async ({ page }) => {
@@ -1169,7 +1187,7 @@ test("should keep the mobile typing field at 16px without enlarging the code", a
   const input = page.locator(".monaco-editor textarea.inputarea");
   const code = page.locator(".monaco-editor .view-lines");
   await expect(input).toHaveCSS("font-size", "16px");
-  await expect(code).toHaveCSS("font-size", "12px");
+  await expect(code).toHaveCSS("font-size", "12.5px");
 
   await input.focus();
   await page.keyboard.press("ControlOrMeta+Home");
@@ -1179,21 +1197,21 @@ test("should keep the mobile typing field at 16px without enlarging the code", a
   await expect(input).toHaveCSS("font-size", "16px");
 
   await page.setViewportSize({ width: 1280, height: 800 });
-  await expect(input).toHaveCSS("font-size", "12px");
+  await expect(input).toHaveCSS("font-size", "12.5px");
 });
 
 test("should set the editor's code size from the menu and keep it on reload", async ({ page }) => {
   await createProject(page, "Code size");
   await waitForRun(page);
   const code = page.locator(".monaco-editor .view-lines");
-  await expect(code).toHaveCSS("font-size", "12px");
+  await expect(code).toHaveCSS("font-size", "12.5px");
   await expect(code).toHaveCSS("line-height", "22px");
 
   await page.getByRole("button", { name: "More actions" }).click();
   await page.getByRole("menuitemradio", { name: "14 px", exact: true }).click();
 
   await expect(code).toHaveCSS("font-size", "14px");
-  await expect(code).toHaveCSS("line-height", "26px");
+  await expect(code).toHaveCSS("line-height", "25px");
   // Monaco draws the margin in a later frame than the lines.
   const firstLineNumber = page.locator(".monaco-editor .line-numbers").filter({ hasText: /^1$/ });
   const firstLine = page.locator(".monaco-editor .view-line").filter({ hasText: "@drizzle-run/runtime/context" });
@@ -1203,7 +1221,7 @@ test("should set the editor's code size from the menu and keep it on reload", as
 
       return { top: (lineNumber?.y ?? 0) - (line?.y ?? -1), height: lineNumber?.height };
     })
-    .toEqual({ top: 0, height: 26 });
+    .toEqual({ top: 0, height: 25 });
 
   await page.reload();
   await waitForRun(page);
@@ -1211,7 +1229,7 @@ test("should set the editor's code size from the menu and keep it on reload", as
 
   await page.getByRole("button", { name: "More actions" }).click();
   await page.getByRole("menuitemradio", { name: /^Default/ }).click();
-  await expect(code).toHaveCSS("font-size", "12px");
+  await expect(code).toHaveCSS("font-size", "12.5px");
   await expect(code).toHaveCSS("line-height", "22px");
 });
 

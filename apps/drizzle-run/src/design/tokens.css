@@ -9,15 +9,15 @@
 :root {
   color-scheme: light;
 
-  --bg: #eef0f3;
-  --panel: #f8f9fb;
+  --bg: #fafafa;
+  --panel: #f5f5f5;
   --surface: #ffffff;
-  --surface-2: #f0f2f5;
-  --border: #dce0e6;
-  --text: #191b23;
-  --text-soft: #383e4c;
-  --text-muted: #555d6e;
-  --text-faint: #606979;
+  --surface-2: #f5f5f5;
+  --border: #e5e5e5;
+  --text: #171717;
+  --text-soft: #404040;
+  --text-muted: #666666;
+  --text-faint: #666666;
   --accent-text: #4a7a0c;
   --lime: #c5f74f;
   /* The darker stripe of the striped lime progress bar, the same in both themes. */
@@ -38,7 +38,7 @@
   --mark-wash: #aad24133;
   --notes-bg: #ddd3fb;
   /* Dots of the output's results grid. */
-  --dot: #e5e7eb;
+  --dot: #d4d4d4;
 
   --logo-bg: #c5f74f;
   --logo-fg: #0a0a0a;
@@ -48,19 +48,19 @@
   --run-border: #0a0a0a;
   --action-edge: #0a0a0a;
   /* Cards, dialogs, popovers, inputs and selected choices; run-border stays on lime controls. */
-  --card-border: #c7cdd6;
+  --card-border: #d4d4d4;
   --kbd-bg: #0a0a0a20;
   --overlay: #11111166;
   --scroll-thumb: #9ca3af;
   --scroll-thumb-hover: #4b5563;
-  --dot-grid: #e5e7eb;
+  --dot-grid: #d4d4d4;
   /* The terminal look: the companion command and the terminal mirror in the AI chat. */
   --term-bg: #0a0a0a;
   --term-fg: #e5e7eb;
   --term-dim: #a3a3a3;
 
-  --code-bg: #ffffff;
-  --code-line: #f0f2f6;
+  --code-bg: #fafafa;
+  --code-line: #f0f0f0;
   --c-key: #7c3aed;
   --c-str: #0f6b4a;
   --c-fn: #1d4ed8;
@@ -73,13 +73,13 @@
   --shadow-pop: 0 4px 12px #19202c0a, 0 16px 40px #19202c14;
 
   --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Geist", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
-  --radius-sm: 7px;
-  --radius: 8px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
+  --radius-sm: 4px;
+  --radius: 6px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
   --radius-pill: 999px;
 
   --space-1: 4px;
@@ -102,15 +102,15 @@
 :root[data-theme="dark"] {
   color-scheme: dark;
 
-  --bg: #111318;
-  --panel: #171a21;
-  --surface: #1c1f26;
-  --surface-2: #272b34;
-  --border: #373d49;
-  --text: #f1f2f5;
-  --text-soft: #d5d8e0;
-  --text-muted: #b2b7c4;
-  --text-faint: #9aa2b2;
+  --bg: #0a0a0a;
+  --panel: #171717;
+  --surface: #171717;
+  --surface-2: #262626;
+  --border: #404040;
+  --text: #fafafa;
+  --text-soft: #e5e5e5;
+  --text-muted: #a3a3a3;
+  --text-faint: #a3a3a3;
   --accent-text: #c5f74f;
   --ok: #c5f74f;
   --ok-bg: #1e2a10;
@@ -129,15 +129,15 @@
   --segment-active-fg: #0a0a0a;
   --run-border: #e5e5e5;
   --action-edge: #e5e5e5;
-  --card-border: #4c5360;
+  --card-border: #525252;
   --overlay: #000000a6;
   --scroll-thumb: #525252;
   --scroll-thumb-hover: #a3a3a3;
   --dot-grid: #242424;
   --term-bg: #0a0a0a;
 
-  --code-bg: #17191f;
-  --code-line: #252a34;
+  --code-bg: #171717;
+  --code-line: #262626;
   --c-key: #c4a7ff;
   --c-str: #8fdcb4;
   --c-fn: #8ab4ff;

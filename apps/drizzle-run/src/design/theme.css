@@ -106,7 +106,7 @@
   --animate-stripes: stripes 0.8s linear infinite;
   --animate-drizzle: drizzle 9s linear infinite;
   /* The welcome page's example strip: two copies of the list, so moving by half loops seamlessly. */
-  --animate-marquee: marquee 90s linear infinite;
+  --animate-marquee: marquee 220s linear infinite;
 
   @keyframes pulse-soft {
     50% {

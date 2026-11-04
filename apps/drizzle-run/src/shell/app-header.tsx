@@ -48,7 +48,7 @@ export function AppHeader({
   return (
     <header
       className={cn(
-        "group/header flex h-header min-w-0 shrink-0 items-center gap-3 border-b border-border px-4 max-phone:h-15 max-phone:gap-2 max-phone:px-3",
+        "group/header flex h-header min-w-0 shrink-0 items-center gap-3 border-b border-border bg-surface px-4 max-phone:h-15 max-phone:gap-2 max-phone:px-3",
         playground && "max-phone:h-header max-phone:gap-2.5 max-phone:bg-surface",
         compact && "h-12 bg-surface px-2.5 max-phone:h-12 max-phone:px-2.5",
         className,

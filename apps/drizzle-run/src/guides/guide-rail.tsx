@@ -351,7 +351,7 @@ function StepDocs({ links }: { links: ReactNode[] }) {
   );
 }
 
-const cardClass = cn("relative flex flex-col gap-2.5 rounded-[12px] bg-surface p-3.5");
+const cardClass = cn("relative flex flex-col gap-2.5 rounded-lg bg-surface p-3.5");
 
 /** A step's copy while the guide loads: its title, a few lines of body, and the Run button. */
 function StepCardSkeleton() {
@@ -393,8 +393,8 @@ function StepListSkeleton({ index, count }: { index: number; count: number }) {
     ),
   );
 }
-const nowCardClass = cn(cardClass, "border-[1.5px] border-card-border shadow-sticker-card");
-const pastCardClass = cn(cardClass, "border-[1.5px] border-border");
+const nowCardClass = cn(cardClass, "border border-card-border shadow-sticker");
+const pastCardClass = cn(cardClass, "border border-border");
 const cardTitleClass = cn("text-[14.5px] font-bold");
 const bodyTextClass = cn("text-[14px] leading-[1.5]");
 const phoneTextClass = cn("text-[13.5px] leading-[1.55]");

@@ -51,9 +51,9 @@ export interface ProjectTableProps {
 }
 
 const thClass = cn(
-  "border-b border-border bg-surface-2 px-2 py-[9px] text-left font-medium whitespace-nowrap text-muted",
+  "border-b border-border bg-panel px-3 py-3 text-left text-[12px] font-medium whitespace-nowrap text-muted",
 );
-const tdClass = cn("border-b border-surface-2 p-2");
+const tdClass = cn("border-b border-border px-3 py-3 text-[13px]");
 const mutedCellClass = cn(tdClass, "whitespace-nowrap text-muted");
 const checkClass = cn("w-10 pl-3.5");
 const actionsClass = cn("w-px text-right");
@@ -381,7 +381,7 @@ export function ProjectTable({
           </thead>
           <tbody>
             {page.rows.map((project) => (
-              <tr key={project.id} className={cn(selected.has(project.id) && "[&>td]:bg-mark")}>
+              <tr key={project.id} className={cn("hover:bg-panel", selected.has(project.id) && "[&>td]:bg-mark")}>
                 <td className={cn(tdClass, checkClass)}>
                   <Checkbox
                     aria-label={`Select ${project.name}`}

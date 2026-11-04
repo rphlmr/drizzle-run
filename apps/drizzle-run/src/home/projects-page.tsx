@@ -1,3 +1,4 @@
+import { SearchIcon } from "lucide-react";
 import { useState } from "react";
 import { NavLink, Outlet, useLoaderData, useSearchParams, type LoaderFunctionArgs } from "react-router";
 
@@ -120,20 +121,30 @@ export function ProjectsPage() {
   };
 
   return (
-    <section className="flex min-w-0 flex-col gap-2.5 max-phone:gap-3.5" aria-labelledby="projects-title">
-      <div className="flex flex-wrap items-center gap-2.5 max-phone:gap-3.5">
-        <h1 id="projects-title" className="font-display text-[28px] font-bold tracking-[-0.02em] max-phone:text-[24px]">
-          My projects <span className="ml-1 font-sans text-[15px] font-medium tracking-normal text-muted">{total}</span>
-        </h1>
-        <div className="ml-auto flex flex-wrap items-center gap-2 max-phone:ml-0 max-phone:w-full">
-          <input
-            className="h-9 w-60 rounded-md border border-border bg-surface px-3 text-text focus-visible:border-accent-text focus-visible:outline-transparent max-phone:h-touch max-phone:w-full max-phone:rounded-[12px] max-phone:px-3.5"
-            type="search"
-            placeholder={`Search ${total} project${total === 1 ? "" : "s"}`}
-            aria-label="Search projects"
-            value={query.search}
-            onChange={(event) => setQuery({ search: event.target.value })}
-          />
+    <section className="flex min-w-0 flex-col gap-4.5 max-phone:gap-3.5" aria-labelledby="projects-title">
+      <div className="flex flex-col items-start gap-4.5 max-phone:gap-3.5">
+        <div>
+          <h1 id="projects-title" className="font-display text-[24px] font-semibold tracking-[-0.03em]">
+            My projects{" "}
+            <span className="ml-1 font-sans text-[15px] font-medium tracking-normal text-muted">{total}</span>
+          </h1>
+          <p className="mt-1 text-[13px] text-muted">Your saved work, ready to run.</p>
+        </div>
+        <div className="flex w-full flex-wrap items-center gap-2">
+          <div className="relative min-w-40 flex-1 max-phone:basis-full">
+            <SearchIcon
+              className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted"
+              aria-hidden="true"
+            />
+            <input
+              className="h-9 w-full rounded-md border border-border bg-surface pr-3 pl-9 text-[13px] text-text focus-visible:border-accent-text focus-visible:outline-transparent max-phone:h-touch"
+              type="search"
+              placeholder={`Search ${total} project${total === 1 ? "" : "s"}`}
+              aria-label="Search projects"
+              value={query.search}
+              onChange={(event) => setQuery({ search: event.target.value })}
+            />
+          </div>
           <ToggleGroup
             label="Database"
             options={DIALECTS}

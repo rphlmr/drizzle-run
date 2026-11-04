@@ -11,7 +11,7 @@ export type LinkSurface = "bar" | "panel";
 
 const kindTones: Record<LinkSurface, Record<ExampleLink["kind"], string>> = {
   bar: { docs: "bg-surface-2 text-muted", notes: "bg-notes text-text", example: "bg-lime text-on-lime" },
-  panel: { docs: "bg-surface-2 text-text", notes: "bg-notes text-text", example: "bg-lime text-on-lime" },
+  panel: { docs: "bg-surface-2 text-muted", notes: "bg-surface-2 text-muted", example: "bg-surface-2 text-muted" },
 };
 
 /** Links with their kind as a small tag. Docs and notes open a new tab; examples stay in Drizzle Run. */
@@ -22,7 +22,7 @@ export function LinkList({ links, surface = "bar" }: { links: readonly ExampleLi
         "flex flex-wrap items-center gap-3",
         surface === "bar"
           ? "ml-auto max-phone:ml-0 max-phone:basis-full max-phone:pl-6.5"
-          : "flex-col flex-nowrap items-start gap-1.5",
+          : "flex-col flex-nowrap items-stretch gap-0.5",
       )}
     >
       {links.map((link) => (
@@ -39,8 +39,10 @@ export function LinkList({ links, surface = "bar" }: { links: readonly ExampleLi
 /** One docs, notes or example link, tagged with its kind. */
 export function ExampleLinkItem({ link, surface = "bar" }: { link: ExampleLink; surface?: LinkSurface }) {
   const className = cn(
-    "inline-flex items-center gap-1.5 font-medium text-accent-text no-underline [&>svg]:size-3.25",
-    surface === "panel" && "gap-2",
+    "inline-flex items-center gap-1.5 font-medium no-underline [&>svg]:size-3.25",
+    surface === "bar"
+      ? "text-accent-text"
+      : "w-full rounded-md px-2 py-2 text-[13px] text-text hover:bg-surface-2 focus-visible:outline-2 focus-visible:outline-accent-text [&>svg]:shrink-0 [&>svg]:text-muted",
   );
   const tag = (
     <span className={cn("rounded-[4px] px-1.5 py-px text-[11px] font-semibold", kindTones[surface][link.kind])}>
@@ -51,8 +53,9 @@ export function ExampleLinkItem({ link, surface = "bar" }: { link: ExampleLink; 
   if (link.kind === "example") {
     return (
       <Link to={`/examples/${link.slug}`} className={className}>
-        {tag}
-        {link.label}
+        {surface === "bar" && tag}
+        <span className={cn(surface === "panel" && "min-w-0 flex-1")}>{link.label}</span>
+        {surface === "panel" && tag}
         <ArrowRightIcon aria-hidden="true" />
       </Link>
     );
@@ -60,8 +63,9 @@ export function ExampleLinkItem({ link, surface = "bar" }: { link: ExampleLink; 
 
   return (
     <a href={link.url} target="_blank" rel="noreferrer" className={className}>
-      {tag}
-      {link.label}
+      {surface === "bar" && tag}
+      <span className={cn(surface === "panel" && "min-w-0 flex-1")}>{link.label}</span>
+      {surface === "panel" && tag}
       <ExternalLinkIcon aria-hidden="true" />
     </a>
   );

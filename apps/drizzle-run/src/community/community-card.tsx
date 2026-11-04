@@ -41,7 +41,7 @@ export function CommunityOwner({ owner }: { owner: CommunityShare["owner"] }) {
 /** The bordered tag that marks community content: "Community" on cards, "Community share" in the notice. */
 export function CommunityTag({ children }: { children: string }) {
   return (
-    <span className="shrink-0 rounded-[4px] border border-card-border px-1.75 py-px text-[11px] font-bold whitespace-nowrap">
+    <span className="shrink-0 rounded-sm border border-border px-1.75 py-px text-[11px] font-medium whitespace-nowrap">
       {children}
     </span>
   );
@@ -59,18 +59,18 @@ export interface CommunityCardProps {
  */
 export function CommunityCard({ share, onOpen }: CommunityCardProps) {
   return (
-    <article className="relative flex min-w-0 flex-1 flex-col gap-2 rounded-lg border border-border bg-surface p-4 text-text has-[[data-open]:hover]:border-muted">
+    <article className="relative flex min-w-0 flex-1 flex-col gap-2.5 rounded-lg border border-border bg-surface p-5 text-text transition-colors has-[[data-open]:hover]:bg-panel max-phone:p-4">
       <span className="flex items-center gap-2 text-[12px] text-muted">
-        <CommunityTag>Community</CommunityTag>
+        <CommunityTag>{formatShareDialects(share)}</CommunityTag>
         {share.sides && <SideBySideTag />}
-        <span>{formatShareDialects(share)}</span>
+        <span>{share.topic === "bug-repros" ? "Bug repro" : "Community share"}</span>
         {!share.sides && (
           <Hint content={getSharePairTitle(share)}>
             <span className="relative z-1 ml-auto truncate font-mono">{getSharePairLabel(share)}</span>
           </Hint>
         )}
       </span>
-      <h2 className="font-display text-[18px] font-bold wrap-anywhere">{share.title}</h2>
+      <h2 className="font-display text-[14px] font-medium wrap-anywhere">{share.title}</h2>
       {share.description && <p className="text-[13px]/[1.5] text-muted">{share.description}</p>}
       {share.sides && (
         <Hint content={getSharePairTitle(share)}>

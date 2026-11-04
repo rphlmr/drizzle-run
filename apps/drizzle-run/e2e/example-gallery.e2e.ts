@@ -4,6 +4,71 @@ import { callStore } from "./store";
 
 const examples = readOfficialExamples();
 
+test("should show related example and documentation links in the preview", async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto("/examples?q=reusable+helpers");
+  await page.locator('[data-example-slug="reusable-helpers"]').click();
+  const resources = page.getByRole("region", { name: "Related resources" });
+  await expect(resources.getByRole("link", { name: /The SQLite version/ })).toHaveAttribute(
+    "href",
+    "/examples/reusable-helpers-sqlite",
+  );
+  const docs = resources.getByRole("link", { name: /Compose SQL expressions/ });
+  await expect(docs).toHaveAttribute("href", "https://orm.drizzle.team/docs/sql");
+  await expect(docs).toHaveAttribute("target", "_blank");
+  await resources.scrollIntoViewIfNeeded();
+  await page.screenshot({ path: testInfo.outputPath("related-resources.png") });
+});
+
+for (const theme of ["light", "dark"] as const) {
+  test(`should clearly distinguish selected topics in ${theme} mode`, async ({ page }) => {
+    await page.addInitScript((value) => localStorage.setItem("theme", value), theme);
+    await page.goto("/examples");
+    const topics = page.getByRole("group", { name: "Topic", exact: true });
+    const helpers = topics.getByRole("button", { name: "Helpers", exact: true });
+    await helpers.click();
+    await expect(helpers).toHaveAttribute("aria-pressed", "true");
+    await expect(helpers).toHaveCSS("background-color", theme === "light" ? "rgb(10, 10, 10)" : "rgb(243, 244, 246)");
+    await expect(helpers).toHaveCSS("color", theme === "light" ? "rgb(255, 255, 255)" : "rgb(10, 10, 10)");
+  });
+}
+
+test("should keep filters and results in place when selecting topics and starting from filtered results", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto("/examples");
+  const search = page.getByRole("searchbox", { name: "Search examples and guides" });
+  const list = page.getByRole("region", { name: "Browse examples" });
+  const searchTop = await search.evaluate((element) => element.getBoundingClientRect().top);
+  const listTop = await list.evaluate((element) => element.getBoundingClientRect().top);
+  await page.getByRole("group", { name: "Topic" }).getByRole("button", { name: "Helpers", exact: true }).click();
+  await expect.poll(() => search.evaluate((element) => element.getBoundingClientRect().top)).toBe(searchTop);
+  await expect.poll(() => list.evaluate((element) => element.getBoundingClientRect().top)).toBe(listTop);
+  await page.getByRole("button", { name: "SQLite quick start Preview ↓" }).click();
+  await expect(page).toHaveURL(/\/examples$/);
+  const row = page.locator('[data-example-slug="quick-start-sqlite"]');
+  await expect(row).toHaveAttribute("aria-pressed", "true");
+  await expect(row).toBeInViewport();
+  await expect(page.getByRole("region", { name: "Example preview" })).toContainText("SQLite quick start");
+});
+
+test("should color the selected example's query and retain it when the theme changes", async ({ page }) => {
+  await page.goto("/examples");
+  await page.locator('[data-example-slug="quick-start-postgresql"]').click();
+  const query = page.getByRole("region", { name: "Query preview" }).locator("code");
+  await expect(query).toContainText("import { db }");
+  await expect(query.locator("span[class*='mtk']").first()).toBeVisible();
+  await page.evaluate(() => {
+    document.documentElement.dataset.theme = "dark";
+  });
+  await expect(query).toContainText("import { db }");
+  await expect(query.locator("span[class*='mtk']").first()).toBeVisible();
+  await page.locator('[data-example-slug="quick-start-sqlite"]').click();
+  await expect(query.locator("span[class*='mtk']").first()).toBeVisible();
+  await expect(page.getByRole("heading", { name: "SQLite quick start" })).toBeVisible();
+});
+
 test("should combine search with topics, database, kind and comparisons on desktop and phone", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 1000 });
   await page.goto("/examples");
@@ -133,6 +198,8 @@ test("should open examples and guides with Enter on desktop", async ({ page }) =
   await page.setViewportSize({ width: 1280, height: 800 });
   for (const slug of ["quick-start-sqlite", "drizzle-in-five-minutes"]) {
     await page.goto("/examples");
+    const logo = page.getByRole("link", { name: "Drizzle Run home" });
+    const leftBefore = await logo.evaluate((element) => element.getBoundingClientRect().left);
     const row = page.locator(`[data-example-slug="${slug}"]`);
     await row.focus();
     await page.keyboard.press("ArrowDown");
@@ -142,6 +209,7 @@ test("should open examples and guides with Enter on desktop", async ({ page }) =
     await page.screenshot({ path: `/tmp/drizzle-gallery-focus-${slug}.png` });
     await page.keyboard.press("Enter");
     await expect(page).toHaveURL(new RegExp(`/examples/${slug}$`));
+    await expect.poll(() => logo.evaluate((element) => element.getBoundingClientRect().left)).toBe(leftBefore);
     if (slug === "drizzle-in-five-minutes") {
       await expect(page.getByRole("complementary", { name: "Guide" })).toBeVisible();
     } else {
