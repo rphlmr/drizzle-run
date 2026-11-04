@@ -4,7 +4,7 @@
   "status": "published",
   "title": "Write reusable, typed SQL helpers",
   "description": "Build a JSONB helper that infers its result from your columns, then compose nested objects and SQL expressions.",
-  "topic": "Queries",
+  "topics": ["Queries","Helpers","JSON"],
   "featured": false,
   "order": 80,
   "dialect": "postgresql",

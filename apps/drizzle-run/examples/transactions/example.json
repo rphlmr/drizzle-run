@@ -4,7 +4,7 @@
   "status": "published",
   "title": "Transactions and savepoints",
   "description": "Transfer between accounts, roll back a savepoint, and check which writes are kept.",
-  "topic": "Transactions",
+  "topics": ["Transactions"],
   "featured": false,
   "order": 40,
   "dialect": "postgresql",

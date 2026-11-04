@@ -4,7 +4,7 @@
   "status": "published",
   "title": "Use one query inside another",
   "description": "Learn membership, existence, grouped subqueries, scalar counts and CTEs with one author report.",
-  "topic": "Queries",
+  "topics": ["Queries"],
   "featured": false,
   "order": 68,
   "dialect": "postgresql",

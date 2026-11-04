@@ -41,7 +41,7 @@ import {
   LoadingExampleGallery,
   shouldReloadExampleGallery,
 } from "./examples/example-gallery";
-import { ExamplePage } from "./examples/example-page";
+import { ExamplePage, loadExamplePage } from "./examples/example-page";
 import { describeProjectDeletion } from "./home/delete-description";
 import { DrizzleRain } from "./home/drizzle-rain";
 import { LoadingProjects, loadProjectShares, ProjectsLayout, ProjectsPage } from "./home/projects-page";
@@ -172,7 +172,7 @@ export function createAppRoutes(): RouteObject[] {
                     { path: "*", Component: NotFoundPage },
                   ],
                 },
-                { path: "examples/:slug", Component: ExamplePage },
+                { path: "examples/:slug", loader: loadExamplePage, Component: ExamplePage },
                 {
                   path: "p/:projectId",
                   loader: loadProjectPage,

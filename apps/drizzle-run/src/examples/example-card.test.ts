@@ -14,13 +14,19 @@ function renderCard({
   progress,
   featured,
   example: cardExample = example,
+  viewedAt,
 }: {
   progress?: GuideProgress;
   featured: boolean;
   example?: OfficialExample;
+  viewedAt?: string;
 }) {
   return renderToStaticMarkup(
-    createElement(MemoryRouter, null, createElement(ExampleCard, { example: cardExample, progress, featured })),
+    createElement(
+      MemoryRouter,
+      null,
+      createElement(ExampleCard, { example: cardExample, progress, featured, viewedAt }),
+    ),
   );
 }
 
@@ -32,15 +38,33 @@ describe.each([false, true])("guide card (featured: %s)", (featured) => {
     expect(html).not.toContain('data-slot="guide-status"');
   });
 
-  it("should show opened guides as in progress before the first step is completed", () => {
+  it("should show opened guides as viewed before the first step is completed", () => {
     const html = renderCard({
       featured,
       progress: { guideId: guide.id, stepId: guide.steps[0].id, completed: [], finished: false },
     });
 
-    expect(html).toContain("In progress");
+    expect(html).toContain("Viewed");
     expect(html).toContain("Continue guide");
-    expect(html).toContain("0 of 7 steps completed");
+    expect(html).not.toContain('data-slot="guide-progress"');
+  });
+
+  it("should show progress after a step has been completed", () => {
+    const html = renderCard({
+      featured,
+      progress: { guideId: guide.id, stepId: guide.steps[1].id, completed: [guide.steps[0].id], finished: false },
+    });
+
+    expect(html).toContain("In progress");
+    expect(html).toContain("1 of 7 steps completed");
+  });
+
+  it("should mark a visited plain example without inventing guide progress", () => {
+    const html = renderCard({ featured, example: findExample("insert-validators")!, viewedAt: "2026-11-04T10:00:00Z" });
+
+    expect(html).toContain("Viewed");
+    expect(html).not.toContain("In progress");
+    expect(html).not.toContain("Completed");
   });
 
   it("should distinguish finished guides from ones still in progress", () => {
@@ -52,6 +76,7 @@ describe.each([false, true])("guide card (featured: %s)", (featured) => {
         completed: guide.steps.map((step) => step.id),
         finished: true,
       },
+      viewedAt: "2026-11-04T10:00:00Z",
     });
 
     expect(html).toContain("Completed");

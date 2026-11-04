@@ -5,6 +5,7 @@ import { Link } from "react-router";
 import { cn } from "../lib/utils";
 import { formatProjectDialects } from "../project/projects";
 import { resolveExampleSides, type OfficialExample } from "./catalog";
+import { getExampleProgress } from "./progress";
 
 export interface ExampleCardProps {
   example: OfficialExample;
@@ -12,6 +13,7 @@ export interface ExampleCardProps {
   featured?: boolean;
   /** Saved progress, for a guide the reader started in this browser. */
   progress?: GuideProgress;
+  viewedAt?: string;
   className?: string;
 }
 
@@ -28,20 +30,27 @@ function getCallToAction(guided: boolean, progress: GuideProgress | undefined): 
 }
 
 /** An example library row, or its featured panel, with saved guide progress. */
-export function ExampleCard({ example, featured = false, progress, className }: ExampleCardProps) {
+export function ExampleCard({ example, featured = false, progress, viewedAt, className }: ExampleCardProps) {
   const steps = example.guide?.steps.length;
   const done = progress?.finished ? (steps ?? 0) : (progress?.completed.length ?? 0);
-  const started = steps !== undefined && progress !== undefined;
+  const status = getExampleProgress({ progress, viewedAt });
+  const started = status !== "not_viewed";
+  const statusLabels = {
+    not_viewed: "Not viewed",
+    viewed: "Viewed",
+    in_progress: "In progress",
+    completed: "Completed",
+  };
   const progressBadge = started && (
     <span
       className={cn(
         "inline-flex items-center gap-1 rounded-[4px] px-2 py-0.5 text-[11px] font-semibold whitespace-nowrap",
-        progress.finished ? "bg-ok-bg text-ok" : "bg-surface-2 text-muted",
+        status === "completed" ? "bg-ok-bg text-ok" : "bg-surface-2 text-muted",
       )}
-      data-slot="guide-status"
+      data-slot={steps === undefined ? "example-status" : "guide-status"}
     >
-      {progress.finished && <CheckCircle2Icon className="size-3.5" aria-hidden="true" />}
-      {progress.finished ? "Completed" : "In progress"}
+      {status === "completed" && <CheckCircle2Icon className="size-3.5" aria-hidden="true" />}
+      {statusLabels[status]}
     </span>
   );
   const sides = resolveExampleSides(example);
@@ -56,10 +65,10 @@ export function ExampleCard({ example, featured = false, progress, className }: 
     .join(" vs ");
   const cta = `${getCallToAction(steps !== undefined, progress)} →`;
   const EntryIcon = steps === undefined ? Code2Icon : BookOpenIcon;
-  const guideProgress = started && (
+  const entryProgress = started && (
     <span className="flex flex-wrap items-center justify-end gap-1.5">
       {progressBadge}
-      {!progress.finished && (
+      {status === "in_progress" && (
         <span
           className="text-[12px] text-muted"
           data-slot="guide-progress"
@@ -96,7 +105,7 @@ export function ExampleCard({ example, featured = false, progress, className }: 
           </div>
         </div>
         <div className="flex flex-col items-end gap-2 max-phone:flex-row max-phone:justify-between">
-          {guideProgress}
+          {entryProgress}
           <span className="ml-auto rounded-sm border border-run-border bg-lime px-3 py-2 text-[13px] font-semibold whitespace-nowrap text-on-lime shadow-action transition-all group-active:translate-0.5 group-active:shadow-none">
             {cta}
           </span>
@@ -122,7 +131,7 @@ export function ExampleCard({ example, featured = false, progress, className }: 
             <h2 className="text-[15px]/[1.5] font-semibold decoration-border underline-offset-4 group-hover:underline">
               {example.title}
             </h2>
-            <span className="text-[11px] text-muted">{example.topic}</span>
+            <span className="text-[11px] text-muted">{example.topics.join(" · ")}</span>
           </div>
           <p className="text-[13px]/[1.5] text-soft">{example.description}</p>
           {comparison && (
@@ -139,7 +148,7 @@ export function ExampleCard({ example, featured = false, progress, className }: 
       </div>
       <p className="text-[12px]/[1.5] text-muted max-wide:hidden">{formatProjectDialects(example.manifest)}</p>
       <div className="flex flex-col items-end gap-2">
-        {guideProgress}
+        {entryProgress}
         <span className="text-[13px] font-semibold whitespace-nowrap">{cta}</span>
       </div>
     </Link>

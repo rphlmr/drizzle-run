@@ -4,7 +4,7 @@
   "status": "published",
   "title": "Use Temporal dates in booking queries (SQLite)",
   "description": "A complete PlainDate column, typed inserts and filters, leap-day arithmetic, and nullable values.",
-  "topic": "Schema",
+  "topics": ["Schema"],
   "featured": false,
   "order": 133,
   "dialect": "sqlite",

@@ -4,7 +4,7 @@
   "status": "published",
   "title": "Filter products by JSONB attributes",
   "description": "Read nested attributes, filter by containment, and distinguish missing keys from JSON null.",
-  "topic": "Queries",
+  "topics": ["Queries","JSON"],
   "featured": false,
   "order": 85,
   "dialect": "postgresql",

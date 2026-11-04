@@ -4,7 +4,7 @@
   "status": "published",
   "title": "Jump to numbered pages (SQLite)",
   "description": "Use limit and offset with a unique tie-breaker and a matching index.",
-  "topic": "Queries",
+  "topics": ["Queries","Pagination"],
   "featured": false,
   "order": 123,
   "dialect": "sqlite",

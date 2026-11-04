@@ -4,7 +4,7 @@
   "status": "published",
   "title": "Pagination: SQL-like vs RQB (SQLite)",
   "description": "Compare numbered pages, shifting offsets and composite cursors through both Drizzle query APIs.",
-  "topic": "Queries",
+  "topics": ["Queries","Pagination","RQB"],
   "featured": false,
   "order": 125,
   "dialect": "sqlite",

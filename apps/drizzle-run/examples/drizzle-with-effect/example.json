@@ -4,7 +4,7 @@
   "status": "published",
   "title": "Drizzle with Effect",
   "description": "Query with Effect, catch a failed insert by its tag, roll back a transaction with your own error, and retry.",
-  "topic": "Effect",
+  "topics": ["Effect"],
   "featured": false,
   "order": 80,
   "dialect": "postgresql",

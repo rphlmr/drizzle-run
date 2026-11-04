@@ -4,7 +4,7 @@
   "status": "published",
   "title": "Jump to numbered pages (PostgreSQL)",
   "description": "Use limit and offset with a unique tie-breaker and a matching index.",
-  "topic": "Queries",
+  "topics": ["Queries","Pagination"],
   "featured": false,
   "order": 122,
   "dialect": "postgresql",

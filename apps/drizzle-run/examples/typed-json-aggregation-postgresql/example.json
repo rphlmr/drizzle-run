@@ -4,7 +4,7 @@
   "status": "published",
   "title": "Reuse typed JSON aggregation helpers (PostgreSQL)",
   "description": "Infer ordered nested arrays, keep a real child with null text, and return an empty collection for a missing child.",
-  "topic": "Queries",
+  "topics": ["Queries","Helpers","JSON"],
   "featured": false,
   "order": 92,
   "dialect": "postgresql",

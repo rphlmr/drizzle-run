@@ -4,7 +4,7 @@
   "status": "published",
   "title": "Prepared product search",
   "description": "Reuse one query with category, minimum price and result-limit placeholders.",
-  "topic": "Queries",
+  "topics": ["Queries"],
   "featured": false,
   "order": 65,
   "dialect": "postgresql",

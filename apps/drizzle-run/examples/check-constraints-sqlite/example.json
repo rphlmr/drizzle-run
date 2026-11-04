@@ -4,7 +4,7 @@
   "status": "published",
   "title": "Enforce product rules with CHECK (SQLite)",
   "description": "Reject invalid inserts and updates in the database, compare two columns, and see why CHECK does not replace NOT NULL.",
-  "topic": "Schema",
+  "topics": ["Schema"],
   "featured": false,
   "order": 111,
   "dialect": "sqlite",

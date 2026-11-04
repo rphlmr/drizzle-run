@@ -1,4 +1,3 @@
-import type { RunManifestTarget } from "@drizzle-run/core/manifest";
 import type { GuideProgress } from "@drizzle-run/runtime/machines";
 import {
   useLoaderData,
@@ -8,41 +7,40 @@ import {
 } from "react-router";
 
 import { appServicesContext } from "../app-services";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
 import { Skeleton } from "../components/ui/skeleton";
 import { readExampleProgress } from "../guides/guide-progress";
-import { cn } from "../lib/utils";
-import { listProjectDialects } from "../project/projects";
 import { SiteMain } from "../shell/site-header";
 import { Chip } from "../ui/chip";
 import { ToggleGroup } from "../ui/toggle-group";
 import { useWorkspace } from "../workspace/context";
-import { getExampleKind, listExamples, listExampleTopics, type ExampleKind, type ExampleTopic } from "./catalog";
+import { listExamples, listExampleTopics } from "./catalog";
 import { ExampleCard } from "./example-card";
+import {
+  filterExamples,
+  GALLERY_DATABASES,
+  GALLERY_KINDS,
+  GALLERY_LAYOUTS,
+  GALLERY_PROGRESS,
+  hasGalleryFilters,
+  readGalleryFilters,
+} from "./gallery-filters";
+import { readExampleViews } from "./progress";
 
-type DatabaseFilter = "all" | RunManifestTarget["dialect"];
-
-const DATABASES: readonly { value: DatabaseFilter; label: string }[] = [
-  { value: "all", label: "Any database" },
-  { value: "postgresql", label: "PostgreSQL" },
-  { value: "sqlite", label: "SQLite" },
-];
-
-const KINDS: readonly { value: "all" | ExampleKind; label: string }[] = [
-  { value: "all", label: "Any kind" },
-  { value: "guided", label: "Guided" },
-  { value: "example", label: "Examples" },
-];
-
-const filterGroupClass = cn("ml-auto max-phone:ml-0 max-phone:w-full");
-
-/** Load the Examples page's saved guide progress, so each guided card shows how far it got. */
+/** Read local guide progress and visits when entering the catalog. */
 export async function loadExampleGallery({ context }: LoaderFunctionArgs) {
   const { settings } = context.get(appServicesContext);
+  const examples = listExamples();
+  const [progress, views] = await Promise.all([
+    readExampleProgress(settings, examples),
+    readExampleViews(settings, examples),
+  ]);
 
-  return { progress: await readExampleProgress(settings, listExamples()) };
+  return { progress, views };
 }
 
-/** Skip the progress read when only a filter changes: progress moves only while a guide plays, on another page. */
+/** Filter navigation reuses progress; returning from an example reads the latest visits and completion. */
 export function shouldReloadExampleGallery({
   currentUrl,
   nextUrl,
@@ -55,14 +53,14 @@ export function shouldReloadExampleGallery({
   return defaultShouldRevalidate;
 }
 
-/** The Examples page: official examples filtered by topic, database and kind from the search params. */
+/** Search and filter official examples using shareable URL parameters. */
 export function ExampleGallery() {
-  const { progress } = useLoaderData<typeof loadExampleGallery>();
+  const { progress, views } = useLoaderData<typeof loadExampleGallery>();
 
-  return <Gallery progress={progress} />;
+  return <Gallery progress={progress} views={views} />;
 }
 
-/** The Examples page while the app opens and reads the guide progress. */
+/** The Examples page while the app reads this browser's progress. */
 export function LoadingExampleGallery() {
   const workspace = useWorkspace();
 
@@ -79,35 +77,34 @@ export function LoadingExampleGallery() {
   );
 }
 
-function Gallery({ progress }: { progress: Readonly<Record<string, GuideProgress>> }) {
+function Gallery({
+  progress,
+  views,
+}: {
+  progress: Readonly<Record<string, GuideProgress>>;
+  views: Readonly<Record<string, string>>;
+}) {
   const workspace = useWorkspace();
   const [params, setParams] = useSearchParams();
   const examples = listExamples();
   const topics = listExampleTopics(examples);
-  const topic = topics.find((item) => item === params.get("topic"));
-  const database = DATABASES.find((item) => item.value === params.get("db"))?.value ?? "all";
-  const kind = KINDS.find((item) => item.value === params.get("kind"))?.value ?? "all";
-  const featured = examples.find((example) => example.featured);
-  const filtered = topic !== undefined || database !== "all" || kind !== "all";
-  const visible = examples.filter(
-    (example) =>
-      (topic === undefined || example.topic === topic) &&
-      (database === "all" || listProjectDialects(example.manifest).includes(database)) &&
-      (kind === "all" || getExampleKind(example) === kind) &&
-      (filtered || example !== featured),
-  );
+  const filters = readGalleryFilters(params);
+  const filtered = hasGalleryFilters(filters);
+  const matches = filterExamples({ examples, filters, progress, views });
+  const featured = filtered ? undefined : examples.find((example) => example.featured);
+  const visible = matches.filter((example) => example !== featured);
 
-  const setFilter = (key: "topic" | "db" | "kind", value: string | undefined) => {
+  function setFilter(key: "q" | "topic" | "db" | "kind" | "layout" | "progress", value: string | undefined) {
     const next = new URLSearchParams(params);
 
-    if (value === undefined || value === "all") {
+    if (value === undefined || value === "" || (key !== "q" && value === "all")) {
       next.delete(key);
     } else {
       next.set(key, value);
     }
 
-    setParams(next, { replace: true });
-  };
+    setParams(next, { replace: true, preventScrollReset: true });
+  }
 
   return (
     <>
@@ -122,40 +119,82 @@ function Gallery({ progress }: { progress: Readonly<Record<string, GuideProgress
             to keep your changes.
           </p>
         </div>
-        {featured && (
-          <section aria-label="Featured example">
-            <ExampleCard example={featured} featured progress={progress[featured.slug]} />
-          </section>
-        )}
-        <div className="flex flex-wrap items-center gap-2">
-          <fieldset
-            className="flex min-w-auto flex-wrap gap-1.5 max-phone:w-full max-phone:scrollbar-none max-phone:flex-nowrap max-phone:overflow-x-auto"
-            aria-label="Topic"
-          >
-            <Chip pressed={topic === undefined} onClick={() => setFilter("topic", undefined)}>
+        <div className="flex flex-col gap-3">
+          <Input
+            type="search"
+            aria-label="Search examples and guides"
+            placeholder="Search examples and guides…"
+            className="m-0"
+            value={filters.search}
+            onChange={(event) => setFilter("q", event.target.value)}
+          />
+          <fieldset className="flex min-w-auto flex-wrap gap-1.5" aria-label="Topic">
+            <Chip pressed={filters.topic === undefined} onClick={() => setFilter("topic", undefined)}>
               All
             </Chip>
-            {topics.map((item: ExampleTopic) => (
-              <Chip key={item} pressed={topic === item} onClick={() => setFilter("topic", item)}>
-                {item}
+            {topics.map((topic) => (
+              <Chip key={topic} pressed={filters.topic === topic} onClick={() => setFilter("topic", topic)}>
+                {topic}
               </Chip>
             ))}
           </fieldset>
-          <ToggleGroup
-            label="Kind"
-            options={KINDS}
-            value={kind}
-            onChange={(value) => setFilter("kind", value)}
-            className={filterGroupClass}
-          />
-          <ToggleGroup
-            label="Database"
-            options={DATABASES}
-            value={database}
-            onChange={(value) => setFilter("db", value)}
-            className={filterGroupClass}
-          />
+          <div className="flex flex-wrap items-center gap-2">
+            <ToggleGroup
+              label="Kind"
+              options={GALLERY_KINDS}
+              value={filters.kind}
+              onChange={(value) => setFilter("kind", value)}
+              className="max-phone:w-full"
+            />
+            <ToggleGroup
+              label="Database"
+              options={GALLERY_DATABASES}
+              value={filters.database}
+              onChange={(value) => setFilter("db", value)}
+              className="max-phone:w-full"
+            />
+            <ToggleGroup
+              label="Layout"
+              options={GALLERY_LAYOUTS}
+              value={filters.layout}
+              onChange={(value) => setFilter("layout", value)}
+              className="max-phone:w-full"
+            />
+            <select
+              aria-label="Progress"
+              value={filters.progress}
+              onChange={(event) => setFilter("progress", event.target.value)}
+              className="min-h-9 rounded-md border border-border bg-surface px-3 py-1.5 text-[13px] text-text max-phone:min-h-touch"
+            >
+              {GALLERY_PROGRESS.map(({ value, label }) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </select>
+            <Button
+              variant="ghost"
+              size="sm"
+              disabled={!filtered}
+              onClick={() => setParams(new URLSearchParams(), { replace: true, preventScrollReset: true })}
+            >
+              Clear filters
+            </Button>
+          </div>
+          <output className="text-[12px] text-muted" aria-live="polite">
+            {matches.length} {matches.length === 1 ? "example or guide" : "examples & guides"}
+          </output>
         </div>
+        {featured && (
+          <section aria-label="Featured example">
+            <ExampleCard
+              example={featured}
+              featured
+              progress={progress[featured.slug]}
+              viewedAt={views[featured.slug]}
+            />
+          </section>
+        )}
         <div className="min-h-dvh">
           {visible.length === 0 ? (
             <p className="my-6 text-muted">No example matches these filters yet.</p>
@@ -165,7 +204,7 @@ function Gallery({ progress }: { progress: Readonly<Record<string, GuideProgress
                 className="grid grid-cols-[minmax(0,1fr)_108px_128px_148px] items-center gap-x-6 border-b border-border bg-surface-2 px-5 py-2.5 text-[11px] font-medium text-muted max-wide:grid-cols-[minmax(0,1fr)_128px_148px] max-phone:hidden"
                 aria-hidden="true"
               >
-                <span>{visible.length} examples &amp; guides</span>
+                <span>Examples &amp; guides</span>
                 <span>Format</span>
                 <span className="max-wide:hidden">Database</span>
                 <span className="text-right">Open &amp; continue</span>
@@ -174,7 +213,7 @@ function Gallery({ progress }: { progress: Readonly<Record<string, GuideProgress
               <ul className="divide-y divide-border" role="list" aria-label="Example list">
                 {visible.map((example) => (
                   <li key={example.slug}>
-                    <ExampleCard example={example} progress={progress[example.slug]} />
+                    <ExampleCard example={example} progress={progress[example.slug]} viewedAt={views[example.slug]} />
                   </li>
                 ))}
               </ul>

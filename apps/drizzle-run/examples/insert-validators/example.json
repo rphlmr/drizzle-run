@@ -4,7 +4,7 @@
   "status": "published",
   "title": "Insert validators",
   "description": "Derive a Zod schema from a table and check rows before they reach the database.",
-  "topic": "Validation",
+  "topics": ["Validation"],
   "featured": false,
   "order": 60,
   "dialect": "postgresql",

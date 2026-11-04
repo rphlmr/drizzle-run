@@ -4,7 +4,7 @@
   "status": "published",
   "title": "Build nested results with SQL",
   "description": "Learn why joins multiply rows, aggregate each relation, keep empty arrays, and compare the result with RQB.",
-  "topic": "Queries",
+  "topics": ["Queries","JSON"],
   "featured": false,
   "order": 75,
   "dialect": "postgresql",

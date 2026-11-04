@@ -31,6 +31,10 @@ export { DOCS_ORIGIN, ExampleError, NOTES_ORIGIN, type ExampleLink } from "./sou
 /** The gallery's topics, in the order its filter lists them. */
 export const EXAMPLE_TOPICS = [
   "Queries",
+  "Helpers",
+  "JSON",
+  "Pagination",
+  "RQB",
   "Schema",
   "Transactions",
   "Migrations",
@@ -47,7 +51,7 @@ export interface OfficialExample extends CatalogVersion {
   folder: string;
   title: string;
   description: string;
-  topic: ExampleTopic;
+  topics: readonly ExampleTopic[];
   featured: boolean;
   order: number;
   links: readonly ExampleLink[];
@@ -76,7 +80,7 @@ const METADATA_FIELDS = new Set([
   "status",
   "title",
   "description",
-  "topic",
+  "topics",
   "featured",
   "order",
   "dialect",
@@ -209,11 +213,14 @@ export function parseExample(source: ExampleSource): OfficialExample {
 
   const title = readRequiredText(folder, metadata, "title");
   const description = readRequiredText(folder, metadata, "description");
-  const topic = readExampleField(
+  const topics = readExampleField(
     folder,
-    ExampleTopicSchema,
-    metadata.topic,
-    `topic must be one of ${EXAMPLE_TOPICS.join(", ")}.`,
+    z.array(ExampleTopicSchema).check(
+      z.minLength(1),
+      z.refine((items) => new Set(items).size === items.length),
+    ),
+    metadata.topics,
+    `topics must be a non-empty list of unique values from ${EXAMPLE_TOPICS.join(", ")}.`,
   );
   const featured = readExampleField(folder, z.boolean(), metadata.featured, "featured must be true or false.");
   const order = readExampleField(folder, IntegerSchema, metadata.order, "order must be an integer.");
@@ -332,7 +339,7 @@ export function parseExample(source: ExampleSource): OfficialExample {
     folder,
     title,
     description,
-    topic,
+    topics,
     featured,
     order,
     links: links.map((link) => parseLink(folder, link)),
@@ -538,7 +545,7 @@ export function findExample(slug: string): OfficialExample | undefined {
 
 /** Topics that at least one example uses, in the fixed topic order. */
 export function listExampleTopics(examples: readonly OfficialExample[] = listExamples()): ExampleTopic[] {
-  return EXAMPLE_TOPICS.filter((topic) => examples.some((example) => example.topic === topic));
+  return EXAMPLE_TOPICS.filter((topic) => examples.some((example) => example.topics.includes(topic)));
 }
 
 /** Guided examples first, then plain ones, as the gallery's Kind filter names them. */

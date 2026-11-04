@@ -4,7 +4,7 @@
   "status": "published",
   "title": "Store Temporal dates with a custom type (SQLite)",
   "description": "Build a customType with actual value conversion, preserve nullable dates, and query with typed Temporal values.",
-  "topic": "Schema",
+  "topics": ["Schema"],
   "featured": false,
   "order": 131,
   "dialect": "sqlite",

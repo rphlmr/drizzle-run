@@ -4,7 +4,7 @@
   "status": "published",
   "title": "PostgreSQL quick start",
   "description": "A users table, two seeded rows, and a first select.",
-  "topic": "Queries",
+  "topics": ["Queries"],
   "featured": false,
   "order": 10,
   "dialect": "postgresql",

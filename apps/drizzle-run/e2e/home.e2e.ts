@@ -292,17 +292,13 @@ for (const scrollTop of [0, 140]) {
     const main = page.getByRole("main");
     const database = page.getByRole("group", { name: "Database" });
     const readPositions = () =>
-      page
-        .locator(
-          'main h1, main section, main fieldset, main fieldset button, [aria-label="Example list"], [aria-label="Example list"] > li:first-child > a > *',
-        )
-        .evaluateAll((elements) =>
-          elements.map((element) => {
-            const { x, y, width } = element.getBoundingClientRect();
+      page.locator("main h1, main fieldset, main fieldset button").evaluateAll((elements) =>
+        elements.map((element) => {
+          const { x, y, width } = element.getBoundingClientRect();
 
-            return { x, y, width };
-          }),
-        );
+          return { x, y, width };
+        }),
+      );
 
     await main.evaluate((element, top) => {
       element.scrollTop = top;

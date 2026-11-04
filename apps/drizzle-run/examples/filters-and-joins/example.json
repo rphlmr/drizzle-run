@@ -4,7 +4,7 @@
   "status": "published",
   "title": "Filters, joins, and counts",
   "description": "Combine where clauses, join two tables, and count rows per group.",
-  "topic": "Queries",
+  "topics": ["Queries"],
   "featured": false,
   "order": 50,
   "dialect": "sqlite",

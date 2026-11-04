@@ -4,7 +4,7 @@
   "status": "published",
   "title": "Paginate with stable ordering (SQLite)",
   "description": "Compare shifting offset pages, a timestamp-only cursor, and a composite cursor with hasNextPage.",
-  "topic": "Queries",
+  "topics": ["Queries","Pagination"],
   "featured": false,
   "order": 121,
   "dialect": "sqlite",

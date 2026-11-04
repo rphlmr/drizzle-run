@@ -4,7 +4,7 @@
   "status": "published",
   "title": "Write reusable, typed SQL helpers with SQLite",
   "description": "Infer JSON object types from SQLite columns, decode JSON text, and compose nested expressions.",
-  "topic": "Queries",
+  "topics": ["Queries","Helpers","JSON"],
   "featured": false,
   "order": 81,
   "dialect": "sqlite",

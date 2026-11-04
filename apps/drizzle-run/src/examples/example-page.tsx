@@ -3,8 +3,9 @@ import type { RunManifest } from "@drizzle-run/core/manifest";
 import { pairSide } from "@drizzle-run/core/pair";
 import { LightbulbIcon } from "lucide-react";
 import { useState } from "react";
-import { useParams, useSearchParams } from "react-router";
+import { useParams, useSearchParams, type LoaderFunctionArgs } from "react-router";
 
+import { appServicesContext } from "../app-services";
 import { getGuideConversation } from "../connect/conversations";
 import { getGuideProgressSetting } from "../guides/catalog";
 import { GuidedPlayground } from "../guides/guided-playground";
@@ -28,6 +29,24 @@ import { NotFoundPage } from "../workspace/project-page";
 import { findExample, findNextGuidedExample, type OfficialExample } from "./catalog";
 import { ExampleTitle } from "./example-title";
 import { LinkList } from "./link-list";
+import { getExampleViewedSetting } from "./progress";
+
+/** Record a local visit when an existing official example is opened, including a direct link. */
+export async function loadExamplePage({ params, context }: LoaderFunctionArgs) {
+  const example = findExample(params.slug ?? "");
+
+  if (example) {
+    const { settings } = context.get(appServicesContext);
+
+    try {
+      await settings.writeSetting(getExampleViewedSetting(example.id), new Date().toISOString());
+    } catch (cause) {
+      console.warn(`Could not save the visit to example ${example.slug}.`, cause);
+    }
+  }
+
+  return null;
+}
 
 /** The `/examples/:slug` page: the example walked by its guide when it has one, else in an editable workspace. */
 export function ExamplePage() {

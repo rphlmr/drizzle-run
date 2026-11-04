@@ -4,7 +4,7 @@
   "status": "published",
   "title": "Author report with a CTE",
   "description": "Count published posts and views per author, keep authors with no posts, and filter by a computed total.",
-  "topic": "Queries",
+  "topics": ["Queries"],
   "featured": false,
   "order": 70,
   "dialect": "postgresql",

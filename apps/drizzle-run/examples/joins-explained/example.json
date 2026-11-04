@@ -4,7 +4,7 @@
   "status": "published",
   "title": "Choose which rows a join keeps",
   "description": "Compare five joins and learn where to put filters when unmatched rows matter.",
-  "topic": "Queries",
+  "topics": ["Queries"],
   "featured": false,
   "order": 33,
   "dialect": "postgresql",

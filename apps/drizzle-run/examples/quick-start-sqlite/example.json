@@ -4,7 +4,7 @@
   "status": "published",
   "title": "SQLite quick start",
   "description": "The same starter on SQLite: a users table, seed rows, and a select.",
-  "topic": "Queries",
+  "topics": ["Queries"],
   "featured": false,
   "order": 20,
   "dialect": "sqlite",

@@ -4,7 +4,7 @@
   "status": "published",
   "title": "Drizzle in five minutes",
   "description": "Create, read, update and delete posts, compare query shapes, then keep related writes together.",
-  "topic": "Schema",
+  "topics": ["Schema"],
   "featured": true,
   "order": 5,
   "dialect": "postgresql",

@@ -40,7 +40,7 @@ function makeSource(metadata: Record<string, unknown> = {}, folder = "sample"): 
       status: "published",
       title: "Sample",
       description: "A sample.",
-      topic: "Queries",
+      topics: ["Queries"],
       featured: false,
       order: 1,
       dialect: "sqlite",
@@ -195,6 +195,13 @@ describe("official examples in the repository", () => {
 });
 
 describe("parseExample", () => {
+  it("should retain every topic on an example", () => {
+    const example = parseExample(makeSource({ topics: ["Queries", "Helpers", "JSON"] }));
+
+    expect(example.topics).toEqual(["Queries", "Helpers", "JSON"]);
+    expect(listExampleTopics([example])).toEqual(["Queries", "Helpers", "JSON"]);
+  });
+
   it("should build a manifest with the pair", () => {
     const example = parseExample(makeSource());
     const manifest = getOneVersionManifest(example);
@@ -221,7 +228,9 @@ describe("parseExample", () => {
   });
 
   it.each([
-    [{ topic: "Cooking" }, /topic/],
+    [{ topics: ["Cooking"] }, /topics/],
+    [{ topics: [] }, /topics/],
+    [{ topics: ["Queries", "Queries"] }, /topics/],
     [{ featured: "yes" }, /featured/],
     [{ dialect: "mysql" }, /dialect/],
     [{ releasePair: "0.45.4" }, /releasePair/],
