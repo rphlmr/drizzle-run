@@ -145,6 +145,20 @@ describe("Worker application routes", () => {
     );
   });
 
+  it.each([
+    { origin: "https://drizzle.run", allowed: true },
+    { origin: "https://next.drizzle.run", allowed: false },
+    { origin: "https://pr-5.example.workers.dev", allowed: false },
+    { origin: "http://localhost:5173", allowed: false },
+    { origin: "http://drizzle.run", allowed: false },
+  ])("should allow analytics requests on $origin only when released", async ({ origin, allowed }) => {
+    const response = await worker.fetch(new Request(`${origin}/`), makeEnvironment());
+
+    expect(response.headers.get("content-security-policy")?.includes("https://collector.onedollarstats.com")).toBe(
+      allowed,
+    );
+  });
+
   it.each(["/embed/00000000-0000-4000-8000-000000000001", "/embed/examples/transactions/02-savepoint"])(
     "should keep the embed %s from sending data to other sites, while any site may frame it",
     async (path) => {
