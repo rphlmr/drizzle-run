@@ -267,7 +267,15 @@ hash of that build. It expects noindex on workers.dev and wherever `DRIZZLE_RUN_
 as previews and next set it, and an indexed page only from production on its own domain. next is also checked on
 next.drizzle.run, where only `SEARCH_INDEXING` hides it. `delete` removes a closed pull request's Worker and D1.
 Every deploy environment sets `SEARCH_INDEXING` to `off` and keeps its workers.dev address, where the release verifies
-it; the Worker answers `noindex` there and on any workers.dev host. next gets its GitHub sign-in secrets once by hand, and previews
+it; the Worker answers `noindex` there and on any workers.dev host. Those sites have no sitemap. Their robots.txt allows
+search engines to read the `noindex` headers and disallows the AI crawlers `GPTBot`, `OAI-SearchBot`, `Google-Extended`,
+`ClaudeBot`, `Claude-SearchBot`, and `PerplexityBot`. These are crawler preferences, not access controls; user-requested
+fetches and crawlers that ignore these rules can still read public pages. Production keeps its public pages and sitemap
+available to search and AI crawlers. See the [OpenAI](https://developers.openai.com/api/docs/bots),
+[Google](https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers#google-extended),
+[Anthropic](https://privacy.claude.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler),
+and [Perplexity](https://docs.perplexity.ai/docs/resources/perplexity-crawlers) crawler documentation.
+next gets its GitHub sign-in secrets once by hand, and previews
 have no sign-in ([Sign in with GitHub](#sign-in-with-github)). The companion they show is built with `VITE_CONNECT_PACKAGE`, its pkg.pr.new address, so its own rejoin
 hint runs that build again.
 

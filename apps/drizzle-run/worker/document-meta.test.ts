@@ -216,9 +216,19 @@ describe("crawler files", () => {
   it("should keep the API and visitors' own pages out of robots.txt, and point at the sitemap", async () => {
     const robots = await serveRobots(origin, environment).text();
 
-    expect(robots).toContain("Disallow: /api/");
-    expect(robots).toContain("Disallow: /p/");
-    expect(robots).toContain(`Sitemap: ${origin}/sitemap.xml`);
+    expect(robots).toBe(
+      [
+        "User-agent: *",
+        "Allow: /",
+        "Disallow: /api/",
+        "Disallow: /embed/",
+        "Disallow: /p/",
+        "Disallow: /projects",
+        "Disallow: /runtime-assets/",
+        `Sitemap: ${origin}/sitemap.xml`,
+        "",
+      ].join("\n"),
+    );
   });
 
   it("should list the public pages, every official example and every listed share", async () => {
@@ -244,11 +254,32 @@ describe("sites hidden from search", () => {
     expect(isHiddenFromSearch("https://workers.dev.example.com", {})).toBe(false);
   });
 
-  it("should allow crawling with no sitemap, so crawlers reach the noindex", async () => {
-    const robots = await serveRobots(previewOrigin, environment).text();
+  it.each([
+    { siteOrigin: previewOrigin, indexing: {} },
+    { siteOrigin: "https://pr-42.example.workers.dev", indexing: { SEARCH_INDEXING: "off" } },
+    { siteOrigin: "https://next.drizzle.run", indexing: { SEARCH_INDEXING: "off" } },
+  ])(
+    "should opt $siteOrigin out of AI crawling while letting search engines read noindex",
+    async ({ siteOrigin, indexing }) => {
+      const robots = await serveRobots(siteOrigin, { ...environment, ...indexing }).text();
 
-    expect(robots).toBe("User-agent: *\nAllow: /\n");
-  });
+      expect(robots).toBe(
+        [
+          "User-agent: *",
+          "Allow: /",
+          "",
+          "User-agent: GPTBot",
+          "User-agent: OAI-SearchBot",
+          "User-agent: Google-Extended",
+          "User-agent: ClaudeBot",
+          "User-agent: Claude-SearchBot",
+          "User-agent: PerplexityBot",
+          "Disallow: /",
+          "",
+        ].join("\n"),
+      );
+    },
+  );
 
   it("should have no sitemap", async () => {
     const services = makeServices({ listListedLinkIds: async () => [linkId] });

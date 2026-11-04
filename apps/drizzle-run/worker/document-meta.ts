@@ -254,11 +254,25 @@ export function isHiddenFromSearch(origin: string, environment: Pick<WorkerEnvir
 /**
  * Answers `GET /robots.txt`: public pages may be crawled, the API and visitors' own pages may not
  *
- * A site hidden from search allows crawling with no sitemap, so crawlers reach the noindex every response carries.
+ * A site hidden from search lets search engines reach its noindex headers, opts out of AI crawling, and has no sitemap.
  */
 export function serveRobots(origin: string, environment: Pick<WorkerEnvironment, "SEARCH_INDEXING">): Response {
   if (isHiddenFromSearch(origin, environment)) {
-    return new Response("User-agent: *\nAllow: /\n", {
+    const body = [
+      "User-agent: *",
+      "Allow: /",
+      "",
+      "User-agent: GPTBot",
+      "User-agent: OAI-SearchBot",
+      "User-agent: Google-Extended",
+      "User-agent: ClaudeBot",
+      "User-agent: Claude-SearchBot",
+      "User-agent: PerplexityBot",
+      "Disallow: /",
+      "",
+    ].join("\n");
+
+    return new Response(body, {
       headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "public, max-age=3600" },
     });
   }

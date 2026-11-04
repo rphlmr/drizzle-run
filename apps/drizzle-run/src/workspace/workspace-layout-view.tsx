@@ -72,15 +72,15 @@ export interface WorkspaceLayoutProps {
 
 type WorkShape = WorkspaceLayoutProps["work"]["shape"];
 
-/** A split's rail floats as a card in the padded row; the sides' rail sits flush on the row's edge. */
+/** The rail floats as a card: the split pads its row, while the sides keep their own spacing. */
 const RAIL_CLASS_NAMES = {
   split: [
     "relative flex min-h-0 max-w-1/2 shrink-0 flex-col",
     "max-phone:w-auto max-phone:max-w-none max-phone:min-w-0 max-phone:flex-1 max-phone:p-3",
   ],
   sides: [
-    "relative flex max-w-1/2 shrink-0 flex-col border-r border-border bg-surface",
-    "max-phone:w-auto max-phone:max-w-none max-phone:min-w-0 max-phone:flex-1 max-phone:border-r-0",
+    "relative my-3 ml-3 flex min-h-0 max-w-1/2 shrink-0 flex-col",
+    "max-phone:m-0 max-phone:w-auto max-phone:max-w-none max-phone:min-w-0 max-phone:flex-1 max-phone:p-3",
   ],
 } as const satisfies Record<WorkShape, readonly string[]>;
 
@@ -90,16 +90,7 @@ const RAIL_WIDTH_CLASS_NAMES = {
   sides: "w-75 min-w-75",
 } as const satisfies Record<WorkShape, string>;
 
-/**
- * The rail handle fills the 12 px gap between the rail and the work area: after a floating rail, or after the 1 px
- * border of a flush one, so the grip sits halfway between the two panels.
- */
-const RAIL_HANDLE_CLASS_NAMES = { split: "-right-3", sides: "-right-3.25" } as const satisfies Record<
-  WorkShape,
-  string
->;
-
-/** The dock floats in a padded row; beside flush sides it keeps the work area's spacing itself. */
+/** The dock floats in a padded row; beside the sides it keeps the work area's spacing itself. */
 const DOCK_CLASS_NAMES = { split: undefined, sides: "my-3 mr-3" } as const satisfies Record<
   WorkShape,
   string | undefined
@@ -297,7 +288,7 @@ function WorkspaceRail({ aside, shape, phone, shown, resizable, widthPx, onWidth
           edge="right"
           onWidthChange={onWidthChange}
           label={`Resize ${aside.label.toLowerCase()}`}
-          className={RAIL_HANDLE_CLASS_NAMES[shape]}
+          className="-right-3"
         />
       )}
     </aside>
