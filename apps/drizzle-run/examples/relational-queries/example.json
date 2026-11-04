@@ -4,7 +4,7 @@
   "status": "published",
   "title": "Migrate relational queries to v1",
   "description": "Migrate from Drizzle ORM 0.45 to v1: compare relation definitions and relational queries side by side.",
-  "topics": ["Queries","RQB"],
+  "topics": ["Queries", "RQB"],
   "featured": false,
   "order": 30,
   "dialect": "postgresql",

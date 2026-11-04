@@ -4,7 +4,7 @@
   "status": "published",
   "title": "Files with comments, authors and tags",
   "description": "A complete PostgreSQL starter: aggregate each relation separately and filter files without losing their other tags.",
-  "topics": ["Queries","JSON","RQB"],
+  "topics": ["Queries", "JSON", "RQB"],
   "featured": false,
   "order": 80,
   "dialect": "postgresql",

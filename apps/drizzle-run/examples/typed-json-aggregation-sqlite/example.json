@@ -4,7 +4,7 @@
   "status": "published",
   "title": "Reuse typed JSON aggregation helpers (SQLite)",
   "description": "Infer ordered nested arrays, keep a real child with null text, and return an empty collection for a missing child.",
-  "topics": ["Queries","Helpers","JSON"],
+  "topics": ["Queries", "Helpers", "JSON"],
   "featured": false,
   "order": 93,
   "dialect": "sqlite",

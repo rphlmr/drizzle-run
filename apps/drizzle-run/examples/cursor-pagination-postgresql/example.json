@@ -4,7 +4,7 @@
   "status": "published",
   "title": "Page through a composite cursor (PostgreSQL)",
   "description": "Preserve tied timestamps, fetch one extra row, and derive the next cursor from the last returned row.",
-  "topics": ["Queries","Pagination"],
+  "topics": ["Queries", "Pagination"],
   "featured": false,
   "order": 124,
   "dialect": "postgresql",

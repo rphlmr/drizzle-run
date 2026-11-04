@@ -4,7 +4,7 @@
   "status": "published",
   "title": "Select vs relational queries",
   "description": "The same authors with their posts, twice: a select with a join on one side, db.query on the other.",
-  "topics": ["Queries","RQB"],
+  "topics": ["Queries", "RQB"],
   "featured": false,
   "order": 35,
   "dialect": "postgresql",
