@@ -31,6 +31,7 @@ jobs:
       # Core builds on the committed guest catalog; it must match the guest packages it is generated from. The check
       # installs the guests to read each drizzle-orm exports map.
       - run: pnpm guests:check
+      - run: pnpm typecheck:scripts && node --test scripts/github-releases.test.ts
       # Every workspace check in one graph: each task runs at most once, and not at all when its inputs match a
       # restored cache entry.
       # Test suites use their own workers; overlapping suites and builds exhaust the private runner's two CPUs.
