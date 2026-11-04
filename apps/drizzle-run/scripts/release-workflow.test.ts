@@ -9,6 +9,8 @@ type JobResult = "success" | "failure" | "cancelled" | "skipped" | "in_progress"
 
 interface ReleaseRun {
   cancelled: boolean;
+  github: { event_name: string; ref: string };
+  inputs: { production_hotfix: boolean };
   needs: {
     packages: { result: JobResult; outputs: { "has-changesets": string; "app-deployed": string } };
     pack: { result: JobResult; outputs: { unpublished: string } };
@@ -24,6 +26,9 @@ function makeRun({
   hasChangesets = "false",
   deployed = "false",
   cancelled = false,
+  eventName = "push",
+  ref = "refs/heads/main",
+  productionHotfix = false,
 }: {
   packages?: JobResult;
   pack?: JobResult;
@@ -32,9 +37,14 @@ function makeRun({
   hasChangesets?: string;
   deployed?: string;
   cancelled?: boolean;
+  eventName?: string;
+  ref?: string;
+  productionHotfix?: boolean;
 } = {}): ReleaseRun {
   return {
     cancelled,
+    github: { event_name: eventName, ref },
+    inputs: { production_hotfix: productionHotfix },
     needs: {
       packages: { result: packages, outputs: { "has-changesets": hasChangesets, "app-deployed": deployed } },
       pack: { result: pack, outputs: { unpublished } },
@@ -89,6 +99,8 @@ function shouldDeploy(run: ReleaseRun): boolean {
   return Boolean(
     runInNewContext(`(${condition.replace(/\.([\w]+(?:-[\w]+)+)/g, '["$1"]')})`, {
       needs: run.needs,
+      github: run.github,
+      inputs: run.inputs,
       cancelled: () => run.cancelled,
       always: () => true,
       success: () => succeeded,
@@ -98,6 +110,47 @@ function shouldDeploy(run: ReleaseRun): boolean {
 }
 
 describe("production release prerequisites", () => {
+  it("should deploy a manually requested hotfix on main after the app version was already deployed", () => {
+    expect(
+      shouldDeploy(
+        makeRun({
+          deployed: "true",
+          eventName: "workflow_dispatch",
+          productionHotfix: true,
+          unpublished: "false",
+          publish: "skipped",
+        }),
+      ),
+    ).toBe(true);
+  });
+
+  it.each([
+    { label: "a different branch", ref: "refs/heads/feature" },
+    { label: "an ordinary push", eventName: "push" },
+    { label: "no explicit hotfix request", productionHotfix: false },
+    { label: "pending changesets", hasChangesets: "true" },
+    { label: "failed packing", pack: "failure" },
+    { label: "failed publishing", unpublished: "true", publish: "failure" },
+    { label: "cancellation", cancelled: true },
+  ] satisfies Array<Parameters<typeof makeRun>[0] & { label: string }>)(
+    "should refuse a hotfix with $label",
+    ({ label, ...options }) => {
+      expect(
+        shouldDeploy(
+          makeRun({
+            deployed: "true",
+            eventName: "workflow_dispatch",
+            productionHotfix: true,
+            unpublished: "false",
+            publish: "skipped",
+            ...options,
+          }),
+        ),
+        label,
+      ).toBe(false);
+    },
+  );
+
   it("should deploy after all missing package versions were successfully published", () => {
     expect(shouldDeploy(makeRun())).toBe(true);
   });

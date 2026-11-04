@@ -8,6 +8,7 @@ name: Release
 # Production deploys while the app's version has no `drizzle-run-app@<version>` tag and no changeset is pending, and
 # tags it once deployed. So a run GitHub drops from the queue, or a failed deploy, is caught up by the next push that
 # brings no changeset, at the latest when the next Version Packages pull request merges.
+# A manual production hotfix deploys main without changing an existing version tag.
 #
 # Credentials stay out of reach of the install and the builds: npm publishes through trusted publishing (OIDC) from a
 # job that runs no repository code, only `npm publish` of the tarball the pack job built, in the `npm` environment the
@@ -17,6 +18,12 @@ name: Release
 on:
   push:
     branches: [main]
+  workflow_dispatch:
+    inputs:
+      production_hotfix:
+        description: Deploy main to production even when the app version is already deployed
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -234,7 +241,8 @@ jobs:
       !cancelled() &&
       needs.packages.result == 'success' &&
       needs.pack.result == 'success' &&
-      needs.packages.outputs.app-deployed == 'false' &&
+      (needs.packages.outputs.app-deployed == 'false' ||
+       (github.event_name == 'workflow_dispatch' && inputs.production_hotfix && github.ref == 'refs/heads/main')) &&
       needs.packages.outputs.has-changesets == 'false' &&
       ((needs.pack.outputs.unpublished == 'true' && needs.publish.result == 'success') ||
        (needs.pack.outputs.unpublished == 'false' && needs.publish.result == 'skipped'))
@@ -262,7 +270,8 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       # Only after a verified release, so a failed one deploys again on the next push. Through the API, so the token
       # never sat in git config while the install and build ran. A rerun of this job finds its own tag and goes on.
-      - run: |
+      - if: needs.packages.outputs.app-deployed == 'false'
+        run: |
           tagged=$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${APP_TAG}" --jq .object.sha 2> /dev/null || true)
           if [ "$tagged" != "$GITHUB_SHA" ]; then
             gh api "repos/${GITHUB_REPOSITORY}/git/refs" -f "ref=refs/tags/${APP_TAG}" -f "sha=${GITHUB_SHA}"
