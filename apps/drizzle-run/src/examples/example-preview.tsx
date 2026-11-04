@@ -88,9 +88,28 @@ export function ExamplePreview({ example, progress }: { example: OfficialExample
             <h3 className="mb-3 text-[13px] font-medium">
               {isPairManifest(project) ? `Starting query · ${sides?.[0].name ?? "First side"}` : "Starting query"}
             </h3>
-            <pre className="rounded-md border border-border bg-surface-2 p-4 font-mono text-[12px]/[1.7] wrap-anywhere whitespace-pre-wrap">
+            {/* oxlint-disable jsx-a11y/no-noninteractive-tabindex, jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/prefer-tag-over-role -- The code region needs keyboard focus and arrow keys for horizontal scrolling. */}
+            <pre
+              className="max-w-full overflow-x-auto rounded-md border border-border bg-surface-2 p-4 font-mono text-[12px]/[1.7] [overflow-wrap:normal] whitespace-pre"
+              tabIndex={0}
+              role="region"
+              aria-label="Starting query code"
+              onKeyDown={(event) => {
+                if (
+                  !event.altKey &&
+                  !event.ctrlKey &&
+                  !event.metaKey &&
+                  !event.shiftKey &&
+                  (event.key === "ArrowLeft" || event.key === "ArrowRight")
+                ) {
+                  event.preventDefault();
+                  event.currentTarget.scrollBy({ left: event.key === "ArrowRight" ? 40 : -40 });
+                }
+              }}
+            >
               <QueryCode code={query} />
             </pre>
+            {/* oxlint-enable jsx-a11y/no-noninteractive-tabindex, jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/prefer-tag-over-role */}
           </section>
         )}
         {example.links.length > 0 && (

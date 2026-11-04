@@ -1,4 +1,5 @@
 import { db } from "@drizzle-run/runtime/context";
+
 import { authors, comments } from "./schema";
 
 await db.insert(authors).values([{ id: 1, name: "Ada" }, { id: 2, name: "Grace" }, { id: 3, name: "Linus" }]);

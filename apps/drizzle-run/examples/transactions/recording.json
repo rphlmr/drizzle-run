@@ -1,7 +1,7 @@
 {
   "recordingVersion": 1,
-  "snapshotDigest": "b50af41bad9c710abf19c7321f81b2e71708b6691214866ac8f09fc16e7acabc",
-  "recordedAt": "2026-11-04T09:10:16.421Z",
+  "snapshotDigest": "eaf72ab748c8b82bfed07de2cd1766af8221f00d26fea10d7a5b84abe0d21708",
+  "recordedAt": "2026-11-04T13:47:04.205Z",
   "result": {
     "version": 1,
     "target": {
@@ -16,7 +16,7 @@
       "kitVersion": "1.0.0-rc.5"
     },
     "random": {
-      "effectiveSeed": 997445679,
+      "effectiveSeed": 1408227494,
       "source": "generated",
       "derivation": "crypto-u32-v1",
       "generator": "mulberry32-v1"
@@ -25,74 +25,74 @@
       {
         "phase": "validate",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:10:14.981Z",
-        "durationMs": 0.039999961853027344
+        "startedAt": "2026-11-04T13:47:01.395Z",
+        "durationMs": 0.0549999475479126
       },
       {
         "phase": "resolve",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:10:14.981Z",
-        "durationMs": 0
+        "startedAt": "2026-11-04T13:47:01.395Z",
+        "durationMs": 0.004999995231628418
       },
       {
         "phase": "load_artifacts",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:10:15.232Z",
-        "durationMs": 436.35000002384186
+        "startedAt": "2026-11-04T13:47:01.621Z",
+        "durationMs": 632.3550000190735
       },
       {
         "phase": "compile",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:10:15.076Z",
-        "durationMs": 155.79999995231628
+        "startedAt": "2026-11-04T13:47:01.439Z",
+        "durationMs": 180.85000002384186
       },
       {
         "phase": "evaluate_schema",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:10:15.669Z",
-        "durationMs": 49.985000014305115
+        "startedAt": "2026-11-04T13:47:02.254Z",
+        "durationMs": 61.62000000476837
       },
       {
         "phase": "generate_bootstrap",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:10:15.719Z",
-        "durationMs": 19.5
+        "startedAt": "2026-11-04T13:47:02.316Z",
+        "durationMs": 24.774999976158142
       },
       {
         "phase": "apply_bootstrap",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:10:15.739Z",
-        "durationMs": 374.2699999809265
+        "startedAt": "2026-11-04T13:47:02.341Z",
+        "durationMs": 1307.4649999141693
       },
       {
         "phase": "seed",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:10:16.114Z",
-        "durationMs": 7.705000042915344
+        "startedAt": "2026-11-04T13:47:03.648Z",
+        "durationMs": 13.475000023841858
       },
       {
         "phase": "run",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:10:16.122Z",
-        "durationMs": 45.97500002384186
+        "startedAt": "2026-11-04T13:47:03.663Z",
+        "durationMs": 70.98000001907349
       },
       {
         "phase": "inspect",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:10:16.166Z",
-        "durationMs": 53.075000047683716
+        "startedAt": "2026-11-04T13:47:03.733Z",
+        "durationMs": 73.7849999666214
       },
       {
         "phase": "plan",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:10:16.220Z",
-        "durationMs": 0.040000081062316895
+        "startedAt": "2026-11-04T13:47:03.807Z",
+        "durationMs": 0.0849999189376831
       },
       {
         "phase": "cleanup",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:10:16.221Z",
-        "durationMs": 2.225000023841858
+        "startedAt": "2026-11-04T13:47:03.808Z",
+        "durationMs": 3.4200000762939453
       }
     ],
     "diagnostics": [],
@@ -114,7 +114,7 @@
         "sql": "BEGIN",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 2.000244140625
+        "durationMs": 2
       },
       {
         "sequence": 3,
@@ -124,7 +124,7 @@
         "sql": "CREATE TABLE \"accounts\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"owner\" text NOT NULL,\n\t\"balance\" integer NOT NULL\n);\n",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 11
+        "durationMs": 18
       },
       {
         "sequence": 4,
@@ -134,7 +134,7 @@
         "sql": "COMMIT",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 1
+        "durationMs": 2
       },
       {
         "sequence": 5,
@@ -162,8 +162,8 @@
         ],
         "outcome": "succeeded",
         "source": "seed.ts",
-        "line": 4,
-        "durationMs": 7,
+        "line": 5,
+        "durationMs": 13,
         "rowCount": 2
       },
       {
@@ -175,8 +175,8 @@
         "parameters": [],
         "outcome": "succeeded",
         "source": "query.ts",
-        "line": 6,
-        "durationMs": 0.999755859375
+        "line": 7,
+        "durationMs": 1
       },
       {
         "sequence": 7,
@@ -192,8 +192,8 @@
         ],
         "outcome": "succeeded",
         "source": "query.ts",
-        "line": 7,
-        "durationMs": 6.000244140625,
+        "line": 8,
+        "durationMs": 8,
         "rowCount": 1
       },
       {
@@ -210,8 +210,8 @@
         ],
         "outcome": "succeeded",
         "source": "query.ts",
-        "line": 11,
-        "durationMs": 3,
+        "line": 12,
+        "durationMs": 5,
         "rowCount": 1
       },
       {
@@ -223,8 +223,8 @@
         "parameters": [],
         "outcome": "succeeded",
         "source": "query.ts",
-        "line": 18,
-        "durationMs": 1
+        "line": 19,
+        "durationMs": 0.999755859375
       },
       {
         "sequence": 10,
@@ -244,8 +244,8 @@
         ],
         "outcome": "succeeded",
         "source": "query.ts",
-        "line": 19,
-        "durationMs": 3,
+        "line": 20,
+        "durationMs": 6.000244140625,
         "rowCount": 1
       },
       {
@@ -257,8 +257,8 @@
         "parameters": [],
         "outcome": "succeeded",
         "source": "query.ts",
-        "line": 19,
-        "durationMs": 1
+        "line": 20,
+        "durationMs": 1.999755859375
       },
       {
         "sequence": 12,
@@ -269,8 +269,8 @@
         "parameters": [],
         "outcome": "succeeded",
         "source": "query.ts",
-        "line": 19,
-        "durationMs": 1
+        "line": 20,
+        "durationMs": 1.000244140625
       },
       {
         "sequence": 13,
@@ -281,8 +281,8 @@
         "parameters": [],
         "outcome": "succeeded",
         "source": "query.ts",
-        "line": 29,
-        "durationMs": 0.999755859375
+        "line": 30,
+        "durationMs": 1
       },
       {
         "sequence": 14,
@@ -293,7 +293,7 @@
         "parameters": [],
         "outcome": "succeeded",
         "source": "query.ts",
-        "line": 30,
+        "line": 31,
         "durationMs": 1.000244140625,
         "rowCount": 2
       },
@@ -306,8 +306,8 @@
         "parameters": [],
         "outcome": "succeeded",
         "source": "query.ts",
-        "line": 31,
-        "durationMs": 1
+        "line": 32,
+        "durationMs": 0.999755859375
       },
       {
         "sequence": 16,
@@ -318,8 +318,8 @@
         "parameters": [],
         "outcome": "succeeded",
         "source": "query.ts",
-        "line": 37,
-        "durationMs": 1,
+        "line": 38,
+        "durationMs": 1.999755859375,
         "rowCount": 2
       }
     ],
@@ -339,7 +339,7 @@
           }
         ],
         "source": "query.ts",
-        "line": 23
+        "line": 24
       },
       {
         "sequence": 2,
@@ -352,7 +352,7 @@
           }
         ],
         "source": "query.ts",
-        "line": 34
+        "line": 35
       }
     ],
     "value": {
@@ -403,7 +403,7 @@
           }
         ],
         "source": "query.ts",
-        "line": 37
+        "line": 38
       }
     ],
     "events": [
@@ -431,7 +431,7 @@
           "sql": "BEGIN",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 2.000244140625
+          "durationMs": 2
         }
       },
       {
@@ -445,7 +445,7 @@
           "sql": "CREATE TABLE \"accounts\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"owner\" text NOT NULL,\n\t\"balance\" integer NOT NULL\n);\n",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 11
+          "durationMs": 18
         }
       },
       {
@@ -459,7 +459,7 @@
           "sql": "COMMIT",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 1
+          "durationMs": 2
         }
       },
       {
@@ -491,8 +491,8 @@
           ],
           "outcome": "succeeded",
           "source": "seed.ts",
-          "line": 4,
-          "durationMs": 7,
+          "line": 5,
+          "durationMs": 13,
           "rowCount": 2
         }
       },
@@ -508,8 +508,8 @@
           "parameters": [],
           "outcome": "succeeded",
           "source": "query.ts",
-          "line": 6,
-          "durationMs": 0.999755859375
+          "line": 7,
+          "durationMs": 1
         }
       },
       {
@@ -529,8 +529,8 @@
           ],
           "outcome": "succeeded",
           "source": "query.ts",
-          "line": 7,
-          "durationMs": 6.000244140625,
+          "line": 8,
+          "durationMs": 8,
           "rowCount": 1
         }
       },
@@ -551,8 +551,8 @@
           ],
           "outcome": "succeeded",
           "source": "query.ts",
-          "line": 11,
-          "durationMs": 3,
+          "line": 12,
+          "durationMs": 5,
           "rowCount": 1
         }
       },
@@ -568,8 +568,8 @@
           "parameters": [],
           "outcome": "succeeded",
           "source": "query.ts",
-          "line": 18,
-          "durationMs": 1
+          "line": 19,
+          "durationMs": 0.999755859375
         }
       },
       {
@@ -593,8 +593,8 @@
           ],
           "outcome": "succeeded",
           "source": "query.ts",
-          "line": 19,
-          "durationMs": 3,
+          "line": 20,
+          "durationMs": 6.000244140625,
           "rowCount": 1
         }
       },
@@ -610,8 +610,8 @@
           "parameters": [],
           "outcome": "succeeded",
           "source": "query.ts",
-          "line": 19,
-          "durationMs": 1
+          "line": 20,
+          "durationMs": 1.999755859375
         }
       },
       {
@@ -632,7 +632,7 @@
             }
           ],
           "source": "query.ts",
-          "line": 23
+          "line": 24
         }
       },
       {
@@ -647,8 +647,8 @@
           "parameters": [],
           "outcome": "succeeded",
           "source": "query.ts",
-          "line": 19,
-          "durationMs": 1
+          "line": 20,
+          "durationMs": 1.000244140625
         }
       },
       {
@@ -663,8 +663,8 @@
           "parameters": [],
           "outcome": "succeeded",
           "source": "query.ts",
-          "line": 29,
-          "durationMs": 0.999755859375
+          "line": 30,
+          "durationMs": 1
         }
       },
       {
@@ -679,7 +679,7 @@
           "parameters": [],
           "outcome": "succeeded",
           "source": "query.ts",
-          "line": 30,
+          "line": 31,
           "durationMs": 1.000244140625,
           "rowCount": 2
         }
@@ -696,8 +696,8 @@
           "parameters": [],
           "outcome": "succeeded",
           "source": "query.ts",
-          "line": 31,
-          "durationMs": 1
+          "line": 32,
+          "durationMs": 0.999755859375
         }
       },
       {
@@ -714,7 +714,7 @@
             }
           ],
           "source": "query.ts",
-          "line": 34
+          "line": 35
         }
       },
       {
@@ -729,8 +729,8 @@
           "parameters": [],
           "outcome": "succeeded",
           "source": "query.ts",
-          "line": 37,
-          "durationMs": 1,
+          "line": 38,
+          "durationMs": 1.999755859375,
           "rowCount": 2
         }
       },
@@ -781,7 +781,7 @@
             }
           ],
           "source": "query.ts",
-          "line": 37
+          "line": 38
         }
       }
     ],
@@ -795,19 +795,19 @@
       }
     },
     "timings": {
-      "total": 1244,
-      "validate": 0.039999961853027344,
-      "resolve": 0,
-      "load_artifacts": 436.35000002384186,
-      "compile": 155.79999995231628,
-      "evaluate_schema": 49.985000014305115,
-      "generate_bootstrap": 19.5,
-      "apply_bootstrap": 374.2699999809265,
-      "seed": 7.705000042915344,
-      "run": 45.97500002384186,
-      "inspect": 53.075000047683716,
-      "plan": 0.040000081062316895,
-      "cleanup": 2.225000023841858
+      "total": 2421,
+      "validate": 0.0549999475479126,
+      "resolve": 0.004999995231628418,
+      "load_artifacts": 632.3550000190735,
+      "compile": 180.85000002384186,
+      "evaluate_schema": 61.62000000476837,
+      "generate_bootstrap": 24.774999976158142,
+      "apply_bootstrap": 1307.4649999141693,
+      "seed": 13.475000023841858,
+      "run": 70.98000001907349,
+      "inspect": 73.7849999666214,
+      "plan": 0.0849999189376831,
+      "cleanup": 3.4200000762939453
     },
     "ok": true,
     "outcome": "succeeded",
@@ -835,9 +835,9 @@
             "role": "commit"
           }
         ],
-        "durationMs": 16,
+        "durationMs": 27,
         "source": "query.ts",
-        "line": 6
+        "line": 7
       },
       {
         "id": 2,
@@ -858,16 +858,16 @@
             "role": "rollback_to"
           }
         ],
-        "durationMs": 5,
+        "durationMs": 8.999755859375,
         "parent": 1,
         "source": "query.ts",
-        "line": 18,
+        "line": 19,
         "reason": "error",
         "error": {
           "name": "Error",
           "message": "Changed our mind",
           "source": "query.ts",
-          "line": 20
+          "line": 21
         }
       },
       {
@@ -889,15 +889,15 @@
             "role": "rollback"
           }
         ],
-        "durationMs": 3,
+        "durationMs": 4,
         "source": "query.ts",
-        "line": 29,
+        "line": 30,
         "reason": "rollback_call",
         "error": {
           "name": "TransactionRollbackError",
           "message": "Rollback",
           "source": "query.ts",
-          "line": 31
+          "line": 32
         }
       }
     ]

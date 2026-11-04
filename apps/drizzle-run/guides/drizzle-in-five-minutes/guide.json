@@ -16,8 +16,8 @@
     },
     "files": {
       "schema.ts": "import { integer, pgTable, serial, text } from \"drizzle-orm/pg-core\";\n\nexport const users = pgTable(\"users\", {\n  id: integer(\"id\").primaryKey(),\n  name: text(\"name\").notNull(),\n});\n\nexport const posts = pgTable(\"posts\", {\n  id: serial(\"id\").primaryKey(),\n  title: text(\"title\").notNull(),\n  authorId: integer(\"author_id\")\n    .notNull()\n    .references(() => users.id),\n});\n",
-      "seed.ts": "import { db } from \"@drizzle-run/runtime/context\";\nimport { posts, users } from \"./schema\";\n\nawait db.insert(users).values([\n  { id: 1, name: \"Ada\" },\n  { id: 2, name: \"Grace\" },\n  { id: 3, name: \"Linus\" },\n]);\n\nawait db.insert(posts).values([\n  { title: \"Hello\", authorId: 1 },\n  { title: \"Notes\", authorId: 1 },\n  { title: \"Ships\", authorId: 2 },\n]);\n",
-      "query.ts": "import { db } from \"@drizzle-run/runtime/context\";\nimport { posts, users } from \"./schema\";\n\n$.display(\"Users\", await db.select().from(users));\n$.display(\"Posts\", await db.select().from(posts));\n"
+      "seed.ts": "import { db } from \"@drizzle-run/runtime/context\";\n\nimport { posts, users } from \"./schema\";\n\nawait db.insert(users).values([\n  { id: 1, name: \"Ada\" },\n  { id: 2, name: \"Grace\" },\n  { id: 3, name: \"Linus\" },\n]);\n\nawait db.insert(posts).values([\n  { title: \"Hello\", authorId: 1 },\n  { title: \"Notes\", authorId: 1 },\n  { title: \"Ships\", authorId: 2 },\n]);\n",
+      "query.ts": "import { db } from \"@drizzle-run/runtime/context\";\n\nimport { posts, users } from \"./schema\";\n\n$.display(\"Users\", await db.select().from(users));\n$.display(\"Posts\", await db.select().from(posts));\n"
     },
     "entrypoints": {
       "schema": "schema.ts",
@@ -70,14 +70,14 @@
       "edits": [
         {
           "file": "query.ts",
-          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { posts } from \"./schema\";\n\n// PostgreSQL generates the id; .returning() includes it in the inserted row.\nconst published = await db\n  .insert(posts)\n  .values({ title: \"Learning Drizzle\", authorId: 1 })\n  .returning();\n\n$.display(\"Published post\", published);\n"
+          "write": "import { db } from \"@drizzle-run/runtime/context\";\n\nimport { posts } from \"./schema\";\n\n// PostgreSQL generates the id; .returning() includes it in the inserted row.\nconst published = await db\n  .insert(posts)\n  .values({ title: \"Learning Drizzle\", authorId: 1 })\n  .returning();\n\n$.display(\"Published post\", published);\n"
         }
       ],
       "focus": {
         "file": "query.ts",
         "lines": [
-          5,
-          8
+          6,
+          9
         ]
       },
       "run": "required",
@@ -106,14 +106,14 @@
       "edits": [
         {
           "file": "query.ts",
-          "write": "import { desc, eq } from \"drizzle-orm\";\nimport { db } from \"@drizzle-run/runtime/context\";\nimport { posts } from \"./schema\";\n\n// Higher ids come first; an id is not a publication date.\nconst adaPosts = await db\n  .select({ id: posts.id, title: posts.title })\n  .from(posts)\n  .where(eq(posts.authorId, 1))\n  .orderBy(desc(posts.id));\n\n$.display(\"Ada's posts\", adaPosts);\n"
+          "write": "import { desc, eq } from \"drizzle-orm\";\nimport { db } from \"@drizzle-run/runtime/context\";\n\nimport { posts } from \"./schema\";\n\n// Higher ids come first; an id is not a publication date.\nconst adaPosts = await db\n  .select({ id: posts.id, title: posts.title })\n  .from(posts)\n  .where(eq(posts.authorId, 1))\n  .orderBy(desc(posts.id));\n\n$.display(\"Ada's posts\", adaPosts);\n"
         }
       ],
       "focus": {
         "file": "query.ts",
         "lines": [
-          6,
-          10
+          7,
+          11
         ]
       },
       "run": "required",
@@ -163,7 +163,7 @@
         },
         {
           "file": "query.ts",
-          "write": "import { asc, eq } from \"drizzle-orm\";\nimport { db } from \"@drizzle-run/runtime/context\";\nimport { posts, users } from \"./schema\";\n\n// One row per user and post. Linus has no posts, so the left join keeps him with a null title.\nconst rows = await db\n  .select({ name: users.name, title: posts.title })\n  .from(users)\n  .leftJoin(posts, eq(posts.authorId, users.id))\n  .orderBy(asc(users.id), asc(posts.id));\n\n$.display(\"Users with posts\", rows);\n",
+          "write": "import { asc, eq } from \"drizzle-orm\";\nimport { db } from \"@drizzle-run/runtime/context\";\n\nimport { posts, users } from \"./schema\";\n\n// One row per user and post. Linus has no posts, so the left join keeps him with a null title.\nconst rows = await db\n  .select({ name: users.name, title: posts.title })\n  .from(users)\n  .leftJoin(posts, eq(posts.authorId, users.id))\n  .orderBy(asc(users.id), asc(posts.id));\n\n$.display(\"Users with posts\", rows);\n",
           "side": 0
         },
         {
@@ -217,14 +217,14 @@
       "edits": [
         {
           "file": "query.ts",
-          "write": "import { asc, eq } from \"drizzle-orm\";\nimport { db } from \"@drizzle-run/runtime/context\";\nimport { posts } from \"./schema\";\n\n// Without .where(), an update or delete affects every row in the table.\nconst renamed = await db.update(posts).set({ title: \"Hello, Drizzle\" }).where(eq(posts.id, 1)).returning();\nconst deleted = await db.delete(posts).where(eq(posts.id, 3)).returning();\n\n$.display(\"Renamed\", renamed);\n$.display(\"Deleted\", deleted);\n$.display(\"Posts\", await db.select().from(posts).orderBy(asc(posts.id)));\n"
+          "write": "import { asc, eq } from \"drizzle-orm\";\nimport { db } from \"@drizzle-run/runtime/context\";\n\nimport { posts } from \"./schema\";\n\n// Without .where(), an update or delete affects every row in the table.\nconst renamed = await db.update(posts).set({ title: \"Hello, Drizzle\" }).where(eq(posts.id, 1)).returning();\nconst deleted = await db.delete(posts).where(eq(posts.id, 3)).returning();\n\n$.display(\"Renamed\", renamed);\n$.display(\"Deleted\", deleted);\n$.display(\"Posts\", await db.select().from(posts).orderBy(asc(posts.id)));\n"
         }
       ],
       "focus": {
         "file": "query.ts",
         "lines": [
-          6,
-          7
+          7,
+          8
         ]
       },
       "run": "required",
@@ -262,14 +262,14 @@
       "edits": [
         {
           "file": "query.ts",
-          "write": "import { asc, eq, TransactionRollbackError } from \"drizzle-orm\";\nimport { db } from \"@drizzle-run/runtime/context\";\nimport { posts } from \"./schema\";\n\n// Roll back both changes, leaving the seeded posts untouched.\ntry {\n  await db.transaction(async (tx) => {\n    await tx.update(posts).set({ title: \"Hello, Drizzle\" }).where(eq(posts.id, 1));\n    await tx.delete(posts).where(eq(posts.id, 3));\n    tx.rollback();\n  });\n} catch (cause) {\n  if (!(cause instanceof TransactionRollbackError)) {\n    throw cause;\n  }\n\n  console.log(\"Rolled back: neither change was kept\");\n}\n\n$.display(\"After rollback\", await db.select().from(posts).orderBy(asc(posts.id)));\n\n// The same changes, from the same starting rows, now commit together.\nawait db.transaction(async (tx) => {\n  await tx.update(posts).set({ title: \"Hello, Drizzle\" }).where(eq(posts.id, 1));\n  await tx.delete(posts).where(eq(posts.id, 3));\n});\n\n$.display(\"After commit\", await db.select().from(posts).orderBy(asc(posts.id)));\n"
+          "write": "import { asc, eq, TransactionRollbackError } from \"drizzle-orm\";\nimport { db } from \"@drizzle-run/runtime/context\";\n\nimport { posts } from \"./schema\";\n\n// Roll back both changes, leaving the seeded posts untouched.\ntry {\n  await db.transaction(async (tx) => {\n    await tx.update(posts).set({ title: \"Hello, Drizzle\" }).where(eq(posts.id, 1));\n    await tx.delete(posts).where(eq(posts.id, 3));\n    tx.rollback();\n  });\n} catch (cause) {\n  if (!(cause instanceof TransactionRollbackError)) {\n    throw cause;\n  }\n\n  console.log(\"Rolled back: neither change was kept\");\n}\n\n$.display(\"After rollback\", await db.select().from(posts).orderBy(asc(posts.id)));\n\n// The same changes, from the same starting rows, now commit together.\nawait db.transaction(async (tx) => {\n  await tx.update(posts).set({ title: \"Hello, Drizzle\" }).where(eq(posts.id, 1));\n  await tx.delete(posts).where(eq(posts.id, 3));\n});\n\n$.display(\"After commit\", await db.select().from(posts).orderBy(asc(posts.id)));\n"
         }
       ],
       "focus": {
         "file": "query.ts",
         "lines": [
-          7,
-          11
+          8,
+          12
         ]
       },
       "run": "required",
@@ -303,14 +303,14 @@
       "edits": [
         {
           "file": "query.ts",
-          "write": "import { desc, eq } from \"drizzle-orm\";\nimport { db } from \"@drizzle-run/runtime/context\";\nimport { posts } from \"./schema\";\n\n// Higher ids come first; an id is not a publication date.\nconst adaPosts = await db\n  .select({ id: posts.id, title: posts.title })\n  .from(posts)\n  .where(eq(posts.authorId, 1))\n  .orderBy(desc(posts.id));\n\n$.display(\"Ada's posts\", adaPosts);\n"
+          "write": "import { desc, eq } from \"drizzle-orm\";\nimport { db } from \"@drizzle-run/runtime/context\";\n\nimport { posts } from \"./schema\";\n\n// Higher ids come first; an id is not a publication date.\nconst adaPosts = await db\n  .select({ id: posts.id, title: posts.title })\n  .from(posts)\n  .where(eq(posts.authorId, 1))\n  .orderBy(desc(posts.id));\n\n$.display(\"Ada's posts\", adaPosts);\n"
         }
       ],
       "focus": {
         "file": "query.ts",
         "lines": [
-          9,
-          9
+          10,
+          10
         ]
       },
       "run": "none",

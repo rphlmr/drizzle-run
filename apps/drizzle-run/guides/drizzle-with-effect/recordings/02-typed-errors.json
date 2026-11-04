@@ -1,7 +1,7 @@
 {
   "recordingVersion": 1,
-  "snapshotDigest": "5253f47a715023aefff6cd6b4ea898428e13f0e1e1b398563cf580f314b1b984",
-  "recordedAt": "2026-11-04T09:11:46.624Z",
+  "snapshotDigest": "061f2aad0bf83ae558e7222222e65d88a7b858e19ef2acc5706eb40fa94bbcff",
+  "recordedAt": "2026-11-04T13:47:50.581Z",
   "result": {
     "version": 1,
     "target": {
@@ -16,7 +16,7 @@
       "kitVersion": "1.0.0-rc.5"
     },
     "random": {
-      "effectiveSeed": 521171931,
+      "effectiveSeed": 3336809916,
       "source": "generated",
       "derivation": "crypto-u32-v1",
       "generator": "mulberry32-v1"
@@ -25,74 +25,74 @@
       {
         "phase": "validate",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:11:44.749Z",
-        "durationMs": 0.06500005722045898
+        "startedAt": "2026-11-04T13:47:48.207Z",
+        "durationMs": 0.09500002861022949
       },
       {
         "phase": "resolve",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:11:44.749Z",
-        "durationMs": 0.004999995231628418
+        "startedAt": "2026-11-04T13:47:48.207Z",
+        "durationMs": 0.009999990463256836
       },
       {
         "phase": "load_artifacts",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:11:44.975Z",
-        "durationMs": 507.2449998855591
+        "startedAt": "2026-11-04T13:47:48.546Z",
+        "durationMs": 686.3049999475479
       },
       {
         "phase": "compile",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:11:44.801Z",
-        "durationMs": 173.375
+        "startedAt": "2026-11-04T13:47:48.336Z",
+        "durationMs": 210.22500002384186
       },
       {
         "phase": "evaluate_schema",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:11:45.483Z",
-        "durationMs": 50.12000000476837
+        "startedAt": "2026-11-04T13:47:49.233Z",
+        "durationMs": 67.27499997615814
       },
       {
         "phase": "generate_bootstrap",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:11:45.533Z",
-        "durationMs": 19.649999976158142
+        "startedAt": "2026-11-04T13:47:49.301Z",
+        "durationMs": 24.259999990463257
       },
       {
         "phase": "apply_bootstrap",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:11:45.553Z",
-        "durationMs": 373.1100000143051
+        "startedAt": "2026-11-04T13:47:49.326Z",
+        "durationMs": 936.8899999856949
       },
       {
         "phase": "seed",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:11:45.926Z",
-        "durationMs": 7.790000081062317
+        "startedAt": "2026-11-04T13:47:50.263Z",
+        "durationMs": 14.399999976158142
       },
       {
         "phase": "run",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:11:45.935Z",
-        "durationMs": 56.64999997615814
+        "startedAt": "2026-11-04T13:47:50.278Z",
+        "durationMs": 83.17500007152557
       },
       {
         "phase": "inspect",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:11:45.990Z",
-        "durationMs": 52.55499994754791
+        "startedAt": "2026-11-04T13:47:50.360Z",
+        "durationMs": 82.27999997138977
       },
       {
         "phase": "plan",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:11:46.043Z",
-        "durationMs": 0.04500007629394531
+        "startedAt": "2026-11-04T13:47:50.443Z",
+        "durationMs": 0.07500004768371582
       },
       {
         "phase": "cleanup",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:11:46.044Z",
-        "durationMs": 2.1100000143051147
+        "startedAt": "2026-11-04T13:47:50.444Z",
+        "durationMs": 5.440000057220459
       }
     ],
     "diagnostics": [],
@@ -114,7 +114,7 @@
         "sql": "BEGIN",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 1.000244140625
+        "durationMs": 2
       },
       {
         "sequence": 3,
@@ -124,7 +124,7 @@
         "sql": "CREATE TABLE \"users\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"email\" text NOT NULL UNIQUE,\n\t\"credits\" integer NOT NULL\n);\n",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 13
+        "durationMs": 18
       },
       {
         "sequence": 4,
@@ -134,7 +134,7 @@
         "sql": "COMMIT",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 1
+        "durationMs": 2
       },
       {
         "sequence": 5,
@@ -170,8 +170,8 @@
         ],
         "outcome": "succeeded",
         "source": "seed.ts",
-        "line": 4,
-        "durationMs": 6.999755859375,
+        "line": 5,
+        "durationMs": 12.999755859375,
         "rowCount": 2
       },
       {
@@ -195,7 +195,7 @@
           }
         ],
         "outcome": "failed",
-        "durationMs": 2,
+        "durationMs": 3,
         "error": {
           "name": "DatabaseError",
           "message": "duplicate key value violates unique constraint \"users_email_key\"",
@@ -369,7 +369,7 @@
           }
         ],
         "source": "query.ts",
-        "line": 25
+        "line": 26
       }
     ],
     "events": [
@@ -397,7 +397,7 @@
           "sql": "BEGIN",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 1.000244140625
+          "durationMs": 2
         }
       },
       {
@@ -411,7 +411,7 @@
           "sql": "CREATE TABLE \"users\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"email\" text NOT NULL UNIQUE,\n\t\"credits\" integer NOT NULL\n);\n",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 13
+          "durationMs": 18
         }
       },
       {
@@ -425,7 +425,7 @@
           "sql": "COMMIT",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 1
+          "durationMs": 2
         }
       },
       {
@@ -465,8 +465,8 @@
           ],
           "outcome": "succeeded",
           "source": "seed.ts",
-          "line": 4,
-          "durationMs": 6.999755859375,
+          "line": 5,
+          "durationMs": 12.999755859375,
           "rowCount": 2
         }
       },
@@ -494,7 +494,7 @@
             }
           ],
           "outcome": "failed",
-          "durationMs": 2,
+          "durationMs": 3,
           "error": {
             "name": "DatabaseError",
             "message": "duplicate key value violates unique constraint \"users_email_key\"",
@@ -673,7 +673,7 @@
             }
           ],
           "source": "query.ts",
-          "line": 25
+          "line": 26
         }
       }
     ],
@@ -687,19 +687,19 @@
       }
     },
     "timings": {
-      "total": 1299,
-      "validate": 0.06500005722045898,
-      "resolve": 0.004999995231628418,
-      "load_artifacts": 507.2449998855591,
-      "compile": 173.375,
-      "evaluate_schema": 50.12000000476837,
-      "generate_bootstrap": 19.649999976158142,
-      "apply_bootstrap": 373.1100000143051,
-      "seed": 7.790000081062317,
-      "run": 56.64999997615814,
-      "inspect": 52.55499994754791,
-      "plan": 0.04500007629394531,
-      "cleanup": 2.1100000143051147
+      "total": 2245,
+      "validate": 0.09500002861022949,
+      "resolve": 0.009999990463256836,
+      "load_artifacts": 686.3049999475479,
+      "compile": 210.22500002384186,
+      "evaluate_schema": 67.27499997615814,
+      "generate_bootstrap": 24.259999990463257,
+      "apply_bootstrap": 936.8899999856949,
+      "seed": 14.399999976158142,
+      "run": 83.17500007152557,
+      "inspect": 82.27999997138977,
+      "plan": 0.07500004768371582,
+      "cleanup": 5.440000057220459
     },
     "ok": true,
     "outcome": "succeeded"

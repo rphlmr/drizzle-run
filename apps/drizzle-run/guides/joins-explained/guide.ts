@@ -25,7 +25,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
       label: "Inner join",
       title: "Keep rows that match",
       body: "A **join** combines rows from two sources. Its `ON` condition decides which pairs match. Here, a book matches an author when `books.authorId` equals `authors.id`.\n\nThis guide runs on PostgreSQL with Drizzle ORM **1.0.0-rc.5**. Ada has two books, Grace has one, Linus has none, and Anonymous tale has no author. You can inspect them in `seed.ts`.\n\nPress **Run**. An `innerJoin` returns only matching pairs. Ada appears twice because she has two books. Linus and Anonymous tale do not appear.",
-      focus: { file: "query.ts", lines: [5, 9] },
+      focus: { file: "query.ts", lines: [6, 10] },
       run: "required",
       highlight: {
         displays: ["Matching authors and books"],
@@ -51,10 +51,10 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
         {
           file: "query.ts",
           write:
-            'import { db } from "@drizzle-run/runtime/context";\nimport { and, eq } from "drizzle-orm";\nimport { authors, books } from "./schema";\n\nconst rows = await db\n  .select({ author: authors.name, title: books.title })\n  .from(authors)\n  .leftJoin(books, eq(books.authorId, authors.id))\n  .orderBy(authors.id, books.id);\n\n$.display("Every author", rows);\n',
+            'import { db } from "@drizzle-run/runtime/context";\nimport { and, eq } from "drizzle-orm";\n\nimport { authors, books } from "./schema";\n\nconst rows = await db\n  .select({ author: authors.name, title: books.title })\n  .from(authors)\n  .leftJoin(books, eq(books.authorId, authors.id))\n  .orderBy(authors.id, books.id);\n\n$.display("Every author", rows);\n',
         },
       ],
-      focus: { file: "query.ts", lines: [5, 9] },
+      focus: { file: "query.ts", lines: [6, 10] },
       run: "required",
       highlight: {
         displays: ["Every author"],
@@ -80,10 +80,10 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
         {
           file: "query.ts",
           write:
-            'import { db } from "@drizzle-run/runtime/context";\nimport { and, eq } from "drizzle-orm";\nimport { authors, books } from "./schema";\n\nconst rows = await db\n  .select({ author: authors.name, title: books.title })\n  .from(authors)\n  .leftJoin(books, eq(books.authorId, authors.id))\n  .where(eq(books.published, true))\n  .orderBy(authors.id, books.id);\n\n$.display("Published books, filtered after the join", rows);\n',
+            'import { db } from "@drizzle-run/runtime/context";\nimport { and, eq } from "drizzle-orm";\n\nimport { authors, books } from "./schema";\n\nconst rows = await db\n  .select({ author: authors.name, title: books.title })\n  .from(authors)\n  .leftJoin(books, eq(books.authorId, authors.id))\n  .where(eq(books.published, true))\n  .orderBy(authors.id, books.id);\n\n$.display("Published books, filtered after the join", rows);\n',
         },
       ],
-      focus: { file: "query.ts", lines: [5, 10] },
+      focus: { file: "query.ts", lines: [6, 11] },
       run: "required",
       highlight: {
         displays: ["Published books, filtered after the join"],
@@ -109,10 +109,10 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
         {
           file: "query.ts",
           write:
-            'import { db } from "@drizzle-run/runtime/context";\nimport { and, eq } from "drizzle-orm";\nimport { authors, books } from "./schema";\n\nconst rows = await db\n  .select({ author: authors.name, title: books.title })\n  .from(authors)\n  .leftJoin(books, and(eq(books.authorId, authors.id), eq(books.published, true)))\n  .orderBy(authors.id, books.id);\n\n$.display("Every author, with published books", rows);\n',
+            'import { db } from "@drizzle-run/runtime/context";\nimport { and, eq } from "drizzle-orm";\n\nimport { authors, books } from "./schema";\n\nconst rows = await db\n  .select({ author: authors.name, title: books.title })\n  .from(authors)\n  .leftJoin(books, and(eq(books.authorId, authors.id), eq(books.published, true)))\n  .orderBy(authors.id, books.id);\n\n$.display("Every author, with published books", rows);\n',
         },
       ],
-      focus: { file: "query.ts", lines: [5, 9] },
+      focus: { file: "query.ts", lines: [6, 10] },
       run: "required",
       highlight: {
         displays: ["Every author, with published books"],
@@ -138,10 +138,10 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
         {
           file: "query.ts",
           write:
-            'import { db } from "@drizzle-run/runtime/context";\nimport { and, eq } from "drizzle-orm";\nimport { authors, books } from "./schema";\n\nconst everyBook = await db\n  .select({ author: authors.name, title: books.title })\n  .from(authors)\n  .rightJoin(books, eq(books.authorId, authors.id))\n  .orderBy(authors.id, books.id);\n\n$.display("Right join keeps every book", everyBook);\n\nconst bothSides = await db\n  .select({ author: authors.name, title: books.title })\n  .from(authors)\n  .fullJoin(books, eq(books.authorId, authors.id))\n  .orderBy(authors.id, books.id);\n\n$.display("Full join keeps both sides", bothSides);\n',
+            'import { db } from "@drizzle-run/runtime/context";\nimport { and, eq } from "drizzle-orm";\n\nimport { authors, books } from "./schema";\n\nconst everyBook = await db\n  .select({ author: authors.name, title: books.title })\n  .from(authors)\n  .rightJoin(books, eq(books.authorId, authors.id))\n  .orderBy(authors.id, books.id);\n\n$.display("Right join keeps every book", everyBook);\n\nconst bothSides = await db\n  .select({ author: authors.name, title: books.title })\n  .from(authors)\n  .fullJoin(books, eq(books.authorId, authors.id))\n  .orderBy(authors.id, books.id);\n\n$.display("Full join keeps both sides", bothSides);\n',
         },
       ],
-      focus: { file: "query.ts", lines: [5, 17] },
+      focus: { file: "query.ts", lines: [6, 18] },
       run: "required",
       highlight: {
         displays: ["Right join keeps every book", "Full join keeps both sides"],
@@ -167,10 +167,10 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
         {
           file: "query.ts",
           write:
-            'import { db } from "@drizzle-run/runtime/context";\nimport { and, eq } from "drizzle-orm";\nimport { authors, books } from "./schema";\n\nconst rows = await db\n  .select({ author: authors.name, title: books.title })\n  .from(authors)\n  .crossJoin(books)\n  .orderBy(authors.id, books.id);\n\n$.display("Every possible author and book pair", rows);\n',
+            'import { db } from "@drizzle-run/runtime/context";\nimport { and, eq } from "drizzle-orm";\n\nimport { authors, books } from "./schema";\n\nconst rows = await db\n  .select({ author: authors.name, title: books.title })\n  .from(authors)\n  .crossJoin(books)\n  .orderBy(authors.id, books.id);\n\n$.display("Every possible author and book pair", rows);\n',
         },
       ],
-      focus: { file: "query.ts", lines: [5, 9] },
+      focus: { file: "query.ts", lines: [6, 10] },
       run: "required",
       highlight: {
         displays: ["Every possible author and book pair"],

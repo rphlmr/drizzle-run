@@ -16,8 +16,8 @@
     },
     "files": {
       "schema.ts": "import { boolean, integer, pgTable, text } from \"drizzle-orm/pg-core\";\n\nexport const authors = pgTable(\"authors\", {\n  id: integer(\"id\").primaryKey(),\n  name: text(\"name\").notNull(),\n});\n\nexport const posts = pgTable(\"posts\", {\n  id: integer(\"id\").primaryKey(),\n  authorId: integer(\"author_id\")\n    .notNull()\n    .references(() => authors.id),\n  title: text(\"title\").notNull(),\n  published: boolean(\"published\").notNull().default(false),\n  views: integer(\"views\").notNull().default(0),\n});\n",
-      "seed.ts": "import { db } from \"@drizzle-run/runtime/context\";\nimport { authors, posts } from \"./schema\";\n\nawait db.insert(authors).values([\n  { id: 1, name: \"Ada\" },\n  { id: 2, name: \"Grace\" },\n  { id: 3, name: \"Linus\" },\n]);\nawait db.insert(posts).values([\n  { id: 1, authorId: 1, title: \"First query\", published: true, views: 10 },\n  { id: 2, authorId: 1, title: \"Joining tables\", published: true, views: 30 },\n  { id: 3, authorId: 2, title: \"Type safety\", published: true, views: 5 },\n  { id: 4, authorId: 2, title: \"Draft notes\", published: false, views: 100 },\n]);\n",
-      "query.ts": "import { db } from \"@drizzle-run/runtime/context\";\nimport { eq, inArray } from \"drizzle-orm\";\nimport { authors, posts } from \"./schema\";\n\n// Leave the inner query unawaited so Drizzle embeds it in the outer SQL.\nconst publishedAuthorIds = db.select({ authorId: posts.authorId }).from(posts).where(eq(posts.published, true));\n\nconst publishedAuthors = await db\n  .select({ name: authors.name })\n  .from(authors)\n  .where(inArray(authors.id, publishedAuthorIds))\n  .orderBy(authors.id);\n\n$.display(\"Authors with published posts\", publishedAuthors);\n"
+      "seed.ts": "import { db } from \"@drizzle-run/runtime/context\";\n\nimport { authors, posts } from \"./schema\";\n\nawait db.insert(authors).values([\n  { id: 1, name: \"Ada\" },\n  { id: 2, name: \"Grace\" },\n  { id: 3, name: \"Linus\" },\n]);\nawait db.insert(posts).values([\n  { id: 1, authorId: 1, title: \"First query\", published: true, views: 10 },\n  { id: 2, authorId: 1, title: \"Joining tables\", published: true, views: 30 },\n  { id: 3, authorId: 2, title: \"Type safety\", published: true, views: 5 },\n  { id: 4, authorId: 2, title: \"Draft notes\", published: false, views: 100 },\n]);\n",
+      "query.ts": "import { db } from \"@drizzle-run/runtime/context\";\nimport { eq, inArray } from \"drizzle-orm\";\n\nimport { authors, posts } from \"./schema\";\n\n// Leave the inner query unawaited so Drizzle embeds it in the outer SQL.\nconst publishedAuthorIds = db.select({ authorId: posts.authorId }).from(posts).where(eq(posts.published, true));\n\nconst publishedAuthors = await db\n  .select({ name: authors.name })\n  .from(authors)\n  .where(inArray(authors.id, publishedAuthorIds))\n  .orderBy(authors.id);\n\n$.display(\"Authors with published posts\", publishedAuthors);\n"
     },
     "entrypoints": {
       "schema": "schema.ts",
@@ -35,8 +35,8 @@
       "focus": {
         "file": "query.ts",
         "lines": [
-          6,
-          14
+          7,
+          15
         ]
       },
       "run": "required",
@@ -65,14 +65,14 @@
       "edits": [
         {
           "file": "query.ts",
-          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { and, eq, exists, notExists } from \"drizzle-orm\";\nimport { authors, posts } from \"./schema\";\n\n// authors.id refers to the current row of the outer query.\nconst matchingPosts = db\n  .select({ id: posts.id })\n  .from(posts)\n  .where(and(eq(posts.authorId, authors.id), eq(posts.published, true)));\n\nconst withPosts = await db\n  .select({ name: authors.name })\n  .from(authors)\n  .where(exists(matchingPosts))\n  .orderBy(authors.id);\nconst withoutPosts = await db\n  .select({ name: authors.name })\n  .from(authors)\n  .where(notExists(matchingPosts))\n  .orderBy(authors.id);\n\n$.display(\"Authors with published posts\", withPosts);\n$.display(\"Authors without published posts\", withoutPosts);\n"
+          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { and, eq, exists, notExists } from \"drizzle-orm\";\n\nimport { authors, posts } from \"./schema\";\n\n// authors.id refers to the current row of the outer query.\nconst matchingPosts = db\n  .select({ id: posts.id })\n  .from(posts)\n  .where(and(eq(posts.authorId, authors.id), eq(posts.published, true)));\n\nconst withPosts = await db\n  .select({ name: authors.name })\n  .from(authors)\n  .where(exists(matchingPosts))\n  .orderBy(authors.id);\nconst withoutPosts = await db\n  .select({ name: authors.name })\n  .from(authors)\n  .where(notExists(matchingPosts))\n  .orderBy(authors.id);\n\n$.display(\"Authors with published posts\", withPosts);\n$.display(\"Authors without published posts\", withoutPosts);\n"
         }
       ],
       "focus": {
         "file": "query.ts",
         "lines": [
-          6,
-          14
+          7,
+          15
         ]
       },
       "run": "required",
@@ -102,14 +102,14 @@
       "edits": [
         {
           "file": "query.ts",
-          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { count, eq, gte, sql, sum } from \"drizzle-orm\";\nimport { authors, posts } from \"./schema\";\n\nconst publishedStats = db\n  .select({\n    authorId: posts.authorId,\n    publishedCount: count(posts.id).as(\"published_count\"),\n    totalViews: sum(posts.views).as(\"total_views\"),\n  })\n  .from(posts)\n  .where(eq(posts.published, true))\n  .groupBy(posts.authorId)\n  .as(\"published_stats\");\n\nconst selection = {\n  name: authors.name,\n  // PostgreSQL aggregate values can be strings. Convert at the outer selection.\n  // These sample totals fit safely in a JavaScript number.\n  publishedPosts: sql<number>`coalesce(${publishedStats.publishedCount}, 0)`.mapWith(Number),\n  views: sql<number>`coalesce(${publishedStats.totalViews}, 0)`.mapWith(Number),\n};\n\nconst report = await db\n  .select(selection)\n  .from(authors)\n  .leftJoin(publishedStats, eq(publishedStats.authorId, authors.id))\n  .orderBy(authors.id);\n\n$.display(\"Author report\", report);\n"
+          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { count, eq, gte, sql, sum } from \"drizzle-orm\";\n\nimport { authors, posts } from \"./schema\";\n\nconst publishedStats = db\n  .select({\n    authorId: posts.authorId,\n    publishedCount: count(posts.id).as(\"published_count\"),\n    totalViews: sum(posts.views).as(\"total_views\"),\n  })\n  .from(posts)\n  .where(eq(posts.published, true))\n  .groupBy(posts.authorId)\n  .as(\"published_stats\");\n\nconst selection = {\n  name: authors.name,\n  // PostgreSQL aggregate values can be strings. Convert at the outer selection.\n  // These sample totals fit safely in a JavaScript number.\n  publishedPosts: sql<number>`coalesce(${publishedStats.publishedCount}, 0)`.mapWith(Number),\n  views: sql<number>`coalesce(${publishedStats.totalViews}, 0)`.mapWith(Number),\n};\n\nconst report = await db\n  .select(selection)\n  .from(authors)\n  .leftJoin(publishedStats, eq(publishedStats.authorId, authors.id))\n  .orderBy(authors.id);\n\n$.display(\"Author report\", report);\n"
         }
       ],
       "focus": {
         "file": "query.ts",
         "lines": [
-          5,
-          13
+          6,
+          14
         ]
       },
       "run": "required",
@@ -138,14 +138,14 @@
       "edits": [
         {
           "file": "query.ts",
-          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { and, count, eq, sql } from \"drizzle-orm\";\nimport { authors, posts } from \"./schema\";\n\n// COUNT without GROUP BY returns exactly one row, including zero for no matches.\nconst publishedCount = db\n  .select({ value: count() })\n  .from(posts)\n  .where(and(eq(posts.authorId, authors.id), eq(posts.published, true)));\n\nconst report = await db\n  .select({\n    name: authors.name,\n    publishedPosts: sql<number>`(${publishedCount})`.mapWith(Number),\n  })\n  .from(authors)\n  .orderBy(authors.id);\n\n$.display(\"One count per author\", report);\n"
+          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { and, count, eq, sql } from \"drizzle-orm\";\n\nimport { authors, posts } from \"./schema\";\n\n// COUNT without GROUP BY returns exactly one row, including zero for no matches.\nconst publishedCount = db\n  .select({ value: count() })\n  .from(posts)\n  .where(and(eq(posts.authorId, authors.id), eq(posts.published, true)));\n\nconst report = await db\n  .select({\n    name: authors.name,\n    publishedPosts: sql<number>`(${publishedCount})`.mapWith(Number),\n  })\n  .from(authors)\n  .orderBy(authors.id);\n\n$.display(\"One count per author\", report);\n"
         }
       ],
       "focus": {
         "file": "query.ts",
         "lines": [
-          6,
-          14
+          7,
+          15
         ]
       },
       "run": "required",
@@ -174,14 +174,14 @@
       "edits": [
         {
           "file": "query.ts",
-          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { count, eq, gte, sql, sum } from \"drizzle-orm\";\nimport { authors, posts } from \"./schema\";\n\nconst publishedStats = db.$with(\"published_stats\").as(\n  db\n    .select({\n      authorId: posts.authorId,\n      publishedCount: count(posts.id).as(\"published_count\"),\n      totalViews: sum(posts.views).as(\"total_views\"),\n    })\n    .from(posts)\n    .where(eq(posts.published, true))\n    .groupBy(posts.authorId),\n);\n\nconst selection = {\n  name: authors.name,\n  // PostgreSQL aggregate values can be strings. Convert at the outer selection.\n  // These sample totals fit safely in a JavaScript number.\n  publishedPosts: sql<number>`coalesce(${publishedStats.publishedCount}, 0)`.mapWith(Number),\n  views: sql<number>`coalesce(${publishedStats.totalViews}, 0)`.mapWith(Number),\n};\n\nconst report = await db\n  .with(publishedStats)\n  .select(selection)\n  .from(authors)\n  .leftJoin(publishedStats, eq(publishedStats.authorId, authors.id))\n  .orderBy(authors.id);\n\n$.display(\"Author report\", report);\n\nconst minimumViews = 30;\nconst popular = await db\n  .with(publishedStats)\n  .select(selection)\n  .from(authors)\n  .leftJoin(publishedStats, eq(publishedStats.authorId, authors.id))\n  .where(gte(publishedStats.totalViews, String(minimumViews)))\n  .orderBy(authors.id);\n\n$.display(\"Authors with at least 30 published views\", popular);\n"
+          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { count, eq, gte, sql, sum } from \"drizzle-orm\";\n\nimport { authors, posts } from \"./schema\";\n\nconst publishedStats = db.$with(\"published_stats\").as(\n  db\n    .select({\n      authorId: posts.authorId,\n      publishedCount: count(posts.id).as(\"published_count\"),\n      totalViews: sum(posts.views).as(\"total_views\"),\n    })\n    .from(posts)\n    .where(eq(posts.published, true))\n    .groupBy(posts.authorId),\n);\n\nconst selection = {\n  name: authors.name,\n  // PostgreSQL aggregate values can be strings. Convert at the outer selection.\n  // These sample totals fit safely in a JavaScript number.\n  publishedPosts: sql<number>`coalesce(${publishedStats.publishedCount}, 0)`.mapWith(Number),\n  views: sql<number>`coalesce(${publishedStats.totalViews}, 0)`.mapWith(Number),\n};\n\nconst report = await db\n  .with(publishedStats)\n  .select(selection)\n  .from(authors)\n  .leftJoin(publishedStats, eq(publishedStats.authorId, authors.id))\n  .orderBy(authors.id);\n\n$.display(\"Author report\", report);\n\nconst minimumViews = 30;\nconst popular = await db\n  .with(publishedStats)\n  .select(selection)\n  .from(authors)\n  .leftJoin(publishedStats, eq(publishedStats.authorId, authors.id))\n  .where(gte(publishedStats.totalViews, String(minimumViews)))\n  .orderBy(authors.id);\n\n$.display(\"Authors with at least 30 published views\", popular);\n"
         }
       ],
       "focus": {
         "file": "query.ts",
         "lines": [
-          5,
-          13
+          6,
+          14
         ]
       },
       "run": "required",

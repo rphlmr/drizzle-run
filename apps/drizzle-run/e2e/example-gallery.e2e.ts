@@ -4,6 +4,23 @@ import { callStore } from "./store";
 
 const examples = readOfficialExamples();
 
+for (const width of [1280, 390]) {
+  test(`should scroll long query lines inside the preview at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/examples?q=insert+validators");
+    await page.locator('[data-example-slug="insert-validators"]').click();
+    const code = page.getByRole("region", { name: "Starting query code" });
+    await expect(code.locator("span[class*='mtk']").first()).toBeVisible();
+    await expect(code).toHaveCSS("white-space", "pre");
+    await expect.poll(() => code.evaluate((element) => element.scrollWidth > element.clientWidth)).toBe(true);
+    await code.scrollIntoViewIfNeeded();
+    await code.focus();
+    await page.keyboard.press("ArrowRight");
+    await expect.poll(() => code.evaluate((element) => element.scrollLeft)).toBeGreaterThan(0);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  });
+}
+
 test("should show related example and documentation links in the preview", async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto("/examples?q=reusable+helpers");

@@ -1,5 +1,6 @@
 import { db } from "@drizzle-run/runtime/context";
 import { eq, sql } from "drizzle-orm";
+
 import { users } from "./schema";
 
 $.display("Before", await db.select().from(users).orderBy(users.id));

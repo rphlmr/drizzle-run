@@ -14,7 +14,7 @@
     },
     "files": {
       "schema.ts": "import { defineRelations } from \"drizzle-orm\";\nimport { index, integer, pgTable, text, timestamp } from \"drizzle-orm/pg-core\";\n\nexport const posts = pgTable(\"posts\", {\n  id: integer(\"id\").primaryKey(),\n  title: text(\"title\").notNull(),\n  createdAt: timestamp(\"created_at\", { mode: \"string\", withTimezone: true, precision: 3 }).notNull(),\n}, (post) => [index(\"posts_created_at_id_idx\").on(post.createdAt, post.id)]);\n\nexport const relations = defineRelations({ posts });\n",
-      "seed.ts": "import { db } from \"@drizzle-run/runtime/context\";\nimport { posts } from \"./schema\";\n\n// SQLite text timestamps use the same fixed-width UTC ISO format so text ordering follows time.\nawait db.insert(posts).values([\n  { id: 1, title: \"First\", createdAt: \"2026-01-01T09:00:00.000Z\" },\n  { id: 2, title: \"Second\", createdAt: \"2026-01-01T09:00:00.000Z\" },\n  { id: 3, title: \"Same timestamp\", createdAt: \"2026-01-01T09:00:00.000Z\" },\n  { id: 4, title: \"Fourth\", createdAt: \"2026-01-02T09:00:00.000Z\" },\n  { id: 5, title: \"Fifth\", createdAt: \"2026-01-02T09:00:00.000Z\" },\n  { id: 6, title: \"Last\", createdAt: \"2026-01-03T09:00:00.000Z\" },\n]);\n"
+      "seed.ts": "import { db } from \"@drizzle-run/runtime/context\";\n\nimport { posts } from \"./schema\";\n\n// SQLite text timestamps use the same fixed-width UTC ISO format so text ordering follows time.\nawait db.insert(posts).values([\n  { id: 1, title: \"First\", createdAt: \"2026-01-01T09:00:00.000Z\" },\n  { id: 2, title: \"Second\", createdAt: \"2026-01-01T09:00:00.000Z\" },\n  { id: 3, title: \"Same timestamp\", createdAt: \"2026-01-01T09:00:00.000Z\" },\n  { id: 4, title: \"Fourth\", createdAt: \"2026-01-02T09:00:00.000Z\" },\n  { id: 5, title: \"Fifth\", createdAt: \"2026-01-02T09:00:00.000Z\" },\n  { id: 6, title: \"Last\", createdAt: \"2026-01-03T09:00:00.000Z\" },\n]);\n"
     },
     "sides": [
       {
@@ -90,12 +90,12 @@
       "edits": [
         {
           "file": "query.ts",
-          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { asc } from \"drizzle-orm\";\n\nimport { posts } from \"./schema\";\n\nconst first = await db.select().from(posts).orderBy(asc(posts.createdAt), asc(posts.id)).limit(2);\n$.display(\"First page before insert\", first);\n\nawait db.insert(posts).values({ id: 7, title: \"Earlier arrival\", createdAt: \"2025-12-31T09:00:00.000Z\" });\nconst second = await db.select().from(posts).orderBy(asc(posts.createdAt), asc(posts.id)).limit(2).offset(2);\n$.display(\"Offset page after insert\", second);\n",
+          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { asc } from \"drizzle-orm\";\n\nimport { posts } from \"./schema\";\n\nconst first = await db.select().from(posts).orderBy(asc(posts.createdAt), asc(posts.id)).limit(2);\n\n$.display(\"First page before insert\", first);\n\nawait db.insert(posts).values({ id: 7, title: \"Earlier arrival\", createdAt: \"2025-12-31T09:00:00.000Z\" });\n\nconst second = await db.select().from(posts).orderBy(asc(posts.createdAt), asc(posts.id)).limit(2).offset(2);\n\n$.display(\"Offset page after insert\", second);\n",
           "side": 0
         },
         {
           "file": "query.ts",
-          "write": "import { db } from \"@drizzle-run/runtime/context\";\n\nimport { posts } from \"./schema\";\n\nconst first = await db.query.posts.findMany({ orderBy: { createdAt: \"asc\", id: \"asc\" }, limit: 2 });\n$.display(\"First page before insert\", first);\n\nawait db.insert(posts).values({ id: 7, title: \"Earlier arrival\", createdAt: \"2025-12-31T09:00:00.000Z\" });\nconst second = await db.query.posts.findMany({ orderBy: { createdAt: \"asc\", id: \"asc\" }, limit: 2, offset: 2 });\n$.display(\"Offset page after insert\", second);\n",
+          "write": "import { db } from \"@drizzle-run/runtime/context\";\n\nimport { posts } from \"./schema\";\n\nconst first = await db.query.posts.findMany({ orderBy: { createdAt: \"asc\", id: \"asc\" }, limit: 2 });\n\n$.display(\"First page before insert\", first);\n\nawait db.insert(posts).values({ id: 7, title: \"Earlier arrival\", createdAt: \"2025-12-31T09:00:00.000Z\" });\n\nconst second = await db.query.posts.findMany({ orderBy: { createdAt: \"asc\", id: \"asc\" }, limit: 2, offset: 2 });\n\n$.display(\"Offset page after insert\", second);\n",
           "side": 1
         }
       ],
@@ -103,7 +103,7 @@
         "file": "query.ts",
         "lines": [
           6,
-          12
+          14
         ],
         "side": 0
       },
@@ -128,20 +128,20 @@
       "edits": [
         {
           "file": "query.ts",
-          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { asc, gt } from \"drizzle-orm\";\n\nimport { posts } from \"./schema\";\n\nconst first = await db.select().from(posts).orderBy(asc(posts.createdAt), asc(posts.id)).limit(2);\nconst last = first.at(-1);\n$.display(\"First page\", first);\n\nif (last) {\n  const second = await db.select().from(posts)\n    .where(gt(posts.createdAt, last.createdAt))\n    .orderBy(asc(posts.createdAt), asc(posts.id)).limit(2);\n  $.display(\"Timestamp-only cursor skips a tie\", second);\n}\n",
+          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { asc, gt } from \"drizzle-orm\";\n\nimport { posts } from \"./schema\";\n\nconst first = await db.select().from(posts).orderBy(asc(posts.createdAt), asc(posts.id)).limit(2);\nconst last = first.at(-1);\n\n$.display(\"First page\", first);\n\nif (last) {\n  const second = await db.select().from(posts)\n    .where(gt(posts.createdAt, last.createdAt))\n    .orderBy(asc(posts.createdAt), asc(posts.id)).limit(2);\n  $.display(\"Timestamp-only cursor skips a tie\", second);\n}\n",
           "side": 0
         },
         {
           "file": "query.ts",
-          "write": "import { db } from \"@drizzle-run/runtime/context\";\n\nconst first = await db.query.posts.findMany({ orderBy: { createdAt: \"asc\", id: \"asc\" }, limit: 2 });\nconst last = first.at(-1);\n$.display(\"First page\", first);\n\nif (last) {\n  const second = await db.query.posts.findMany({\n    where: { createdAt: { gt: last.createdAt } },\n    orderBy: { createdAt: \"asc\", id: \"asc\" },\n    limit: 2,\n  });\n  $.display(\"Timestamp-only cursor skips a tie\", second);\n}\n",
+          "write": "import { db } from \"@drizzle-run/runtime/context\";\n\nconst first = await db.query.posts.findMany({ orderBy: { createdAt: \"asc\", id: \"asc\" }, limit: 2 });\nconst last = first.at(-1);\n\n$.display(\"First page\", first);\n\nif (last) {\n  const second = await db.query.posts.findMany({\n    where: { createdAt: { gt: last.createdAt } },\n    orderBy: { createdAt: \"asc\", id: \"asc\" },\n    limit: 2,\n  });\n  $.display(\"Timestamp-only cursor skips a tie\", second);\n}\n",
           "side": 1
         }
       ],
       "focus": {
         "file": "query.ts",
         "lines": [
-          10,
-          14
+          11,
+          15
         ],
         "side": 0
       },
@@ -166,12 +166,12 @@
       "edits": [
         {
           "file": "query.ts",
-          "write": "import { getNextPage } from \"./pagination\";\n\nconst first = await getNextPage();\n$.display(\"Cursor page 1\", first);\n\nif (first.nextCursor) {\n  const second = await getNextPage({ after: first.nextCursor });\n  $.display(\"Cursor page 2\", second);\n\n  if (second.nextCursor) {\n    $.display(\"Cursor page 3\", await getNextPage({ after: second.nextCursor }));\n  }\n}\n",
+          "write": "import { getNextPage } from \"./pagination\";\n\nconst first = await getNextPage();\n\n$.display(\"Cursor page 1\", first);\n\nif (first.nextCursor) {\n  const second = await getNextPage({ after: first.nextCursor });\n  $.display(\"Cursor page 2\", second);\n\n  if (second.nextCursor) {\n    $.display(\"Cursor page 3\", await getNextPage({ after: second.nextCursor }));\n  }\n}\n",
           "side": 0
         },
         {
           "file": "query.ts",
-          "write": "import { getNextPage } from \"./pagination\";\n\nconst first = await getNextPage();\n$.display(\"Cursor page 1\", first);\n\nif (first.nextCursor) {\n  const second = await getNextPage({ after: first.nextCursor });\n  $.display(\"Cursor page 2\", second);\n\n  if (second.nextCursor) {\n    $.display(\"Cursor page 3\", await getNextPage({ after: second.nextCursor }));\n  }\n}\n",
+          "write": "import { getNextPage } from \"./pagination\";\n\nconst first = await getNextPage();\n\n$.display(\"Cursor page 1\", first);\n\nif (first.nextCursor) {\n  const second = await getNextPage({ after: first.nextCursor });\n  $.display(\"Cursor page 2\", second);\n\n  if (second.nextCursor) {\n    $.display(\"Cursor page 3\", await getNextPage({ after: second.nextCursor }));\n  }\n}\n",
           "side": 1
         }
       ],

@@ -22,7 +22,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
     {
       type: "walkthrough",
       id: "01-bound-values",
-      focus: { file: "query.ts", lines: [6, 12] },
+      focus: { file: "query.ts", lines: [7, 13] },
       label: "Bound values",
       title: "Pass a value to an ordinary query",
       body: "This guide uses PostgreSQL and Drizzle ORM **1.0.0-rc.5** to search a small product catalogue. Prices are stored as integer cents.\n\nStart with an ordinary query. `eq(products.category, category)` binds the category as a parameter. It does not paste the text into SQL. You do not need `.prepare()` to bind values safely.\n\nPress **Run**, then look at the SQL panel: the statement and its parameter values are separate. The result contains three books, ordered by price and then ID.",
@@ -44,7 +44,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
     {
       type: "walkthrough",
       id: "02-prepare",
-      focus: { file: "query.ts", lines: [5, 13] },
+      focus: { file: "query.ts", lines: [6, 14] },
       label: "Prepare once",
       title: "Reuse a query with a named placeholder",
       body: 'A **placeholder** names a value you will provide later. `sql.placeholder("category")` leaves that value open, and `.prepare("products_by_category")` creates a reusable query object.\n\nCall `.execute({ category: ... })` with the same placeholder name. Press **Run**: the same prepared object searches books, then tools. The SQL shape stays the same while the value changes.\n\nThe prepare name identifies the statement; it is not the placeholder name. Keep a statement name associated with one query shape. Preparing does not cache the returned rows.',
@@ -52,7 +52,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
         {
           file: "query.ts",
           write:
-            'import { db } from "@drizzle-run/runtime/context";\nimport { eq, sql } from "drizzle-orm";\nimport { products } from "./schema";\n\nconst byCategory = db\n  .select()\n  .from(products)\n  .where(eq(products.category, sql.placeholder("category")))\n  .orderBy(products.priceCents, products.id)\n  .prepare("products_by_category");\n\n$.display("Books", await byCategory.execute({ category: "books" }));\n$.display("Tools", await byCategory.execute({ category: "tools" }));\n',
+            'import { db } from "@drizzle-run/runtime/context";\nimport { eq, sql } from "drizzle-orm";\n\nimport { products } from "./schema";\n\nconst byCategory = db\n  .select()\n  .from(products)\n  .where(eq(products.category, sql.placeholder("category")))\n  .orderBy(products.priceCents, products.id)\n  .prepare("products_by_category");\n\n$.display("Books", await byCategory.execute({ category: "books" }));\n$.display("Tools", await byCategory.execute({ category: "tools" }));\n',
         },
       ],
       run: "required",
@@ -73,7 +73,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
     {
       type: "walkthrough",
       id: "03-several-values",
-      focus: { file: "query.ts", lines: [6, 14] },
+      focus: { file: "query.ts", lines: [7, 15] },
       label: "Several values",
       title: "Bind a minimum price and a result limit",
       body: "Placeholders work for more than equality filters. This query binds `category`, `minimumCents` and the numeric `pageSize` passed to `limit`.\n\nPress **Run**. With a minimum of 1000 cents, Pocket notes is excluded. A limit of one returns Query notebook; a limit of two also returns SQL handbook. The tools call reuses that same query shape.\n\nPlaceholders stand for **values**, not table names, column names or sort directions. Here the order is fixed. If your application offers different sorts, choose the allowed columns and directions in query-building code.",
@@ -81,7 +81,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
         {
           file: "query.ts",
           write:
-            'import { db } from "@drizzle-run/runtime/context";\nimport { and, eq, gte, sql } from "drizzle-orm";\nimport { products } from "./schema";\n\n// Prepare once, then execute with different values. The sort order and selected columns stay fixed.\nconst searchProducts = db\n  .select()\n  .from(products)\n  .where(\n    and(eq(products.category, sql.placeholder("category")), gte(products.priceCents, sql.placeholder("minimumCents"))),\n  )\n  .orderBy(products.priceCents, products.id)\n  .limit(sql.placeholder("pageSize"))\n  .prepare("product_search");\n\n// Validate external input before execute: these local values are already known.\n$.display(\n  "First book at or above 1000 cents",\n  await searchProducts.execute({\n    category: "books",\n    minimumCents: 1000,\n    pageSize: 1,\n  }),\n);\n$.display(\n  "Two books at or above 1000 cents",\n  await searchProducts.execute({\n    category: "books",\n    minimumCents: 1000,\n    pageSize: 2,\n  }),\n);\n$.display(\n  "Tools under the same query shape",\n  await searchProducts.execute({\n    category: "tools",\n    minimumCents: 1000,\n    pageSize: 2,\n  }),\n);\n',
+            'import { db } from "@drizzle-run/runtime/context";\nimport { and, eq, gte, sql } from "drizzle-orm";\n\nimport { products } from "./schema";\n\n// Prepare once, then execute with different values. The sort order and selected columns stay fixed.\nconst searchProducts = db\n  .select()\n  .from(products)\n  .where(\n    and(eq(products.category, sql.placeholder("category")), gte(products.priceCents, sql.placeholder("minimumCents"))),\n  )\n  .orderBy(products.priceCents, products.id)\n  .limit(sql.placeholder("pageSize"))\n  .prepare("product_search");\n\n// Validate external input before execute: these local values are already known.\n$.display(\n  "First book at or above 1000 cents",\n  await searchProducts.execute({\n    category: "books",\n    minimumCents: 1000,\n    pageSize: 1,\n  }),\n);\n$.display(\n  "Two books at or above 1000 cents",\n  await searchProducts.execute({\n    category: "books",\n    minimumCents: 1000,\n    pageSize: 2,\n  }),\n);\n$.display(\n  "Tools under the same query shape",\n  await searchProducts.execute({\n    category: "tools",\n    minimumCents: 1000,\n    pageSize: 2,\n  }),\n);\n',
         },
       ],
       run: "required",
@@ -103,7 +103,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
     {
       type: "walkthrough",
       id: "04-missing-value",
-      focus: { file: "query.ts", lines: [42, 50] },
+      focus: { file: "query.ts", lines: [43, 51] },
       label: "Missing value",
       title: "Provide every named placeholder",
       body: 'The final call deliberately leaves out `minimumCents`. The catch handles only the error this lesson expects and displays its message; any different error is rethrown.\n\nPress **Run**. Drizzle reports **No value for placeholder "minimumCents" was provided**. A missing value does not remove that filter.\n\nNamed placeholders are not input validation. Validate values from requests or forms before execution, including the category, minimum price and an allowed positive page size.',
@@ -111,7 +111,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
         {
           file: "query.ts",
           write:
-            'import { db } from "@drizzle-run/runtime/context";\nimport { and, eq, gte, sql } from "drizzle-orm";\nimport { products } from "./schema";\n\n// Prepare once, then execute with different values. The sort order and selected columns stay fixed.\nconst searchProducts = db\n  .select()\n  .from(products)\n  .where(\n    and(eq(products.category, sql.placeholder("category")), gte(products.priceCents, sql.placeholder("minimumCents"))),\n  )\n  .orderBy(products.priceCents, products.id)\n  .limit(sql.placeholder("pageSize"))\n  .prepare("product_search");\n\n// Validate external input before execute: these local values are already known.\n$.display(\n  "First book at or above 1000 cents",\n  await searchProducts.execute({\n    category: "books",\n    minimumCents: 1000,\n    pageSize: 1,\n  }),\n);\n$.display(\n  "Two books at or above 1000 cents",\n  await searchProducts.execute({\n    category: "books",\n    minimumCents: 1000,\n    pageSize: 2,\n  }),\n);\n$.display(\n  "Tools under the same query shape",\n  await searchProducts.execute({\n    category: "tools",\n    minimumCents: 1000,\n    pageSize: 2,\n  }),\n);\n\ntry {\n  await searchProducts.execute({ category: "books", pageSize: 2 });\n} catch (cause) {\n  if (!(cause instanceof Error) || cause.message !== \'No value for placeholder "minimumCents" was provided\') {\n    throw cause;\n  }\n\n  $.display("Missing placeholder", cause.message);\n}\n',
+            'import { db } from "@drizzle-run/runtime/context";\nimport { and, eq, gte, sql } from "drizzle-orm";\n\nimport { products } from "./schema";\n\n// Prepare once, then execute with different values. The sort order and selected columns stay fixed.\nconst searchProducts = db\n  .select()\n  .from(products)\n  .where(\n    and(eq(products.category, sql.placeholder("category")), gte(products.priceCents, sql.placeholder("minimumCents"))),\n  )\n  .orderBy(products.priceCents, products.id)\n  .limit(sql.placeholder("pageSize"))\n  .prepare("product_search");\n\n// Validate external input before execute: these local values are already known.\n$.display(\n  "First book at or above 1000 cents",\n  await searchProducts.execute({\n    category: "books",\n    minimumCents: 1000,\n    pageSize: 1,\n  }),\n);\n$.display(\n  "Two books at or above 1000 cents",\n  await searchProducts.execute({\n    category: "books",\n    minimumCents: 1000,\n    pageSize: 2,\n  }),\n);\n$.display(\n  "Tools under the same query shape",\n  await searchProducts.execute({\n    category: "tools",\n    minimumCents: 1000,\n    pageSize: 2,\n  }),\n);\n\ntry {\n  await searchProducts.execute({ category: "books", pageSize: 2 });\n} catch (cause) {\n  if (!(cause instanceof Error) || cause.message !== \'No value for placeholder "minimumCents" was provided\') {\n    throw cause;\n  }\n\n  $.display("Missing placeholder", cause.message);\n}\n',
         },
       ],
       run: "required",

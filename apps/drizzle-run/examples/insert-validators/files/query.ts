@@ -1,6 +1,7 @@
 import { db } from "@drizzle-run/runtime/context";
 import { createInsertSchema } from "drizzle-orm/zod";
 import * as z from "zod";
+
 import { users } from "./schema";
 
 // Column types and nullability come from the table; refinements add input rules.
@@ -33,6 +34,7 @@ const checked = candidates.map((candidate) => {
 $.display("Validation", checked.map(({ email, valid, problems }) => ({ email, valid, problems })));
 
 const validRows = checked.flatMap((item) => (item.row ? [item.row] : []));
+
 await db.insert(users).values(validRows);
 
 $.display("Inserted users", await db.select().from(users));

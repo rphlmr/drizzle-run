@@ -1,7 +1,7 @@
 {
   "recordingVersion": 1,
-  "snapshotDigest": "a510794ee7b6635db6e7eb1fff5ee73da5fb0cc8df0d92081701d06518a5ca87",
-  "recordedAt": "2026-11-04T09:12:33.261Z",
+  "snapshotDigest": "2e541109ddbd7abe0c748c7e4a93fbf087261f8259e37987c63ead8e2636f67b",
+  "recordedAt": "2026-11-04T13:48:00.205Z",
   "result": {
     "version": 1,
     "target": {
@@ -16,7 +16,7 @@
       "kitVersion": "1.0.0-rc.5"
     },
     "random": {
-      "effectiveSeed": 2210174470,
+      "effectiveSeed": 1104727751,
       "source": "generated",
       "derivation": "crypto-u32-v1",
       "generator": "mulberry32-v1"
@@ -25,74 +25,74 @@
       {
         "phase": "validate",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:12:31.924Z",
-        "durationMs": 0.019999980926513672
+        "startedAt": "2026-11-04T13:47:58.805Z",
+        "durationMs": 0.03500008583068848
       },
       {
         "phase": "resolve",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:12:31.924Z",
-        "durationMs": 0
+        "startedAt": "2026-11-04T13:47:58.805Z",
+        "durationMs": 0.004999995231628418
       },
       {
         "phase": "load_artifacts",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:12:32.121Z",
-        "durationMs": 458.5900000333786
+        "startedAt": "2026-11-04T13:47:59.074Z",
+        "durationMs": 603.0099999904633
       },
       {
         "phase": "compile",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:12:31.961Z",
-        "durationMs": 159.4650000333786
+        "startedAt": "2026-11-04T13:47:58.854Z",
+        "durationMs": 219.65500009059906
       },
       {
         "phase": "evaluate_schema",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:12:32.580Z",
-        "durationMs": 14.225000023841858
+        "startedAt": "2026-11-04T13:47:59.677Z",
+        "durationMs": 14.889999985694885
       },
       {
         "phase": "generate_bootstrap",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:12:32.594Z",
-        "durationMs": 1.8350000381469727
+        "startedAt": "2026-11-04T13:47:59.692Z",
+        "durationMs": 2.1649999618530273
       },
       {
         "phase": "apply_bootstrap",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:12:32.597Z",
-        "durationMs": 82.61000001430511
+        "startedAt": "2026-11-04T13:47:59.695Z",
+        "durationMs": 145.95499992370605
       },
       {
         "phase": "seed",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:12:32.679Z",
-        "durationMs": 4.569999933242798
+        "startedAt": "2026-11-04T13:47:59.841Z",
+        "durationMs": 5.3450000286102295
       },
       {
         "phase": "run",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:12:32.684Z",
-        "durationMs": 30.18999993801117
+        "startedAt": "2026-11-04T13:47:59.846Z",
+        "durationMs": 37.575000047683716
       },
       {
         "phase": "inspect",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:12:32.714Z",
-        "durationMs": 1.7000000476837158
+        "startedAt": "2026-11-04T13:47:59.884Z",
+        "durationMs": 2.7649999856948853
       },
       {
         "phase": "plan",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:12:32.715Z",
-        "durationMs": 0.039999961853027344
+        "startedAt": "2026-11-04T13:47:59.887Z",
+        "durationMs": 0.05500006675720215
       },
       {
         "phase": "cleanup",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:12:32.716Z",
-        "durationMs": 0.9650000333786011
+        "startedAt": "2026-11-04T13:47:59.887Z",
+        "durationMs": 1.3000000715255737
       }
     ],
     "diagnostics": [],
@@ -167,7 +167,7 @@
         ],
         "outcome": "succeeded",
         "source": "seed.ts",
-        "line": 4,
+        "line": 5,
         "durationMs": 2,
         "rowCount": 3
       },
@@ -217,8 +217,8 @@
         ],
         "outcome": "succeeded",
         "source": "seed.ts",
-        "line": 9,
-        "durationMs": 1.000244140625,
+        "line": 10,
+        "durationMs": 1,
         "rowCount": 3
       },
       {
@@ -236,7 +236,7 @@
         "outcome": "succeeded",
         "source": "query.ts",
         "line": 7,
-        "durationMs": 3,
+        "durationMs": 4,
         "rowCount": 3
       }
     ],
@@ -399,7 +399,7 @@
           ],
           "outcome": "succeeded",
           "source": "seed.ts",
-          "line": 4,
+          "line": 5,
           "durationMs": 2,
           "rowCount": 3
         }
@@ -453,8 +453,8 @@
           ],
           "outcome": "succeeded",
           "source": "seed.ts",
-          "line": 9,
-          "durationMs": 1.000244140625,
+          "line": 10,
+          "durationMs": 1,
           "rowCount": 3
         }
       },
@@ -476,7 +476,7 @@
           "outcome": "succeeded",
           "source": "query.ts",
           "line": 7,
-          "durationMs": 3,
+          "durationMs": 4,
           "rowCount": 3
         }
       },
@@ -558,19 +558,19 @@
       }
     },
     "timings": {
-      "total": 796,
-      "validate": 0.019999980926513672,
-      "resolve": 0,
-      "load_artifacts": 458.5900000333786,
-      "compile": 159.4650000333786,
-      "evaluate_schema": 14.225000023841858,
-      "generate_bootstrap": 1.8350000381469727,
-      "apply_bootstrap": 82.61000001430511,
-      "seed": 4.569999933242798,
-      "run": 30.18999993801117,
-      "inspect": 1.7000000476837158,
-      "plan": 0.039999961853027344,
-      "cleanup": 0.9650000333786011
+      "total": 1087,
+      "validate": 0.03500008583068848,
+      "resolve": 0.004999995231628418,
+      "load_artifacts": 603.0099999904633,
+      "compile": 219.65500009059906,
+      "evaluate_schema": 14.889999985694885,
+      "generate_bootstrap": 2.1649999618530273,
+      "apply_bootstrap": 145.95499992370605,
+      "seed": 5.3450000286102295,
+      "run": 37.575000047683716,
+      "inspect": 2.7649999856948853,
+      "plan": 0.05500006675720215,
+      "cleanup": 1.3000000715255737
     },
     "ok": true,
     "outcome": "succeeded"

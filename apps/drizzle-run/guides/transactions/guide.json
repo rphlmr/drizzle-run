@@ -16,8 +16,8 @@
     },
     "files": {
       "schema.ts": "import { integer, pgTable, serial, text } from \"drizzle-orm/pg-core\";\n\nexport const accounts = pgTable(\"accounts\", {\n  id: serial(\"id\").primaryKey(),\n  owner: text(\"owner\").notNull(),\n  balance: integer(\"balance\").notNull(),\n});\n",
-      "seed.ts": "import { db } from \"@drizzle-run/runtime/context\";\nimport { accounts } from \"./schema\";\n\nawait db.insert(accounts).values([\n  { owner: \"Ada\", balance: 100 },\n  { owner: \"Grace\", balance: 50 },\n]);\n",
-      "query.ts": "import { db } from \"@drizzle-run/runtime/context\";\nimport { asc, eq, sql } from \"drizzle-orm\";\nimport { accounts } from \"./schema\";\n\n// Both updates commit together, or not at all.\nawait db.transaction(async (tx) => {\n  await tx.update(accounts).set({ balance: sql`${accounts.balance} - 30` }).where(eq(accounts.owner, \"Ada\"));\n  await tx.update(accounts).set({ balance: sql`${accounts.balance} + 30` }).where(eq(accounts.owner, \"Grace\"));\n\n  // A nested transaction is a savepoint: it fails and rolls back alone.\n  try {\n    await tx.transaction(async (savepoint) => {\n      await savepoint.update(accounts).set({ balance: 0 }).where(eq(accounts.owner, \"Grace\"));\n      throw new Error(\"Changed our mind\");\n    });\n  } catch (error) {\n    console.log(\"Savepoint rolled back:\", error instanceof Error ? error.message : error);\n  }\n});\n\n// tx.rollback() throws, so nothing in this transaction is kept.\ntry {\n  await db.transaction(async (tx) => {\n    await tx.delete(accounts);\n    tx.rollback();\n  });\n} catch {\n  console.log(\"Whole transaction rolled back\");\n}\n\n$.display(\"Balances\", await db.select().from(accounts).orderBy(asc(accounts.id)));\n"
+      "seed.ts": "import { db } from \"@drizzle-run/runtime/context\";\n\nimport { accounts } from \"./schema\";\n\nawait db.insert(accounts).values([\n  { owner: \"Ada\", balance: 100 },\n  { owner: \"Grace\", balance: 50 },\n]);\n",
+      "query.ts": "import { db } from \"@drizzle-run/runtime/context\";\nimport { asc, eq, sql } from \"drizzle-orm\";\n\nimport { accounts } from \"./schema\";\n\n// Both updates commit together, or not at all.\nawait db.transaction(async (tx) => {\n  await tx.update(accounts).set({ balance: sql`${accounts.balance} - 30` }).where(eq(accounts.owner, \"Ada\"));\n  await tx.update(accounts).set({ balance: sql`${accounts.balance} + 30` }).where(eq(accounts.owner, \"Grace\"));\n\n  // A nested transaction is a savepoint: it fails and rolls back alone.\n  try {\n    await tx.transaction(async (savepoint) => {\n      await savepoint.update(accounts).set({ balance: 0 }).where(eq(accounts.owner, \"Grace\"));\n      throw new Error(\"Changed our mind\");\n    });\n  } catch (error) {\n    console.log(\"Savepoint rolled back:\", error instanceof Error ? error.message : error);\n  }\n});\n\n// tx.rollback() throws, so nothing in this transaction is kept.\ntry {\n  await db.transaction(async (tx) => {\n    await tx.delete(accounts);\n    tx.rollback();\n  });\n} catch {\n  console.log(\"Whole transaction rolled back\");\n}\n\n$.display(\"Balances\", await db.select().from(accounts).orderBy(asc(accounts.id)));\n"
     },
     "entrypoints": {
       "schema": "schema.ts",
@@ -35,8 +35,8 @@
       "focus": {
         "file": "query.ts",
         "lines": [
-          6,
-          19
+          7,
+          20
         ]
       },
       "run": "required",
@@ -74,8 +74,8 @@
       "focus": {
         "file": "query.ts",
         "lines": [
-          12,
-          14
+          13,
+          15
         ]
       },
       "run": "required",
@@ -114,8 +114,8 @@
       "focus": {
         "file": "query.ts",
         "lines": [
-          30,
-          38
+          31,
+          39
         ]
       },
       "run": "required",

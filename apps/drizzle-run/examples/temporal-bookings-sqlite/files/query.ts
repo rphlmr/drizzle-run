@@ -16,6 +16,7 @@ $.display("Decoded dates", rows.map((row) => ({
 })));
 
 const leapDay = Temporal.PlainDate.from("2024-02-29");
+
 await db.insert(bookings).values({ id: 3, title: "March session", startsOn: leapDay.add({ days: 1 }) });
 
 const upcoming = await db.select().from(bookings)

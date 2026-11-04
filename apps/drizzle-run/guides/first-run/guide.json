@@ -16,8 +16,8 @@
     },
     "files": {
       "schema.ts": "import { pgTable, integer, text } from \"drizzle-orm/pg-core\";\n\nexport const users = pgTable(\"users\", {\n  id: integer(\"id\").primaryKey(),\n  name: text(\"name\").notNull(),\n});\n",
-      "seed.ts": "import { db } from \"@drizzle-run/runtime/context\";\nimport { users } from \"./schema\";\n\nawait db.insert(users).values([\n  { id: 1, name: \"Ada\" },\n  { id: 2, name: \"Grace\" },\n]);\n",
-      "query.ts": "import { db } from \"@drizzle-run/runtime/context\";\nimport { users } from \"./schema\";\n\nconst rows = await db.select().from(users);\nconsole.log(\"Found\", rows.length, \"users\");\n$.display(\"Users\", rows);\n$.display(\"Summary\", [{ total: rows.length }]);\n"
+      "seed.ts": "import { db } from \"@drizzle-run/runtime/context\";\n\nimport { users } from \"./schema\";\n\nawait db.insert(users).values([\n  { id: 1, name: \"Ada\" },\n  { id: 2, name: \"Grace\" },\n]);\n",
+      "query.ts": "import { db } from \"@drizzle-run/runtime/context\";\n\nimport { users } from \"./schema\";\n\nconst rows = await db.select().from(users);\n\nconsole.log(\"Found\", rows.length, \"users\");\n\n$.display(\"Users\", rows);\n$.display(\"Summary\", [{ total: rows.length }]);\n"
     },
     "entrypoints": {
       "schema": "schema.ts",
@@ -35,8 +35,8 @@
       "focus": {
         "file": "query.ts",
         "lines": [
-          4,
-          6
+          5,
+          9
         ]
       },
       "run": "none",
@@ -59,8 +59,8 @@
       "focus": {
         "file": "query.ts",
         "lines": [
-          4,
-          6
+          5,
+          9
         ]
       },
       "run": "required",
@@ -98,7 +98,7 @@
           "file": "query.ts",
           "replace": {
             "anchor": "import { users } from \"./schema\";",
-            "with": "import { like } from \"drizzle-orm\";\nimport { users } from \"./schema\";"
+            "with": "import { like } from \"drizzle-orm\";\n\nimport { users } from \"./schema\";"
           }
         },
         {
@@ -112,8 +112,8 @@
       "focus": {
         "file": "query.ts",
         "lines": [
-          5,
-          5
+          7,
+          7
         ]
       },
       "run": "required",

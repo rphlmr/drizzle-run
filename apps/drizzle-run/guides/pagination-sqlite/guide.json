@@ -16,7 +16,7 @@
     },
     "files": {
       "schema.ts": "import { index, integer, sqliteTable, text } from \"drizzle-orm/sqlite-core\";\n\nexport const posts = sqliteTable(\"posts\", {\n  id: integer(\"id\").primaryKey(),\n  title: text(\"title\").notNull(),\n  createdAt: text(\"created_at\").notNull(),\n}, (post) => [index(\"posts_created_at_id_idx\").on(post.createdAt, post.id)]);\n",
-      "seed.ts": "import { db } from \"@drizzle-run/runtime/context\";\nimport { posts } from \"./schema\";\n\n// SQLite text timestamps use the same fixed-width UTC ISO format so text ordering follows time.\nawait db.insert(posts).values([\n  { id: 1, title: \"First\", createdAt: \"2026-01-01T09:00:00.000Z\" },\n  { id: 2, title: \"Second\", createdAt: \"2026-01-01T09:00:00.000Z\" },\n  { id: 3, title: \"Same timestamp\", createdAt: \"2026-01-01T09:00:00.000Z\" },\n  { id: 4, title: \"Fourth\", createdAt: \"2026-01-02T09:00:00.000Z\" },\n  { id: 5, title: \"Fifth\", createdAt: \"2026-01-02T09:00:00.000Z\" },\n  { id: 6, title: \"Last\", createdAt: \"2026-01-03T09:00:00.000Z\" },\n]);\n",
+      "seed.ts": "import { db } from \"@drizzle-run/runtime/context\";\n\nimport { posts } from \"./schema\";\n\n// SQLite text timestamps use the same fixed-width UTC ISO format so text ordering follows time.\nawait db.insert(posts).values([\n  { id: 1, title: \"First\", createdAt: \"2026-01-01T09:00:00.000Z\" },\n  { id: 2, title: \"Second\", createdAt: \"2026-01-01T09:00:00.000Z\" },\n  { id: 3, title: \"Same timestamp\", createdAt: \"2026-01-01T09:00:00.000Z\" },\n  { id: 4, title: \"Fourth\", createdAt: \"2026-01-02T09:00:00.000Z\" },\n  { id: 5, title: \"Fifth\", createdAt: \"2026-01-02T09:00:00.000Z\" },\n  { id: 6, title: \"Last\", createdAt: \"2026-01-03T09:00:00.000Z\" },\n]);\n",
       "query.ts": "import { db } from \"@drizzle-run/runtime/context\";\nimport { asc } from \"drizzle-orm\";\n\nimport { posts } from \"./schema\";\n\n/** Fetch a numbered page; callers supply a positive page number and page size. */\nasync function getPage({ page, pageSize }: { page: number; pageSize: number }) {\n  return db.select().from(posts)\n    .orderBy(asc(posts.createdAt), asc(posts.id))\n    .limit(pageSize).offset((page - 1) * pageSize);\n}\n\n$.display(\"Offset page 1\", await getPage({ page: 1, pageSize: 2 }));\n$.display(\"Offset page 2\", await getPage({ page: 2, pageSize: 2 }));\n$.display(\"Jump to page 3\", await getPage({ page: 3, pageSize: 2 }));\n",
       "pagination.ts": "import { db } from \"@drizzle-run/runtime/context\";\nimport { and, asc, eq, gt, or } from \"drizzle-orm\";\n\nimport { posts } from \"./schema\";\n\ntype Cursor = Pick<typeof posts.$inferSelect, \"createdAt\" | \"id\">;\n\n/** Fetch after an exclusive composite cursor. Callers validate a positive pageSize before calling. */\nexport async function getNextPage({ after, pageSize = 2 }: { after?: Cursor; pageSize?: number } = {}) {\n  const rows = await db.select().from(posts)\n    .where(after === undefined ? undefined : or(\n      gt(posts.createdAt, after.createdAt),\n      and(eq(posts.createdAt, after.createdAt), gt(posts.id, after.id)),\n    ))\n    .orderBy(asc(posts.createdAt), asc(posts.id))\n    .limit(pageSize + 1);\n  const items = rows.slice(0, pageSize);\n  const hasNextPage = rows.length > pageSize;\n  const last = items.at(-1);\n\n  return {\n    items,\n    hasNextPage,\n    nextCursor: hasNextPage && last ? { createdAt: last.createdAt, id: last.id } : null,\n  };\n}\n"
     },
@@ -68,14 +68,14 @@
       "edits": [
         {
           "file": "query.ts",
-          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { asc } from \"drizzle-orm\";\n\nimport { posts } from \"./schema\";\n\nconst first = await db.select().from(posts).orderBy(asc(posts.createdAt), asc(posts.id)).limit(2);\n$.display(\"First page before insert\", first);\n\nawait db.insert(posts).values({ id: 7, title: \"Earlier arrival\", createdAt: \"2025-12-31T09:00:00.000Z\" });\nconst second = await db.select().from(posts).orderBy(asc(posts.createdAt), asc(posts.id)).limit(2).offset(2);\n$.display(\"Offset page after insert\", second);\n"
+          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { asc } from \"drizzle-orm\";\n\nimport { posts } from \"./schema\";\n\nconst first = await db.select().from(posts).orderBy(asc(posts.createdAt), asc(posts.id)).limit(2);\n\n$.display(\"First page before insert\", first);\n\nawait db.insert(posts).values({ id: 7, title: \"Earlier arrival\", createdAt: \"2025-12-31T09:00:00.000Z\" });\n\nconst second = await db.select().from(posts).orderBy(asc(posts.createdAt), asc(posts.id)).limit(2).offset(2);\n\n$.display(\"Offset page after insert\", second);\n"
         }
       ],
       "focus": {
         "file": "query.ts",
         "lines": [
           6,
-          12
+          14
         ]
       },
       "run": "required",
@@ -99,14 +99,14 @@
       "edits": [
         {
           "file": "query.ts",
-          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { asc, gt } from \"drizzle-orm\";\n\nimport { posts } from \"./schema\";\n\nconst first = await db.select().from(posts).orderBy(asc(posts.createdAt), asc(posts.id)).limit(2);\nconst last = first.at(-1);\n$.display(\"First page\", first);\n\nif (last) {\n  const second = await db.select().from(posts)\n    .where(gt(posts.createdAt, last.createdAt))\n    .orderBy(asc(posts.createdAt), asc(posts.id)).limit(2);\n  $.display(\"Timestamp-only cursor skips a tie\", second);\n}\n"
+          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { asc, gt } from \"drizzle-orm\";\n\nimport { posts } from \"./schema\";\n\nconst first = await db.select().from(posts).orderBy(asc(posts.createdAt), asc(posts.id)).limit(2);\nconst last = first.at(-1);\n\n$.display(\"First page\", first);\n\nif (last) {\n  const second = await db.select().from(posts)\n    .where(gt(posts.createdAt, last.createdAt))\n    .orderBy(asc(posts.createdAt), asc(posts.id)).limit(2);\n  $.display(\"Timestamp-only cursor skips a tie\", second);\n}\n"
         }
       ],
       "focus": {
         "file": "query.ts",
         "lines": [
-          10,
-          14
+          11,
+          15
         ]
       },
       "run": "required",
@@ -130,7 +130,7 @@
       "edits": [
         {
           "file": "query.ts",
-          "write": "import { getNextPage } from \"./pagination\";\n\nconst first = await getNextPage();\n$.display(\"Cursor page 1\", first);\n\nif (first.nextCursor) {\n  const second = await getNextPage({ after: first.nextCursor });\n  $.display(\"Cursor page 2\", second);\n\n  if (second.nextCursor) {\n    $.display(\"Cursor page 3\", await getNextPage({ after: second.nextCursor }));\n  }\n}\n"
+          "write": "import { getNextPage } from \"./pagination\";\n\nconst first = await getNextPage();\n\n$.display(\"Cursor page 1\", first);\n\nif (first.nextCursor) {\n  const second = await getNextPage({ after: first.nextCursor });\n  $.display(\"Cursor page 2\", second);\n\n  if (second.nextCursor) {\n    $.display(\"Cursor page 3\", await getNextPage({ after: second.nextCursor }));\n  }\n}\n"
         }
       ],
       "focus": {

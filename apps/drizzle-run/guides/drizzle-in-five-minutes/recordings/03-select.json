@@ -1,7 +1,7 @@
 {
   "recordingVersion": 1,
-  "snapshotDigest": "83912eecd38df3ddbf22c0ee921a019b50ec44a6fffb269698eca0f9f1fc20d4",
-  "recordedAt": "2026-11-04T09:08:54.109Z",
+  "snapshotDigest": "136572a93dbc7f867c093730de6d40eb8062f6bf925c7d7351860e2b93daecf9",
+  "recordedAt": "2026-11-04T13:46:27.436Z",
   "result": {
     "version": 1,
     "target": {
@@ -25,74 +25,74 @@
       {
         "phase": "validate",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:08:52.680Z",
-        "durationMs": 0.05500006675720215
+        "startedAt": "2026-11-04T13:46:25.013Z",
+        "durationMs": 0.09000003337860107
       },
       {
         "phase": "resolve",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:08:52.680Z",
+        "startedAt": "2026-11-04T13:46:25.013Z",
         "durationMs": 0.004999995231628418
       },
       {
         "phase": "load_artifacts",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:08:52.935Z",
-        "durationMs": 430.8799999952316
+        "startedAt": "2026-11-04T13:46:25.309Z",
+        "durationMs": 537.454999923706
       },
       {
         "phase": "compile",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:08:52.780Z",
-        "durationMs": 154.61000001430511
+        "startedAt": "2026-11-04T13:46:25.097Z",
+        "durationMs": 211.49000000953674
       },
       {
         "phase": "evaluate_schema",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:08:53.367Z",
-        "durationMs": 50.12000000476837
+        "startedAt": "2026-11-04T13:46:25.847Z",
+        "durationMs": 61.74000000953674
       },
       {
         "phase": "generate_bootstrap",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:08:53.417Z",
-        "durationMs": 20.050000071525574
+        "startedAt": "2026-11-04T13:46:25.909Z",
+        "durationMs": 23.68500006198883
       },
       {
         "phase": "apply_bootstrap",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:08:53.438Z",
-        "durationMs": 376.1399999856949
+        "startedAt": "2026-11-04T13:46:25.933Z",
+        "durationMs": 909.0299999713898
       },
       {
         "phase": "seed",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:08:53.813Z",
-        "durationMs": 13.034999966621399
+        "startedAt": "2026-11-04T13:46:26.842Z",
+        "durationMs": 22.59500002861023
       },
       {
         "phase": "run",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:08:53.827Z",
-        "durationMs": 30.06499993801117
+        "startedAt": "2026-11-04T13:46:26.865Z",
+        "durationMs": 38.43499994277954
       },
       {
         "phase": "inspect",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:08:53.857Z",
-        "durationMs": 52.97000002861023
+        "startedAt": "2026-11-04T13:46:26.903Z",
+        "durationMs": 71.0349999666214
       },
       {
         "phase": "plan",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:08:53.910Z",
-        "durationMs": 0.040000081062316895
+        "startedAt": "2026-11-04T13:46:26.974Z",
+        "durationMs": 0.05500006675720215
       },
       {
         "phase": "cleanup",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:08:53.910Z",
-        "durationMs": 2.4049999713897705
+        "startedAt": "2026-11-04T13:46:26.975Z",
+        "durationMs": 3
       }
     ],
     "diagnostics": [],
@@ -132,7 +132,7 @@
         "sql": "BEGIN",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 1.999755859375
+        "durationMs": 2.999755859375
       },
       {
         "sequence": 5,
@@ -142,7 +142,7 @@
         "sql": "CREATE TABLE \"posts\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"title\" text NOT NULL,\n\t\"author_id\" integer NOT NULL\n);\n",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 11.000244140625
+        "durationMs": 19
       },
       {
         "sequence": 6,
@@ -152,7 +152,7 @@
         "sql": "CREATE TABLE \"users\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"name\" text NOT NULL\n);\n",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 3
+        "durationMs": 4
       },
       {
         "sequence": 7,
@@ -162,7 +162,7 @@
         "sql": "ALTER TABLE \"posts\" ADD CONSTRAINT \"posts_author_id_users_id_fkey\" FOREIGN KEY (\"author_id\") REFERENCES \"users\"(\"id\");",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 4
+        "durationMs": 6
       },
       {
         "sequence": 8,
@@ -172,7 +172,7 @@
         "sql": "COMMIT",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 1
+        "durationMs": 2
       },
       {
         "sequence": 9,
@@ -208,8 +208,8 @@
         ],
         "outcome": "succeeded",
         "source": "seed.ts",
-        "line": 4,
-        "durationMs": 6,
+        "line": 5,
+        "durationMs": 10.000244140625,
         "rowCount": 3
       },
       {
@@ -246,8 +246,8 @@
         ],
         "outcome": "succeeded",
         "source": "seed.ts",
-        "line": 10,
-        "durationMs": 6.999755859375,
+        "line": 11,
+        "durationMs": 10,
         "rowCount": 3
       },
       {
@@ -264,8 +264,8 @@
         ],
         "outcome": "succeeded",
         "source": "query.ts",
-        "line": 6,
-        "durationMs": 5.000244140625,
+        "line": 7,
+        "durationMs": 8,
         "rowCount": 2
       }
     ],
@@ -310,7 +310,7 @@
           }
         ],
         "source": "query.ts",
-        "line": 12
+        "line": 13
       }
     ],
     "events": [
@@ -364,7 +364,7 @@
           "sql": "BEGIN",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 1.999755859375
+          "durationMs": 2.999755859375
         }
       },
       {
@@ -378,7 +378,7 @@
           "sql": "CREATE TABLE \"posts\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"title\" text NOT NULL,\n\t\"author_id\" integer NOT NULL\n);\n",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 11.000244140625
+          "durationMs": 19
         }
       },
       {
@@ -392,7 +392,7 @@
           "sql": "CREATE TABLE \"users\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"name\" text NOT NULL\n);\n",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 3
+          "durationMs": 4
         }
       },
       {
@@ -406,7 +406,7 @@
           "sql": "ALTER TABLE \"posts\" ADD CONSTRAINT \"posts_author_id_users_id_fkey\" FOREIGN KEY (\"author_id\") REFERENCES \"users\"(\"id\");",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 4
+          "durationMs": 6
         }
       },
       {
@@ -420,7 +420,7 @@
           "sql": "COMMIT",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 1
+          "durationMs": 2
         }
       },
       {
@@ -460,8 +460,8 @@
           ],
           "outcome": "succeeded",
           "source": "seed.ts",
-          "line": 4,
-          "durationMs": 6,
+          "line": 5,
+          "durationMs": 10.000244140625,
           "rowCount": 3
         }
       },
@@ -502,8 +502,8 @@
           ],
           "outcome": "succeeded",
           "source": "seed.ts",
-          "line": 10,
-          "durationMs": 6.999755859375,
+          "line": 11,
+          "durationMs": 10,
           "rowCount": 3
         }
       },
@@ -524,8 +524,8 @@
           ],
           "outcome": "succeeded",
           "source": "query.ts",
-          "line": 6,
-          "durationMs": 5.000244140625,
+          "line": 7,
+          "durationMs": 8,
           "rowCount": 2
         }
       },
@@ -568,7 +568,7 @@
             }
           ],
           "source": "query.ts",
-          "line": 12
+          "line": 13
         }
       }
     ],
@@ -582,19 +582,19 @@
       }
     },
     "timings": {
-      "total": 1236,
-      "validate": 0.05500006675720215,
+      "total": 1968,
+      "validate": 0.09000003337860107,
       "resolve": 0.004999995231628418,
-      "load_artifacts": 430.8799999952316,
-      "compile": 154.61000001430511,
-      "evaluate_schema": 50.12000000476837,
-      "generate_bootstrap": 20.050000071525574,
-      "apply_bootstrap": 376.1399999856949,
-      "seed": 13.034999966621399,
-      "run": 30.06499993801117,
-      "inspect": 52.97000002861023,
-      "plan": 0.040000081062316895,
-      "cleanup": 2.4049999713897705
+      "load_artifacts": 537.454999923706,
+      "compile": 211.49000000953674,
+      "evaluate_schema": 61.74000000953674,
+      "generate_bootstrap": 23.68500006198883,
+      "apply_bootstrap": 909.0299999713898,
+      "seed": 22.59500002861023,
+      "run": 38.43499994277954,
+      "inspect": 71.0349999666214,
+      "plan": 0.05500006675720215,
+      "cleanup": 3
     },
     "ok": true,
     "outcome": "succeeded"

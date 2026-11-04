@@ -1,7 +1,7 @@
 {
   "recordingVersion": 1,
-  "snapshotDigest": "b182c8bc2639bcc6b5fc29298075f99b0b33001384c079dc66067f6095c8f331",
-  "recordedAt": "2026-11-04T09:17:20.237Z",
+  "snapshotDigest": "56193210eaa2b8a09d16a2c955efecd8ba2ae26f4304b273a9ace48f95389849",
+  "recordedAt": "2026-11-04T13:48:09.559Z",
   "result": {
     "version": 1,
     "target": {
@@ -16,7 +16,7 @@
       "kitVersion": "1.0.0-rc.5"
     },
     "random": {
-      "effectiveSeed": 3456189721,
+      "effectiveSeed": 3998861289,
       "source": "generated",
       "derivation": "crypto-u32-v1",
       "generator": "mulberry32-v1"
@@ -25,74 +25,74 @@
       {
         "phase": "validate",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:17:18.836Z",
-        "durationMs": 0.02499997615814209
+        "startedAt": "2026-11-04T13:48:07.856Z",
+        "durationMs": 0.029999971389770508
       },
       {
         "phase": "resolve",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:17:18.836Z",
+        "startedAt": "2026-11-04T13:48:07.856Z",
         "durationMs": 0.004999995231628418
       },
       {
         "phase": "load_artifacts",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:17:19.068Z",
-        "durationMs": 445.4299999475479
+        "startedAt": "2026-11-04T13:48:08.162Z",
+        "durationMs": 541.6049998998642
       },
       {
         "phase": "compile",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:17:18.922Z",
-        "durationMs": 145.25999999046326
+        "startedAt": "2026-11-04T13:48:07.996Z",
+        "durationMs": 165.9299999475479
       },
       {
         "phase": "evaluate_schema",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:17:19.514Z",
-        "durationMs": 39.32000005245209
+        "startedAt": "2026-11-04T13:48:08.704Z",
+        "durationMs": 44.375
       },
       {
         "phase": "generate_bootstrap",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:17:19.553Z",
-        "durationMs": 1.899999976158142
+        "startedAt": "2026-11-04T13:48:08.749Z",
+        "durationMs": 2.2899999618530273
       },
       {
         "phase": "apply_bootstrap",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:17:19.555Z",
-        "durationMs": 73.60500001907349
+        "startedAt": "2026-11-04T13:48:08.752Z",
+        "durationMs": 301.5700000524521
       },
       {
         "phase": "seed",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:17:19.629Z",
-        "durationMs": 2.6649999618530273
+        "startedAt": "2026-11-04T13:48:09.053Z",
+        "durationMs": 3.6100000143051147
       },
       {
         "phase": "run",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:17:19.632Z",
-        "durationMs": 6.389999985694885
+        "startedAt": "2026-11-04T13:48:09.058Z",
+        "durationMs": 11.909999966621399
       },
       {
         "phase": "inspect",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:17:19.638Z",
-        "durationMs": 1.4200000762939453
+        "startedAt": "2026-11-04T13:48:09.068Z",
+        "durationMs": 2.180000066757202
       },
       {
         "phase": "plan",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:17:19.639Z",
-        "durationMs": 0.05500006675720215
+        "startedAt": "2026-11-04T13:48:09.071Z",
+        "durationMs": 0.06999993324279785
       },
       {
         "phase": "cleanup",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:17:19.640Z",
-        "durationMs": 0.8149999380111694
+        "startedAt": "2026-11-04T13:48:09.071Z",
+        "durationMs": 1.274999976158142
       }
     ],
     "diagnostics": [],
@@ -145,8 +145,8 @@
         ],
         "outcome": "succeeded",
         "source": "seed.ts",
-        "line": 4,
-        "durationMs": 2,
+        "line": 5,
+        "durationMs": 3,
         "rowCount": 1
       },
       {
@@ -180,11 +180,11 @@
         "outcome": "failed",
         "source": "query.ts",
         "line": 29,
-        "durationMs": 1,
+        "durationMs": 2,
         "error": {
           "name": "LibsqlError",
           "message": "SQLITE_CONSTRAINT: SQLITE_CONSTRAINT_CHECK: sqlite3 result code 275: CHECK constraint failed: stock_non_negative",
-          "stack": "LibsqlError: SQLITE_CONSTRAINT: SQLITE_CONSTRAINT_CHECK: sqlite3 result code 275: CHECK constraint failed: stock_non_negative\n    at withSqliteErrors (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:25239:13)\n    at executeStatement (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:25254:10)\n    at SqliteClient.execute (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:25410:16)\n    at Object.call (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:29150:58)\n    at Object.serveRequest [as serve] (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:29915:35)\n    at http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:29642:30\n    at Object.start (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:27939:47)\n    at Actor.start (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:26343:20)\n    at http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:26609:14\n    at Actor.update (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:26128:9)"
+          "stack": "LibsqlError: SQLITE_CONSTRAINT: SQLITE_CONSTRAINT_CHECK: sqlite3 result code 275: CHECK constraint failed: stock_non_negative\n    at withSqliteErrors (http://127.0.0.1:4273/runtime-assets/61714c3694be1b79bbd71d722810967cd22a6ba60a0a0f82206e6803b98467f0/quickjs/database-worker.js:25239:13)\n    at executeStatement (http://127.0.0.1:4273/runtime-assets/61714c3694be1b79bbd71d722810967cd22a6ba60a0a0f82206e6803b98467f0/quickjs/database-worker.js:25254:10)\n    at SqliteClient.execute (http://127.0.0.1:4273/runtime-assets/61714c3694be1b79bbd71d722810967cd22a6ba60a0a0f82206e6803b98467f0/quickjs/database-worker.js:25410:16)\n    at Object.call (http://127.0.0.1:4273/runtime-assets/61714c3694be1b79bbd71d722810967cd22a6ba60a0a0f82206e6803b98467f0/quickjs/database-worker.js:29150:58)\n    at Object.serveRequest [as serve] (http://127.0.0.1:4273/runtime-assets/61714c3694be1b79bbd71d722810967cd22a6ba60a0a0f82206e6803b98467f0/quickjs/database-worker.js:29915:35)\n    at http://127.0.0.1:4273/runtime-assets/61714c3694be1b79bbd71d722810967cd22a6ba60a0a0f82206e6803b98467f0/quickjs/database-worker.js:29642:30\n    at Object.start (http://127.0.0.1:4273/runtime-assets/61714c3694be1b79bbd71d722810967cd22a6ba60a0a0f82206e6803b98467f0/quickjs/database-worker.js:27939:47)\n    at Actor.start (http://127.0.0.1:4273/runtime-assets/61714c3694be1b79bbd71d722810967cd22a6ba60a0a0f82206e6803b98467f0/quickjs/database-worker.js:26343:20)\n    at http://127.0.0.1:4273/runtime-assets/61714c3694be1b79bbd71d722810967cd22a6ba60a0a0f82206e6803b98467f0/quickjs/database-worker.js:26609:14\n    at Actor.update (http://127.0.0.1:4273/runtime-assets/61714c3694be1b79bbd71d722810967cd22a6ba60a0a0f82206e6803b98467f0/quickjs/database-worker.js:26128:9)"
         }
       },
       {
@@ -206,11 +206,11 @@
         "outcome": "failed",
         "source": "query.ts",
         "line": 38,
-        "durationMs": 0.999755859375,
+        "durationMs": 1,
         "error": {
           "name": "LibsqlError",
           "message": "SQLITE_CONSTRAINT: SQLITE_CONSTRAINT_CHECK: sqlite3 result code 275: CHECK constraint failed: discount_in_range",
-          "stack": "LibsqlError: SQLITE_CONSTRAINT: SQLITE_CONSTRAINT_CHECK: sqlite3 result code 275: CHECK constraint failed: discount_in_range\n    at withSqliteErrors (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:25239:13)\n    at executeStatement (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:25254:10)\n    at SqliteClient.execute (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:25410:16)\n    at Object.call (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:29150:58)\n    at Object.serveRequest [as serve] (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:29915:35)\n    at http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:29642:30\n    at Object.start (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:27939:47)\n    at Actor.start (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:26343:20)\n    at http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:26609:14\n    at Actor.update (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:26128:9)"
+          "stack": "LibsqlError: SQLITE_CONSTRAINT: SQLITE_CONSTRAINT_CHECK: sqlite3 result code 275: CHECK constraint failed: discount_in_range\n    at withSqliteErrors (http://127.0.0.1:4273/runtime-assets/61714c3694be1b79bbd71d722810967cd22a6ba60a0a0f82206e6803b98467f0/quickjs/database-worker.js:25239:13)\n    at executeStatement (http://127.0.0.1:4273/runtime-assets/61714c3694be1b79bbd71d722810967cd22a6ba60a0a0f82206e6803b98467f0/quickjs/database-worker.js:25254:10)\n    at SqliteClient.execute (http://127.0.0.1:4273/runtime-assets/61714c3694be1b79bbd71d722810967cd22a6ba60a0a0f82206e6803b98467f0/quickjs/database-worker.js:25410:16)\n    at Object.call (http://127.0.0.1:4273/runtime-assets/61714c3694be1b79bbd71d722810967cd22a6ba60a0a0f82206e6803b98467f0/quickjs/database-worker.js:29150:58)\n    at Object.serveRequest [as serve] (http://127.0.0.1:4273/runtime-assets/61714c3694be1b79bbd71d722810967cd22a6ba60a0a0f82206e6803b98467f0/quickjs/database-worker.js:29915:35)\n    at http://127.0.0.1:4273/runtime-assets/61714c3694be1b79bbd71d722810967cd22a6ba60a0a0f82206e6803b98467f0/quickjs/database-worker.js:29642:30\n    at Object.start (http://127.0.0.1:4273/runtime-assets/61714c3694be1b79bbd71d722810967cd22a6ba60a0a0f82206e6803b98467f0/quickjs/database-worker.js:27939:47)\n    at Actor.start (http://127.0.0.1:4273/runtime-assets/61714c3694be1b79bbd71d722810967cd22a6ba60a0a0f82206e6803b98467f0/quickjs/database-worker.js:26343:20)\n    at http://127.0.0.1:4273/runtime-assets/61714c3694be1b79bbd71d722810967cd22a6ba60a0a0f82206e6803b98467f0/quickjs/database-worker.js:26609:14\n    at Actor.update (http://127.0.0.1:4273/runtime-assets/61714c3694be1b79bbd71d722810967cd22a6ba60a0a0f82206e6803b98467f0/quickjs/database-worker.js:26128:9)"
         }
       },
       {
@@ -248,7 +248,7 @@
         "outcome": "succeeded",
         "source": "query.ts",
         "line": 42,
-        "durationMs": 1.000244140625,
+        "durationMs": 0.999755859375,
         "rowCount": 1
       },
       {
@@ -261,7 +261,7 @@
         "outcome": "succeeded",
         "source": "query.ts",
         "line": 46,
-        "durationMs": 1,
+        "durationMs": 1.999755859375,
         "rowCount": 2
       }
     ],
@@ -433,8 +433,8 @@
           ],
           "outcome": "succeeded",
           "source": "seed.ts",
-          "line": 4,
-          "durationMs": 2,
+          "line": 5,
+          "durationMs": 3,
           "rowCount": 1
         }
       },
@@ -472,11 +472,11 @@
           "outcome": "failed",
           "source": "query.ts",
           "line": 29,
-          "durationMs": 1,
+          "durationMs": 2,
           "error": {
             "name": "LibsqlError",
             "message": "SQLITE_CONSTRAINT: SQLITE_CONSTRAINT_CHECK: sqlite3 result code 275: CHECK constraint failed: stock_non_negative",
-            "stack": "LibsqlError: SQLITE_CONSTRAINT: SQLITE_CONSTRAINT_CHECK: sqlite3 result code 275: CHECK constraint failed: stock_non_negative\n    at withSqliteErrors (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:25239:13)\n    at executeStatement (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:25254:10)\n    at SqliteClient.execute (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:25410:16)\n    at Object.call (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:29150:58)\n    at Object.serveRequest [as serve] (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:29915:35)\n    at http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:29642:30\n    at Object.start (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:27939:47)\n    at Actor.start (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:26343:20)\n    at http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:26609:14\n    at Actor.update (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:26128:9)"
+            "stack": "LibsqlError: SQLITE_CONSTRAINT: SQLITE_CONSTRAINT_CHECK: sqlite3 result code 275: CHECK constraint failed: stock_non_negative\n    at withSqliteErrors (http://127.0.0.1:4273/runtime-assets/61714c3694be1b79bbd71d722810967cd22a6ba60a0a0f82206e6803b98467f0/quickjs/database-worker.js:25239:13)\n    at executeStatement (http://127.0.0.1:4273/runtime-assets/61714c3694be1b79bbd71d722810967cd22a6ba60a0a0f82206e6803b98467f0/quickjs/database-worker.js:25254:10)\n    at SqliteClient.execute (http://127.0.0.1:4273/runtime-assets/61714c3694be1b79bbd71d722810967cd22a6ba60a0a0f82206e6803b98467f0/quickjs/database-worker.js:25410:16)\n    at Object.call (http://127.0.0.1:4273/runtime-assets/61714c3694be1b79bbd71d722810967cd22a6ba60a0a0f82206e6803b98467f0/quickjs/database-worker.js:29150:58)\n    at Object.serveRequest [as serve] (http://127.0.0.1:4273/runtime-assets/61714c3694be1b79bbd71d722810967cd22a6ba60a0a0f82206e6803b98467f0/quickjs/database-worker.js:29915:35)\n    at http://127.0.0.1:4273/runtime-assets/61714c3694be1b79bbd71d722810967cd22a6ba60a0a0f82206e6803b98467f0/quickjs/database-worker.js:29642:30\n    at Object.start (http://127.0.0.1:4273/runtime-assets/61714c3694be1b79bbd71d722810967cd22a6ba60a0a0f82206e6803b98467f0/quickjs/database-worker.js:27939:47)\n    at Actor.start (http://127.0.0.1:4273/runtime-assets/61714c3694be1b79bbd71d722810967cd22a6ba60a0a0f82206e6803b98467f0/quickjs/database-worker.js:26343:20)\n    at http://127.0.0.1:4273/runtime-assets/61714c3694be1b79bbd71d722810967cd22a6ba60a0a0f82206e6803b98467f0/quickjs/database-worker.js:26609:14\n    at Actor.update (http://127.0.0.1:4273/runtime-assets/61714c3694be1b79bbd71d722810967cd22a6ba60a0a0f82206e6803b98467f0/quickjs/database-worker.js:26128:9)"
           }
         }
       },
@@ -522,11 +522,11 @@
           "outcome": "failed",
           "source": "query.ts",
           "line": 38,
-          "durationMs": 0.999755859375,
+          "durationMs": 1,
           "error": {
             "name": "LibsqlError",
             "message": "SQLITE_CONSTRAINT: SQLITE_CONSTRAINT_CHECK: sqlite3 result code 275: CHECK constraint failed: discount_in_range",
-            "stack": "LibsqlError: SQLITE_CONSTRAINT: SQLITE_CONSTRAINT_CHECK: sqlite3 result code 275: CHECK constraint failed: discount_in_range\n    at withSqliteErrors (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:25239:13)\n    at executeStatement (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:25254:10)\n    at SqliteClient.execute (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:25410:16)\n    at Object.call (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:29150:58)\n    at Object.serveRequest [as serve] (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:29915:35)\n    at http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:29642:30\n    at Object.start (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:27939:47)\n    at Actor.start (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:26343:20)\n    at http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:26609:14\n    at Actor.update (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:26128:9)"
+            "stack": "LibsqlError: SQLITE_CONSTRAINT: SQLITE_CONSTRAINT_CHECK: sqlite3 result code 275: CHECK constraint failed: discount_in_range\n    at withSqliteErrors (http://127.0.0.1:4273/runtime-assets/61714c3694be1b79bbd71d722810967cd22a6ba60a0a0f82206e6803b98467f0/quickjs/database-worker.js:25239:13)\n    at executeStatement (http://127.0.0.1:4273/runtime-assets/61714c3694be1b79bbd71d722810967cd22a6ba60a0a0f82206e6803b98467f0/quickjs/database-worker.js:25254:10)\n    at SqliteClient.execute (http://127.0.0.1:4273/runtime-assets/61714c3694be1b79bbd71d722810967cd22a6ba60a0a0f82206e6803b98467f0/quickjs/database-worker.js:25410:16)\n    at Object.call (http://127.0.0.1:4273/runtime-assets/61714c3694be1b79bbd71d722810967cd22a6ba60a0a0f82206e6803b98467f0/quickjs/database-worker.js:29150:58)\n    at Object.serveRequest [as serve] (http://127.0.0.1:4273/runtime-assets/61714c3694be1b79bbd71d722810967cd22a6ba60a0a0f82206e6803b98467f0/quickjs/database-worker.js:29915:35)\n    at http://127.0.0.1:4273/runtime-assets/61714c3694be1b79bbd71d722810967cd22a6ba60a0a0f82206e6803b98467f0/quickjs/database-worker.js:29642:30\n    at Object.start (http://127.0.0.1:4273/runtime-assets/61714c3694be1b79bbd71d722810967cd22a6ba60a0a0f82206e6803b98467f0/quickjs/database-worker.js:27939:47)\n    at Actor.start (http://127.0.0.1:4273/runtime-assets/61714c3694be1b79bbd71d722810967cd22a6ba60a0a0f82206e6803b98467f0/quickjs/database-worker.js:26343:20)\n    at http://127.0.0.1:4273/runtime-assets/61714c3694be1b79bbd71d722810967cd22a6ba60a0a0f82206e6803b98467f0/quickjs/database-worker.js:26609:14\n    at Actor.update (http://127.0.0.1:4273/runtime-assets/61714c3694be1b79bbd71d722810967cd22a6ba60a0a0f82206e6803b98467f0/quickjs/database-worker.js:26128:9)"
           }
         }
       },
@@ -588,7 +588,7 @@
           "outcome": "succeeded",
           "source": "query.ts",
           "line": 42,
-          "durationMs": 1.000244140625,
+          "durationMs": 0.999755859375,
           "rowCount": 1
         }
       },
@@ -605,7 +605,7 @@
           "outcome": "succeeded",
           "source": "query.ts",
           "line": 46,
-          "durationMs": 1,
+          "durationMs": 1.999755859375,
           "rowCount": 2
         }
       },
@@ -694,19 +694,19 @@
       }
     },
     "timings": {
-      "total": 807,
-      "validate": 0.02499997615814209,
+      "total": 1221,
+      "validate": 0.029999971389770508,
       "resolve": 0.004999995231628418,
-      "load_artifacts": 445.4299999475479,
-      "compile": 145.25999999046326,
-      "evaluate_schema": 39.32000005245209,
-      "generate_bootstrap": 1.899999976158142,
-      "apply_bootstrap": 73.60500001907349,
-      "seed": 2.6649999618530273,
-      "run": 6.389999985694885,
-      "inspect": 1.4200000762939453,
-      "plan": 0.05500006675720215,
-      "cleanup": 0.8149999380111694
+      "load_artifacts": 541.6049998998642,
+      "compile": 165.9299999475479,
+      "evaluate_schema": 44.375,
+      "generate_bootstrap": 2.2899999618530273,
+      "apply_bootstrap": 301.5700000524521,
+      "seed": 3.6100000143051147,
+      "run": 11.909999966621399,
+      "inspect": 2.180000066757202,
+      "plan": 0.06999993324279785,
+      "cleanup": 1.274999976158142
     },
     "ok": true,
     "outcome": "succeeded"

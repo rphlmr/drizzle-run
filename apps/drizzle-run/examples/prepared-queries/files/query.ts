@@ -1,5 +1,6 @@
 import { db } from "@drizzle-run/runtime/context";
 import { eq } from "drizzle-orm";
+
 import { products } from "./schema";
 
 const category = "books";

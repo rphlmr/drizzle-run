@@ -5,6 +5,7 @@ import { readExampleFiles } from "../example-files.ts";
 import type { DrizzleRunGuideMeta, DrizzleRunStepMeta } from "../meta.ts";
 
 const insertQuery = `import { db } from "@drizzle-run/runtime/context";
+
 import { posts } from "./schema";
 
 // PostgreSQL generates the id; .returning() includes it in the inserted row.
@@ -18,6 +19,7 @@ $.display("Published post", published);
 
 const selectQuery = `import { desc, eq } from "drizzle-orm";
 import { db } from "@drizzle-run/runtime/context";
+
 import { posts } from "./schema";
 
 // Higher ids come first; an id is not a publication date.
@@ -32,6 +34,7 @@ $.display("Ada's posts", adaPosts);
 
 const joinQuery = `import { asc, eq } from "drizzle-orm";
 import { db } from "@drizzle-run/runtime/context";
+
 import { posts, users } from "./schema";
 
 // One row per user and post. Linus has no posts, so the left join keeps him with a null title.
@@ -87,6 +90,7 @@ $.display("Users with posts", usersWithPosts);
 
 const updateQuery = `import { asc, eq } from "drizzle-orm";
 import { db } from "@drizzle-run/runtime/context";
+
 import { posts } from "./schema";
 
 // Without .where(), an update or delete affects every row in the table.
@@ -100,6 +104,7 @@ $.display("Posts", await db.select().from(posts).orderBy(asc(posts.id)));
 
 const transactionQuery = `import { asc, eq, TransactionRollbackError } from "drizzle-orm";
 import { db } from "@drizzle-run/runtime/context";
+
 import { posts } from "./schema";
 
 // Roll back both changes, leaving the seeded posts untouched.
@@ -166,7 +171,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
       title: "Publish Ada's next post",
       body: "Use `.insert(posts).values()` to publish a post. You supply its title and Ada's user ID, `1`. The `serial` column generates the post ID.\n\n`.returning()` gives you an array of inserted rows, including generated values. Press **Run**: **Published post** contains one row with ID `4`.",
       edits: [{ file: "query.ts", write: insertQuery }],
-      focus: { file: "query.ts", lines: [5, 8] },
+      focus: { file: "query.ts", lines: [6, 9] },
       run: "required",
       highlight: { displays: ["Published post"] },
       links: [{ label: "Insert", href: "https://orm.drizzle.team/docs/insert" }],
@@ -182,7 +187,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
       title: "Find Ada's posts",
       body: "Select just `id` and `title`. `.where(eq(posts.authorId, 1))` keeps Ada's posts; `.orderBy(desc(posts.id))` puts higher IDs first.\n\nThis step replaces the insert with a select. Each run starts from the seed, so the post you inserted in step 2 is gone. Press **Run**: you get Notes, then Hello. Open **SQL** to inspect the selected columns, filter and ordering.",
       edits: [{ file: "query.ts", write: selectQuery }],
-      focus: { file: "query.ts", lines: [6, 10] },
+      focus: { file: "query.ts", lines: [7, 11] },
       run: "required",
       highlight: { displays: ["Ada's posts"] },
       links: [
@@ -227,7 +232,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
       body: "Back to one editor. `.update().set()` renames post `1`; `.delete()` removes post `3`. Each `.where()` selects a post by ID. `.returning()` gives back the changed rows.\n\n**Without .where(), an update or delete affects every row in the table.** In your own project, [Drizzle's ESLint plugin](https://orm.drizzle.team/docs/eslint-plugin) can flag missing filters. It cannot tell whether your filter selects the intended rows.\n\nPress **Run**: Hello becomes Hello, Drizzle; Ships is deleted; Notes stays.",
       merge: { keep: 0 },
       edits: [{ file: "query.ts", write: updateQuery }],
-      focus: { file: "query.ts", lines: [6, 7] },
+      focus: { file: "query.ts", lines: [7, 8] },
       run: "required",
       highlight: { displays: ["Renamed", "Deleted", "Posts"] },
       links: [
@@ -244,7 +249,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
       title: "Keep both changes or neither",
       body: "A **transaction** keeps a group of writes together: they all commit, or they are undone. Use `tx` for both writes inside `db.transaction`.\n\nThe first transaction renames Hello and deletes Ships, then calls `tx.rollback()`. That throws a rollback error, which we catch outside the transaction. Both changes are undone.\n\nThe second transaction repeats the same writes without rolling back. Press **Run**: **After rollback** has the original three posts; **After commit** has Hello, Drizzle and Notes.",
       edits: [{ file: "query.ts", write: transactionQuery }],
-      focus: { file: "query.ts", lines: [7, 11] },
+      focus: { file: "query.ts", lines: [8, 12] },
       run: "required",
       highlight: { displays: ["After commit", "After rollback"] },
       links: [
@@ -263,7 +268,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
       title: "Find Grace's posts yourself",
       body: "The editor is back to the filtered select, and the next run starts from the original seed. Choose **Finish guide** to unlock the editor.\n\nChange the author ID in `.where()` from `1` to `2`, change the display label to Grace's posts, then press **Run**. You should get one row: Ships, with ID `3`.\n\nUse **Fork to my projects** if you want to keep your changes. Next, explore [relational queries](https://orm.drizzle.team/docs/rqb) in more depth.",
       edits: [{ file: "query.ts", write: selectQuery }],
-      focus: { file: "query.ts", lines: [9, 9] },
+      focus: { file: "query.ts", lines: [10, 10] },
       run: "none",
       links: [{ label: "Relational queries", href: "https://orm.drizzle.team/docs/rqb" }],
       meta: {

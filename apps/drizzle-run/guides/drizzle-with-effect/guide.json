@@ -17,8 +17,8 @@
     "guestFlavor": "effect",
     "files": {
       "schema.ts": "import { integer, pgTable, serial, text } from \"drizzle-orm/pg-core\";\n\nexport const users = pgTable(\"users\", {\n  id: serial(\"id\").primaryKey(),\n  name: text(\"name\").notNull(),\n  email: text(\"email\").notNull().unique(),\n  credits: integer(\"credits\").notNull(),\n});\n",
-      "seed.ts": "import { db } from \"@drizzle-run/runtime/context\";\nimport { users } from \"./schema\";\n\nawait db.insert(users).values([\n  { name: \"Ada\", email: \"ada@example.com\", credits: 10 },\n  { name: \"Grace\", email: \"grace@example.com\", credits: 5 },\n]);\n",
-      "query.ts": "import { postgresConnection } from \"@drizzle-run/runtime/context\";\nimport * as PgClient from \"@effect/sql-pg/PgClient\";\nimport { asc } from \"drizzle-orm\";\nimport * as PgDrizzle from \"drizzle-orm/effect-postgres\";\nimport { Effect } from \"effect\";\nimport { users } from \"./schema\";\n\n// A program is a plan: nothing in it runs until Effect.runPromise below.\nconst program = Effect.gen(function* () {\n  // yield* works like await: it waits for the result and hands it back.\n  const db = yield* PgDrizzle.makeWithDefaults({ paramsInErrors: true });\n\n  return yield* db.select().from(users).orderBy(asc(users.id));\n});\n\n// The program needs a PostgreSQL client, and this layer is the one for Drizzle Run's database.\nconst DatabaseLive = PgClient.layerFrom(PgClient.makeClient(postgresConnection));\n\n$.display(\"Users\", await Effect.runPromise(program.pipe(Effect.provide(DatabaseLive))));\n"
+      "seed.ts": "import { db } from \"@drizzle-run/runtime/context\";\n\nimport { users } from \"./schema\";\n\nawait db.insert(users).values([\n  { name: \"Ada\", email: \"ada@example.com\", credits: 10 },\n  { name: \"Grace\", email: \"grace@example.com\", credits: 5 },\n]);\n",
+      "query.ts": "import { postgresConnection } from \"@drizzle-run/runtime/context\";\nimport * as PgClient from \"@effect/sql-pg/PgClient\";\nimport { asc } from \"drizzle-orm\";\nimport * as PgDrizzle from \"drizzle-orm/effect-postgres\";\nimport { Effect } from \"effect\";\n\nimport { users } from \"./schema\";\n\n// A program is a plan: nothing in it runs until Effect.runPromise below.\nconst program = Effect.gen(function* () {\n  // yield* works like await: it waits for the result and hands it back.\n  const db = yield* PgDrizzle.makeWithDefaults({ paramsInErrors: true });\n\n  return yield* db.select().from(users).orderBy(asc(users.id));\n});\n\n// The program needs a PostgreSQL client, and this layer is the one for Drizzle Run's database.\nconst DatabaseLive = PgClient.layerFrom(PgClient.makeClient(postgresConnection));\n\n$.display(\"Users\", await Effect.runPromise(program.pipe(Effect.provide(DatabaseLive))));\n"
     },
     "entrypoints": {
       "schema": "schema.ts",
@@ -36,8 +36,8 @@
       "focus": {
         "file": "query.ts",
         "lines": [
-          9,
-          19
+          10,
+          20
         ]
       },
       "run": "required",
@@ -86,8 +86,8 @@
       "focus": {
         "file": "query.ts",
         "lines": [
-          13,
-          17
+          14,
+          18
         ]
       },
       "run": "required",
@@ -150,8 +150,8 @@
       "focus": {
         "file": "query.ts",
         "lines": [
-          22,
-          41
+          23,
+          42
         ]
       },
       "run": "required",
@@ -200,8 +200,8 @@
       "focus": {
         "file": "query.ts",
         "lines": [
-          44,
-          56
+          45,
+          57
         ]
       },
       "run": "required",

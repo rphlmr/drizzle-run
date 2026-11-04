@@ -14,7 +14,7 @@
     },
     "files": {
       "schema.ts": "import { defineRelations } from \"drizzle-orm\";\nimport { integer, pgTable, serial, text } from \"drizzle-orm/pg-core\";\n\nexport const users = pgTable(\"users\", {\n  id: serial(\"id\").primaryKey(),\n  name: text(\"name\").notNull(),\n});\n\nexport const posts = pgTable(\"posts\", {\n  id: serial(\"id\").primaryKey(),\n  authorId: integer(\"author_id\").notNull().references(() => users.id),\n  title: text(\"title\").notNull(),\n});\n\n// Only db.query reads these relations; a select with a join names its join condition itself.\nexport const relations = defineRelations({ users, posts }, (r) => ({\n  users: {\n    posts: r.many.posts(),\n  },\n  posts: {\n    author: r.one.users({ from: r.posts.authorId, to: r.users.id }),\n  },\n}));\n",
-      "seed.ts": "import { db } from \"@drizzle-run/runtime/context\";\nimport { posts, users } from \"./schema\";\n\nconst [ada, grace] = await db\n  .insert(users)\n  .values([{ name: \"Ada\" }, { name: \"Grace\" }, { name: \"Linus\" }])\n  .returning();\n\nawait db.insert(posts).values([\n  { authorId: ada.id, title: \"Hello, Drizzle\" },\n  { authorId: ada.id, title: \"Joins without the boilerplate\" },\n  { authorId: grace.id, title: \"Types all the way down\" },\n]);\n"
+      "seed.ts": "import { db } from \"@drizzle-run/runtime/context\";\n\nimport { posts, users } from \"./schema\";\n\nconst [ada, grace] = await db\n  .insert(users)\n  .values([{ name: \"Ada\" }, { name: \"Grace\" }, { name: \"Linus\" }])\n  .returning();\n\nawait db.insert(posts).values([\n  { authorId: ada.id, title: \"Hello, Drizzle\" },\n  { authorId: ada.id, title: \"Joins without the boilerplate\" },\n  { authorId: grace.id, title: \"Types all the way down\" },\n]);\n"
     },
     "sides": [
       {
@@ -27,7 +27,7 @@
           "drizzle-kit": "1.0.0-rc.5"
         },
         "files": {
-          "query.ts": "import { db } from \"@drizzle-run/runtime/context\";\nimport { asc, eq } from \"drizzle-orm\";\nimport { posts, users } from \"./schema\";\n\n// One flat row per user and post. The left join keeps Linus, who has no posts, with a null title.\nconst rows = await db\n  .select({ userId: users.id, name: users.name, title: posts.title })\n  .from(users)\n  .leftJoin(posts, eq(posts.authorId, users.id))\n  .orderBy(asc(users.id), asc(posts.id));\n\n$.display(\"Joined rows\", rows);\n\n// Nesting is up to you: group the rows by user.\nconst authors = new Map<number, { name: string; posts: { title: string }[] }>();\n\nfor (const row of rows) {\n  const author = authors.get(row.userId) ?? { name: row.name, posts: [] };\n\n  if (row.title !== null) {\n    author.posts.push({ title: row.title });\n  }\n\n  authors.set(row.userId, author);\n}\n\n$.display(\"Authors with posts\", [...authors.values()]);\n"
+          "query.ts": "import { db } from \"@drizzle-run/runtime/context\";\nimport { asc, eq } from \"drizzle-orm\";\n\nimport { posts, users } from \"./schema\";\n\n// One flat row per user and post. The left join keeps Linus, who has no posts, with a null title.\nconst rows = await db\n  .select({ userId: users.id, name: users.name, title: posts.title })\n  .from(users)\n  .leftJoin(posts, eq(posts.authorId, users.id))\n  .orderBy(asc(users.id), asc(posts.id));\n\n$.display(\"Joined rows\", rows);\n\n// Nesting is up to you: group the rows by user.\nconst authors = new Map<number, { name: string; posts: { title: string }[] }>();\n\nfor (const row of rows) {\n  const author = authors.get(row.userId) ?? { name: row.name, posts: [] };\n\n  if (row.title !== null) {\n    author.posts.push({ title: row.title });\n  }\n\n  authors.set(row.userId, author);\n}\n\n$.display(\"Authors with posts\", [...authors.values()]);\n"
         }
       },
       {
@@ -55,15 +55,15 @@
       "edits": [
         {
           "file": "query.ts",
-          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { asc, eq } from \"drizzle-orm\";\nimport { posts, users } from \"./schema\";\n\n// One flat row per user and post. The left join keeps Linus, who has no posts, with a null title.\nconst rows = await db\n  .select({ userId: users.id, name: users.name, title: posts.title })\n  .from(users)\n  .leftJoin(posts, eq(posts.authorId, users.id))\n  .orderBy(asc(users.id), asc(posts.id));\n\n$.display(\"Joined rows\", rows);\n\n",
+          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { asc, eq } from \"drizzle-orm\";\n\nimport { posts, users } from \"./schema\";\n\n// One flat row per user and post. The left join keeps Linus, who has no posts, with a null title.\nconst rows = await db\n  .select({ userId: users.id, name: users.name, title: posts.title })\n  .from(users)\n  .leftJoin(posts, eq(posts.authorId, users.id))\n  .orderBy(asc(users.id), asc(posts.id));\n\n$.display(\"Joined rows\", rows);\n\n",
           "side": 0
         }
       ],
       "focus": {
         "file": "query.ts",
         "lines": [
-          7,
-          11
+          8,
+          12
         ],
         "side": 0
       },
@@ -117,8 +117,8 @@
       "focus": {
         "file": "query.ts",
         "lines": [
-          7,
-          11
+          8,
+          12
         ],
         "side": 0
       },
@@ -142,15 +142,15 @@
       "edits": [
         {
           "file": "query.ts",
-          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { asc, eq } from \"drizzle-orm\";\nimport { posts, users } from \"./schema\";\n\n// One flat row per user and post. The left join keeps Linus, who has no posts, with a null title.\nconst rows = await db\n  .select({ userId: users.id, name: users.name, title: posts.title })\n  .from(users)\n  .leftJoin(posts, eq(posts.authorId, users.id))\n  .orderBy(asc(users.id), asc(posts.id));\n\n$.display(\"Joined rows\", rows);\n\n// Nesting is up to you: group the rows by user.\nconst authors = new Map<number, { name: string; posts: { title: string }[] }>();\n\nfor (const row of rows) {\n  const author = authors.get(row.userId) ?? { name: row.name, posts: [] };\n\n  if (row.title !== null) {\n    author.posts.push({ title: row.title });\n  }\n\n  authors.set(row.userId, author);\n}\n\n$.display(\"Authors with posts\", [...authors.values()]);\n",
+          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { asc, eq } from \"drizzle-orm\";\n\nimport { posts, users } from \"./schema\";\n\n// One flat row per user and post. The left join keeps Linus, who has no posts, with a null title.\nconst rows = await db\n  .select({ userId: users.id, name: users.name, title: posts.title })\n  .from(users)\n  .leftJoin(posts, eq(posts.authorId, users.id))\n  .orderBy(asc(users.id), asc(posts.id));\n\n$.display(\"Joined rows\", rows);\n\n// Nesting is up to you: group the rows by user.\nconst authors = new Map<number, { name: string; posts: { title: string }[] }>();\n\nfor (const row of rows) {\n  const author = authors.get(row.userId) ?? { name: row.name, posts: [] };\n\n  if (row.title !== null) {\n    author.posts.push({ title: row.title });\n  }\n\n  authors.set(row.userId, author);\n}\n\n$.display(\"Authors with posts\", [...authors.values()]);\n",
           "side": 0
         }
       ],
       "focus": {
         "file": "query.ts",
         "lines": [
-          15,
-          27
+          16,
+          28
         ],
         "side": 0
       },

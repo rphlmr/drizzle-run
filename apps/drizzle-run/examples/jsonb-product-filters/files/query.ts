@@ -1,5 +1,6 @@
 import { db } from "@drizzle-run/runtime/context";
 import { sql } from "drizzle-orm";
+
 import { products } from "./schema";
 
 // -> keeps a JSON value; ->> returns text. Missing paths return SQL NULL.

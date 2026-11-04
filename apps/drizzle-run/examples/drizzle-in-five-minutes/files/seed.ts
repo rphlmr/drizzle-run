@@ -1,4 +1,5 @@
 import { db } from "@drizzle-run/runtime/context";
+
 import { posts, users } from "./schema";
 
 await db.insert(users).values([

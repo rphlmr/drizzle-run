@@ -16,8 +16,8 @@
     },
     "files": {
       "schema.ts": "import { boolean, integer, pgTable, text } from \"drizzle-orm/pg-core\";\n\nexport const authors = pgTable(\"authors\", {\n  id: integer(\"id\").primaryKey(),\n  name: text(\"name\").notNull(),\n});\n\nexport const books = pgTable(\"books\", {\n  id: integer(\"id\").primaryKey(),\n  authorId: integer(\"author_id\").references(() => authors.id),\n  title: text(\"title\").notNull(),\n  published: boolean(\"published\").notNull().default(false),\n});\n",
-      "seed.ts": "import { db } from \"@drizzle-run/runtime/context\";\nimport { authors, books } from \"./schema\";\n\nawait db.insert(authors).values([\n  { id: 1, name: \"Ada\" },\n  { id: 2, name: \"Grace\" },\n  { id: 3, name: \"Linus\" },\n]);\nawait db.insert(books).values([\n  { id: 1, authorId: 1, title: \"Types in practice\", published: true },\n  { id: 2, authorId: 1, title: \"Draft notes\", published: false },\n  { id: 3, authorId: 2, title: \"Compilers\", published: false },\n  { id: 4, authorId: null, title: \"Anonymous tale\", published: true },\n]);\n",
-      "query.ts": "import { db } from \"@drizzle-run/runtime/context\";\nimport { eq } from \"drizzle-orm\";\nimport { authors, books } from \"./schema\";\n\nconst rows = await db\n  .select({ author: authors.name, title: books.title })\n  .from(authors)\n  .innerJoin(books, eq(books.authorId, authors.id))\n  .orderBy(authors.id, books.id);\n\n$.display(\"Matching authors and books\", rows);\n"
+      "seed.ts": "import { db } from \"@drizzle-run/runtime/context\";\n\nimport { authors, books } from \"./schema\";\n\nawait db.insert(authors).values([\n  { id: 1, name: \"Ada\" },\n  { id: 2, name: \"Grace\" },\n  { id: 3, name: \"Linus\" },\n]);\nawait db.insert(books).values([\n  { id: 1, authorId: 1, title: \"Types in practice\", published: true },\n  { id: 2, authorId: 1, title: \"Draft notes\", published: false },\n  { id: 3, authorId: 2, title: \"Compilers\", published: false },\n  { id: 4, authorId: null, title: \"Anonymous tale\", published: true },\n]);\n",
+      "query.ts": "import { db } from \"@drizzle-run/runtime/context\";\nimport { eq } from \"drizzle-orm\";\n\nimport { authors, books } from \"./schema\";\n\nconst rows = await db\n  .select({ author: authors.name, title: books.title })\n  .from(authors)\n  .innerJoin(books, eq(books.authorId, authors.id))\n  .orderBy(authors.id, books.id);\n\n$.display(\"Matching authors and books\", rows);\n"
     },
     "entrypoints": {
       "schema": "schema.ts",
@@ -35,8 +35,8 @@
       "focus": {
         "file": "query.ts",
         "lines": [
-          5,
-          9
+          6,
+          10
         ]
       },
       "run": "required",
@@ -65,14 +65,14 @@
       "edits": [
         {
           "file": "query.ts",
-          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { and, eq } from \"drizzle-orm\";\nimport { authors, books } from \"./schema\";\n\nconst rows = await db\n  .select({ author: authors.name, title: books.title })\n  .from(authors)\n  .leftJoin(books, eq(books.authorId, authors.id))\n  .orderBy(authors.id, books.id);\n\n$.display(\"Every author\", rows);\n"
+          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { and, eq } from \"drizzle-orm\";\n\nimport { authors, books } from \"./schema\";\n\nconst rows = await db\n  .select({ author: authors.name, title: books.title })\n  .from(authors)\n  .leftJoin(books, eq(books.authorId, authors.id))\n  .orderBy(authors.id, books.id);\n\n$.display(\"Every author\", rows);\n"
         }
       ],
       "focus": {
         "file": "query.ts",
         "lines": [
-          5,
-          9
+          6,
+          10
         ]
       },
       "run": "required",
@@ -101,14 +101,14 @@
       "edits": [
         {
           "file": "query.ts",
-          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { and, eq } from \"drizzle-orm\";\nimport { authors, books } from \"./schema\";\n\nconst rows = await db\n  .select({ author: authors.name, title: books.title })\n  .from(authors)\n  .leftJoin(books, eq(books.authorId, authors.id))\n  .where(eq(books.published, true))\n  .orderBy(authors.id, books.id);\n\n$.display(\"Published books, filtered after the join\", rows);\n"
+          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { and, eq } from \"drizzle-orm\";\n\nimport { authors, books } from \"./schema\";\n\nconst rows = await db\n  .select({ author: authors.name, title: books.title })\n  .from(authors)\n  .leftJoin(books, eq(books.authorId, authors.id))\n  .where(eq(books.published, true))\n  .orderBy(authors.id, books.id);\n\n$.display(\"Published books, filtered after the join\", rows);\n"
         }
       ],
       "focus": {
         "file": "query.ts",
         "lines": [
-          5,
-          10
+          6,
+          11
         ]
       },
       "run": "required",
@@ -137,14 +137,14 @@
       "edits": [
         {
           "file": "query.ts",
-          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { and, eq } from \"drizzle-orm\";\nimport { authors, books } from \"./schema\";\n\nconst rows = await db\n  .select({ author: authors.name, title: books.title })\n  .from(authors)\n  .leftJoin(books, and(eq(books.authorId, authors.id), eq(books.published, true)))\n  .orderBy(authors.id, books.id);\n\n$.display(\"Every author, with published books\", rows);\n"
+          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { and, eq } from \"drizzle-orm\";\n\nimport { authors, books } from \"./schema\";\n\nconst rows = await db\n  .select({ author: authors.name, title: books.title })\n  .from(authors)\n  .leftJoin(books, and(eq(books.authorId, authors.id), eq(books.published, true)))\n  .orderBy(authors.id, books.id);\n\n$.display(\"Every author, with published books\", rows);\n"
         }
       ],
       "focus": {
         "file": "query.ts",
         "lines": [
-          5,
-          9
+          6,
+          10
         ]
       },
       "run": "required",
@@ -173,14 +173,14 @@
       "edits": [
         {
           "file": "query.ts",
-          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { and, eq } from \"drizzle-orm\";\nimport { authors, books } from \"./schema\";\n\nconst everyBook = await db\n  .select({ author: authors.name, title: books.title })\n  .from(authors)\n  .rightJoin(books, eq(books.authorId, authors.id))\n  .orderBy(authors.id, books.id);\n\n$.display(\"Right join keeps every book\", everyBook);\n\nconst bothSides = await db\n  .select({ author: authors.name, title: books.title })\n  .from(authors)\n  .fullJoin(books, eq(books.authorId, authors.id))\n  .orderBy(authors.id, books.id);\n\n$.display(\"Full join keeps both sides\", bothSides);\n"
+          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { and, eq } from \"drizzle-orm\";\n\nimport { authors, books } from \"./schema\";\n\nconst everyBook = await db\n  .select({ author: authors.name, title: books.title })\n  .from(authors)\n  .rightJoin(books, eq(books.authorId, authors.id))\n  .orderBy(authors.id, books.id);\n\n$.display(\"Right join keeps every book\", everyBook);\n\nconst bothSides = await db\n  .select({ author: authors.name, title: books.title })\n  .from(authors)\n  .fullJoin(books, eq(books.authorId, authors.id))\n  .orderBy(authors.id, books.id);\n\n$.display(\"Full join keeps both sides\", bothSides);\n"
         }
       ],
       "focus": {
         "file": "query.ts",
         "lines": [
-          5,
-          17
+          6,
+          18
         ]
       },
       "run": "required",
@@ -210,14 +210,14 @@
       "edits": [
         {
           "file": "query.ts",
-          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { and, eq } from \"drizzle-orm\";\nimport { authors, books } from \"./schema\";\n\nconst rows = await db\n  .select({ author: authors.name, title: books.title })\n  .from(authors)\n  .crossJoin(books)\n  .orderBy(authors.id, books.id);\n\n$.display(\"Every possible author and book pair\", rows);\n"
+          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { and, eq } from \"drizzle-orm\";\n\nimport { authors, books } from \"./schema\";\n\nconst rows = await db\n  .select({ author: authors.name, title: books.title })\n  .from(authors)\n  .crossJoin(books)\n  .orderBy(authors.id, books.id);\n\n$.display(\"Every possible author and book pair\", rows);\n"
         }
       ],
       "focus": {
         "file": "query.ts",
         "lines": [
-          5,
-          9
+          6,
+          10
         ]
       },
       "run": "required",

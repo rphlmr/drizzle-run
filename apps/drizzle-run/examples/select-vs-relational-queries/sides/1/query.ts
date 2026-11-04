@@ -1,5 +1,6 @@
 import { db } from "@drizzle-run/runtime/context";
 import { asc, eq } from "drizzle-orm";
+
 import { posts, users } from "./schema";
 
 // One flat row per user and post. The left join keeps Linus, who has no posts, with a null title.

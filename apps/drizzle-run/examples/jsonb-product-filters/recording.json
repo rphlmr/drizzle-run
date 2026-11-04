@@ -1,7 +1,7 @@
 {
   "recordingVersion": 1,
-  "snapshotDigest": "30819fe65a4bab9600fad8dc3f2dacd79c37ad4eb1b8d02a1ac8bb0e4cccc3a3",
-  "recordedAt": "2026-11-04T09:12:24.042Z",
+  "snapshotDigest": "bf3b08575363cc10205d515b1eec4c8ad346df928b8dfc6e2a0924445882984f",
+  "recordedAt": "2026-11-04T13:47:59.298Z",
   "result": {
     "version": 1,
     "target": {
@@ -16,7 +16,7 @@
       "kitVersion": "1.0.0-rc.5"
     },
     "random": {
-      "effectiveSeed": 2471070949,
+      "effectiveSeed": 3810129208,
       "source": "generated",
       "derivation": "crypto-u32-v1",
       "generator": "mulberry32-v1"
@@ -25,74 +25,74 @@
       {
         "phase": "validate",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:12:22.605Z",
-        "durationMs": 0.03500008583068848
+        "startedAt": "2026-11-04T13:47:56.475Z",
+        "durationMs": 0.05000007152557373
       },
       {
         "phase": "resolve",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:12:22.605Z",
+        "startedAt": "2026-11-04T13:47:56.475Z",
         "durationMs": 0.004999995231628418
       },
       {
         "phase": "load_artifacts",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:12:22.851Z",
-        "durationMs": 443.4649999141693
+        "startedAt": "2026-11-04T13:47:56.728Z",
+        "durationMs": 601.6150000095367
       },
       {
         "phase": "compile",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:12:22.695Z",
-        "durationMs": 155.32500004768372
+        "startedAt": "2026-11-04T13:47:56.543Z",
+        "durationMs": 184.34500002861023
       },
       {
         "phase": "evaluate_schema",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:12:23.295Z",
-        "durationMs": 50.295000076293945
+        "startedAt": "2026-11-04T13:47:57.330Z",
+        "durationMs": 58.09999990463257
       },
       {
         "phase": "generate_bootstrap",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:12:23.345Z",
-        "durationMs": 19.75499999523163
+        "startedAt": "2026-11-04T13:47:57.389Z",
+        "durationMs": 26.25499999523163
       },
       {
         "phase": "apply_bootstrap",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:12:23.366Z",
-        "durationMs": 373.10000002384186
+        "startedAt": "2026-11-04T13:47:57.416Z",
+        "durationMs": 1385.5599999427795
       },
       {
         "phase": "seed",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:12:23.738Z",
-        "durationMs": 7.230000019073486
+        "startedAt": "2026-11-04T13:47:58.801Z",
+        "durationMs": 12.190000057220459
       },
       {
         "phase": "run",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:12:23.747Z",
-        "durationMs": 39.69500005245209
+        "startedAt": "2026-11-04T13:47:58.815Z",
+        "durationMs": 60.68499994277954
       },
       {
         "phase": "inspect",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:12:23.785Z",
-        "durationMs": 51.77500009536743
+        "startedAt": "2026-11-04T13:47:58.873Z",
+        "durationMs": 85.80000007152557
       },
       {
         "phase": "plan",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:12:23.837Z",
-        "durationMs": 0.040000081062316895
+        "startedAt": "2026-11-04T13:47:58.960Z",
+        "durationMs": 0.06499993801116943
       },
       {
         "phase": "cleanup",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:12:23.838Z",
-        "durationMs": 2.065000057220459
+        "startedAt": "2026-11-04T13:47:58.960Z",
+        "durationMs": 6.975000023841858
       }
     ],
     "diagnostics": [],
@@ -114,7 +114,7 @@
         "sql": "BEGIN",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 1
+        "durationMs": 2.000244140625
       },
       {
         "sequence": 3,
@@ -124,7 +124,7 @@
         "sql": "CREATE TABLE \"products\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"attributes\" jsonb DEFAULT '{}' NOT NULL\n);\n",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 9.999755859375
+        "durationMs": 16
       },
       {
         "sequence": 4,
@@ -134,7 +134,7 @@
         "sql": "COMMIT",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 1
+        "durationMs": 1.999755859375
       },
       {
         "sequence": 5,
@@ -284,8 +284,8 @@
         ],
         "outcome": "succeeded",
         "source": "seed.ts",
-        "line": 4,
-        "durationMs": 6.000244140625,
+        "line": 5,
+        "durationMs": 11,
         "rowCount": 5
       },
       {
@@ -297,8 +297,8 @@
         "parameters": [],
         "outcome": "succeeded",
         "source": "query.ts",
-        "line": 6,
-        "durationMs": 4,
+        "line": 7,
+        "durationMs": 4.999755859375,
         "rowCount": 5
       },
       {
@@ -315,8 +315,8 @@
         ],
         "outcome": "succeeded",
         "source": "query.ts",
-        "line": 20,
-        "durationMs": 3.99951171875,
+        "line": 21,
+        "durationMs": 8,
         "rowCount": 1
       },
       {
@@ -333,8 +333,8 @@
         ],
         "outcome": "succeeded",
         "source": "query.ts",
-        "line": 29,
-        "durationMs": 4.00048828125,
+        "line": 30,
+        "durationMs": 7,
         "rowCount": 2
       },
       {
@@ -346,8 +346,8 @@
         "parameters": [],
         "outcome": "succeeded",
         "source": "query.ts",
-        "line": 38,
-        "durationMs": 0.999755859375,
+        "line": 39,
+        "durationMs": 2.000244140625,
         "rowCount": 5
       }
     ],
@@ -486,7 +486,7 @@
           }
         ],
         "source": "query.ts",
-        "line": 16
+        "line": 17
       },
       {
         "label": "Blue products available in M",
@@ -542,7 +542,7 @@
           }
         ],
         "source": "query.ts",
-        "line": 26
+        "line": 27
       },
       {
         "label": "Products under 300 grams",
@@ -572,7 +572,7 @@
           }
         ],
         "source": "query.ts",
-        "line": 35
+        "line": 36
       },
       {
         "label": "Missing color versus JSON null",
@@ -689,7 +689,7 @@
           }
         ],
         "source": "query.ts",
-        "line": 48
+        "line": 49
       }
     ],
     "events": [
@@ -717,7 +717,7 @@
           "sql": "BEGIN",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 1
+          "durationMs": 2.000244140625
         }
       },
       {
@@ -731,7 +731,7 @@
           "sql": "CREATE TABLE \"products\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"attributes\" jsonb DEFAULT '{}' NOT NULL\n);\n",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 9.999755859375
+          "durationMs": 16
         }
       },
       {
@@ -745,7 +745,7 @@
           "sql": "COMMIT",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 1
+          "durationMs": 1.999755859375
         }
       },
       {
@@ -899,8 +899,8 @@
           ],
           "outcome": "succeeded",
           "source": "seed.ts",
-          "line": 4,
-          "durationMs": 6.000244140625,
+          "line": 5,
+          "durationMs": 11,
           "rowCount": 5
         }
       },
@@ -916,8 +916,8 @@
           "parameters": [],
           "outcome": "succeeded",
           "source": "query.ts",
-          "line": 6,
-          "durationMs": 4,
+          "line": 7,
+          "durationMs": 4.999755859375,
           "rowCount": 5
         }
       },
@@ -1054,7 +1054,7 @@
             }
           ],
           "source": "query.ts",
-          "line": 16
+          "line": 17
         }
       },
       {
@@ -1074,8 +1074,8 @@
           ],
           "outcome": "succeeded",
           "source": "query.ts",
-          "line": 20,
-          "durationMs": 3.99951171875,
+          "line": 21,
+          "durationMs": 8,
           "rowCount": 1
         }
       },
@@ -1136,7 +1136,7 @@
             }
           ],
           "source": "query.ts",
-          "line": 26
+          "line": 27
         }
       },
       {
@@ -1156,8 +1156,8 @@
           ],
           "outcome": "succeeded",
           "source": "query.ts",
-          "line": 29,
-          "durationMs": 4.00048828125,
+          "line": 30,
+          "durationMs": 7,
           "rowCount": 2
         }
       },
@@ -1192,7 +1192,7 @@
             }
           ],
           "source": "query.ts",
-          "line": 35
+          "line": 36
         }
       },
       {
@@ -1207,8 +1207,8 @@
           "parameters": [],
           "outcome": "succeeded",
           "source": "query.ts",
-          "line": 38,
-          "durationMs": 0.999755859375,
+          "line": 39,
+          "durationMs": 2.000244140625,
           "rowCount": 5
         }
       },
@@ -1330,7 +1330,7 @@
             }
           ],
           "source": "query.ts",
-          "line": 48
+          "line": 49
         }
       }
     ],
@@ -1344,19 +1344,19 @@
       }
     },
     "timings": {
-      "total": 1238,
-      "validate": 0.03500008583068848,
+      "total": 2496,
+      "validate": 0.05000007152557373,
       "resolve": 0.004999995231628418,
-      "load_artifacts": 443.4649999141693,
-      "compile": 155.32500004768372,
-      "evaluate_schema": 50.295000076293945,
-      "generate_bootstrap": 19.75499999523163,
-      "apply_bootstrap": 373.10000002384186,
-      "seed": 7.230000019073486,
-      "run": 39.69500005245209,
-      "inspect": 51.77500009536743,
-      "plan": 0.040000081062316895,
-      "cleanup": 2.065000057220459
+      "load_artifacts": 601.6150000095367,
+      "compile": 184.34500002861023,
+      "evaluate_schema": 58.09999990463257,
+      "generate_bootstrap": 26.25499999523163,
+      "apply_bootstrap": 1385.5599999427795,
+      "seed": 12.190000057220459,
+      "run": 60.68499994277954,
+      "inspect": 85.80000007152557,
+      "plan": 0.06499993801116943,
+      "cleanup": 6.975000023841858
     },
     "ok": true,
     "outcome": "succeeded"

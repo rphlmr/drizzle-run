@@ -16,8 +16,8 @@
     },
     "files": {
       "schema.ts": "import { integer, pgTable, text } from \"drizzle-orm/pg-core\";\n\nexport const products = pgTable(\"products\", {\n  id: integer(\"id\").primaryKey(),\n  name: text(\"name\").notNull(),\n  category: text(\"category\").notNull(),\n  priceCents: integer(\"price_cents\").notNull(),\n});\n",
-      "seed.ts": "import { db } from \"@drizzle-run/runtime/context\";\nimport { products } from \"./schema\";\n\nawait db.insert(products).values([\n  { id: 1, name: \"SQL handbook\", category: \"books\", priceCents: 2500 },\n  { id: 2, name: \"Pocket notes\", category: \"books\", priceCents: 800 },\n  { id: 3, name: \"Query notebook\", category: \"books\", priceCents: 1200 },\n  { id: 4, name: \"Debugging kit\", category: \"tools\", priceCents: 4500 },\n]);\n",
-      "query.ts": "import { db } from \"@drizzle-run/runtime/context\";\nimport { eq } from \"drizzle-orm\";\nimport { products } from \"./schema\";\n\nconst category = \"books\";\nconst books = await db\n  .select()\n  .from(products)\n  .where(eq(products.category, category))\n  .orderBy(products.priceCents, products.id);\n\n$.display(\"Books\", books);\n"
+      "seed.ts": "import { db } from \"@drizzle-run/runtime/context\";\n\nimport { products } from \"./schema\";\n\nawait db.insert(products).values([\n  { id: 1, name: \"SQL handbook\", category: \"books\", priceCents: 2500 },\n  { id: 2, name: \"Pocket notes\", category: \"books\", priceCents: 800 },\n  { id: 3, name: \"Query notebook\", category: \"books\", priceCents: 1200 },\n  { id: 4, name: \"Debugging kit\", category: \"tools\", priceCents: 4500 },\n]);\n",
+      "query.ts": "import { db } from \"@drizzle-run/runtime/context\";\nimport { eq } from \"drizzle-orm\";\n\nimport { products } from \"./schema\";\n\nconst category = \"books\";\nconst books = await db\n  .select()\n  .from(products)\n  .where(eq(products.category, category))\n  .orderBy(products.priceCents, products.id);\n\n$.display(\"Books\", books);\n"
     },
     "entrypoints": {
       "schema": "schema.ts",
@@ -35,8 +35,8 @@
       "focus": {
         "file": "query.ts",
         "lines": [
-          6,
-          12
+          7,
+          13
         ]
       },
       "run": "required",
@@ -65,14 +65,14 @@
       "edits": [
         {
           "file": "query.ts",
-          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { eq, sql } from \"drizzle-orm\";\nimport { products } from \"./schema\";\n\nconst byCategory = db\n  .select()\n  .from(products)\n  .where(eq(products.category, sql.placeholder(\"category\")))\n  .orderBy(products.priceCents, products.id)\n  .prepare(\"products_by_category\");\n\n$.display(\"Books\", await byCategory.execute({ category: \"books\" }));\n$.display(\"Tools\", await byCategory.execute({ category: \"tools\" }));\n"
+          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { eq, sql } from \"drizzle-orm\";\n\nimport { products } from \"./schema\";\n\nconst byCategory = db\n  .select()\n  .from(products)\n  .where(eq(products.category, sql.placeholder(\"category\")))\n  .orderBy(products.priceCents, products.id)\n  .prepare(\"products_by_category\");\n\n$.display(\"Books\", await byCategory.execute({ category: \"books\" }));\n$.display(\"Tools\", await byCategory.execute({ category: \"tools\" }));\n"
         }
       ],
       "focus": {
         "file": "query.ts",
         "lines": [
-          5,
-          13
+          6,
+          14
         ]
       },
       "run": "required",
@@ -102,14 +102,14 @@
       "edits": [
         {
           "file": "query.ts",
-          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { and, eq, gte, sql } from \"drizzle-orm\";\nimport { products } from \"./schema\";\n\n// Prepare once, then execute with different values. The sort order and selected columns stay fixed.\nconst searchProducts = db\n  .select()\n  .from(products)\n  .where(\n    and(eq(products.category, sql.placeholder(\"category\")), gte(products.priceCents, sql.placeholder(\"minimumCents\"))),\n  )\n  .orderBy(products.priceCents, products.id)\n  .limit(sql.placeholder(\"pageSize\"))\n  .prepare(\"product_search\");\n\n// Validate external input before execute: these local values are already known.\n$.display(\n  \"First book at or above 1000 cents\",\n  await searchProducts.execute({\n    category: \"books\",\n    minimumCents: 1000,\n    pageSize: 1,\n  }),\n);\n$.display(\n  \"Two books at or above 1000 cents\",\n  await searchProducts.execute({\n    category: \"books\",\n    minimumCents: 1000,\n    pageSize: 2,\n  }),\n);\n$.display(\n  \"Tools under the same query shape\",\n  await searchProducts.execute({\n    category: \"tools\",\n    minimumCents: 1000,\n    pageSize: 2,\n  }),\n);\n"
+          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { and, eq, gte, sql } from \"drizzle-orm\";\n\nimport { products } from \"./schema\";\n\n// Prepare once, then execute with different values. The sort order and selected columns stay fixed.\nconst searchProducts = db\n  .select()\n  .from(products)\n  .where(\n    and(eq(products.category, sql.placeholder(\"category\")), gte(products.priceCents, sql.placeholder(\"minimumCents\"))),\n  )\n  .orderBy(products.priceCents, products.id)\n  .limit(sql.placeholder(\"pageSize\"))\n  .prepare(\"product_search\");\n\n// Validate external input before execute: these local values are already known.\n$.display(\n  \"First book at or above 1000 cents\",\n  await searchProducts.execute({\n    category: \"books\",\n    minimumCents: 1000,\n    pageSize: 1,\n  }),\n);\n$.display(\n  \"Two books at or above 1000 cents\",\n  await searchProducts.execute({\n    category: \"books\",\n    minimumCents: 1000,\n    pageSize: 2,\n  }),\n);\n$.display(\n  \"Tools under the same query shape\",\n  await searchProducts.execute({\n    category: \"tools\",\n    minimumCents: 1000,\n    pageSize: 2,\n  }),\n);\n"
         }
       ],
       "focus": {
         "file": "query.ts",
         "lines": [
-          6,
-          14
+          7,
+          15
         ]
       },
       "run": "required",
@@ -139,14 +139,14 @@
       "edits": [
         {
           "file": "query.ts",
-          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { and, eq, gte, sql } from \"drizzle-orm\";\nimport { products } from \"./schema\";\n\n// Prepare once, then execute with different values. The sort order and selected columns stay fixed.\nconst searchProducts = db\n  .select()\n  .from(products)\n  .where(\n    and(eq(products.category, sql.placeholder(\"category\")), gte(products.priceCents, sql.placeholder(\"minimumCents\"))),\n  )\n  .orderBy(products.priceCents, products.id)\n  .limit(sql.placeholder(\"pageSize\"))\n  .prepare(\"product_search\");\n\n// Validate external input before execute: these local values are already known.\n$.display(\n  \"First book at or above 1000 cents\",\n  await searchProducts.execute({\n    category: \"books\",\n    minimumCents: 1000,\n    pageSize: 1,\n  }),\n);\n$.display(\n  \"Two books at or above 1000 cents\",\n  await searchProducts.execute({\n    category: \"books\",\n    minimumCents: 1000,\n    pageSize: 2,\n  }),\n);\n$.display(\n  \"Tools under the same query shape\",\n  await searchProducts.execute({\n    category: \"tools\",\n    minimumCents: 1000,\n    pageSize: 2,\n  }),\n);\n\ntry {\n  await searchProducts.execute({ category: \"books\", pageSize: 2 });\n} catch (cause) {\n  if (!(cause instanceof Error) || cause.message !== 'No value for placeholder \"minimumCents\" was provided') {\n    throw cause;\n  }\n\n  $.display(\"Missing placeholder\", cause.message);\n}\n"
+          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { and, eq, gte, sql } from \"drizzle-orm\";\n\nimport { products } from \"./schema\";\n\n// Prepare once, then execute with different values. The sort order and selected columns stay fixed.\nconst searchProducts = db\n  .select()\n  .from(products)\n  .where(\n    and(eq(products.category, sql.placeholder(\"category\")), gte(products.priceCents, sql.placeholder(\"minimumCents\"))),\n  )\n  .orderBy(products.priceCents, products.id)\n  .limit(sql.placeholder(\"pageSize\"))\n  .prepare(\"product_search\");\n\n// Validate external input before execute: these local values are already known.\n$.display(\n  \"First book at or above 1000 cents\",\n  await searchProducts.execute({\n    category: \"books\",\n    minimumCents: 1000,\n    pageSize: 1,\n  }),\n);\n$.display(\n  \"Two books at or above 1000 cents\",\n  await searchProducts.execute({\n    category: \"books\",\n    minimumCents: 1000,\n    pageSize: 2,\n  }),\n);\n$.display(\n  \"Tools under the same query shape\",\n  await searchProducts.execute({\n    category: \"tools\",\n    minimumCents: 1000,\n    pageSize: 2,\n  }),\n);\n\ntry {\n  await searchProducts.execute({ category: \"books\", pageSize: 2 });\n} catch (cause) {\n  if (!(cause instanceof Error) || cause.message !== 'No value for placeholder \"minimumCents\" was provided') {\n    throw cause;\n  }\n\n  $.display(\"Missing placeholder\", cause.message);\n}\n"
         }
       ],
       "focus": {
         "file": "query.ts",
         "lines": [
-          42,
-          50
+          43,
+          51
         ]
       },
       "run": "required",

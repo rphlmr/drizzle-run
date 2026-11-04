@@ -22,7 +22,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
     {
       type: "walkthrough",
       id: "01-membership",
-      focus: { file: "query.ts", lines: [6, 14] },
+      focus: { file: "query.ts", lines: [7, 15] },
       label: "IN",
       title: "Use a query as the list of matching IDs",
       body: "A **subquery** is a query inside another SQL query. This guide uses PostgreSQL and Drizzle ORM **1.0.0-rc.5**, with authors and their published or draft posts.\n\n`publishedAuthorIds` selects one column: author IDs from published posts. Pass that query directly to `inArray`. **Do not await the inner query**: awaiting would fetch an array into JavaScript instead of composing one SQL statement.\n\nPress **Run**. Ada and Grace appear once each, even though Ada's ID occurs twice in the inner query. `IN` checks membership; it does not join each matching post into another row.",
@@ -44,7 +44,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
     {
       type: "walkthrough",
       id: "02-exists",
-      focus: { file: "query.ts", lines: [6, 14] },
+      focus: { file: "query.ts", lines: [7, 15] },
       label: "EXISTS",
       title: "Check whether a related row exists",
       body: "A **correlated subquery** refers to a column from its outer query. Here, `matchingPosts` compares each post's author ID with the outer author's ID.\n\n`exists` asks whether at least one matching row exists. Its selected value does not matter. `notExists` asks the opposite, without adding child rows to the result.\n\nPress **Run**. The first result contains Ada and Grace. The second contains Linus. If you omit the author-ID comparison, you ask whether any published post exists anywhere, which would match every author in this data.",
@@ -52,7 +52,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
         {
           file: "query.ts",
           write:
-            'import { db } from "@drizzle-run/runtime/context";\nimport { and, eq, exists, notExists } from "drizzle-orm";\nimport { authors, posts } from "./schema";\n\n// authors.id refers to the current row of the outer query.\nconst matchingPosts = db\n  .select({ id: posts.id })\n  .from(posts)\n  .where(and(eq(posts.authorId, authors.id), eq(posts.published, true)));\n\nconst withPosts = await db\n  .select({ name: authors.name })\n  .from(authors)\n  .where(exists(matchingPosts))\n  .orderBy(authors.id);\nconst withoutPosts = await db\n  .select({ name: authors.name })\n  .from(authors)\n  .where(notExists(matchingPosts))\n  .orderBy(authors.id);\n\n$.display("Authors with published posts", withPosts);\n$.display("Authors without published posts", withoutPosts);\n',
+            'import { db } from "@drizzle-run/runtime/context";\nimport { and, eq, exists, notExists } from "drizzle-orm";\n\nimport { authors, posts } from "./schema";\n\n// authors.id refers to the current row of the outer query.\nconst matchingPosts = db\n  .select({ id: posts.id })\n  .from(posts)\n  .where(and(eq(posts.authorId, authors.id), eq(posts.published, true)));\n\nconst withPosts = await db\n  .select({ name: authors.name })\n  .from(authors)\n  .where(exists(matchingPosts))\n  .orderBy(authors.id);\nconst withoutPosts = await db\n  .select({ name: authors.name })\n  .from(authors)\n  .where(notExists(matchingPosts))\n  .orderBy(authors.id);\n\n$.display("Authors with published posts", withPosts);\n$.display("Authors without published posts", withoutPosts);\n',
         },
       ],
       run: "required",
@@ -73,7 +73,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
     {
       type: "walkthrough",
       id: "03-derived-table",
-      focus: { file: "query.ts", lines: [5, 13] },
+      focus: { file: "query.ts", lines: [6, 14] },
       label: "Grouped query",
       title: "Join a grouped subquery like a table",
       body: 'Now you need each author\'s published-post count and total views. Group posts by author ID, then name that query with `.as("published_stats")`. You can join it like a table.\n\nComputed columns also need SQL aliases: `.as("published_count")` and `.as("total_views")` let the outer query reference them. JavaScript property names alone do not name raw SQL expressions.\n\nPress **Run**. The left join keeps Linus, and the outer `coalesce` turns missing totals into zero. `.mapWith(Number)` converts these small aggregate values at the result boundary; `sql<number>` by itself would only describe a type.',
@@ -81,7 +81,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
         {
           file: "query.ts",
           write:
-            'import { db } from "@drizzle-run/runtime/context";\nimport { count, eq, gte, sql, sum } from "drizzle-orm";\nimport { authors, posts } from "./schema";\n\nconst publishedStats = db\n  .select({\n    authorId: posts.authorId,\n    publishedCount: count(posts.id).as("published_count"),\n    totalViews: sum(posts.views).as("total_views"),\n  })\n  .from(posts)\n  .where(eq(posts.published, true))\n  .groupBy(posts.authorId)\n  .as("published_stats");\n\nconst selection = {\n  name: authors.name,\n  // PostgreSQL aggregate values can be strings. Convert at the outer selection.\n  // These sample totals fit safely in a JavaScript number.\n  publishedPosts: sql<number>`coalesce(${publishedStats.publishedCount}, 0)`.mapWith(Number),\n  views: sql<number>`coalesce(${publishedStats.totalViews}, 0)`.mapWith(Number),\n};\n\nconst report = await db\n  .select(selection)\n  .from(authors)\n  .leftJoin(publishedStats, eq(publishedStats.authorId, authors.id))\n  .orderBy(authors.id);\n\n$.display("Author report", report);\n',
+            'import { db } from "@drizzle-run/runtime/context";\nimport { count, eq, gte, sql, sum } from "drizzle-orm";\n\nimport { authors, posts } from "./schema";\n\nconst publishedStats = db\n  .select({\n    authorId: posts.authorId,\n    publishedCount: count(posts.id).as("published_count"),\n    totalViews: sum(posts.views).as("total_views"),\n  })\n  .from(posts)\n  .where(eq(posts.published, true))\n  .groupBy(posts.authorId)\n  .as("published_stats");\n\nconst selection = {\n  name: authors.name,\n  // PostgreSQL aggregate values can be strings. Convert at the outer selection.\n  // These sample totals fit safely in a JavaScript number.\n  publishedPosts: sql<number>`coalesce(${publishedStats.publishedCount}, 0)`.mapWith(Number),\n  views: sql<number>`coalesce(${publishedStats.totalViews}, 0)`.mapWith(Number),\n};\n\nconst report = await db\n  .select(selection)\n  .from(authors)\n  .leftJoin(publishedStats, eq(publishedStats.authorId, authors.id))\n  .orderBy(authors.id);\n\n$.display("Author report", report);\n',
         },
       ],
       run: "required",
@@ -102,7 +102,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
     {
       type: "walkthrough",
       id: "04-scalar",
-      focus: { file: "query.ts", lines: [6, 14] },
+      focus: { file: "query.ts", lines: [7, 15] },
       label: "One value",
       title: "Select one value from a subquery",
       body: "A **scalar subquery** supplies one column from at most one row as a value in the outer selection. This one counts published posts for the current author.\n\n`count()` without `groupBy` produces exactly one row, including zero when no posts match. The outer selection converts that count to a JavaScript number.\n\nPress **Run**. Ada has two, Grace one and Linus zero. An arbitrary multi-row query cannot be used here: PostgreSQL rejects a scalar subquery that returns more than one row.",
@@ -110,7 +110,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
         {
           file: "query.ts",
           write:
-            'import { db } from "@drizzle-run/runtime/context";\nimport { and, count, eq, sql } from "drizzle-orm";\nimport { authors, posts } from "./schema";\n\n// COUNT without GROUP BY returns exactly one row, including zero for no matches.\nconst publishedCount = db\n  .select({ value: count() })\n  .from(posts)\n  .where(and(eq(posts.authorId, authors.id), eq(posts.published, true)));\n\nconst report = await db\n  .select({\n    name: authors.name,\n    publishedPosts: sql<number>`(${publishedCount})`.mapWith(Number),\n  })\n  .from(authors)\n  .orderBy(authors.id);\n\n$.display("One count per author", report);\n',
+            'import { db } from "@drizzle-run/runtime/context";\nimport { and, count, eq, sql } from "drizzle-orm";\n\nimport { authors, posts } from "./schema";\n\n// COUNT without GROUP BY returns exactly one row, including zero for no matches.\nconst publishedCount = db\n  .select({ value: count() })\n  .from(posts)\n  .where(and(eq(posts.authorId, authors.id), eq(posts.published, true)));\n\nconst report = await db\n  .select({\n    name: authors.name,\n    publishedPosts: sql<number>`(${publishedCount})`.mapWith(Number),\n  })\n  .from(authors)\n  .orderBy(authors.id);\n\n$.display("One count per author", report);\n',
         },
       ],
       run: "required",
@@ -131,7 +131,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
     {
       type: "walkthrough",
       id: "05-cte",
-      focus: { file: "query.ts", lines: [5, 13] },
+      focus: { file: "query.ts", lines: [6, 14] },
       label: "WITH",
       title: "Name the grouped query with a CTE",
       body: "A **common table expression (CTE)** names a query inside a SQL statement's `WITH` clause. `db.$with(\"published_stats\").as(...)` defines it; `db.with(publishedStats)` includes it in the statement that uses it.\n\nThis is the same grouped report as before, written with a CTE. It is not a saved table or a promise that the database materializes or caches the result.\n\nPress **Run**. The full report is unchanged. The second query filters by at least 30 published views, leaving Ada. Grace's 100 draft views never enter the grouped totals.",
@@ -139,7 +139,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
         {
           file: "query.ts",
           write:
-            'import { db } from "@drizzle-run/runtime/context";\nimport { count, eq, gte, sql, sum } from "drizzle-orm";\nimport { authors, posts } from "./schema";\n\nconst publishedStats = db.$with("published_stats").as(\n  db\n    .select({\n      authorId: posts.authorId,\n      publishedCount: count(posts.id).as("published_count"),\n      totalViews: sum(posts.views).as("total_views"),\n    })\n    .from(posts)\n    .where(eq(posts.published, true))\n    .groupBy(posts.authorId),\n);\n\nconst selection = {\n  name: authors.name,\n  // PostgreSQL aggregate values can be strings. Convert at the outer selection.\n  // These sample totals fit safely in a JavaScript number.\n  publishedPosts: sql<number>`coalesce(${publishedStats.publishedCount}, 0)`.mapWith(Number),\n  views: sql<number>`coalesce(${publishedStats.totalViews}, 0)`.mapWith(Number),\n};\n\nconst report = await db\n  .with(publishedStats)\n  .select(selection)\n  .from(authors)\n  .leftJoin(publishedStats, eq(publishedStats.authorId, authors.id))\n  .orderBy(authors.id);\n\n$.display("Author report", report);\n\nconst minimumViews = 30;\nconst popular = await db\n  .with(publishedStats)\n  .select(selection)\n  .from(authors)\n  .leftJoin(publishedStats, eq(publishedStats.authorId, authors.id))\n  .where(gte(publishedStats.totalViews, String(minimumViews)))\n  .orderBy(authors.id);\n\n$.display("Authors with at least 30 published views", popular);\n',
+            'import { db } from "@drizzle-run/runtime/context";\nimport { count, eq, gte, sql, sum } from "drizzle-orm";\n\nimport { authors, posts } from "./schema";\n\nconst publishedStats = db.$with("published_stats").as(\n  db\n    .select({\n      authorId: posts.authorId,\n      publishedCount: count(posts.id).as("published_count"),\n      totalViews: sum(posts.views).as("total_views"),\n    })\n    .from(posts)\n    .where(eq(posts.published, true))\n    .groupBy(posts.authorId),\n);\n\nconst selection = {\n  name: authors.name,\n  // PostgreSQL aggregate values can be strings. Convert at the outer selection.\n  // These sample totals fit safely in a JavaScript number.\n  publishedPosts: sql<number>`coalesce(${publishedStats.publishedCount}, 0)`.mapWith(Number),\n  views: sql<number>`coalesce(${publishedStats.totalViews}, 0)`.mapWith(Number),\n};\n\nconst report = await db\n  .with(publishedStats)\n  .select(selection)\n  .from(authors)\n  .leftJoin(publishedStats, eq(publishedStats.authorId, authors.id))\n  .orderBy(authors.id);\n\n$.display("Author report", report);\n\nconst minimumViews = 30;\nconst popular = await db\n  .with(publishedStats)\n  .select(selection)\n  .from(authors)\n  .leftJoin(publishedStats, eq(publishedStats.authorId, authors.id))\n  .where(gte(publishedStats.totalViews, String(minimumViews)))\n  .orderBy(authors.id);\n\n$.display("Authors with at least 30 published views", popular);\n',
         },
       ],
       run: "required",

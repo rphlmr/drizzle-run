@@ -1,7 +1,7 @@
 {
   "recordingVersion": 1,
-  "snapshotDigest": "75ac5a167680c56560ac28fdacb04984ad27b2f70116db851035100a570ec30c",
-  "recordedAt": "2026-11-04T09:17:14.413Z",
+  "snapshotDigest": "ee77a677a3c8f2d66ae0b13dd7b2b9896ba8981ab89d75c44cc08e6b9bf20828",
+  "recordedAt": "2026-11-04T13:48:05.754Z",
   "result": {
     "version": 1,
     "target": {
@@ -16,7 +16,7 @@
       "kitVersion": "1.0.0-rc.5"
     },
     "random": {
-      "effectiveSeed": 608789280,
+      "effectiveSeed": 2196500001,
       "source": "generated",
       "derivation": "crypto-u32-v1",
       "generator": "mulberry32-v1"
@@ -25,74 +25,74 @@
       {
         "phase": "validate",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:17:13.030Z",
-        "durationMs": 0.029999971389770508
+        "startedAt": "2026-11-04T13:48:04.454Z",
+        "durationMs": 0.039999961853027344
       },
       {
         "phase": "resolve",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:17:13.030Z",
-        "durationMs": 0
+        "startedAt": "2026-11-04T13:48:04.454Z",
+        "durationMs": 0.004999995231628418
       },
       {
         "phase": "load_artifacts",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:17:13.272Z",
-        "durationMs": 440.6599999666214
+        "startedAt": "2026-11-04T13:48:04.689Z",
+        "durationMs": 592.9249999523163
       },
       {
         "phase": "compile",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:17:13.112Z",
-        "durationMs": 158.62999999523163
+        "startedAt": "2026-11-04T13:48:04.506Z",
+        "durationMs": 182.79500007629395
       },
       {
         "phase": "evaluate_schema",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:17:13.712Z",
-        "durationMs": 13.514999985694885
+        "startedAt": "2026-11-04T13:48:05.282Z",
+        "durationMs": 15.684999942779541
       },
       {
         "phase": "generate_bootstrap",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:17:13.726Z",
-        "durationMs": 1.5
+        "startedAt": "2026-11-04T13:48:05.298Z",
+        "durationMs": 2.0549999475479126
       },
       {
         "phase": "apply_bootstrap",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:17:13.728Z",
-        "durationMs": 72.20500004291534
+        "startedAt": "2026-11-04T13:48:05.301Z",
+        "durationMs": 293.88499999046326
       },
       {
         "phase": "seed",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:17:13.800Z",
-        "durationMs": 2.540000081062317
+        "startedAt": "2026-11-04T13:48:05.595Z",
+        "durationMs": 4.205000042915344
       },
       {
         "phase": "run",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:17:13.804Z",
-        "durationMs": 30.615000009536743
+        "startedAt": "2026-11-04T13:48:05.600Z",
+        "durationMs": 38.05999994277954
       },
       {
         "phase": "inspect",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:17:13.834Z",
-        "durationMs": 1.159999966621399
+        "startedAt": "2026-11-04T13:48:05.637Z",
+        "durationMs": 1.6100000143051147
       },
       {
         "phase": "plan",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:17:13.834Z",
-        "durationMs": 0.03500008583068848
+        "startedAt": "2026-11-04T13:48:05.639Z",
+        "durationMs": 0.039999961853027344
       },
       {
         "phase": "cleanup",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:17:13.835Z",
-        "durationMs": 0.7250000238418579
+        "startedAt": "2026-11-04T13:48:05.639Z",
+        "durationMs": 0.9950000047683716
       }
     ],
     "diagnostics": [],
@@ -185,8 +185,8 @@
         ],
         "outcome": "succeeded",
         "source": "seed.ts",
-        "line": 4,
-        "durationMs": 1.999755859375,
+        "line": 5,
+        "durationMs": 4.00048828125,
         "rowCount": 5
       },
       {
@@ -204,7 +204,7 @@
         "outcome": "succeeded",
         "source": "query.ts",
         "line": 10,
-        "durationMs": 2.000244140625,
+        "durationMs": 4,
         "rowCount": 5
       },
       {
@@ -234,7 +234,7 @@
         "outcome": "succeeded",
         "source": "query.ts",
         "line": 13,
-        "durationMs": 1,
+        "durationMs": 2,
         "rowCount": 1
       }
     ],
@@ -468,8 +468,8 @@
           ],
           "outcome": "succeeded",
           "source": "seed.ts",
-          "line": 4,
-          "durationMs": 1.999755859375,
+          "line": 5,
+          "durationMs": 4.00048828125,
           "rowCount": 5
         }
       },
@@ -491,7 +491,7 @@
           "outcome": "succeeded",
           "source": "query.ts",
           "line": 10,
-          "durationMs": 2.000244140625,
+          "durationMs": 4,
           "rowCount": 5
         }
       },
@@ -606,7 +606,7 @@
           "outcome": "succeeded",
           "source": "query.ts",
           "line": 13,
-          "durationMs": 1,
+          "durationMs": 2,
           "rowCount": 1
         }
       },
@@ -672,19 +672,19 @@
       }
     },
     "timings": {
-      "total": 808,
-      "validate": 0.029999971389770508,
-      "resolve": 0,
-      "load_artifacts": 440.6599999666214,
-      "compile": 158.62999999523163,
-      "evaluate_schema": 13.514999985694885,
-      "generate_bootstrap": 1.5,
-      "apply_bootstrap": 72.20500004291534,
-      "seed": 2.540000081062317,
-      "run": 30.615000009536743,
-      "inspect": 1.159999966621399,
-      "plan": 0.03500008583068848,
-      "cleanup": 0.7250000238418579
+      "total": 1188,
+      "validate": 0.039999961853027344,
+      "resolve": 0.004999995231628418,
+      "load_artifacts": 592.9249999523163,
+      "compile": 182.79500007629395,
+      "evaluate_schema": 15.684999942779541,
+      "generate_bootstrap": 2.0549999475479126,
+      "apply_bootstrap": 293.88499999046326,
+      "seed": 4.205000042915344,
+      "run": 38.05999994277954,
+      "inspect": 1.6100000143051147,
+      "plan": 0.039999961853027344,
+      "cleanup": 0.9950000047683716
     },
     "ok": true,
     "outcome": "succeeded"

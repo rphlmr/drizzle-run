@@ -1,4 +1,5 @@
 import { db } from "@drizzle-run/runtime/context";
+
 import { comments, posts, users } from "./schema";
 
 const [ada, grace] = await db.insert(users).values([{ name: "Ada" }, { name: "Grace" }]).returning();

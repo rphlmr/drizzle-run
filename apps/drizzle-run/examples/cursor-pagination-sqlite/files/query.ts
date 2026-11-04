@@ -1,6 +1,7 @@
 import { getNextPage } from "./pagination";
 
 const first = await getNextPage();
+
 $.display("Cursor page 1", first);
 
 if (first.nextCursor) {

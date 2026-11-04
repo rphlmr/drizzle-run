@@ -13,10 +13,13 @@ const shiftingQuery = `import { db } from "@drizzle-run/runtime/context";
 import { posts } from "./schema";
 
 const first = await db.query.posts.findMany({ orderBy: { createdAt: "asc", id: "asc" }, limit: 2 });
+
 $.display("First page before insert", first);
 
 await db.insert(posts).values({ id: 7, title: "Earlier arrival", createdAt: "2025-12-31T09:00:00.000Z" });
+
 const second = await db.query.posts.findMany({ orderBy: { createdAt: "asc", id: "asc" }, limit: 2, offset: 2 });
+
 $.display("Offset page after insert", second);
 `;
 
@@ -24,6 +27,7 @@ const naiveQuery = `import { db } from "@drizzle-run/runtime/context";
 
 const first = await db.query.posts.findMany({ orderBy: { createdAt: "asc", id: "asc" }, limit: 2 });
 const last = first.at(-1);
+
 $.display("First page", first);
 
 if (last) {

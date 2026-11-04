@@ -6,10 +6,10 @@ import { readExampleFiles } from "./example-files.ts";
 import type { DrizzleRunGuideMeta, DrizzleRunStepMeta } from "./meta.ts";
 
 const shiftingQuery =
-  'import { db } from "@drizzle-run/runtime/context";\nimport { asc } from "drizzle-orm";\n\nimport { posts } from "./schema";\n\nconst first = await db.select().from(posts).orderBy(asc(posts.createdAt), asc(posts.id)).limit(2);\n$.display("First page before insert", first);\n\nawait db.insert(posts).values({ id: 7, title: "Earlier arrival", createdAt: "2025-12-31T09:00:00.000Z" });\nconst second = await db.select().from(posts).orderBy(asc(posts.createdAt), asc(posts.id)).limit(2).offset(2);\n$.display("Offset page after insert", second);\n';
+  'import { db } from "@drizzle-run/runtime/context";\nimport { asc } from "drizzle-orm";\n\nimport { posts } from "./schema";\n\nconst first = await db.select().from(posts).orderBy(asc(posts.createdAt), asc(posts.id)).limit(2);\n\n$.display("First page before insert", first);\n\nawait db.insert(posts).values({ id: 7, title: "Earlier arrival", createdAt: "2025-12-31T09:00:00.000Z" });\n\nconst second = await db.select().from(posts).orderBy(asc(posts.createdAt), asc(posts.id)).limit(2).offset(2);\n\n$.display("Offset page after insert", second);\n';
 
 const naiveQuery =
-  'import { db } from "@drizzle-run/runtime/context";\nimport { asc, gt } from "drizzle-orm";\n\nimport { posts } from "./schema";\n\nconst first = await db.select().from(posts).orderBy(asc(posts.createdAt), asc(posts.id)).limit(2);\nconst last = first.at(-1);\n$.display("First page", first);\n\nif (last) {\n  const second = await db.select().from(posts)\n    .where(gt(posts.createdAt, last.createdAt))\n    .orderBy(asc(posts.createdAt), asc(posts.id)).limit(2);\n  $.display("Timestamp-only cursor skips a tie", second);\n}\n';
+  'import { db } from "@drizzle-run/runtime/context";\nimport { asc, gt } from "drizzle-orm";\n\nimport { posts } from "./schema";\n\nconst first = await db.select().from(posts).orderBy(asc(posts.createdAt), asc(posts.id)).limit(2);\nconst last = first.at(-1);\n\n$.display("First page", first);\n\nif (last) {\n  const second = await db.select().from(posts)\n    .where(gt(posts.createdAt, last.createdAt))\n    .orderBy(asc(posts.createdAt), asc(posts.id)).limit(2);\n  $.display("Timestamp-only cursor skips a tie", second);\n}\n';
 
 /** Teach the same pagination behavior using each dialect's timestamp storage. */
 export function createPaginationGuide({ id, exampleId, dialect }: { id: string; exampleId: string; dialect: Dialect }) {
@@ -63,7 +63,7 @@ export function createPaginationGuide({ id, exampleId, dialect }: { id: string; 
         title: "Insert before the next offset page",
         body: "The first request reads IDs 1 and 2. Before the second request, an insert adds a post ahead of them in the sort order.\n\nPress **Run**. Offset 2 now returns IDs 2 and 3: ID 2 appears again because row positions moved. A unique order makes each query deterministic; it does not freeze the dataset between requests.\n\nEach Run starts from the seed again. This step simulates two requests and one intervening write within a single execution.",
         edits: [{ file: "query.ts", write: shiftingQuery }],
-        focus: { file: "query.ts", lines: [6, 12] },
+        focus: { file: "query.ts", lines: [6, 14] },
         run: "required",
         highlight: { displays: ["First page before insert", "Offset page after insert"] },
         meta: {
@@ -78,7 +78,7 @@ export function createPaginationGuide({ id, exampleId, dialect }: { id: string; 
         title: "A timestamp alone skips tied rows",
         body: "A cursor describes where the previous page ended. The tempting filter is `createdAt > last.createdAt`.\n\nPress **Run**. The first page contains IDs 1 and 2, but ID 3 shares their timestamp. The timestamp-only filter jumps to IDs 4 and 5, skipping ID 3.\n\nThe cursor must describe the same complete ordering as the query. Here that means both the timestamp and the ID.",
         edits: [{ file: "query.ts", write: naiveQuery }],
-        focus: { file: "query.ts", lines: [10, 14] },
+        focus: { file: "query.ts", lines: [11, 15] },
         run: "required",
         highlight: { displays: ["First page", "Timestamp-only cursor skips a tie"] },
         meta: {

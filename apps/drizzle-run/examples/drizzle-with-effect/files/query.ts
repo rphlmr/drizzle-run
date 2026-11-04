@@ -3,6 +3,7 @@ import * as PgClient from "@effect/sql-pg/PgClient";
 import { asc } from "drizzle-orm";
 import * as PgDrizzle from "drizzle-orm/effect-postgres";
 import { Effect } from "effect";
+
 import { users } from "./schema";
 
 // A program is a plan: nothing in it runs until Effect.runPromise below.
