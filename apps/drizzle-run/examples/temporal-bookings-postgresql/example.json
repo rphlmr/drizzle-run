@@ -1,0 +1,24 @@
+{
+  "id": "ed5ec81e-8dc3-44b2-83b3-6e1d787f7e77",
+  "slug": "temporal-bookings-postgresql",
+  "status": "published",
+  "title": "Use Temporal dates in booking queries (PostgreSQL)",
+  "description": "A complete PlainDate column, typed inserts and filters, leap-day arithmetic, and nullable values.",
+  "topic": "Schema",
+  "featured": false,
+  "order": 132,
+  "dialect": "postgresql",
+  "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+  "links": [
+    {
+      "kind": "docs",
+      "label": "Custom column types",
+      "url": "https://orm.drizzle.team/docs/custom-types"
+    },
+    {
+      "kind": "example",
+      "label": "The SQLite version",
+      "slug": "temporal-bookings-sqlite"
+    }
+  ]
+}

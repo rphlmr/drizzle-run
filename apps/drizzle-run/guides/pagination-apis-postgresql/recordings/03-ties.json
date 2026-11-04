@@ -1,0 +1,1471 @@
+{
+  "recordingVersion": 1,
+  "snapshotDigest": "32d6b92d5af3c791e31eb8439dc2dcb223a4b4e080fa21f4142eeb28b9aba7df",
+  "recordedAt": "2026-11-04T09:58:37.142Z",
+  "sides": [
+    {
+      "version": 1,
+      "target": {
+        "dialect": "postgresql"
+      },
+      "tuple": {
+        "id": "postgresql-pglite__orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+        "target": {
+          "dialect": "postgresql"
+        },
+        "ormVersion": "1.0.0-rc.5",
+        "kitVersion": "1.0.0-rc.5"
+      },
+      "random": {
+        "effectiveSeed": 1823908753,
+        "source": "generated",
+        "derivation": "crypto-u32-v1",
+        "generator": "mulberry32-v1"
+      },
+      "phases": [
+        {
+          "phase": "validate",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:58:32.769Z",
+          "durationMs": 0.04500007629394531
+        },
+        {
+          "phase": "resolve",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:58:32.769Z",
+          "durationMs": 0.004999995231628418
+        },
+        {
+          "phase": "load_artifacts",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:58:33.027Z",
+          "durationMs": 490.875
+        },
+        {
+          "phase": "compile",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:58:32.857Z",
+          "durationMs": 169.53999996185303
+        },
+        {
+          "phase": "evaluate_schema",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:58:33.519Z",
+          "durationMs": 79.05999994277954
+        },
+        {
+          "phase": "generate_bootstrap",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:58:33.598Z",
+          "durationMs": 21.819999933242798
+        },
+        {
+          "phase": "apply_bootstrap",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:58:33.621Z",
+          "durationMs": 389.95500004291534
+        },
+        {
+          "phase": "seed",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:58:34.010Z",
+          "durationMs": 8.514999985694885
+        },
+        {
+          "phase": "run",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:58:34.020Z",
+          "durationMs": 10.170000076293945
+        },
+        {
+          "phase": "inspect",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:58:34.029Z",
+          "durationMs": 54.9650000333786
+        },
+        {
+          "phase": "plan",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:58:34.084Z",
+          "durationMs": 0.059999942779541016
+        },
+        {
+          "phase": "cleanup",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:58:34.084Z",
+          "durationMs": 2.3450000286102295
+        }
+      ],
+      "diagnostics": [],
+      "sql": [
+        {
+          "sequence": 1,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "CREATE TABLE \"posts\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"title\" text NOT NULL,\n\t\"created_at\" timestamp(3) with time zone NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        },
+        {
+          "sequence": 2,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "CREATE INDEX \"posts_created_at_id_idx\" ON \"posts\" (\"created_at\",\"id\");",
+          "parameters": [],
+          "outcome": "succeeded"
+        },
+        {
+          "sequence": 3,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "BEGIN",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 1
+        },
+        {
+          "sequence": 4,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "CREATE TABLE \"posts\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"title\" text NOT NULL,\n\t\"created_at\" timestamp(3) with time zone NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 9.000244140625
+        },
+        {
+          "sequence": 5,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "CREATE INDEX \"posts_created_at_id_idx\" ON \"posts\" (\"created_at\",\"id\");",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 1.999755859375
+        },
+        {
+          "sequence": 6,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "COMMIT",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 1
+        },
+        {
+          "sequence": 7,
+          "phase": "seed",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "insert into \"posts\" (\"id\", \"title\", \"created_at\") values ($1, $2, $3), ($4, $5, $6), ($7, $8, $9), ($10, $11, $12), ($13, $14, $15), ($16, $17, $18)",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": 1
+            },
+            {
+              "type": "primitive",
+              "value": "First"
+            },
+            {
+              "type": "primitive",
+              "value": "2026-01-01T09:00:00.000Z"
+            },
+            {
+              "type": "primitive",
+              "value": 2
+            },
+            {
+              "type": "primitive",
+              "value": "Second"
+            },
+            {
+              "type": "primitive",
+              "value": "2026-01-01T09:00:00.000Z"
+            },
+            {
+              "type": "primitive",
+              "value": 3
+            },
+            {
+              "type": "primitive",
+              "value": "Same timestamp"
+            },
+            {
+              "type": "primitive",
+              "value": "2026-01-01T09:00:00.000Z"
+            },
+            {
+              "type": "primitive",
+              "value": 4
+            },
+            {
+              "type": "primitive",
+              "value": "Fourth"
+            },
+            {
+              "type": "primitive",
+              "value": "2026-01-02T09:00:00.000Z"
+            },
+            {
+              "type": "primitive",
+              "value": 5
+            },
+            {
+              "type": "primitive",
+              "value": "Fifth"
+            },
+            {
+              "type": "primitive",
+              "value": "2026-01-02T09:00:00.000Z"
+            },
+            {
+              "type": "primitive",
+              "value": 6
+            },
+            {
+              "type": "primitive",
+              "value": "Last"
+            },
+            {
+              "type": "primitive",
+              "value": "2026-01-03T09:00:00.000Z"
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "seed.ts",
+          "line": 5,
+          "durationMs": 7.000244140625,
+          "rowCount": 6
+        },
+        {
+          "sequence": 8,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "select \"id\", \"title\", \"created_at\" from \"posts\" order by \"posts\".\"created_at\" asc, \"posts\".\"id\" asc limit $1",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": 2
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 6,
+          "durationMs": 4.00048828125,
+          "rowCount": 2
+        },
+        {
+          "sequence": 9,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "select \"id\", \"title\", \"created_at\" from \"posts\" where \"posts\".\"created_at\" > $1 order by \"posts\".\"created_at\" asc, \"posts\".\"id\" asc limit $2",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": "2026-01-01 10:00:00+01"
+            },
+            {
+              "type": "primitive",
+              "value": 2
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 11,
+          "durationMs": 4,
+          "rowCount": 2
+        }
+      ],
+      "logs": [],
+      "value": {
+        "type": "undefined"
+      },
+      "displays": [
+        {
+          "label": "First page",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 1
+                    },
+                    "title": {
+                      "type": "primitive",
+                      "value": "First"
+                    },
+                    "createdAt": {
+                      "type": "primitive",
+                      "value": "2026-01-01 10:00:00+01"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 2
+                    },
+                    "title": {
+                      "type": "primitive",
+                      "value": "Second"
+                    },
+                    "createdAt": {
+                      "type": "primitive",
+                      "value": "2026-01-01 10:00:00+01"
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 8
+        },
+        {
+          "label": "Timestamp-only cursor skips a tie",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 4
+                    },
+                    "title": {
+                      "type": "primitive",
+                      "value": "Fourth"
+                    },
+                    "createdAt": {
+                      "type": "primitive",
+                      "value": "2026-01-02 10:00:00+01"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 5
+                    },
+                    "title": {
+                      "type": "primitive",
+                      "value": "Fifth"
+                    },
+                    "createdAt": {
+                      "type": "primitive",
+                      "value": "2026-01-02 10:00:00+01"
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 17
+        }
+      ],
+      "events": [
+        {
+          "type": "sql",
+          "sequence": 1,
+          "payload": {
+            "sequence": 1,
+            "phase": "bootstrap",
+            "origin": "kit",
+            "kind": "generated",
+            "sql": "CREATE TABLE \"posts\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"title\" text NOT NULL,\n\t\"created_at\" timestamp(3) with time zone NOT NULL\n);\n",
+            "parameters": [],
+            "outcome": "succeeded"
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 2,
+          "payload": {
+            "sequence": 2,
+            "phase": "bootstrap",
+            "origin": "kit",
+            "kind": "generated",
+            "sql": "CREATE INDEX \"posts_created_at_id_idx\" ON \"posts\" (\"created_at\",\"id\");",
+            "parameters": [],
+            "outcome": "succeeded"
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 3,
+          "payload": {
+            "sequence": 3,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "BEGIN",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 1
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 4,
+          "payload": {
+            "sequence": 4,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "CREATE TABLE \"posts\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"title\" text NOT NULL,\n\t\"created_at\" timestamp(3) with time zone NOT NULL\n);\n",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 9.000244140625
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 5,
+          "payload": {
+            "sequence": 5,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "CREATE INDEX \"posts_created_at_id_idx\" ON \"posts\" (\"created_at\",\"id\");",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 1.999755859375
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 6,
+          "payload": {
+            "sequence": 6,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "COMMIT",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 1
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 7,
+          "payload": {
+            "sequence": 7,
+            "phase": "seed",
+            "origin": "drizzle",
+            "kind": "executed",
+            "sql": "insert into \"posts\" (\"id\", \"title\", \"created_at\") values ($1, $2, $3), ($4, $5, $6), ($7, $8, $9), ($10, $11, $12), ($13, $14, $15), ($16, $17, $18)",
+            "parameters": [
+              {
+                "type": "primitive",
+                "value": 1
+              },
+              {
+                "type": "primitive",
+                "value": "First"
+              },
+              {
+                "type": "primitive",
+                "value": "2026-01-01T09:00:00.000Z"
+              },
+              {
+                "type": "primitive",
+                "value": 2
+              },
+              {
+                "type": "primitive",
+                "value": "Second"
+              },
+              {
+                "type": "primitive",
+                "value": "2026-01-01T09:00:00.000Z"
+              },
+              {
+                "type": "primitive",
+                "value": 3
+              },
+              {
+                "type": "primitive",
+                "value": "Same timestamp"
+              },
+              {
+                "type": "primitive",
+                "value": "2026-01-01T09:00:00.000Z"
+              },
+              {
+                "type": "primitive",
+                "value": 4
+              },
+              {
+                "type": "primitive",
+                "value": "Fourth"
+              },
+              {
+                "type": "primitive",
+                "value": "2026-01-02T09:00:00.000Z"
+              },
+              {
+                "type": "primitive",
+                "value": 5
+              },
+              {
+                "type": "primitive",
+                "value": "Fifth"
+              },
+              {
+                "type": "primitive",
+                "value": "2026-01-02T09:00:00.000Z"
+              },
+              {
+                "type": "primitive",
+                "value": 6
+              },
+              {
+                "type": "primitive",
+                "value": "Last"
+              },
+              {
+                "type": "primitive",
+                "value": "2026-01-03T09:00:00.000Z"
+              }
+            ],
+            "outcome": "succeeded",
+            "source": "seed.ts",
+            "line": 5,
+            "durationMs": 7.000244140625,
+            "rowCount": 6
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 8,
+          "payload": {
+            "sequence": 8,
+            "phase": "run",
+            "origin": "drizzle",
+            "kind": "executed",
+            "sql": "select \"id\", \"title\", \"created_at\" from \"posts\" order by \"posts\".\"created_at\" asc, \"posts\".\"id\" asc limit $1",
+            "parameters": [
+              {
+                "type": "primitive",
+                "value": 2
+              }
+            ],
+            "outcome": "succeeded",
+            "source": "query.ts",
+            "line": 6,
+            "durationMs": 4.00048828125,
+            "rowCount": 2
+          }
+        },
+        {
+          "type": "display",
+          "sequence": 9,
+          "payload": {
+            "label": "First page",
+            "values": [
+              {
+                "type": "array",
+                "value": [
+                  {
+                    "type": "object",
+                    "value": {
+                      "id": {
+                        "type": "primitive",
+                        "value": 1
+                      },
+                      "title": {
+                        "type": "primitive",
+                        "value": "First"
+                      },
+                      "createdAt": {
+                        "type": "primitive",
+                        "value": "2026-01-01 10:00:00+01"
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "value": {
+                      "id": {
+                        "type": "primitive",
+                        "value": 2
+                      },
+                      "title": {
+                        "type": "primitive",
+                        "value": "Second"
+                      },
+                      "createdAt": {
+                        "type": "primitive",
+                        "value": "2026-01-01 10:00:00+01"
+                      }
+                    }
+                  }
+                ]
+              }
+            ],
+            "source": "query.ts",
+            "line": 8
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 10,
+          "payload": {
+            "sequence": 9,
+            "phase": "run",
+            "origin": "drizzle",
+            "kind": "executed",
+            "sql": "select \"id\", \"title\", \"created_at\" from \"posts\" where \"posts\".\"created_at\" > $1 order by \"posts\".\"created_at\" asc, \"posts\".\"id\" asc limit $2",
+            "parameters": [
+              {
+                "type": "primitive",
+                "value": "2026-01-01 10:00:00+01"
+              },
+              {
+                "type": "primitive",
+                "value": 2
+              }
+            ],
+            "outcome": "succeeded",
+            "source": "query.ts",
+            "line": 11,
+            "durationMs": 4,
+            "rowCount": 2
+          }
+        },
+        {
+          "type": "display",
+          "sequence": 11,
+          "payload": {
+            "label": "Timestamp-only cursor skips a tie",
+            "values": [
+              {
+                "type": "array",
+                "value": [
+                  {
+                    "type": "object",
+                    "value": {
+                      "id": {
+                        "type": "primitive",
+                        "value": 4
+                      },
+                      "title": {
+                        "type": "primitive",
+                        "value": "Fourth"
+                      },
+                      "createdAt": {
+                        "type": "primitive",
+                        "value": "2026-01-02 10:00:00+01"
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "value": {
+                      "id": {
+                        "type": "primitive",
+                        "value": 5
+                      },
+                      "title": {
+                        "type": "primitive",
+                        "value": "Fifth"
+                      },
+                      "createdAt": {
+                        "type": "primitive",
+                        "value": "2026-01-02 10:00:00+01"
+                      }
+                    }
+                  }
+                ]
+              }
+            ],
+            "source": "query.ts",
+            "line": 17
+          }
+        }
+      ],
+      "cleanupErrors": [],
+      "cleanup": {
+        "guest": {
+          "mode": "graceful"
+        },
+        "database": {
+          "mode": "graceful"
+        }
+      },
+      "timings": {
+        "total": 1321,
+        "validate": 0.04500007629394531,
+        "resolve": 0.004999995231628418,
+        "load_artifacts": 490.875,
+        "compile": 169.53999996185303,
+        "evaluate_schema": 79.05999994277954,
+        "generate_bootstrap": 21.819999933242798,
+        "apply_bootstrap": 389.95500004291534,
+        "seed": 8.514999985694885,
+        "run": 10.170000076293945,
+        "inspect": 54.9650000333786,
+        "plan": 0.059999942779541016,
+        "cleanup": 2.3450000286102295
+      },
+      "ok": true,
+      "outcome": "succeeded"
+    },
+    {
+      "version": 1,
+      "target": {
+        "dialect": "postgresql"
+      },
+      "tuple": {
+        "id": "postgresql-pglite__orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+        "target": {
+          "dialect": "postgresql"
+        },
+        "ormVersion": "1.0.0-rc.5",
+        "kitVersion": "1.0.0-rc.5"
+      },
+      "random": {
+        "effectiveSeed": 70288408,
+        "source": "generated",
+        "derivation": "crypto-u32-v1",
+        "generator": "mulberry32-v1"
+      },
+      "phases": [
+        {
+          "phase": "validate",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:58:35.711Z",
+          "durationMs": 0.039999961853027344
+        },
+        {
+          "phase": "resolve",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:58:35.711Z",
+          "durationMs": 0.004999995231628418
+        },
+        {
+          "phase": "load_artifacts",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:58:35.880Z",
+          "durationMs": 445.2150000333786
+        },
+        {
+          "phase": "compile",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:58:35.814Z",
+          "durationMs": 64.87999999523163
+        },
+        {
+          "phase": "evaluate_schema",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:58:36.325Z",
+          "durationMs": 74.64000010490417
+        },
+        {
+          "phase": "generate_bootstrap",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:58:36.400Z",
+          "durationMs": 19.894999980926514
+        },
+        {
+          "phase": "apply_bootstrap",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:58:36.421Z",
+          "durationMs": 385.5550000667572
+        },
+        {
+          "phase": "seed",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:58:36.806Z",
+          "durationMs": 8.90500009059906
+        },
+        {
+          "phase": "run",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:58:36.816Z",
+          "durationMs": 13.485000014305115
+        },
+        {
+          "phase": "inspect",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:58:36.828Z",
+          "durationMs": 60.264999985694885
+        },
+        {
+          "phase": "plan",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:58:36.889Z",
+          "durationMs": 0.04999995231628418
+        },
+        {
+          "phase": "cleanup",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:58:36.889Z",
+          "durationMs": 2.2949999570846558
+        }
+      ],
+      "diagnostics": [],
+      "sql": [
+        {
+          "sequence": 1,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "CREATE TABLE \"posts\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"title\" text NOT NULL,\n\t\"created_at\" timestamp(3) with time zone NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        },
+        {
+          "sequence": 2,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "CREATE INDEX \"posts_created_at_id_idx\" ON \"posts\" (\"created_at\",\"id\");",
+          "parameters": [],
+          "outcome": "succeeded"
+        },
+        {
+          "sequence": 3,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "BEGIN",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 1.000244140625
+        },
+        {
+          "sequence": 4,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "CREATE TABLE \"posts\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"title\" text NOT NULL,\n\t\"created_at\" timestamp(3) with time zone NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 10.999755859375
+        },
+        {
+          "sequence": 5,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "CREATE INDEX \"posts_created_at_id_idx\" ON \"posts\" (\"created_at\",\"id\");",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 2
+        },
+        {
+          "sequence": 6,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "COMMIT",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 2
+        },
+        {
+          "sequence": 7,
+          "phase": "seed",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "insert into \"posts\" (\"id\", \"title\", \"created_at\") values ($1, $2, $3), ($4, $5, $6), ($7, $8, $9), ($10, $11, $12), ($13, $14, $15), ($16, $17, $18)",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": 1
+            },
+            {
+              "type": "primitive",
+              "value": "First"
+            },
+            {
+              "type": "primitive",
+              "value": "2026-01-01T09:00:00.000Z"
+            },
+            {
+              "type": "primitive",
+              "value": 2
+            },
+            {
+              "type": "primitive",
+              "value": "Second"
+            },
+            {
+              "type": "primitive",
+              "value": "2026-01-01T09:00:00.000Z"
+            },
+            {
+              "type": "primitive",
+              "value": 3
+            },
+            {
+              "type": "primitive",
+              "value": "Same timestamp"
+            },
+            {
+              "type": "primitive",
+              "value": "2026-01-01T09:00:00.000Z"
+            },
+            {
+              "type": "primitive",
+              "value": 4
+            },
+            {
+              "type": "primitive",
+              "value": "Fourth"
+            },
+            {
+              "type": "primitive",
+              "value": "2026-01-02T09:00:00.000Z"
+            },
+            {
+              "type": "primitive",
+              "value": 5
+            },
+            {
+              "type": "primitive",
+              "value": "Fifth"
+            },
+            {
+              "type": "primitive",
+              "value": "2026-01-02T09:00:00.000Z"
+            },
+            {
+              "type": "primitive",
+              "value": 6
+            },
+            {
+              "type": "primitive",
+              "value": "Last"
+            },
+            {
+              "type": "primitive",
+              "value": "2026-01-03T09:00:00.000Z"
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "seed.ts",
+          "line": 5,
+          "durationMs": 8,
+          "rowCount": 6
+        },
+        {
+          "sequence": 8,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "select \"d0\".\"id\" as \"id\", \"d0\".\"title\" as \"title\", \"d0\".\"created_at\" as \"createdAt\" from \"posts\" as \"d0\" order by \"d0\".\"created_at\" asc, \"d0\".\"id\" asc limit $1",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": 2
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 3,
+          "durationMs": 5,
+          "rowCount": 2
+        },
+        {
+          "sequence": 9,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "select \"d0\".\"id\" as \"id\", \"d0\".\"title\" as \"title\", \"d0\".\"created_at\" as \"createdAt\" from \"posts\" as \"d0\" where \"d0\".\"created_at\" > $1 order by \"d0\".\"created_at\" asc, \"d0\".\"id\" asc limit $2",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": "2026-01-01 10:00:00+01"
+            },
+            {
+              "type": "primitive",
+              "value": 2
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 8,
+          "durationMs": 4.999755859375,
+          "rowCount": 2
+        }
+      ],
+      "logs": [],
+      "value": {
+        "type": "undefined"
+      },
+      "displays": [
+        {
+          "label": "First page",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 1
+                    },
+                    "title": {
+                      "type": "primitive",
+                      "value": "First"
+                    },
+                    "createdAt": {
+                      "type": "primitive",
+                      "value": "2026-01-01 10:00:00+01"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 2
+                    },
+                    "title": {
+                      "type": "primitive",
+                      "value": "Second"
+                    },
+                    "createdAt": {
+                      "type": "primitive",
+                      "value": "2026-01-01 10:00:00+01"
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 5
+        },
+        {
+          "label": "Timestamp-only cursor skips a tie",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 4
+                    },
+                    "title": {
+                      "type": "primitive",
+                      "value": "Fourth"
+                    },
+                    "createdAt": {
+                      "type": "primitive",
+                      "value": "2026-01-02 10:00:00+01"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 5
+                    },
+                    "title": {
+                      "type": "primitive",
+                      "value": "Fifth"
+                    },
+                    "createdAt": {
+                      "type": "primitive",
+                      "value": "2026-01-02 10:00:00+01"
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 13
+        }
+      ],
+      "events": [
+        {
+          "type": "sql",
+          "sequence": 1,
+          "payload": {
+            "sequence": 1,
+            "phase": "bootstrap",
+            "origin": "kit",
+            "kind": "generated",
+            "sql": "CREATE TABLE \"posts\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"title\" text NOT NULL,\n\t\"created_at\" timestamp(3) with time zone NOT NULL\n);\n",
+            "parameters": [],
+            "outcome": "succeeded"
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 2,
+          "payload": {
+            "sequence": 2,
+            "phase": "bootstrap",
+            "origin": "kit",
+            "kind": "generated",
+            "sql": "CREATE INDEX \"posts_created_at_id_idx\" ON \"posts\" (\"created_at\",\"id\");",
+            "parameters": [],
+            "outcome": "succeeded"
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 3,
+          "payload": {
+            "sequence": 3,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "BEGIN",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 1.000244140625
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 4,
+          "payload": {
+            "sequence": 4,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "CREATE TABLE \"posts\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"title\" text NOT NULL,\n\t\"created_at\" timestamp(3) with time zone NOT NULL\n);\n",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 10.999755859375
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 5,
+          "payload": {
+            "sequence": 5,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "CREATE INDEX \"posts_created_at_id_idx\" ON \"posts\" (\"created_at\",\"id\");",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 2
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 6,
+          "payload": {
+            "sequence": 6,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "COMMIT",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 2
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 7,
+          "payload": {
+            "sequence": 7,
+            "phase": "seed",
+            "origin": "drizzle",
+            "kind": "executed",
+            "sql": "insert into \"posts\" (\"id\", \"title\", \"created_at\") values ($1, $2, $3), ($4, $5, $6), ($7, $8, $9), ($10, $11, $12), ($13, $14, $15), ($16, $17, $18)",
+            "parameters": [
+              {
+                "type": "primitive",
+                "value": 1
+              },
+              {
+                "type": "primitive",
+                "value": "First"
+              },
+              {
+                "type": "primitive",
+                "value": "2026-01-01T09:00:00.000Z"
+              },
+              {
+                "type": "primitive",
+                "value": 2
+              },
+              {
+                "type": "primitive",
+                "value": "Second"
+              },
+              {
+                "type": "primitive",
+                "value": "2026-01-01T09:00:00.000Z"
+              },
+              {
+                "type": "primitive",
+                "value": 3
+              },
+              {
+                "type": "primitive",
+                "value": "Same timestamp"
+              },
+              {
+                "type": "primitive",
+                "value": "2026-01-01T09:00:00.000Z"
+              },
+              {
+                "type": "primitive",
+                "value": 4
+              },
+              {
+                "type": "primitive",
+                "value": "Fourth"
+              },
+              {
+                "type": "primitive",
+                "value": "2026-01-02T09:00:00.000Z"
+              },
+              {
+                "type": "primitive",
+                "value": 5
+              },
+              {
+                "type": "primitive",
+                "value": "Fifth"
+              },
+              {
+                "type": "primitive",
+                "value": "2026-01-02T09:00:00.000Z"
+              },
+              {
+                "type": "primitive",
+                "value": 6
+              },
+              {
+                "type": "primitive",
+                "value": "Last"
+              },
+              {
+                "type": "primitive",
+                "value": "2026-01-03T09:00:00.000Z"
+              }
+            ],
+            "outcome": "succeeded",
+            "source": "seed.ts",
+            "line": 5,
+            "durationMs": 8,
+            "rowCount": 6
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 8,
+          "payload": {
+            "sequence": 8,
+            "phase": "run",
+            "origin": "drizzle",
+            "kind": "executed",
+            "sql": "select \"d0\".\"id\" as \"id\", \"d0\".\"title\" as \"title\", \"d0\".\"created_at\" as \"createdAt\" from \"posts\" as \"d0\" order by \"d0\".\"created_at\" asc, \"d0\".\"id\" asc limit $1",
+            "parameters": [
+              {
+                "type": "primitive",
+                "value": 2
+              }
+            ],
+            "outcome": "succeeded",
+            "source": "query.ts",
+            "line": 3,
+            "durationMs": 5,
+            "rowCount": 2
+          }
+        },
+        {
+          "type": "display",
+          "sequence": 9,
+          "payload": {
+            "label": "First page",
+            "values": [
+              {
+                "type": "array",
+                "value": [
+                  {
+                    "type": "object",
+                    "value": {
+                      "id": {
+                        "type": "primitive",
+                        "value": 1
+                      },
+                      "title": {
+                        "type": "primitive",
+                        "value": "First"
+                      },
+                      "createdAt": {
+                        "type": "primitive",
+                        "value": "2026-01-01 10:00:00+01"
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "value": {
+                      "id": {
+                        "type": "primitive",
+                        "value": 2
+                      },
+                      "title": {
+                        "type": "primitive",
+                        "value": "Second"
+                      },
+                      "createdAt": {
+                        "type": "primitive",
+                        "value": "2026-01-01 10:00:00+01"
+                      }
+                    }
+                  }
+                ]
+              }
+            ],
+            "source": "query.ts",
+            "line": 5
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 10,
+          "payload": {
+            "sequence": 9,
+            "phase": "run",
+            "origin": "drizzle",
+            "kind": "executed",
+            "sql": "select \"d0\".\"id\" as \"id\", \"d0\".\"title\" as \"title\", \"d0\".\"created_at\" as \"createdAt\" from \"posts\" as \"d0\" where \"d0\".\"created_at\" > $1 order by \"d0\".\"created_at\" asc, \"d0\".\"id\" asc limit $2",
+            "parameters": [
+              {
+                "type": "primitive",
+                "value": "2026-01-01 10:00:00+01"
+              },
+              {
+                "type": "primitive",
+                "value": 2
+              }
+            ],
+            "outcome": "succeeded",
+            "source": "query.ts",
+            "line": 8,
+            "durationMs": 4.999755859375,
+            "rowCount": 2
+          }
+        },
+        {
+          "type": "display",
+          "sequence": 11,
+          "payload": {
+            "label": "Timestamp-only cursor skips a tie",
+            "values": [
+              {
+                "type": "array",
+                "value": [
+                  {
+                    "type": "object",
+                    "value": {
+                      "id": {
+                        "type": "primitive",
+                        "value": 4
+                      },
+                      "title": {
+                        "type": "primitive",
+                        "value": "Fourth"
+                      },
+                      "createdAt": {
+                        "type": "primitive",
+                        "value": "2026-01-02 10:00:00+01"
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "value": {
+                      "id": {
+                        "type": "primitive",
+                        "value": 5
+                      },
+                      "title": {
+                        "type": "primitive",
+                        "value": "Fifth"
+                      },
+                      "createdAt": {
+                        "type": "primitive",
+                        "value": "2026-01-02 10:00:00+01"
+                      }
+                    }
+                  }
+                ]
+              }
+            ],
+            "source": "query.ts",
+            "line": 13
+          }
+        }
+      ],
+      "cleanupErrors": [],
+      "cleanup": {
+        "guest": {
+          "mode": "graceful"
+        },
+        "database": {
+          "mode": "graceful"
+        }
+      },
+      "timings": {
+        "total": 1183,
+        "validate": 0.039999961853027344,
+        "resolve": 0.004999995231628418,
+        "load_artifacts": 445.2150000333786,
+        "compile": 64.87999999523163,
+        "evaluate_schema": 74.64000010490417,
+        "generate_bootstrap": 19.894999980926514,
+        "apply_bootstrap": 385.5550000667572,
+        "seed": 8.90500009059906,
+        "run": 13.485000014305115,
+        "inspect": 60.264999985694885,
+        "plan": 0.04999995231628418,
+        "cleanup": 2.2949999570846558
+      },
+      "ok": true,
+      "outcome": "succeeded"
+    }
+  ],
+  "guests": [
+    {
+      "imageId": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+      "lockDigest": "sha256-dabcc2a116ec5e228673a8c074b17ef00b455fc65afad67b9e392fd1ff4d2ad6"
+    },
+    {
+      "imageId": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+      "lockDigest": "sha256-dabcc2a116ec5e228673a8c074b17ef00b455fc65afad67b9e392fd1ff4d2ad6"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "id": "364c4c49-e38d-47b3-be01-107b7cb76552",
+  "slug": "temporal-custom-type-sqlite",
+  "status": "published",
+  "title": "Store Temporal dates with a custom type (SQLite)",
+  "description": "Build a customType with actual value conversion, preserve nullable dates, and query with typed Temporal values.",
+  "topic": "Schema",
+  "featured": false,
+  "order": 131,
+  "dialect": "sqlite",
+  "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+  "links": [
+    {
+      "kind": "docs",
+      "label": "Custom column types",
+      "url": "https://orm.drizzle.team/docs/custom-types"
+    },
+    {
+      "kind": "example",
+      "label": "The PostgreSQL version",
+      "slug": "temporal-custom-type-postgresql"
+    },
+    {
+      "kind": "example",
+      "label": "Fork the complete booking example",
+      "slug": "temporal-bookings-sqlite"
+    }
+  ]
+}

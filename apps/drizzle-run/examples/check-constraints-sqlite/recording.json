@@ -1,0 +1,720 @@
+{
+  "recordingVersion": 1,
+  "snapshotDigest": "b182c8bc2639bcc6b5fc29298075f99b0b33001384c079dc66067f6095c8f331",
+  "recordedAt": "2026-11-04T09:17:20.237Z",
+  "result": {
+    "version": 1,
+    "target": {
+      "dialect": "sqlite"
+    },
+    "tuple": {
+      "id": "sqlite-wasm__orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+      "target": {
+        "dialect": "sqlite"
+      },
+      "ormVersion": "1.0.0-rc.5",
+      "kitVersion": "1.0.0-rc.5"
+    },
+    "random": {
+      "effectiveSeed": 3456189721,
+      "source": "generated",
+      "derivation": "crypto-u32-v1",
+      "generator": "mulberry32-v1"
+    },
+    "phases": [
+      {
+        "phase": "validate",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:17:18.836Z",
+        "durationMs": 0.02499997615814209
+      },
+      {
+        "phase": "resolve",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:17:18.836Z",
+        "durationMs": 0.004999995231628418
+      },
+      {
+        "phase": "load_artifacts",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:17:19.068Z",
+        "durationMs": 445.4299999475479
+      },
+      {
+        "phase": "compile",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:17:18.922Z",
+        "durationMs": 145.25999999046326
+      },
+      {
+        "phase": "evaluate_schema",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:17:19.514Z",
+        "durationMs": 39.32000005245209
+      },
+      {
+        "phase": "generate_bootstrap",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:17:19.553Z",
+        "durationMs": 1.899999976158142
+      },
+      {
+        "phase": "apply_bootstrap",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:17:19.555Z",
+        "durationMs": 73.60500001907349
+      },
+      {
+        "phase": "seed",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:17:19.629Z",
+        "durationMs": 2.6649999618530273
+      },
+      {
+        "phase": "run",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:17:19.632Z",
+        "durationMs": 6.389999985694885
+      },
+      {
+        "phase": "inspect",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:17:19.638Z",
+        "durationMs": 1.4200000762939453
+      },
+      {
+        "phase": "plan",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:17:19.639Z",
+        "durationMs": 0.05500006675720215
+      },
+      {
+        "phase": "cleanup",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:17:19.640Z",
+        "durationMs": 0.8149999380111694
+      }
+    ],
+    "diagnostics": [],
+    "sql": [
+      {
+        "sequence": 1,
+        "phase": "bootstrap",
+        "origin": "kit",
+        "kind": "generated",
+        "sql": "CREATE TABLE `products` (\n\t`id` integer PRIMARY KEY,\n\t`name` text NOT NULL,\n\t`price_cents` integer NOT NULL,\n\t`discount_cents` integer NOT NULL,\n\t`restock_threshold` integer,\n\t`stock` integer DEFAULT 0 NOT NULL,\n\tCONSTRAINT \"price_non_negative\" CHECK(\"price_cents\" >= 0),\n\tCONSTRAINT \"stock_non_negative\" CHECK(\"stock\" >= 0),\n\tCONSTRAINT \"discount_in_range\" CHECK(\"discount_cents\" >= 0 and \"discount_cents\" <= \"price_cents\"),\n\tCONSTRAINT \"threshold_non_negative\" CHECK(\"restock_threshold\" >= 0)\n);\n",
+        "parameters": [],
+        "outcome": "succeeded"
+      },
+      {
+        "sequence": 2,
+        "phase": "bootstrap",
+        "origin": "adapter",
+        "kind": "executed",
+        "sql": "CREATE TABLE `products` (\n\t`id` integer PRIMARY KEY,\n\t`name` text NOT NULL,\n\t`price_cents` integer NOT NULL,\n\t`discount_cents` integer NOT NULL,\n\t`restock_threshold` integer,\n\t`stock` integer DEFAULT 0 NOT NULL,\n\tCONSTRAINT \"price_non_negative\" CHECK(\"price_cents\" >= 0),\n\tCONSTRAINT \"stock_non_negative\" CHECK(\"stock\" >= 0),\n\tCONSTRAINT \"discount_in_range\" CHECK(\"discount_cents\" >= 0 and \"discount_cents\" <= \"price_cents\"),\n\tCONSTRAINT \"threshold_non_negative\" CHECK(\"restock_threshold\" >= 0)\n);\n",
+        "parameters": [],
+        "outcome": "succeeded"
+      },
+      {
+        "sequence": 3,
+        "phase": "seed",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "insert into \"products\" (\"id\", \"name\", \"price_cents\", \"discount_cents\", \"restock_threshold\", \"stock\") values (?, ?, ?, ?, null, ?)",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": 1
+          },
+          {
+            "type": "primitive",
+            "value": "SQL handbook"
+          },
+          {
+            "type": "primitive",
+            "value": 2000
+          },
+          {
+            "type": "primitive",
+            "value": 250
+          },
+          {
+            "type": "primitive",
+            "value": 0
+          }
+        ],
+        "outcome": "succeeded",
+        "source": "seed.ts",
+        "line": 4,
+        "durationMs": 2,
+        "rowCount": 1
+      },
+      {
+        "sequence": 4,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "insert into \"products\" (\"id\", \"name\", \"price_cents\", \"discount_cents\", \"restock_threshold\", \"stock\") values (?, ?, ?, ?, null, ?)",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": 2
+          },
+          {
+            "type": "primitive",
+            "value": "Invalid stock"
+          },
+          {
+            "type": "primitive",
+            "value": 1000
+          },
+          {
+            "type": "primitive",
+            "value": 0
+          },
+          {
+            "type": "primitive",
+            "value": -1
+          }
+        ],
+        "outcome": "failed",
+        "source": "query.ts",
+        "line": 29,
+        "durationMs": 1,
+        "error": {
+          "name": "LibsqlError",
+          "message": "SQLITE_CONSTRAINT: SQLITE_CONSTRAINT_CHECK: sqlite3 result code 275: CHECK constraint failed: stock_non_negative",
+          "stack": "LibsqlError: SQLITE_CONSTRAINT: SQLITE_CONSTRAINT_CHECK: sqlite3 result code 275: CHECK constraint failed: stock_non_negative\n    at withSqliteErrors (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:25239:13)\n    at executeStatement (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:25254:10)\n    at SqliteClient.execute (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:25410:16)\n    at Object.call (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:29150:58)\n    at Object.serveRequest [as serve] (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:29915:35)\n    at http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:29642:30\n    at Object.start (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:27939:47)\n    at Actor.start (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:26343:20)\n    at http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:26609:14\n    at Actor.update (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:26128:9)"
+        }
+      },
+      {
+        "sequence": 5,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "update \"products\" set \"discount_cents\" = ? where \"products\".\"id\" = ?",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": 3000
+          },
+          {
+            "type": "primitive",
+            "value": 1
+          }
+        ],
+        "outcome": "failed",
+        "source": "query.ts",
+        "line": 38,
+        "durationMs": 0.999755859375,
+        "error": {
+          "name": "LibsqlError",
+          "message": "SQLITE_CONSTRAINT: SQLITE_CONSTRAINT_CHECK: sqlite3 result code 275: CHECK constraint failed: discount_in_range",
+          "stack": "LibsqlError: SQLITE_CONSTRAINT: SQLITE_CONSTRAINT_CHECK: sqlite3 result code 275: CHECK constraint failed: discount_in_range\n    at withSqliteErrors (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:25239:13)\n    at executeStatement (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:25254:10)\n    at SqliteClient.execute (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:25410:16)\n    at Object.call (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:29150:58)\n    at Object.serveRequest [as serve] (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:29915:35)\n    at http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:29642:30\n    at Object.start (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:27939:47)\n    at Actor.start (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:26343:20)\n    at http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:26609:14\n    at Actor.update (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:26128:9)"
+        }
+      },
+      {
+        "sequence": 6,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "insert into \"products\" (\"id\", \"name\", \"price_cents\", \"discount_cents\", \"restock_threshold\", \"stock\") values (?, ?, ?, ?, ?, ?)",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": 3
+          },
+          {
+            "type": "primitive",
+            "value": "Pocket notes"
+          },
+          {
+            "type": "primitive",
+            "value": 500
+          },
+          {
+            "type": "primitive",
+            "value": 0
+          },
+          {
+            "type": "primitive",
+            "value": null
+          },
+          {
+            "type": "primitive",
+            "value": 0
+          }
+        ],
+        "outcome": "succeeded",
+        "source": "query.ts",
+        "line": 42,
+        "durationMs": 1.000244140625,
+        "rowCount": 1
+      },
+      {
+        "sequence": 7,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "select \"id\", \"name\", \"price_cents\", \"discount_cents\", \"restock_threshold\", \"stock\" from \"products\" order by \"products\".\"id\"",
+        "parameters": [],
+        "outcome": "succeeded",
+        "source": "query.ts",
+        "line": 46,
+        "durationMs": 1,
+        "rowCount": 2
+      }
+    ],
+    "logs": [],
+    "value": {
+      "type": "undefined"
+    },
+    "displays": [
+      {
+        "label": "stock_non_negative",
+        "values": [
+          {
+            "type": "object",
+            "value": {
+              "rejected": {
+                "type": "primitive",
+                "value": true
+              }
+            }
+          }
+        ],
+        "source": "query.ts",
+        "line": 15
+      },
+      {
+        "label": "discount_in_range",
+        "values": [
+          {
+            "type": "object",
+            "value": {
+              "rejected": {
+                "type": "primitive",
+                "value": true
+              }
+            }
+          }
+        ],
+        "source": "query.ts",
+        "line": 15
+      },
+      {
+        "label": "Stored products",
+        "values": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "id": {
+                    "type": "primitive",
+                    "value": 1
+                  },
+                  "name": {
+                    "type": "primitive",
+                    "value": "SQL handbook"
+                  },
+                  "priceCents": {
+                    "type": "primitive",
+                    "value": 2000
+                  },
+                  "discountCents": {
+                    "type": "primitive",
+                    "value": 250
+                  },
+                  "restockThreshold": {
+                    "type": "primitive",
+                    "value": null
+                  },
+                  "stock": {
+                    "type": "primitive",
+                    "value": 0
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "id": {
+                    "type": "primitive",
+                    "value": 3
+                  },
+                  "name": {
+                    "type": "primitive",
+                    "value": "Pocket notes"
+                  },
+                  "priceCents": {
+                    "type": "primitive",
+                    "value": 500
+                  },
+                  "discountCents": {
+                    "type": "primitive",
+                    "value": 0
+                  },
+                  "restockThreshold": {
+                    "type": "primitive",
+                    "value": null
+                  },
+                  "stock": {
+                    "type": "primitive",
+                    "value": 0
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "source": "query.ts",
+        "line": 46
+      }
+    ],
+    "events": [
+      {
+        "type": "sql",
+        "sequence": 1,
+        "payload": {
+          "sequence": 1,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "CREATE TABLE `products` (\n\t`id` integer PRIMARY KEY,\n\t`name` text NOT NULL,\n\t`price_cents` integer NOT NULL,\n\t`discount_cents` integer NOT NULL,\n\t`restock_threshold` integer,\n\t`stock` integer DEFAULT 0 NOT NULL,\n\tCONSTRAINT \"price_non_negative\" CHECK(\"price_cents\" >= 0),\n\tCONSTRAINT \"stock_non_negative\" CHECK(\"stock\" >= 0),\n\tCONSTRAINT \"discount_in_range\" CHECK(\"discount_cents\" >= 0 and \"discount_cents\" <= \"price_cents\"),\n\tCONSTRAINT \"threshold_non_negative\" CHECK(\"restock_threshold\" >= 0)\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 2,
+        "payload": {
+          "sequence": 2,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "CREATE TABLE `products` (\n\t`id` integer PRIMARY KEY,\n\t`name` text NOT NULL,\n\t`price_cents` integer NOT NULL,\n\t`discount_cents` integer NOT NULL,\n\t`restock_threshold` integer,\n\t`stock` integer DEFAULT 0 NOT NULL,\n\tCONSTRAINT \"price_non_negative\" CHECK(\"price_cents\" >= 0),\n\tCONSTRAINT \"stock_non_negative\" CHECK(\"stock\" >= 0),\n\tCONSTRAINT \"discount_in_range\" CHECK(\"discount_cents\" >= 0 and \"discount_cents\" <= \"price_cents\"),\n\tCONSTRAINT \"threshold_non_negative\" CHECK(\"restock_threshold\" >= 0)\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 3,
+        "payload": {
+          "sequence": 3,
+          "phase": "seed",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "insert into \"products\" (\"id\", \"name\", \"price_cents\", \"discount_cents\", \"restock_threshold\", \"stock\") values (?, ?, ?, ?, null, ?)",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": 1
+            },
+            {
+              "type": "primitive",
+              "value": "SQL handbook"
+            },
+            {
+              "type": "primitive",
+              "value": 2000
+            },
+            {
+              "type": "primitive",
+              "value": 250
+            },
+            {
+              "type": "primitive",
+              "value": 0
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "seed.ts",
+          "line": 4,
+          "durationMs": 2,
+          "rowCount": 1
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 4,
+        "payload": {
+          "sequence": 4,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "insert into \"products\" (\"id\", \"name\", \"price_cents\", \"discount_cents\", \"restock_threshold\", \"stock\") values (?, ?, ?, ?, null, ?)",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": 2
+            },
+            {
+              "type": "primitive",
+              "value": "Invalid stock"
+            },
+            {
+              "type": "primitive",
+              "value": 1000
+            },
+            {
+              "type": "primitive",
+              "value": 0
+            },
+            {
+              "type": "primitive",
+              "value": -1
+            }
+          ],
+          "outcome": "failed",
+          "source": "query.ts",
+          "line": 29,
+          "durationMs": 1,
+          "error": {
+            "name": "LibsqlError",
+            "message": "SQLITE_CONSTRAINT: SQLITE_CONSTRAINT_CHECK: sqlite3 result code 275: CHECK constraint failed: stock_non_negative",
+            "stack": "LibsqlError: SQLITE_CONSTRAINT: SQLITE_CONSTRAINT_CHECK: sqlite3 result code 275: CHECK constraint failed: stock_non_negative\n    at withSqliteErrors (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:25239:13)\n    at executeStatement (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:25254:10)\n    at SqliteClient.execute (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:25410:16)\n    at Object.call (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:29150:58)\n    at Object.serveRequest [as serve] (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:29915:35)\n    at http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:29642:30\n    at Object.start (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:27939:47)\n    at Actor.start (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:26343:20)\n    at http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:26609:14\n    at Actor.update (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:26128:9)"
+          }
+        }
+      },
+      {
+        "type": "display",
+        "sequence": 5,
+        "payload": {
+          "label": "stock_non_negative",
+          "values": [
+            {
+              "type": "object",
+              "value": {
+                "rejected": {
+                  "type": "primitive",
+                  "value": true
+                }
+              }
+            }
+          ],
+          "source": "query.ts",
+          "line": 15
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 6,
+        "payload": {
+          "sequence": 5,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "update \"products\" set \"discount_cents\" = ? where \"products\".\"id\" = ?",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": 3000
+            },
+            {
+              "type": "primitive",
+              "value": 1
+            }
+          ],
+          "outcome": "failed",
+          "source": "query.ts",
+          "line": 38,
+          "durationMs": 0.999755859375,
+          "error": {
+            "name": "LibsqlError",
+            "message": "SQLITE_CONSTRAINT: SQLITE_CONSTRAINT_CHECK: sqlite3 result code 275: CHECK constraint failed: discount_in_range",
+            "stack": "LibsqlError: SQLITE_CONSTRAINT: SQLITE_CONSTRAINT_CHECK: sqlite3 result code 275: CHECK constraint failed: discount_in_range\n    at withSqliteErrors (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:25239:13)\n    at executeStatement (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:25254:10)\n    at SqliteClient.execute (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:25410:16)\n    at Object.call (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:29150:58)\n    at Object.serveRequest [as serve] (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:29915:35)\n    at http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:29642:30\n    at Object.start (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:27939:47)\n    at Actor.start (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:26343:20)\n    at http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:26609:14\n    at Actor.update (http://127.0.0.1:4173/runtime-assets/7314d96cb7abad36e2c2f190d5d54ee35d7acc9330d8244e6745f5afb5224c72/quickjs/database-worker.js:26128:9)"
+          }
+        }
+      },
+      {
+        "type": "display",
+        "sequence": 7,
+        "payload": {
+          "label": "discount_in_range",
+          "values": [
+            {
+              "type": "object",
+              "value": {
+                "rejected": {
+                  "type": "primitive",
+                  "value": true
+                }
+              }
+            }
+          ],
+          "source": "query.ts",
+          "line": 15
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 8,
+        "payload": {
+          "sequence": 6,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "insert into \"products\" (\"id\", \"name\", \"price_cents\", \"discount_cents\", \"restock_threshold\", \"stock\") values (?, ?, ?, ?, ?, ?)",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": 3
+            },
+            {
+              "type": "primitive",
+              "value": "Pocket notes"
+            },
+            {
+              "type": "primitive",
+              "value": 500
+            },
+            {
+              "type": "primitive",
+              "value": 0
+            },
+            {
+              "type": "primitive",
+              "value": null
+            },
+            {
+              "type": "primitive",
+              "value": 0
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 42,
+          "durationMs": 1.000244140625,
+          "rowCount": 1
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 9,
+        "payload": {
+          "sequence": 7,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "select \"id\", \"name\", \"price_cents\", \"discount_cents\", \"restock_threshold\", \"stock\" from \"products\" order by \"products\".\"id\"",
+          "parameters": [],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 46,
+          "durationMs": 1,
+          "rowCount": 2
+        }
+      },
+      {
+        "type": "display",
+        "sequence": 10,
+        "payload": {
+          "label": "Stored products",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 1
+                    },
+                    "name": {
+                      "type": "primitive",
+                      "value": "SQL handbook"
+                    },
+                    "priceCents": {
+                      "type": "primitive",
+                      "value": 2000
+                    },
+                    "discountCents": {
+                      "type": "primitive",
+                      "value": 250
+                    },
+                    "restockThreshold": {
+                      "type": "primitive",
+                      "value": null
+                    },
+                    "stock": {
+                      "type": "primitive",
+                      "value": 0
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 3
+                    },
+                    "name": {
+                      "type": "primitive",
+                      "value": "Pocket notes"
+                    },
+                    "priceCents": {
+                      "type": "primitive",
+                      "value": 500
+                    },
+                    "discountCents": {
+                      "type": "primitive",
+                      "value": 0
+                    },
+                    "restockThreshold": {
+                      "type": "primitive",
+                      "value": null
+                    },
+                    "stock": {
+                      "type": "primitive",
+                      "value": 0
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 46
+        }
+      }
+    ],
+    "cleanupErrors": [],
+    "cleanup": {
+      "guest": {
+        "mode": "graceful"
+      },
+      "database": {
+        "mode": "graceful"
+      }
+    },
+    "timings": {
+      "total": 807,
+      "validate": 0.02499997615814209,
+      "resolve": 0.004999995231628418,
+      "load_artifacts": 445.4299999475479,
+      "compile": 145.25999999046326,
+      "evaluate_schema": 39.32000005245209,
+      "generate_bootstrap": 1.899999976158142,
+      "apply_bootstrap": 73.60500001907349,
+      "seed": 2.6649999618530273,
+      "run": 6.389999985694885,
+      "inspect": 1.4200000762939453,
+      "plan": 0.05500006675720215,
+      "cleanup": 0.8149999380111694
+    },
+    "ok": true,
+    "outcome": "succeeded"
+  },
+  "guests": [
+    {
+      "imageId": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+      "lockDigest": "sha256-dabcc2a116ec5e228673a8c074b17ef00b455fc65afad67b9e392fd1ff4d2ad6"
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 {
   "recordingVersion": 1,
-  "snapshotDigest": "241e8ce172bd0b079b022a9c9cceeb70c245eaa46827be226b4b8db6408233e5",
-  "recordedAt": "2026-10-28T19:45:49.427Z",
+  "snapshotDigest": "e79cc42cff525aebdf9987317476885070535e6a15a03d55d13358548d70c33d",
+  "recordedAt": "2026-11-04T09:37:07.558Z",
   "result": {
     "version": 1,
     "target": {
@@ -16,83 +16,83 @@
       "kitVersion": "1.0.0-rc.5"
     },
     "random": {
-      "effectiveSeed": 927190613,
-      "source": "derived",
-      "derivation": "run-manifest-sha256-u32-v1",
+      "effectiveSeed": 4204531220,
+      "source": "generated",
+      "derivation": "crypto-u32-v1",
       "generator": "mulberry32-v1"
     },
     "phases": [
       {
         "phase": "validate",
         "status": "succeeded",
-        "startedAt": "2026-10-28T19:45:48.715Z",
-        "durationMs": 0.03999999165534973
+        "startedAt": "2026-11-04T09:37:05.737Z",
+        "durationMs": 0.04499995708465576
       },
       {
         "phase": "resolve",
         "status": "succeeded",
-        "startedAt": "2026-10-28T19:45:48.715Z",
+        "startedAt": "2026-11-04T09:37:05.737Z",
         "durationMs": 0.004999995231628418
       },
       {
         "phase": "load_artifacts",
         "status": "succeeded",
-        "startedAt": "2026-10-28T19:45:48.716Z",
-        "durationMs": 0.42499999701976776
+        "startedAt": "2026-11-04T09:37:05.957Z",
+        "durationMs": 444.25999999046326
       },
       {
         "phase": "compile",
         "status": "succeeded",
-        "startedAt": "2026-10-28T19:45:48.939Z",
-        "durationMs": 2
+        "startedAt": "2026-11-04T09:37:05.780Z",
+        "durationMs": 176.45500004291534
       },
       {
         "phase": "evaluate_schema",
         "status": "succeeded",
-        "startedAt": "2026-10-28T19:45:48.944Z",
-        "durationMs": 0
+        "startedAt": "2026-11-04T09:37:06.402Z",
+        "durationMs": 50.06000006198883
       },
       {
         "phase": "generate_bootstrap",
         "status": "succeeded",
-        "startedAt": "2026-10-28T19:45:48.945Z",
-        "durationMs": 21
-      },
-      {
-        "phase": "open_database",
-        "status": "succeeded",
-        "startedAt": "2026-10-28T19:45:48.968Z",
-        "durationMs": 7
+        "startedAt": "2026-11-04T09:37:06.452Z",
+        "durationMs": 19.804999947547913
       },
       {
         "phase": "apply_bootstrap",
         "status": "succeeded",
-        "startedAt": "2026-10-28T19:45:48.973Z",
-        "durationMs": 27
-      },
-      {
-        "phase": "initialize_context",
-        "status": "succeeded",
-        "startedAt": "2026-10-28T19:45:49.003Z",
-        "durationMs": 1
+        "startedAt": "2026-11-04T09:37:06.472Z",
+        "durationMs": 387.0200001001358
       },
       {
         "phase": "seed",
         "status": "succeeded",
-        "startedAt": "2026-10-28T19:45:49.004Z",
-        "durationMs": 0
+        "startedAt": "2026-11-04T09:37:06.859Z",
+        "durationMs": 0.10000002384185791
       },
       {
         "phase": "run",
         "status": "succeeded",
-        "startedAt": "2026-10-28T19:45:49.004Z",
-        "durationMs": 17
+        "startedAt": "2026-11-04T09:37:06.859Z",
+        "durationMs": 55.29000008106232
       },
       {
         "phase": "inspect",
         "status": "succeeded",
-        "startedAt": "2026-10-28T19:45:49.021Z",
-        "durationMs": 74
+        "startedAt": "2026-11-04T09:37:06.914Z",
+        "durationMs": 53.54000008106232
+      },
+      {
+        "phase": "plan",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:37:06.968Z",
+        "durationMs": 0.04500007629394531
+      },
+      {
+        "phase": "cleanup",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:37:06.968Z",
+        "durationMs": 2.115000009536743
       }
     ],
     "diagnostics": [],
@@ -114,7 +114,7 @@
         "sql": "BEGIN",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 11
+        "durationMs": 1
       },
       {
         "sequence": 3,
@@ -124,7 +124,7 @@
         "sql": "CREATE TABLE \"users\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"email\" text NOT NULL UNIQUE,\n\t\"age\" integer\n);\n",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 11
+        "durationMs": 12
       },
       {
         "sequence": 4,
@@ -134,7 +134,7 @@
         "sql": "COMMIT",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 3
+        "durationMs": 0.999755859375
       },
       {
         "sequence": 5,
@@ -158,8 +158,8 @@
         ],
         "outcome": "succeeded",
         "source": "query.ts",
-        "line": 38,
-        "durationMs": 5,
+        "line": 39,
+        "durationMs": 7,
         "rowCount": 1
       },
       {
@@ -171,8 +171,8 @@
         "parameters": [],
         "outcome": "succeeded",
         "source": "query.ts",
-        "line": 40,
-        "durationMs": 3,
+        "line": 41,
+        "durationMs": 1,
         "rowCount": 1
       }
     ],
@@ -242,7 +242,7 @@
           }
         ],
         "source": "query.ts",
-        "line": 34
+        "line": 35
       },
       {
         "label": "Inserted users",
@@ -275,7 +275,7 @@
           }
         ],
         "source": "query.ts",
-        "line": 40
+        "line": 41
       }
     ],
     "events": [
@@ -303,7 +303,7 @@
           "sql": "BEGIN",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 11
+          "durationMs": 1
         }
       },
       {
@@ -317,7 +317,7 @@
           "sql": "CREATE TABLE \"users\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"email\" text NOT NULL UNIQUE,\n\t\"age\" integer\n);\n",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 11
+          "durationMs": 12
         }
       },
       {
@@ -331,7 +331,7 @@
           "sql": "COMMIT",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 3
+          "durationMs": 0.999755859375
         }
       },
       {
@@ -398,7 +398,7 @@
             }
           ],
           "source": "query.ts",
-          "line": 34
+          "line": 35
         }
       },
       {
@@ -426,8 +426,8 @@
           ],
           "outcome": "succeeded",
           "source": "query.ts",
-          "line": 38,
-          "durationMs": 5,
+          "line": 39,
+          "durationMs": 7,
           "rowCount": 1
         }
       },
@@ -443,8 +443,8 @@
           "parameters": [],
           "outcome": "succeeded",
           "source": "query.ts",
-          "line": 40,
-          "durationMs": 3,
+          "line": 41,
+          "durationMs": 1,
           "rowCount": 1
         }
       },
@@ -482,7 +482,7 @@
             }
           ],
           "source": "query.ts",
-          "line": 40
+          "line": 41
         }
       }
     ],
@@ -496,19 +496,19 @@
       }
     },
     "timings": {
-      "total": 384,
-      "validate": 0.03999999165534973,
+      "total": 1236,
+      "validate": 0.04499995708465576,
       "resolve": 0.004999995231628418,
-      "load_artifacts": 0.42499999701976776,
-      "compile": 2,
-      "evaluate_schema": 0,
-      "generate_bootstrap": 21,
-      "open_database": 7,
-      "apply_bootstrap": 27,
-      "initialize_context": 1,
-      "seed": 0,
-      "run": 17,
-      "inspect": 74
+      "load_artifacts": 444.25999999046326,
+      "compile": 176.45500004291534,
+      "evaluate_schema": 50.06000006198883,
+      "generate_bootstrap": 19.804999947547913,
+      "apply_bootstrap": 387.0200001001358,
+      "seed": 0.10000002384185791,
+      "run": 55.29000008106232,
+      "inspect": 53.54000008106232,
+      "plan": 0.04500007629394531,
+      "cleanup": 2.115000009536743
     },
     "ok": true,
     "outcome": "succeeded"
@@ -516,7 +516,7 @@
   "guests": [
     {
       "imageId": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
-      "lockDigest": "sha256-173d5c06268596c4f200f2c55999d19e7020ea73b9767d6f1cb6c8b2851731b1"
+      "lockDigest": "sha256-dabcc2a116ec5e228673a8c074b17ef00b455fc65afad67b9e392fd1ff4d2ad6"
     }
   ]
 }

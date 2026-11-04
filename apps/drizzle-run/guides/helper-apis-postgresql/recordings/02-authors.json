@@ -1,0 +1,2151 @@
+{
+  "recordingVersion": 1,
+  "snapshotDigest": "eb1fb4edd22c94b07b5b671fb1dc99472e9f18f7ee409c22fdae74c7750eae8c",
+  "recordedAt": "2026-11-04T09:52:47.393Z",
+  "sides": [
+    {
+      "version": 1,
+      "target": {
+        "dialect": "postgresql"
+      },
+      "tuple": {
+        "id": "postgresql-pglite__orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+        "target": {
+          "dialect": "postgresql"
+        },
+        "ormVersion": "1.0.0-rc.5",
+        "kitVersion": "1.0.0-rc.5"
+      },
+      "random": {
+        "effectiveSeed": 487779926,
+        "source": "generated",
+        "derivation": "crypto-u32-v1",
+        "generator": "mulberry32-v1"
+      },
+      "phases": [
+        {
+          "phase": "validate",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:52:43.525Z",
+          "durationMs": 0.034999966621398926
+        },
+        {
+          "phase": "resolve",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:52:43.525Z",
+          "durationMs": 0.004999995231628418
+        },
+        {
+          "phase": "load_artifacts",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:52:43.778Z",
+          "durationMs": 446.58000004291534
+        },
+        {
+          "phase": "compile",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:52:43.605Z",
+          "durationMs": 171.63500010967255
+        },
+        {
+          "phase": "evaluate_schema",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:52:44.225Z",
+          "durationMs": 78.75999999046326
+        },
+        {
+          "phase": "generate_bootstrap",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:52:44.304Z",
+          "durationMs": 21.429999947547913
+        },
+        {
+          "phase": "apply_bootstrap",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:52:44.326Z",
+          "durationMs": 401.89999997615814
+        },
+        {
+          "phase": "seed",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:52:44.727Z",
+          "durationMs": 11.725000023841858
+        },
+        {
+          "phase": "run",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:52:44.739Z",
+          "durationMs": 14.434999942779541
+        },
+        {
+          "phase": "inspect",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:52:44.753Z",
+          "durationMs": 55.204999923706055
+        },
+        {
+          "phase": "plan",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:52:44.809Z",
+          "durationMs": 0.040000081062316895
+        },
+        {
+          "phase": "cleanup",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:52:44.810Z",
+          "durationMs": 2.7549999952316284
+        }
+      ],
+      "diagnostics": [],
+      "sql": [
+        {
+          "sequence": 1,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "CREATE TABLE \"posts\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"author_id\" integer NOT NULL,\n\t\"title\" text NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        },
+        {
+          "sequence": 2,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "CREATE TABLE \"users\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"bio\" text,\n\t\"active\" boolean NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        },
+        {
+          "sequence": 3,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "ALTER TABLE \"posts\" ADD CONSTRAINT \"posts_author_id_users_id_fkey\" FOREIGN KEY (\"author_id\") REFERENCES \"users\"(\"id\");",
+          "parameters": [],
+          "outcome": "succeeded"
+        },
+        {
+          "sequence": 4,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "BEGIN",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 1
+        },
+        {
+          "sequence": 5,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "CREATE TABLE \"posts\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"author_id\" integer NOT NULL,\n\t\"title\" text NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 8
+        },
+        {
+          "sequence": 6,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "CREATE TABLE \"users\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"bio\" text,\n\t\"active\" boolean NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 2.999755859375
+        },
+        {
+          "sequence": 7,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "ALTER TABLE \"posts\" ADD CONSTRAINT \"posts_author_id_users_id_fkey\" FOREIGN KEY (\"author_id\") REFERENCES \"users\"(\"id\");",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 4
+        },
+        {
+          "sequence": 8,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "COMMIT",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 1.000244140625
+        },
+        {
+          "sequence": 9,
+          "phase": "seed",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "insert into \"users\" (\"id\", \"name\", \"bio\", \"active\") values ($1, $2, $3, $4), ($5, $6, $7, $8)",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": 1
+            },
+            {
+              "type": "primitive",
+              "value": "Ada"
+            },
+            {
+              "type": "primitive",
+              "value": "Writes about SQL"
+            },
+            {
+              "type": "primitive",
+              "value": true
+            },
+            {
+              "type": "primitive",
+              "value": 2
+            },
+            {
+              "type": "primitive",
+              "value": "Grace"
+            },
+            {
+              "type": "primitive",
+              "value": null
+            },
+            {
+              "type": "primitive",
+              "value": false
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "seed.ts",
+          "line": 5,
+          "durationMs": 6,
+          "rowCount": 2
+        },
+        {
+          "sequence": 10,
+          "phase": "seed",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "insert into \"posts\" (\"id\", \"author_id\", \"title\") values ($1, $2, $3), ($4, $5, $6), ($7, $8, $9)",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": 1
+            },
+            {
+              "type": "primitive",
+              "value": 1
+            },
+            {
+              "type": "primitive",
+              "value": "Small SQL helpers"
+            },
+            {
+              "type": "primitive",
+              "value": 2
+            },
+            {
+              "type": "primitive",
+              "value": 2
+            },
+            {
+              "type": "primitive",
+              "value": "Types that follow your query"
+            },
+            {
+              "type": "primitive",
+              "value": 3
+            },
+            {
+              "type": "primitive",
+              "value": 1
+            },
+            {
+              "type": "primitive",
+              "value": "Compose your queries"
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "seed.ts",
+          "line": 10,
+          "durationMs": 4.999755859375,
+          "rowCount": 3
+        },
+        {
+          "sequence": 11,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "select jsonb_build_object($1::text, \"users\".\"id\", $2::text, \"users\".\"name\", $3::text, \"users\".\"bio\", $4::text, \"users\".\"active\") from \"users\" order by \"users\".\"id\"",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": "id"
+            },
+            {
+              "type": "primitive",
+              "value": "displayName"
+            },
+            {
+              "type": "primitive",
+              "value": "bio"
+            },
+            {
+              "type": "primitive",
+              "value": "active"
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 7,
+          "durationMs": 5,
+          "rowCount": 2
+        },
+        {
+          "sequence": 12,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "select \"posts\".\"id\", \"posts\".\"title\", length(\"posts\".\"title\"), jsonb_build_object($1::text, \"users\".\"id\", $2::text, \"users\".\"name\", $3::text, \"users\".\"bio\", $4::text, \"users\".\"active\") from \"posts\" inner join \"users\" on \"posts\".\"author_id\" = \"users\".\"id\" order by \"posts\".\"id\"",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": "id"
+            },
+            {
+              "type": "primitive",
+              "value": "displayName"
+            },
+            {
+              "type": "primitive",
+              "value": "bio"
+            },
+            {
+              "type": "primitive",
+              "value": "active"
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 16,
+          "durationMs": 6,
+          "rowCount": 3
+        }
+      ],
+      "logs": [],
+      "value": {
+        "type": "undefined"
+      },
+      "displays": [
+        {
+          "label": "Profiles",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "profile": {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 1
+                        },
+                        "bio": {
+                          "type": "primitive",
+                          "value": "Writes about SQL"
+                        },
+                        "active": {
+                          "type": "primitive",
+                          "value": true
+                        },
+                        "displayName": {
+                          "type": "primitive",
+                          "value": "Ada"
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "profile": {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 2
+                        },
+                        "bio": {
+                          "type": "primitive",
+                          "value": null
+                        },
+                        "active": {
+                          "type": "primitive",
+                          "value": false
+                        },
+                        "displayName": {
+                          "type": "primitive",
+                          "value": "Grace"
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 14
+        },
+        {
+          "label": "Post cards",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 1
+                    },
+                    "title": {
+                      "type": "primitive",
+                      "value": "Small SQL helpers"
+                    },
+                    "titleLength": {
+                      "type": "primitive",
+                      "value": 17
+                    },
+                    "author": {
+                      "type": "object",
+                      "value": {
+                        "profile": {
+                          "type": "object",
+                          "value": {
+                            "id": {
+                              "type": "primitive",
+                              "value": 1
+                            },
+                            "bio": {
+                              "type": "primitive",
+                              "value": "Writes about SQL"
+                            },
+                            "active": {
+                              "type": "primitive",
+                              "value": true
+                            },
+                            "displayName": {
+                              "type": "primitive",
+                              "value": "Ada"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 2
+                    },
+                    "title": {
+                      "type": "primitive",
+                      "value": "Types that follow your query"
+                    },
+                    "titleLength": {
+                      "type": "primitive",
+                      "value": 28
+                    },
+                    "author": {
+                      "type": "object",
+                      "value": {
+                        "profile": {
+                          "type": "object",
+                          "value": {
+                            "id": {
+                              "type": "primitive",
+                              "value": 2
+                            },
+                            "bio": {
+                              "type": "primitive",
+                              "value": null
+                            },
+                            "active": {
+                              "type": "primitive",
+                              "value": false
+                            },
+                            "displayName": {
+                              "type": "primitive",
+                              "value": "Grace"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 3
+                    },
+                    "title": {
+                      "type": "primitive",
+                      "value": "Compose your queries"
+                    },
+                    "titleLength": {
+                      "type": "primitive",
+                      "value": 20
+                    },
+                    "author": {
+                      "type": "object",
+                      "value": {
+                        "profile": {
+                          "type": "object",
+                          "value": {
+                            "id": {
+                              "type": "primitive",
+                              "value": 1
+                            },
+                            "bio": {
+                              "type": "primitive",
+                              "value": "Writes about SQL"
+                            },
+                            "active": {
+                              "type": "primitive",
+                              "value": true
+                            },
+                            "displayName": {
+                              "type": "primitive",
+                              "value": "Ada"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 29
+        }
+      ],
+      "events": [
+        {
+          "type": "sql",
+          "sequence": 1,
+          "payload": {
+            "sequence": 1,
+            "phase": "bootstrap",
+            "origin": "kit",
+            "kind": "generated",
+            "sql": "CREATE TABLE \"posts\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"author_id\" integer NOT NULL,\n\t\"title\" text NOT NULL\n);\n",
+            "parameters": [],
+            "outcome": "succeeded"
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 2,
+          "payload": {
+            "sequence": 2,
+            "phase": "bootstrap",
+            "origin": "kit",
+            "kind": "generated",
+            "sql": "CREATE TABLE \"users\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"bio\" text,\n\t\"active\" boolean NOT NULL\n);\n",
+            "parameters": [],
+            "outcome": "succeeded"
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 3,
+          "payload": {
+            "sequence": 3,
+            "phase": "bootstrap",
+            "origin": "kit",
+            "kind": "generated",
+            "sql": "ALTER TABLE \"posts\" ADD CONSTRAINT \"posts_author_id_users_id_fkey\" FOREIGN KEY (\"author_id\") REFERENCES \"users\"(\"id\");",
+            "parameters": [],
+            "outcome": "succeeded"
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 4,
+          "payload": {
+            "sequence": 4,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "BEGIN",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 1
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 5,
+          "payload": {
+            "sequence": 5,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "CREATE TABLE \"posts\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"author_id\" integer NOT NULL,\n\t\"title\" text NOT NULL\n);\n",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 8
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 6,
+          "payload": {
+            "sequence": 6,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "CREATE TABLE \"users\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"bio\" text,\n\t\"active\" boolean NOT NULL\n);\n",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 2.999755859375
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 7,
+          "payload": {
+            "sequence": 7,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "ALTER TABLE \"posts\" ADD CONSTRAINT \"posts_author_id_users_id_fkey\" FOREIGN KEY (\"author_id\") REFERENCES \"users\"(\"id\");",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 4
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 8,
+          "payload": {
+            "sequence": 8,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "COMMIT",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 1.000244140625
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 9,
+          "payload": {
+            "sequence": 9,
+            "phase": "seed",
+            "origin": "drizzle",
+            "kind": "executed",
+            "sql": "insert into \"users\" (\"id\", \"name\", \"bio\", \"active\") values ($1, $2, $3, $4), ($5, $6, $7, $8)",
+            "parameters": [
+              {
+                "type": "primitive",
+                "value": 1
+              },
+              {
+                "type": "primitive",
+                "value": "Ada"
+              },
+              {
+                "type": "primitive",
+                "value": "Writes about SQL"
+              },
+              {
+                "type": "primitive",
+                "value": true
+              },
+              {
+                "type": "primitive",
+                "value": 2
+              },
+              {
+                "type": "primitive",
+                "value": "Grace"
+              },
+              {
+                "type": "primitive",
+                "value": null
+              },
+              {
+                "type": "primitive",
+                "value": false
+              }
+            ],
+            "outcome": "succeeded",
+            "source": "seed.ts",
+            "line": 5,
+            "durationMs": 6,
+            "rowCount": 2
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 10,
+          "payload": {
+            "sequence": 10,
+            "phase": "seed",
+            "origin": "drizzle",
+            "kind": "executed",
+            "sql": "insert into \"posts\" (\"id\", \"author_id\", \"title\") values ($1, $2, $3), ($4, $5, $6), ($7, $8, $9)",
+            "parameters": [
+              {
+                "type": "primitive",
+                "value": 1
+              },
+              {
+                "type": "primitive",
+                "value": 1
+              },
+              {
+                "type": "primitive",
+                "value": "Small SQL helpers"
+              },
+              {
+                "type": "primitive",
+                "value": 2
+              },
+              {
+                "type": "primitive",
+                "value": 2
+              },
+              {
+                "type": "primitive",
+                "value": "Types that follow your query"
+              },
+              {
+                "type": "primitive",
+                "value": 3
+              },
+              {
+                "type": "primitive",
+                "value": 1
+              },
+              {
+                "type": "primitive",
+                "value": "Compose your queries"
+              }
+            ],
+            "outcome": "succeeded",
+            "source": "seed.ts",
+            "line": 10,
+            "durationMs": 4.999755859375,
+            "rowCount": 3
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 11,
+          "payload": {
+            "sequence": 11,
+            "phase": "run",
+            "origin": "drizzle",
+            "kind": "executed",
+            "sql": "select jsonb_build_object($1::text, \"users\".\"id\", $2::text, \"users\".\"name\", $3::text, \"users\".\"bio\", $4::text, \"users\".\"active\") from \"users\" order by \"users\".\"id\"",
+            "parameters": [
+              {
+                "type": "primitive",
+                "value": "id"
+              },
+              {
+                "type": "primitive",
+                "value": "displayName"
+              },
+              {
+                "type": "primitive",
+                "value": "bio"
+              },
+              {
+                "type": "primitive",
+                "value": "active"
+              }
+            ],
+            "outcome": "succeeded",
+            "source": "query.ts",
+            "line": 7,
+            "durationMs": 5,
+            "rowCount": 2
+          }
+        },
+        {
+          "type": "display",
+          "sequence": 12,
+          "payload": {
+            "label": "Profiles",
+            "values": [
+              {
+                "type": "array",
+                "value": [
+                  {
+                    "type": "object",
+                    "value": {
+                      "profile": {
+                        "type": "object",
+                        "value": {
+                          "id": {
+                            "type": "primitive",
+                            "value": 1
+                          },
+                          "bio": {
+                            "type": "primitive",
+                            "value": "Writes about SQL"
+                          },
+                          "active": {
+                            "type": "primitive",
+                            "value": true
+                          },
+                          "displayName": {
+                            "type": "primitive",
+                            "value": "Ada"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "value": {
+                      "profile": {
+                        "type": "object",
+                        "value": {
+                          "id": {
+                            "type": "primitive",
+                            "value": 2
+                          },
+                          "bio": {
+                            "type": "primitive",
+                            "value": null
+                          },
+                          "active": {
+                            "type": "primitive",
+                            "value": false
+                          },
+                          "displayName": {
+                            "type": "primitive",
+                            "value": "Grace"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            ],
+            "source": "query.ts",
+            "line": 14
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 13,
+          "payload": {
+            "sequence": 12,
+            "phase": "run",
+            "origin": "drizzle",
+            "kind": "executed",
+            "sql": "select \"posts\".\"id\", \"posts\".\"title\", length(\"posts\".\"title\"), jsonb_build_object($1::text, \"users\".\"id\", $2::text, \"users\".\"name\", $3::text, \"users\".\"bio\", $4::text, \"users\".\"active\") from \"posts\" inner join \"users\" on \"posts\".\"author_id\" = \"users\".\"id\" order by \"posts\".\"id\"",
+            "parameters": [
+              {
+                "type": "primitive",
+                "value": "id"
+              },
+              {
+                "type": "primitive",
+                "value": "displayName"
+              },
+              {
+                "type": "primitive",
+                "value": "bio"
+              },
+              {
+                "type": "primitive",
+                "value": "active"
+              }
+            ],
+            "outcome": "succeeded",
+            "source": "query.ts",
+            "line": 16,
+            "durationMs": 6,
+            "rowCount": 3
+          }
+        },
+        {
+          "type": "display",
+          "sequence": 14,
+          "payload": {
+            "label": "Post cards",
+            "values": [
+              {
+                "type": "array",
+                "value": [
+                  {
+                    "type": "object",
+                    "value": {
+                      "id": {
+                        "type": "primitive",
+                        "value": 1
+                      },
+                      "title": {
+                        "type": "primitive",
+                        "value": "Small SQL helpers"
+                      },
+                      "titleLength": {
+                        "type": "primitive",
+                        "value": 17
+                      },
+                      "author": {
+                        "type": "object",
+                        "value": {
+                          "profile": {
+                            "type": "object",
+                            "value": {
+                              "id": {
+                                "type": "primitive",
+                                "value": 1
+                              },
+                              "bio": {
+                                "type": "primitive",
+                                "value": "Writes about SQL"
+                              },
+                              "active": {
+                                "type": "primitive",
+                                "value": true
+                              },
+                              "displayName": {
+                                "type": "primitive",
+                                "value": "Ada"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "value": {
+                      "id": {
+                        "type": "primitive",
+                        "value": 2
+                      },
+                      "title": {
+                        "type": "primitive",
+                        "value": "Types that follow your query"
+                      },
+                      "titleLength": {
+                        "type": "primitive",
+                        "value": 28
+                      },
+                      "author": {
+                        "type": "object",
+                        "value": {
+                          "profile": {
+                            "type": "object",
+                            "value": {
+                              "id": {
+                                "type": "primitive",
+                                "value": 2
+                              },
+                              "bio": {
+                                "type": "primitive",
+                                "value": null
+                              },
+                              "active": {
+                                "type": "primitive",
+                                "value": false
+                              },
+                              "displayName": {
+                                "type": "primitive",
+                                "value": "Grace"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "value": {
+                      "id": {
+                        "type": "primitive",
+                        "value": 3
+                      },
+                      "title": {
+                        "type": "primitive",
+                        "value": "Compose your queries"
+                      },
+                      "titleLength": {
+                        "type": "primitive",
+                        "value": 20
+                      },
+                      "author": {
+                        "type": "object",
+                        "value": {
+                          "profile": {
+                            "type": "object",
+                            "value": {
+                              "id": {
+                                "type": "primitive",
+                                "value": 1
+                              },
+                              "bio": {
+                                "type": "primitive",
+                                "value": "Writes about SQL"
+                              },
+                              "active": {
+                                "type": "primitive",
+                                "value": true
+                              },
+                              "displayName": {
+                                "type": "primitive",
+                                "value": "Ada"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            ],
+            "source": "query.ts",
+            "line": 29
+          }
+        }
+      ],
+      "cleanupErrors": [],
+      "cleanup": {
+        "guest": {
+          "mode": "graceful"
+        },
+        "database": {
+          "mode": "graceful"
+        }
+      },
+      "timings": {
+        "total": 1291,
+        "validate": 0.034999966621398926,
+        "resolve": 0.004999995231628418,
+        "load_artifacts": 446.58000004291534,
+        "compile": 171.63500010967255,
+        "evaluate_schema": 78.75999999046326,
+        "generate_bootstrap": 21.429999947547913,
+        "apply_bootstrap": 401.89999997615814,
+        "seed": 11.725000023841858,
+        "run": 14.434999942779541,
+        "inspect": 55.204999923706055,
+        "plan": 0.040000081062316895,
+        "cleanup": 2.7549999952316284
+      },
+      "ok": true,
+      "outcome": "succeeded"
+    },
+    {
+      "version": 1,
+      "target": {
+        "dialect": "postgresql"
+      },
+      "tuple": {
+        "id": "postgresql-pglite__orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+        "target": {
+          "dialect": "postgresql"
+        },
+        "ormVersion": "1.0.0-rc.5",
+        "kitVersion": "1.0.0-rc.5"
+      },
+      "random": {
+        "effectiveSeed": 3763373443,
+        "source": "generated",
+        "derivation": "crypto-u32-v1",
+        "generator": "mulberry32-v1"
+      },
+      "phases": [
+        {
+          "phase": "validate",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:52:45.980Z",
+          "durationMs": 0.02500009536743164
+        },
+        {
+          "phase": "resolve",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:52:45.980Z",
+          "durationMs": 0.009999990463256836
+        },
+        {
+          "phase": "load_artifacts",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:52:46.153Z",
+          "durationMs": 446.8700000047684
+        },
+        {
+          "phase": "compile",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:52:46.079Z",
+          "durationMs": 72.9650000333786
+        },
+        {
+          "phase": "evaluate_schema",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:52:46.600Z",
+          "durationMs": 75.52999997138977
+        },
+        {
+          "phase": "generate_bootstrap",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:52:46.676Z",
+          "durationMs": 20.854999899864197
+        },
+        {
+          "phase": "apply_bootstrap",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:52:46.698Z",
+          "durationMs": 386.3400000333786
+        },
+        {
+          "phase": "seed",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:52:47.083Z",
+          "durationMs": 11.490000009536743
+        },
+        {
+          "phase": "run",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:52:47.095Z",
+          "durationMs": 13.990000009536743
+        },
+        {
+          "phase": "inspect",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:52:47.109Z",
+          "durationMs": 54.75499999523163
+        },
+        {
+          "phase": "plan",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:52:47.164Z",
+          "durationMs": 0.039999961853027344
+        },
+        {
+          "phase": "cleanup",
+          "status": "succeeded",
+          "startedAt": "2026-11-04T09:52:47.164Z",
+          "durationMs": 2.319999933242798
+        }
+      ],
+      "diagnostics": [],
+      "sql": [
+        {
+          "sequence": 1,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "CREATE TABLE \"posts\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"author_id\" integer NOT NULL,\n\t\"title\" text NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        },
+        {
+          "sequence": 2,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "CREATE TABLE \"users\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"bio\" text,\n\t\"active\" boolean NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        },
+        {
+          "sequence": 3,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "ALTER TABLE \"posts\" ADD CONSTRAINT \"posts_author_id_users_id_fkey\" FOREIGN KEY (\"author_id\") REFERENCES \"users\"(\"id\");",
+          "parameters": [],
+          "outcome": "succeeded"
+        },
+        {
+          "sequence": 4,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "BEGIN",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 0.999755859375
+        },
+        {
+          "sequence": 5,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "CREATE TABLE \"posts\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"author_id\" integer NOT NULL,\n\t\"title\" text NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 9.000244140625
+        },
+        {
+          "sequence": 6,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "CREATE TABLE \"users\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"bio\" text,\n\t\"active\" boolean NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 2
+        },
+        {
+          "sequence": 7,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "ALTER TABLE \"posts\" ADD CONSTRAINT \"posts_author_id_users_id_fkey\" FOREIGN KEY (\"author_id\") REFERENCES \"users\"(\"id\");",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 4
+        },
+        {
+          "sequence": 8,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "COMMIT",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 0.999755859375
+        },
+        {
+          "sequence": 9,
+          "phase": "seed",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "insert into \"users\" (\"id\", \"name\", \"bio\", \"active\") values ($1, $2, $3, $4), ($5, $6, $7, $8)",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": 1
+            },
+            {
+              "type": "primitive",
+              "value": "Ada"
+            },
+            {
+              "type": "primitive",
+              "value": "Writes about SQL"
+            },
+            {
+              "type": "primitive",
+              "value": true
+            },
+            {
+              "type": "primitive",
+              "value": 2
+            },
+            {
+              "type": "primitive",
+              "value": "Grace"
+            },
+            {
+              "type": "primitive",
+              "value": null
+            },
+            {
+              "type": "primitive",
+              "value": false
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "seed.ts",
+          "line": 5,
+          "durationMs": 5,
+          "rowCount": 2
+        },
+        {
+          "sequence": 10,
+          "phase": "seed",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "insert into \"posts\" (\"id\", \"author_id\", \"title\") values ($1, $2, $3), ($4, $5, $6), ($7, $8, $9)",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": 1
+            },
+            {
+              "type": "primitive",
+              "value": 1
+            },
+            {
+              "type": "primitive",
+              "value": "Small SQL helpers"
+            },
+            {
+              "type": "primitive",
+              "value": 2
+            },
+            {
+              "type": "primitive",
+              "value": 2
+            },
+            {
+              "type": "primitive",
+              "value": "Types that follow your query"
+            },
+            {
+              "type": "primitive",
+              "value": 3
+            },
+            {
+              "type": "primitive",
+              "value": 1
+            },
+            {
+              "type": "primitive",
+              "value": "Compose your queries"
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "seed.ts",
+          "line": 10,
+          "durationMs": 5.000244140625,
+          "rowCount": 3
+        },
+        {
+          "sequence": 11,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "select (jsonb_build_object($1::text, \"d0\".\"id\", $2::text, \"d0\".\"name\", $3::text, \"d0\".\"bio\", $4::text, \"d0\".\"active\")) as \"profile\" from \"users\" as \"d0\" order by \"d0\".\"id\" asc",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": "id"
+            },
+            {
+              "type": "primitive",
+              "value": "displayName"
+            },
+            {
+              "type": "primitive",
+              "value": "bio"
+            },
+            {
+              "type": "primitive",
+              "value": "active"
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 6,
+          "durationMs": 4.999755859375,
+          "rowCount": 2
+        },
+        {
+          "sequence": 12,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "select \"d0\".\"id\" as \"id\", \"d0\".\"title\" as \"title\", (length(\"d0\".\"title\")) as \"titleLength\", \"author\".\"r\" as \"author\" from \"posts\" as \"d0\" left join lateral(select row_to_json(\"t\".*) \"r\" from (select (jsonb_build_object($1::text, \"d1\".\"id\", $2::text, \"d1\".\"name\", $3::text, \"d1\".\"bio\", $4::text, \"d1\".\"active\")) as \"profile\" from \"users\" as \"d1\" where \"d0\".\"author_id\" = \"d1\".\"id\" limit $5) as \"t\") as \"author\" on true order by \"d0\".\"id\" asc",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": "id"
+            },
+            {
+              "type": "primitive",
+              "value": "displayName"
+            },
+            {
+              "type": "primitive",
+              "value": "bio"
+            },
+            {
+              "type": "primitive",
+              "value": "active"
+            },
+            {
+              "type": "primitive",
+              "value": 1
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 16,
+          "durationMs": 5.999755859375,
+          "rowCount": 3
+        }
+      ],
+      "logs": [],
+      "value": {
+        "type": "undefined"
+      },
+      "displays": [
+        {
+          "label": "Profiles",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "profile": {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 1
+                        },
+                        "bio": {
+                          "type": "primitive",
+                          "value": "Writes about SQL"
+                        },
+                        "active": {
+                          "type": "primitive",
+                          "value": true
+                        },
+                        "displayName": {
+                          "type": "primitive",
+                          "value": "Ada"
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "profile": {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 2
+                        },
+                        "bio": {
+                          "type": "primitive",
+                          "value": null
+                        },
+                        "active": {
+                          "type": "primitive",
+                          "value": false
+                        },
+                        "displayName": {
+                          "type": "primitive",
+                          "value": "Grace"
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 14
+        },
+        {
+          "label": "Post cards",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 1
+                    },
+                    "title": {
+                      "type": "primitive",
+                      "value": "Small SQL helpers"
+                    },
+                    "titleLength": {
+                      "type": "primitive",
+                      "value": 17
+                    },
+                    "author": {
+                      "type": "object",
+                      "value": {
+                        "profile": {
+                          "type": "object",
+                          "value": {
+                            "id": {
+                              "type": "primitive",
+                              "value": 1
+                            },
+                            "bio": {
+                              "type": "primitive",
+                              "value": "Writes about SQL"
+                            },
+                            "active": {
+                              "type": "primitive",
+                              "value": true
+                            },
+                            "displayName": {
+                              "type": "primitive",
+                              "value": "Ada"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 2
+                    },
+                    "title": {
+                      "type": "primitive",
+                      "value": "Types that follow your query"
+                    },
+                    "titleLength": {
+                      "type": "primitive",
+                      "value": 28
+                    },
+                    "author": {
+                      "type": "object",
+                      "value": {
+                        "profile": {
+                          "type": "object",
+                          "value": {
+                            "id": {
+                              "type": "primitive",
+                              "value": 2
+                            },
+                            "bio": {
+                              "type": "primitive",
+                              "value": null
+                            },
+                            "active": {
+                              "type": "primitive",
+                              "value": false
+                            },
+                            "displayName": {
+                              "type": "primitive",
+                              "value": "Grace"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 3
+                    },
+                    "title": {
+                      "type": "primitive",
+                      "value": "Compose your queries"
+                    },
+                    "titleLength": {
+                      "type": "primitive",
+                      "value": 20
+                    },
+                    "author": {
+                      "type": "object",
+                      "value": {
+                        "profile": {
+                          "type": "object",
+                          "value": {
+                            "id": {
+                              "type": "primitive",
+                              "value": 1
+                            },
+                            "bio": {
+                              "type": "primitive",
+                              "value": "Writes about SQL"
+                            },
+                            "active": {
+                              "type": "primitive",
+                              "value": true
+                            },
+                            "displayName": {
+                              "type": "primitive",
+                              "value": "Ada"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 31
+        }
+      ],
+      "events": [
+        {
+          "type": "sql",
+          "sequence": 1,
+          "payload": {
+            "sequence": 1,
+            "phase": "bootstrap",
+            "origin": "kit",
+            "kind": "generated",
+            "sql": "CREATE TABLE \"posts\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"author_id\" integer NOT NULL,\n\t\"title\" text NOT NULL\n);\n",
+            "parameters": [],
+            "outcome": "succeeded"
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 2,
+          "payload": {
+            "sequence": 2,
+            "phase": "bootstrap",
+            "origin": "kit",
+            "kind": "generated",
+            "sql": "CREATE TABLE \"users\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"bio\" text,\n\t\"active\" boolean NOT NULL\n);\n",
+            "parameters": [],
+            "outcome": "succeeded"
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 3,
+          "payload": {
+            "sequence": 3,
+            "phase": "bootstrap",
+            "origin": "kit",
+            "kind": "generated",
+            "sql": "ALTER TABLE \"posts\" ADD CONSTRAINT \"posts_author_id_users_id_fkey\" FOREIGN KEY (\"author_id\") REFERENCES \"users\"(\"id\");",
+            "parameters": [],
+            "outcome": "succeeded"
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 4,
+          "payload": {
+            "sequence": 4,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "BEGIN",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 0.999755859375
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 5,
+          "payload": {
+            "sequence": 5,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "CREATE TABLE \"posts\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"author_id\" integer NOT NULL,\n\t\"title\" text NOT NULL\n);\n",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 9.000244140625
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 6,
+          "payload": {
+            "sequence": 6,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "CREATE TABLE \"users\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"bio\" text,\n\t\"active\" boolean NOT NULL\n);\n",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 2
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 7,
+          "payload": {
+            "sequence": 7,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "ALTER TABLE \"posts\" ADD CONSTRAINT \"posts_author_id_users_id_fkey\" FOREIGN KEY (\"author_id\") REFERENCES \"users\"(\"id\");",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 4
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 8,
+          "payload": {
+            "sequence": 8,
+            "phase": "bootstrap",
+            "origin": "adapter",
+            "kind": "executed",
+            "sql": "COMMIT",
+            "parameters": [],
+            "outcome": "succeeded",
+            "durationMs": 0.999755859375
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 9,
+          "payload": {
+            "sequence": 9,
+            "phase": "seed",
+            "origin": "drizzle",
+            "kind": "executed",
+            "sql": "insert into \"users\" (\"id\", \"name\", \"bio\", \"active\") values ($1, $2, $3, $4), ($5, $6, $7, $8)",
+            "parameters": [
+              {
+                "type": "primitive",
+                "value": 1
+              },
+              {
+                "type": "primitive",
+                "value": "Ada"
+              },
+              {
+                "type": "primitive",
+                "value": "Writes about SQL"
+              },
+              {
+                "type": "primitive",
+                "value": true
+              },
+              {
+                "type": "primitive",
+                "value": 2
+              },
+              {
+                "type": "primitive",
+                "value": "Grace"
+              },
+              {
+                "type": "primitive",
+                "value": null
+              },
+              {
+                "type": "primitive",
+                "value": false
+              }
+            ],
+            "outcome": "succeeded",
+            "source": "seed.ts",
+            "line": 5,
+            "durationMs": 5,
+            "rowCount": 2
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 10,
+          "payload": {
+            "sequence": 10,
+            "phase": "seed",
+            "origin": "drizzle",
+            "kind": "executed",
+            "sql": "insert into \"posts\" (\"id\", \"author_id\", \"title\") values ($1, $2, $3), ($4, $5, $6), ($7, $8, $9)",
+            "parameters": [
+              {
+                "type": "primitive",
+                "value": 1
+              },
+              {
+                "type": "primitive",
+                "value": 1
+              },
+              {
+                "type": "primitive",
+                "value": "Small SQL helpers"
+              },
+              {
+                "type": "primitive",
+                "value": 2
+              },
+              {
+                "type": "primitive",
+                "value": 2
+              },
+              {
+                "type": "primitive",
+                "value": "Types that follow your query"
+              },
+              {
+                "type": "primitive",
+                "value": 3
+              },
+              {
+                "type": "primitive",
+                "value": 1
+              },
+              {
+                "type": "primitive",
+                "value": "Compose your queries"
+              }
+            ],
+            "outcome": "succeeded",
+            "source": "seed.ts",
+            "line": 10,
+            "durationMs": 5.000244140625,
+            "rowCount": 3
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 11,
+          "payload": {
+            "sequence": 11,
+            "phase": "run",
+            "origin": "drizzle",
+            "kind": "executed",
+            "sql": "select (jsonb_build_object($1::text, \"d0\".\"id\", $2::text, \"d0\".\"name\", $3::text, \"d0\".\"bio\", $4::text, \"d0\".\"active\")) as \"profile\" from \"users\" as \"d0\" order by \"d0\".\"id\" asc",
+            "parameters": [
+              {
+                "type": "primitive",
+                "value": "id"
+              },
+              {
+                "type": "primitive",
+                "value": "displayName"
+              },
+              {
+                "type": "primitive",
+                "value": "bio"
+              },
+              {
+                "type": "primitive",
+                "value": "active"
+              }
+            ],
+            "outcome": "succeeded",
+            "source": "query.ts",
+            "line": 6,
+            "durationMs": 4.999755859375,
+            "rowCount": 2
+          }
+        },
+        {
+          "type": "display",
+          "sequence": 12,
+          "payload": {
+            "label": "Profiles",
+            "values": [
+              {
+                "type": "array",
+                "value": [
+                  {
+                    "type": "object",
+                    "value": {
+                      "profile": {
+                        "type": "object",
+                        "value": {
+                          "id": {
+                            "type": "primitive",
+                            "value": 1
+                          },
+                          "bio": {
+                            "type": "primitive",
+                            "value": "Writes about SQL"
+                          },
+                          "active": {
+                            "type": "primitive",
+                            "value": true
+                          },
+                          "displayName": {
+                            "type": "primitive",
+                            "value": "Ada"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "value": {
+                      "profile": {
+                        "type": "object",
+                        "value": {
+                          "id": {
+                            "type": "primitive",
+                            "value": 2
+                          },
+                          "bio": {
+                            "type": "primitive",
+                            "value": null
+                          },
+                          "active": {
+                            "type": "primitive",
+                            "value": false
+                          },
+                          "displayName": {
+                            "type": "primitive",
+                            "value": "Grace"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            ],
+            "source": "query.ts",
+            "line": 14
+          }
+        },
+        {
+          "type": "sql",
+          "sequence": 13,
+          "payload": {
+            "sequence": 12,
+            "phase": "run",
+            "origin": "drizzle",
+            "kind": "executed",
+            "sql": "select \"d0\".\"id\" as \"id\", \"d0\".\"title\" as \"title\", (length(\"d0\".\"title\")) as \"titleLength\", \"author\".\"r\" as \"author\" from \"posts\" as \"d0\" left join lateral(select row_to_json(\"t\".*) \"r\" from (select (jsonb_build_object($1::text, \"d1\".\"id\", $2::text, \"d1\".\"name\", $3::text, \"d1\".\"bio\", $4::text, \"d1\".\"active\")) as \"profile\" from \"users\" as \"d1\" where \"d0\".\"author_id\" = \"d1\".\"id\" limit $5) as \"t\") as \"author\" on true order by \"d0\".\"id\" asc",
+            "parameters": [
+              {
+                "type": "primitive",
+                "value": "id"
+              },
+              {
+                "type": "primitive",
+                "value": "displayName"
+              },
+              {
+                "type": "primitive",
+                "value": "bio"
+              },
+              {
+                "type": "primitive",
+                "value": "active"
+              },
+              {
+                "type": "primitive",
+                "value": 1
+              }
+            ],
+            "outcome": "succeeded",
+            "source": "query.ts",
+            "line": 16,
+            "durationMs": 5.999755859375,
+            "rowCount": 3
+          }
+        },
+        {
+          "type": "display",
+          "sequence": 14,
+          "payload": {
+            "label": "Post cards",
+            "values": [
+              {
+                "type": "array",
+                "value": [
+                  {
+                    "type": "object",
+                    "value": {
+                      "id": {
+                        "type": "primitive",
+                        "value": 1
+                      },
+                      "title": {
+                        "type": "primitive",
+                        "value": "Small SQL helpers"
+                      },
+                      "titleLength": {
+                        "type": "primitive",
+                        "value": 17
+                      },
+                      "author": {
+                        "type": "object",
+                        "value": {
+                          "profile": {
+                            "type": "object",
+                            "value": {
+                              "id": {
+                                "type": "primitive",
+                                "value": 1
+                              },
+                              "bio": {
+                                "type": "primitive",
+                                "value": "Writes about SQL"
+                              },
+                              "active": {
+                                "type": "primitive",
+                                "value": true
+                              },
+                              "displayName": {
+                                "type": "primitive",
+                                "value": "Ada"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "value": {
+                      "id": {
+                        "type": "primitive",
+                        "value": 2
+                      },
+                      "title": {
+                        "type": "primitive",
+                        "value": "Types that follow your query"
+                      },
+                      "titleLength": {
+                        "type": "primitive",
+                        "value": 28
+                      },
+                      "author": {
+                        "type": "object",
+                        "value": {
+                          "profile": {
+                            "type": "object",
+                            "value": {
+                              "id": {
+                                "type": "primitive",
+                                "value": 2
+                              },
+                              "bio": {
+                                "type": "primitive",
+                                "value": null
+                              },
+                              "active": {
+                                "type": "primitive",
+                                "value": false
+                              },
+                              "displayName": {
+                                "type": "primitive",
+                                "value": "Grace"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "value": {
+                      "id": {
+                        "type": "primitive",
+                        "value": 3
+                      },
+                      "title": {
+                        "type": "primitive",
+                        "value": "Compose your queries"
+                      },
+                      "titleLength": {
+                        "type": "primitive",
+                        "value": 20
+                      },
+                      "author": {
+                        "type": "object",
+                        "value": {
+                          "profile": {
+                            "type": "object",
+                            "value": {
+                              "id": {
+                                "type": "primitive",
+                                "value": 1
+                              },
+                              "bio": {
+                                "type": "primitive",
+                                "value": "Writes about SQL"
+                              },
+                              "active": {
+                                "type": "primitive",
+                                "value": true
+                              },
+                              "displayName": {
+                                "type": "primitive",
+                                "value": "Ada"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            ],
+            "source": "query.ts",
+            "line": 31
+          }
+        }
+      ],
+      "cleanupErrors": [],
+      "cleanup": {
+        "guest": {
+          "mode": "graceful"
+        },
+        "database": {
+          "mode": "graceful"
+        }
+      },
+      "timings": {
+        "total": 1189,
+        "validate": 0.02500009536743164,
+        "resolve": 0.009999990463256836,
+        "load_artifacts": 446.8700000047684,
+        "compile": 72.9650000333786,
+        "evaluate_schema": 75.52999997138977,
+        "generate_bootstrap": 20.854999899864197,
+        "apply_bootstrap": 386.3400000333786,
+        "seed": 11.490000009536743,
+        "run": 13.990000009536743,
+        "inspect": 54.75499999523163,
+        "plan": 0.039999961853027344,
+        "cleanup": 2.319999933242798
+      },
+      "ok": true,
+      "outcome": "succeeded"
+    }
+  ],
+  "guests": [
+    {
+      "imageId": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+      "lockDigest": "sha256-dabcc2a116ec5e228673a8c074b17ef00b455fc65afad67b9e392fd1ff4d2ad6"
+    },
+    {
+      "imageId": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+      "lockDigest": "sha256-dabcc2a116ec5e228673a8c074b17ef00b455fc65afad67b9e392fd1ff4d2ad6"
+    }
+  ]
+}

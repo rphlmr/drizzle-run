@@ -1,0 +1,24 @@
+{
+  "id": "6518a35e-d2f7-4489-9545-8989df9d7a16",
+  "slug": "reusable-helpers-sqlite",
+  "status": "published",
+  "title": "Write reusable, typed SQL helpers with SQLite",
+  "description": "Infer JSON object types from SQLite columns, decode JSON text, and compose nested expressions.",
+  "topic": "Queries",
+  "featured": false,
+  "order": 81,
+  "dialect": "sqlite",
+  "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+  "links": [
+    {
+      "kind": "docs",
+      "label": "SQL expressions and decoding",
+      "url": "https://orm.drizzle.team/docs/sql"
+    },
+    {
+      "kind": "example",
+      "label": "The PostgreSQL version",
+      "slug": "reusable-helpers"
+    }
+  ]
+}

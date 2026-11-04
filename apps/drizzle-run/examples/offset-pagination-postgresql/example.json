@@ -1,0 +1,24 @@
+{
+  "id": "65302da5-b86c-4b6b-be4e-a3a8b90ab837",
+  "slug": "offset-pagination-postgresql",
+  "status": "published",
+  "title": "Jump to numbered pages (PostgreSQL)",
+  "description": "Use limit and offset with a unique tie-breaker and a matching index.",
+  "topic": "Queries",
+  "featured": false,
+  "order": 122,
+  "dialect": "postgresql",
+  "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+  "links": [
+    {
+      "kind": "docs",
+      "label": "Pagination",
+      "url": "https://orm.drizzle.team/docs/guides/cursor-based-pagination"
+    },
+    {
+      "kind": "example",
+      "label": "The SQLite version",
+      "slug": "offset-pagination-sqlite"
+    }
+  ]
+}

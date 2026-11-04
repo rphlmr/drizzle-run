@@ -1,0 +1,616 @@
+{
+  "recordingVersion": 1,
+  "snapshotDigest": "822b14af6450b1db395030f3d3f4cbd36b0c76be320d61b1eb2b8e650e3f52e6",
+  "recordedAt": "2026-11-04T10:02:46.001Z",
+  "result": {
+    "version": 1,
+    "target": {
+      "dialect": "sqlite"
+    },
+    "tuple": {
+      "id": "sqlite-wasm__orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+      "target": {
+        "dialect": "sqlite"
+      },
+      "ormVersion": "1.0.0-rc.5",
+      "kitVersion": "1.0.0-rc.5"
+    },
+    "random": {
+      "effectiveSeed": 3309443384,
+      "source": "generated",
+      "derivation": "crypto-u32-v1",
+      "generator": "mulberry32-v1"
+    },
+    "phases": [
+      {
+        "phase": "validate",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T10:02:44.584Z",
+        "durationMs": 0.039999961853027344
+      },
+      {
+        "phase": "resolve",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T10:02:44.584Z",
+        "durationMs": 0.004999995231628418
+      },
+      {
+        "phase": "load_artifacts",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T10:02:44.834Z",
+        "durationMs": 450.48999989032745
+      },
+      {
+        "phase": "compile",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T10:02:44.673Z",
+        "durationMs": 160.24000000953674
+      },
+      {
+        "phase": "evaluate_schema",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T10:02:45.285Z",
+        "durationMs": 14.115000009536743
+      },
+      {
+        "phase": "generate_bootstrap",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T10:02:45.299Z",
+        "durationMs": 1.465000033378601
+      },
+      {
+        "phase": "apply_bootstrap",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T10:02:45.301Z",
+        "durationMs": 73.17499995231628
+      },
+      {
+        "phase": "seed",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T10:02:45.374Z",
+        "durationMs": 2.7899999618530273
+      },
+      {
+        "phase": "run",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T10:02:45.378Z",
+        "durationMs": 31.274999976158142
+      },
+      {
+        "phase": "inspect",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T10:02:45.408Z",
+        "durationMs": 1.2049999237060547
+      },
+      {
+        "phase": "plan",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T10:02:45.409Z",
+        "durationMs": 0.029999971389770508
+      },
+      {
+        "phase": "cleanup",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T10:02:45.409Z",
+        "durationMs": 1.0950000286102295
+      }
+    ],
+    "diagnostics": [],
+    "sql": [
+      {
+        "sequence": 1,
+        "phase": "bootstrap",
+        "origin": "kit",
+        "kind": "generated",
+        "sql": "CREATE TABLE `bookings` (\n\t`id` integer PRIMARY KEY,\n\t`title` text NOT NULL,\n\t`starts_on` text NOT NULL,\n\t`follow_up` text\n);\n",
+        "parameters": [],
+        "outcome": "succeeded"
+      },
+      {
+        "sequence": 2,
+        "phase": "bootstrap",
+        "origin": "adapter",
+        "kind": "executed",
+        "sql": "CREATE TABLE `bookings` (\n\t`id` integer PRIMARY KEY,\n\t`title` text NOT NULL,\n\t`starts_on` text NOT NULL,\n\t`follow_up` text\n);\n",
+        "parameters": [],
+        "outcome": "succeeded"
+      },
+      {
+        "sequence": 3,
+        "phase": "seed",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "insert into \"bookings\" (\"id\", \"title\", \"starts_on\", \"follow_up\") values (?, ?, ?, ?), (?, ?, ?, ?)",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": 1
+          },
+          {
+            "type": "primitive",
+            "value": "Workshop"
+          },
+          {
+            "type": "primitive",
+            "value": "2024-02-28"
+          },
+          {
+            "type": "primitive",
+            "value": null
+          },
+          {
+            "type": "primitive",
+            "value": 2
+          },
+          {
+            "type": "primitive",
+            "value": "Leap-day session"
+          },
+          {
+            "type": "primitive",
+            "value": "2024-02-29"
+          },
+          {
+            "type": "primitive",
+            "value": "2024-03-01"
+          }
+        ],
+        "outcome": "succeeded",
+        "source": "seed.ts",
+        "line": 6,
+        "durationMs": 1.999755859375,
+        "rowCount": 2
+      },
+      {
+        "sequence": 4,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "select \"id\", \"title\", \"starts_on\", \"follow_up\" from \"bookings\" order by \"bookings\".\"id\"",
+        "parameters": [],
+        "outcome": "succeeded",
+        "source": "query.ts",
+        "line": 7,
+        "durationMs": 1.000244140625,
+        "rowCount": 2
+      },
+      {
+        "sequence": 5,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "insert into \"bookings\" (\"id\", \"title\", \"starts_on\", \"follow_up\") values (?, ?, ?, null)",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": 3
+          },
+          {
+            "type": "primitive",
+            "value": "March session"
+          },
+          {
+            "type": "primitive",
+            "value": "2024-03-01"
+          }
+        ],
+        "outcome": "succeeded",
+        "source": "query.ts",
+        "line": 22,
+        "durationMs": 0,
+        "rowCount": 1
+      },
+      {
+        "sequence": 6,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "select \"id\", \"title\", \"starts_on\", \"follow_up\" from \"bookings\" where \"bookings\".\"starts_on\" >= ? order by \"bookings\".\"starts_on\", \"bookings\".\"id\"",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": "2024-02-29"
+          }
+        ],
+        "outcome": "succeeded",
+        "source": "query.ts",
+        "line": 24,
+        "durationMs": 0,
+        "rowCount": 2
+      }
+    ],
+    "logs": [],
+    "value": {
+      "type": "undefined"
+    },
+    "displays": [
+      {
+        "label": "Decoded dates",
+        "values": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "title": {
+                    "type": "primitive",
+                    "value": "Workshop"
+                  },
+                  "startsOn": {
+                    "type": "primitive",
+                    "value": "2024-02-28"
+                  },
+                  "nextDay": {
+                    "type": "primitive",
+                    "value": "2024-02-29"
+                  },
+                  "followUp": {
+                    "type": "primitive",
+                    "value": null
+                  },
+                  "isTemporal": {
+                    "type": "primitive",
+                    "value": true
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "title": {
+                    "type": "primitive",
+                    "value": "Leap-day session"
+                  },
+                  "startsOn": {
+                    "type": "primitive",
+                    "value": "2024-02-29"
+                  },
+                  "nextDay": {
+                    "type": "primitive",
+                    "value": "2024-03-01"
+                  },
+                  "followUp": {
+                    "type": "primitive",
+                    "value": "2024-03-01"
+                  },
+                  "isTemporal": {
+                    "type": "primitive",
+                    "value": true
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "source": "query.ts",
+        "line": 12
+      },
+      {
+        "label": "Bookings from leap day",
+        "values": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "title": {
+                    "type": "primitive",
+                    "value": "Leap-day session"
+                  },
+                  "startsOn": {
+                    "type": "primitive",
+                    "value": "2024-02-29"
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "title": {
+                    "type": "primitive",
+                    "value": "March session"
+                  },
+                  "startsOn": {
+                    "type": "primitive",
+                    "value": "2024-03-01"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "source": "query.ts",
+        "line": 32
+      }
+    ],
+    "events": [
+      {
+        "type": "sql",
+        "sequence": 1,
+        "payload": {
+          "sequence": 1,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "CREATE TABLE `bookings` (\n\t`id` integer PRIMARY KEY,\n\t`title` text NOT NULL,\n\t`starts_on` text NOT NULL,\n\t`follow_up` text\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 2,
+        "payload": {
+          "sequence": 2,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "CREATE TABLE `bookings` (\n\t`id` integer PRIMARY KEY,\n\t`title` text NOT NULL,\n\t`starts_on` text NOT NULL,\n\t`follow_up` text\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 3,
+        "payload": {
+          "sequence": 3,
+          "phase": "seed",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "insert into \"bookings\" (\"id\", \"title\", \"starts_on\", \"follow_up\") values (?, ?, ?, ?), (?, ?, ?, ?)",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": 1
+            },
+            {
+              "type": "primitive",
+              "value": "Workshop"
+            },
+            {
+              "type": "primitive",
+              "value": "2024-02-28"
+            },
+            {
+              "type": "primitive",
+              "value": null
+            },
+            {
+              "type": "primitive",
+              "value": 2
+            },
+            {
+              "type": "primitive",
+              "value": "Leap-day session"
+            },
+            {
+              "type": "primitive",
+              "value": "2024-02-29"
+            },
+            {
+              "type": "primitive",
+              "value": "2024-03-01"
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "seed.ts",
+          "line": 6,
+          "durationMs": 1.999755859375,
+          "rowCount": 2
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 4,
+        "payload": {
+          "sequence": 4,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "select \"id\", \"title\", \"starts_on\", \"follow_up\" from \"bookings\" order by \"bookings\".\"id\"",
+          "parameters": [],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 7,
+          "durationMs": 1.000244140625,
+          "rowCount": 2
+        }
+      },
+      {
+        "type": "display",
+        "sequence": 5,
+        "payload": {
+          "label": "Decoded dates",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "title": {
+                      "type": "primitive",
+                      "value": "Workshop"
+                    },
+                    "startsOn": {
+                      "type": "primitive",
+                      "value": "2024-02-28"
+                    },
+                    "nextDay": {
+                      "type": "primitive",
+                      "value": "2024-02-29"
+                    },
+                    "followUp": {
+                      "type": "primitive",
+                      "value": null
+                    },
+                    "isTemporal": {
+                      "type": "primitive",
+                      "value": true
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "title": {
+                      "type": "primitive",
+                      "value": "Leap-day session"
+                    },
+                    "startsOn": {
+                      "type": "primitive",
+                      "value": "2024-02-29"
+                    },
+                    "nextDay": {
+                      "type": "primitive",
+                      "value": "2024-03-01"
+                    },
+                    "followUp": {
+                      "type": "primitive",
+                      "value": "2024-03-01"
+                    },
+                    "isTemporal": {
+                      "type": "primitive",
+                      "value": true
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 12
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 6,
+        "payload": {
+          "sequence": 5,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "insert into \"bookings\" (\"id\", \"title\", \"starts_on\", \"follow_up\") values (?, ?, ?, null)",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": 3
+            },
+            {
+              "type": "primitive",
+              "value": "March session"
+            },
+            {
+              "type": "primitive",
+              "value": "2024-03-01"
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 22,
+          "durationMs": 0,
+          "rowCount": 1
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 7,
+        "payload": {
+          "sequence": 6,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "select \"id\", \"title\", \"starts_on\", \"follow_up\" from \"bookings\" where \"bookings\".\"starts_on\" >= ? order by \"bookings\".\"starts_on\", \"bookings\".\"id\"",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": "2024-02-29"
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 24,
+          "durationMs": 0,
+          "rowCount": 2
+        }
+      },
+      {
+        "type": "display",
+        "sequence": 8,
+        "payload": {
+          "label": "Bookings from leap day",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "title": {
+                      "type": "primitive",
+                      "value": "Leap-day session"
+                    },
+                    "startsOn": {
+                      "type": "primitive",
+                      "value": "2024-02-29"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "title": {
+                      "type": "primitive",
+                      "value": "March session"
+                    },
+                    "startsOn": {
+                      "type": "primitive",
+                      "value": "2024-03-01"
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 32
+        }
+      }
+    ],
+    "cleanupErrors": [],
+    "cleanup": {
+      "guest": {
+        "mode": "graceful"
+      },
+      "database": {
+        "mode": "graceful"
+      }
+    },
+    "timings": {
+      "total": 829,
+      "validate": 0.039999961853027344,
+      "resolve": 0.004999995231628418,
+      "load_artifacts": 450.48999989032745,
+      "compile": 160.24000000953674,
+      "evaluate_schema": 14.115000009536743,
+      "generate_bootstrap": 1.465000033378601,
+      "apply_bootstrap": 73.17499995231628,
+      "seed": 2.7899999618530273,
+      "run": 31.274999976158142,
+      "inspect": 1.2049999237060547,
+      "plan": 0.029999971389770508,
+      "cleanup": 1.0950000286102295
+    },
+    "ok": true,
+    "outcome": "succeeded"
+  },
+  "guests": [
+    {
+      "imageId": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+      "lockDigest": "sha256-dabcc2a116ec5e228673a8c074b17ef00b455fc65afad67b9e392fd1ff4d2ad6"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "id": "b261897c-1c1a-4f40-83dc-b1dff35fe66d",
+  "slug": "cursor-pagination-sqlite",
+  "status": "published",
+  "title": "Page through a composite cursor (SQLite)",
+  "description": "Preserve tied timestamps, fetch one extra row, and derive the next cursor from the last returned row.",
+  "topic": "Queries",
+  "featured": false,
+  "order": 125,
+  "dialect": "sqlite",
+  "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+  "links": [
+    {
+      "kind": "docs",
+      "label": "Pagination",
+      "url": "https://orm.drizzle.team/docs/guides/cursor-based-pagination"
+    },
+    {
+      "kind": "example",
+      "label": "The PostgreSQL version",
+      "slug": "cursor-pagination-postgresql"
+    }
+  ]
+}

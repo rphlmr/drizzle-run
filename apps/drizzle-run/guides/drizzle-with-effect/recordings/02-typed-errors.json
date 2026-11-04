@@ -1,7 +1,7 @@
 {
   "recordingVersion": 1,
   "snapshotDigest": "5253f47a715023aefff6cd6b4ea898428e13f0e1e1b398563cf580f314b1b984",
-  "recordedAt": "2026-10-28T19:45:52.705Z",
+  "recordedAt": "2026-11-04T09:11:46.624Z",
   "result": {
     "version": 1,
     "target": {
@@ -16,83 +16,83 @@
       "kitVersion": "1.0.0-rc.5"
     },
     "random": {
-      "effectiveSeed": 2584254652,
-      "source": "derived",
-      "derivation": "run-manifest-sha256-u32-v1",
+      "effectiveSeed": 521171931,
+      "source": "generated",
+      "derivation": "crypto-u32-v1",
       "generator": "mulberry32-v1"
     },
     "phases": [
       {
         "phase": "validate",
         "status": "succeeded",
-        "startedAt": "2026-10-28T19:45:51.888Z",
-        "durationMs": 0.07499998807907104
+        "startedAt": "2026-11-04T09:11:44.749Z",
+        "durationMs": 0.06500005722045898
       },
       {
         "phase": "resolve",
         "status": "succeeded",
-        "startedAt": "2026-10-28T19:45:51.888Z",
-        "durationMs": 0.005000010132789612
+        "startedAt": "2026-11-04T09:11:44.749Z",
+        "durationMs": 0.004999995231628418
       },
       {
         "phase": "load_artifacts",
         "status": "succeeded",
-        "startedAt": "2026-10-28T19:45:51.889Z",
-        "durationMs": 0.5649999976158142
+        "startedAt": "2026-11-04T09:11:44.975Z",
+        "durationMs": 507.2449998855591
       },
       {
         "phase": "compile",
         "status": "succeeded",
-        "startedAt": "2026-10-28T19:45:52.117Z",
-        "durationMs": 2
+        "startedAt": "2026-11-04T09:11:44.801Z",
+        "durationMs": 173.375
       },
       {
         "phase": "evaluate_schema",
         "status": "succeeded",
-        "startedAt": "2026-10-28T19:45:52.118Z",
-        "durationMs": 0
+        "startedAt": "2026-11-04T09:11:45.483Z",
+        "durationMs": 50.12000000476837
       },
       {
         "phase": "generate_bootstrap",
         "status": "succeeded",
-        "startedAt": "2026-10-28T19:45:52.121Z",
-        "durationMs": 24
-      },
-      {
-        "phase": "open_database",
-        "status": "succeeded",
-        "startedAt": "2026-10-28T19:45:52.143Z",
-        "durationMs": 5
+        "startedAt": "2026-11-04T09:11:45.533Z",
+        "durationMs": 19.649999976158142
       },
       {
         "phase": "apply_bootstrap",
         "status": "succeeded",
-        "startedAt": "2026-10-28T19:45:52.148Z",
-        "durationMs": 15
-      },
-      {
-        "phase": "initialize_context",
-        "status": "succeeded",
-        "startedAt": "2026-10-28T19:45:52.163Z",
-        "durationMs": 0
+        "startedAt": "2026-11-04T09:11:45.553Z",
+        "durationMs": 373.1100000143051
       },
       {
         "phase": "seed",
         "status": "succeeded",
-        "startedAt": "2026-10-28T19:45:52.164Z",
-        "durationMs": 4
+        "startedAt": "2026-11-04T09:11:45.926Z",
+        "durationMs": 7.790000081062317
       },
       {
         "phase": "run",
         "status": "succeeded",
-        "startedAt": "2026-10-28T19:45:52.170Z",
-        "durationMs": 106
+        "startedAt": "2026-11-04T09:11:45.935Z",
+        "durationMs": 56.64999997615814
       },
       {
         "phase": "inspect",
         "status": "succeeded",
-        "startedAt": "2026-10-28T19:45:52.277Z",
-        "durationMs": 74
+        "startedAt": "2026-11-04T09:11:45.990Z",
+        "durationMs": 52.55499994754791
+      },
+      {
+        "phase": "plan",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:11:46.043Z",
+        "durationMs": 0.04500007629394531
+      },
+      {
+        "phase": "cleanup",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:11:46.044Z",
+        "durationMs": 2.1100000143051147
       }
     ],
     "diagnostics": [],
@@ -114,7 +114,7 @@
         "sql": "BEGIN",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 4
+        "durationMs": 1.000244140625
       },
       {
         "sequence": 3,
@@ -124,7 +124,7 @@
         "sql": "CREATE TABLE \"users\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"email\" text NOT NULL UNIQUE,\n\t\"credits\" integer NOT NULL\n);\n",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 9
+        "durationMs": 13
       },
       {
         "sequence": 4,
@@ -134,7 +134,7 @@
         "sql": "COMMIT",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 2
+        "durationMs": 1
       },
       {
         "sequence": 5,
@@ -171,7 +171,7 @@
         "outcome": "succeeded",
         "source": "seed.ts",
         "line": 4,
-        "durationMs": 4,
+        "durationMs": 6.999755859375,
         "rowCount": 2
       },
       {
@@ -195,11 +195,11 @@
           }
         ],
         "outcome": "failed",
-        "durationMs": 4,
+        "durationMs": 2,
         "error": {
           "name": "DatabaseError",
           "message": "duplicate key value violates unique constraint \"users_email_key\"",
-          "stack": "DatabaseError: duplicate key value violates unique constraint \"users_email_key\"\n    at readErrorFields (file:///workspace/guest/runner.mjs:3957:34)\n    at <anonymous> (file:///workspace/guest/runner.mjs:4034:53)\n    at Object.<anonymous> (file:///workspace/guest/runner.mjs:3990:12)\n    at Object.<anonymous> (file:///workspace/guest/runner.mjs:3705:30)\n    at runMicrotasks (native)\n    at Object.processTicksAndRejections (node:internal/process/task_queues:105:5)"
+          "stack": "    at Sua (dependencies.js:4893:26275)\n    at <anonymous> (dependencies.js:4893:27304)\n    at <anonymous> (dependencies.js:4893:26652)\n    at exchange (dependencies.js:4893:16492)\n"
         }
       },
       {
@@ -210,7 +210,7 @@
         "sql": "select \"id\", \"name\", \"email\", \"credits\" from \"users\" order by \"users\".\"id\" asc",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 4,
+        "durationMs": 1,
         "rowCount": 2
       }
     ],
@@ -222,7 +222,93 @@
         "values": [
           {
             "type": "primitive",
-            "value": "Insert failed: { _id: 'Cause', failures: [ { _tag: 'Fail', error: [Object] } ] }"
+            "value": "Insert failed:"
+          },
+          {
+            "type": "object",
+            "value": {
+              "~effect/Cause": {
+                "type": "primitive",
+                "value": "~effect/Cause"
+              },
+              "reasons": {
+                "type": "array",
+                "value": [
+                  {
+                    "type": "object",
+                    "value": {
+                      "~effect/Cause/Reason": {
+                        "type": "primitive",
+                        "value": "~effect/Cause/Reason"
+                      },
+                      "annotations": {
+                        "type": "object",
+                        "value": {}
+                      },
+                      "_tag": {
+                        "type": "primitive",
+                        "value": "Fail"
+                      },
+                      "error": {
+                        "type": "object",
+                        "value": {
+                          "_tag": {
+                            "type": "primitive",
+                            "value": "SqlError"
+                          },
+                          "reason": {
+                            "type": "object",
+                            "value": {
+                              "_tag": {
+                                "type": "primitive",
+                                "value": "UniqueViolation"
+                              },
+                              "operation": {
+                                "type": "primitive",
+                                "value": "query"
+                              },
+                              "constraint": {
+                                "type": "primitive",
+                                "value": "users_email_key"
+                              },
+                              "~effect/sql/SqlError/Reason": {
+                                "type": "primitive",
+                                "value": "~effect/sql/SqlError/Reason"
+                              }
+                            }
+                          },
+                          "~effect/sql/SqlError": {
+                            "type": "primitive",
+                            "value": "~effect/sql/SqlError"
+                          },
+                          "cause": {
+                            "type": "object",
+                            "value": {
+                              "_tag": {
+                                "type": "primitive",
+                                "value": "UniqueViolation"
+                              },
+                              "operation": {
+                                "type": "primitive",
+                                "value": "query"
+                              },
+                              "constraint": {
+                                "type": "primitive",
+                                "value": "users_email_key"
+                              },
+                              "~effect/sql/SqlError/Reason": {
+                                "type": "primitive",
+                                "value": "~effect/sql/SqlError/Reason"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
           }
         ]
       }
@@ -311,7 +397,7 @@
           "sql": "BEGIN",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 4
+          "durationMs": 1.000244140625
         }
       },
       {
@@ -325,7 +411,7 @@
           "sql": "CREATE TABLE \"users\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"email\" text NOT NULL UNIQUE,\n\t\"credits\" integer NOT NULL\n);\n",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 9
+          "durationMs": 13
         }
       },
       {
@@ -339,7 +425,7 @@
           "sql": "COMMIT",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 2
+          "durationMs": 1
         }
       },
       {
@@ -380,7 +466,7 @@
           "outcome": "succeeded",
           "source": "seed.ts",
           "line": 4,
-          "durationMs": 4,
+          "durationMs": 6.999755859375,
           "rowCount": 2
         }
       },
@@ -408,11 +494,11 @@
             }
           ],
           "outcome": "failed",
-          "durationMs": 4,
+          "durationMs": 2,
           "error": {
             "name": "DatabaseError",
             "message": "duplicate key value violates unique constraint \"users_email_key\"",
-            "stack": "DatabaseError: duplicate key value violates unique constraint \"users_email_key\"\n    at readErrorFields (file:///workspace/guest/runner.mjs:3957:34)\n    at <anonymous> (file:///workspace/guest/runner.mjs:4034:53)\n    at Object.<anonymous> (file:///workspace/guest/runner.mjs:3990:12)\n    at Object.<anonymous> (file:///workspace/guest/runner.mjs:3705:30)\n    at runMicrotasks (native)\n    at Object.processTicksAndRejections (node:internal/process/task_queues:105:5)"
+            "stack": "    at Sua (dependencies.js:4893:26275)\n    at <anonymous> (dependencies.js:4893:27304)\n    at <anonymous> (dependencies.js:4893:26652)\n    at exchange (dependencies.js:4893:16492)\n"
           }
         }
       },
@@ -426,7 +512,93 @@
           "values": [
             {
               "type": "primitive",
-              "value": "Insert failed: { _id: 'Cause', failures: [ { _tag: 'Fail', error: [Object] } ] }"
+              "value": "Insert failed:"
+            },
+            {
+              "type": "object",
+              "value": {
+                "~effect/Cause": {
+                  "type": "primitive",
+                  "value": "~effect/Cause"
+                },
+                "reasons": {
+                  "type": "array",
+                  "value": [
+                    {
+                      "type": "object",
+                      "value": {
+                        "~effect/Cause/Reason": {
+                          "type": "primitive",
+                          "value": "~effect/Cause/Reason"
+                        },
+                        "annotations": {
+                          "type": "object",
+                          "value": {}
+                        },
+                        "_tag": {
+                          "type": "primitive",
+                          "value": "Fail"
+                        },
+                        "error": {
+                          "type": "object",
+                          "value": {
+                            "_tag": {
+                              "type": "primitive",
+                              "value": "SqlError"
+                            },
+                            "reason": {
+                              "type": "object",
+                              "value": {
+                                "_tag": {
+                                  "type": "primitive",
+                                  "value": "UniqueViolation"
+                                },
+                                "operation": {
+                                  "type": "primitive",
+                                  "value": "query"
+                                },
+                                "constraint": {
+                                  "type": "primitive",
+                                  "value": "users_email_key"
+                                },
+                                "~effect/sql/SqlError/Reason": {
+                                  "type": "primitive",
+                                  "value": "~effect/sql/SqlError/Reason"
+                                }
+                              }
+                            },
+                            "~effect/sql/SqlError": {
+                              "type": "primitive",
+                              "value": "~effect/sql/SqlError"
+                            },
+                            "cause": {
+                              "type": "object",
+                              "value": {
+                                "_tag": {
+                                  "type": "primitive",
+                                  "value": "UniqueViolation"
+                                },
+                                "operation": {
+                                  "type": "primitive",
+                                  "value": "query"
+                                },
+                                "constraint": {
+                                  "type": "primitive",
+                                  "value": "users_email_key"
+                                },
+                                "~effect/sql/SqlError/Reason": {
+                                  "type": "primitive",
+                                  "value": "~effect/sql/SqlError/Reason"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
             }
           ]
         }
@@ -442,7 +614,7 @@
           "sql": "select \"id\", \"name\", \"email\", \"credits\" from \"users\" order by \"users\".\"id\" asc",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 4,
+          "durationMs": 1,
           "rowCount": 2
         }
       },
@@ -515,19 +687,19 @@
       }
     },
     "timings": {
-      "total": 473,
-      "validate": 0.07499998807907104,
-      "resolve": 0.005000010132789612,
-      "load_artifacts": 0.5649999976158142,
-      "compile": 2,
-      "evaluate_schema": 0,
-      "generate_bootstrap": 24,
-      "open_database": 5,
-      "apply_bootstrap": 15,
-      "initialize_context": 0,
-      "seed": 4,
-      "run": 106,
-      "inspect": 74
+      "total": 1299,
+      "validate": 0.06500005722045898,
+      "resolve": 0.004999995231628418,
+      "load_artifacts": 507.2449998855591,
+      "compile": 173.375,
+      "evaluate_schema": 50.12000000476837,
+      "generate_bootstrap": 19.649999976158142,
+      "apply_bootstrap": 373.1100000143051,
+      "seed": 7.790000081062317,
+      "run": 56.64999997615814,
+      "inspect": 52.55499994754791,
+      "plan": 0.04500007629394531,
+      "cleanup": 2.1100000143051147
     },
     "ok": true,
     "outcome": "succeeded"
@@ -535,7 +707,7 @@
   "guests": [
     {
       "imageId": "orm-1.0.0-rc.5__kit-1.0.0-rc.5+effect",
-      "lockDigest": "sha256-295491eea02e1d7393ffb59b89a4ddacc0574730e2948ed799e46592d9d6f3ec"
+      "lockDigest": "sha256-20b443c6d9ff4ed1406e665759b2a05278eaba35ee3d50adfba116745693e005"
     }
   ]
 }

@@ -10,7 +10,7 @@ export interface ExampleTitleProps {
   phoneStep?: string;
 }
 
-/** "Examples / Title" with its kind, in the header of an example or a guided example. */
+/** "Examples & guides / Title" with its kind, in the header of an example or a guided example. */
 export function ExampleTitle({ title, badge, phoneStep }: ExampleTitleProps) {
   return (
     <span
@@ -20,7 +20,7 @@ export function ExampleTitle({ title, badge, phoneStep }: ExampleTitleProps) {
       )}
     >
       <Link to="/examples" className="whitespace-nowrap text-muted no-underline hover:text-text max-phone:hidden">
-        Examples /
+        Examples &amp; guides /
       </Link>
       <span className="truncate font-semibold">{title}</span>
       <span className={cn("contents", phoneStep && "max-phone:hidden")}>{badge}</span>

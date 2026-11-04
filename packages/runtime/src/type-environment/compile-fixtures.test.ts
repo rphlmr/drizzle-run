@@ -1,9 +1,11 @@
 import { execFileSync } from "node:child_process";
-import { existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { isPairProject, parseGuideManifest, resolveStep } from "@drizzle-run/core/guide";
+import { PAIR_SIDES, pairSide } from "@drizzle-run/core/pair";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 
 import { serveLocalRuntimeAssets } from "../../test/type-environment/local-runtime-assets.ts";
@@ -12,6 +14,37 @@ import type { ProjectTypeEnvironment, ProjectTypeFile, RunManifest } from "./typ
 
 beforeAll(serveLocalRuntimeAssets);
 afterAll(() => vi.unstubAllGlobals());
+
+describe("API comparison guide types", () => {
+  it.each(["pagination-apis-postgresql", "pagination-apis-sqlite", "helper-apis-postgresql", "helper-apis-sqlite"])(
+    "should type-check both APIs at every runnable step of %s",
+    async (slug) => {
+      const guide = parseGuideManifest(
+        JSON.parse(
+          readFileSync(new URL(`../../../../apps/drizzle-run/guides/${slug}/guide.json`, import.meta.url), "utf8"),
+        ),
+      );
+
+      for (const [index, step] of guide.steps.entries()) {
+        if (step.run === "none") {
+          continue;
+        }
+
+        const { project } = resolveStep(guide, index);
+
+        if (!isPairProject(project)) {
+          throw new Error(`Expected ${slug}/${step.id} to compare two APIs.`);
+        }
+
+        for (const side of PAIR_SIDES) {
+          const environment = await createProjectTypeEnvironment(pairSide(project, side));
+          expect(compileVirtualProject(environment), `${slug}/${step.id} side ${side}`).toBe("");
+        }
+      }
+    },
+    120_000,
+  );
+});
 
 const virtualUriToDiskPath = (root: string, uri: string): string => {
   const parsed = new URL(uri);
@@ -266,6 +299,53 @@ const projectFixture = ({
 };
 
 describe("compile-time project fixtures", () => {
+  it.each(["postgresql", "sqlite"] as const)(
+    "should infer Temporal custom-type reads and writes for rc.5 %s",
+    async (dialect) => {
+      const postgres = dialect === "postgresql";
+      const project = projectFixture({ target: { dialect }, releaseLine: "next" });
+      const environment = await createProjectTypeEnvironment({
+        ...project,
+        files: {
+          "schema.ts": `
+          import { Temporal } from "@js-temporal/polyfill";
+          import { customType, integer, ${postgres ? "pgTable" : "sqliteTable"} } from "drizzle-orm/${postgres ? "pg-core" : "sqlite-core"}";
+          const plainDate = customType<{ data: Temporal.PlainDate; driverData: string }>({
+            dataType: () => "${postgres ? "date" : "text"}",
+            codec: "${postgres ? "date:string" : "text"}",
+            toDriver: (value) => value.toString(),
+            fromDriver: (value) => Temporal.PlainDate.from(value),
+          });
+          export const bookings = ${postgres ? "pgTable" : "sqliteTable"}("bookings", {
+            id: integer("id").primaryKey(),
+            startsOn: plainDate("starts_on").notNull(),
+            followUp: plainDate("follow_up"),
+          });
+        `,
+          "seed.ts": "export {};",
+          "run.ts": `
+          import { Temporal } from "@js-temporal/polyfill";
+          import { db } from "@drizzle-run/runtime/context";
+          import { bookings } from "./schema";
+          await db.insert(bookings).values({ id: 1, startsOn: Temporal.PlainDate.from("2024-02-29") });
+          // @ts-expect-error custom column writes require PlainDate, not a raw string
+          await db.insert(bookings).values({ id: 2, startsOn: "2024-02-29" });
+          for (const row of await db.select().from(bookings)) {
+            const exact: Temporal.PlainDate = row.startsOn;
+            const nullable: Temporal.PlainDate | null = row.followUp;
+            const rendered: string = exact.add({ days: 1 }).toString();
+            // @ts-expect-error selected dates are not numbers
+            const wrong: number = row.startsOn;
+            void nullable; void rendered; void wrong;
+          }
+        `,
+        },
+      });
+
+      expect(compileVirtualProject(environment)).toBe("");
+    },
+  );
+
   for (const target of [{ dialect: "postgresql" }, { dialect: "sqlite" }] as const) {
     for (const releaseLine of ["legacy", "next"] as const) {
       it(`should type-check natural ${target.dialect} schema/seed/run modules for ${releaseLine} integrations`, async () => {

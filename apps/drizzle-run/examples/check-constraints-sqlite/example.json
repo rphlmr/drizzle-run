@@ -1,0 +1,24 @@
+{
+  "id": "961d3532-c26f-4499-b96a-f9f26f866869",
+  "slug": "check-constraints-sqlite",
+  "status": "published",
+  "title": "Enforce product rules with CHECK (SQLite)",
+  "description": "Reject invalid inserts and updates in the database, compare two columns, and see why CHECK does not replace NOT NULL.",
+  "topic": "Schema",
+  "featured": false,
+  "order": 111,
+  "dialect": "sqlite",
+  "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+  "links": [
+    {
+      "kind": "docs",
+      "label": "Drizzle documentation",
+      "url": "https://orm.drizzle.team/docs/indexes-constraints#check"
+    },
+    {
+      "kind": "example",
+      "label": "The PostgreSQL version",
+      "slug": "check-constraints-postgresql"
+    }
+  ]
+}

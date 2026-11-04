@@ -12,6 +12,7 @@
     "kitApi": "v1"
   },
   "dependencies": {
+    "@js-temporal/polyfill": "0.5.1",
     "@libsql/client": "0.15.14",
     "@sinclair/typebox": "0.34.52",
     "arktype": "2.2.3",

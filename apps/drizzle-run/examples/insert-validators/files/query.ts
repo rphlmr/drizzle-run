@@ -1,12 +1,13 @@
 import { db } from "@drizzle-run/runtime/context";
 import { createInsertSchema } from "drizzle-orm/zod";
+import * as z from "zod";
 import { users } from "./schema";
 
 // Column types and nullability come from the table; refinements add input rules.
 // Validation does not check whether an email is already stored. The unique constraint does that on insert.
 const insertUser = createInsertSchema(users, {
   name: (schema) => schema.min(1),
-  email: (schema) => schema.email(),
+  email: (schema) => schema.pipe(z.email()),
   age: (schema) => schema.min(0).max(150),
 });
 

@@ -1,7 +1,7 @@
 {
   "recordingVersion": 1,
   "snapshotDigest": "aa933d70992df1f483ca3a2490eaa348bf983b9c9729e9bda176a3d832db5349",
-  "recordedAt": "2026-10-21T20:18:47.186Z",
+  "recordedAt": "2026-11-04T09:10:25.375Z",
   "result": {
     "version": 1,
     "target": {
@@ -16,83 +16,83 @@
       "kitVersion": "1.0.0-rc.5"
     },
     "random": {
-      "effectiveSeed": 2149234254,
-      "source": "derived",
-      "derivation": "run-manifest-sha256-u32-v1",
+      "effectiveSeed": 2588753196,
+      "source": "generated",
+      "derivation": "crypto-u32-v1",
       "generator": "mulberry32-v1"
     },
     "phases": [
       {
         "phase": "validate",
         "status": "succeeded",
-        "startedAt": "2026-10-21T20:18:46.375Z",
-        "durationMs": 0.059999942779541016
+        "startedAt": "2026-11-04T09:10:23.938Z",
+        "durationMs": 0.034999966621398926
       },
       {
         "phase": "resolve",
         "status": "succeeded",
-        "startedAt": "2026-10-21T20:18:46.375Z",
-        "durationMs": 0.009999990463256836
+        "startedAt": "2026-11-04T09:10:23.938Z",
+        "durationMs": 0.004999995231628418
       },
       {
         "phase": "load_artifacts",
         "status": "succeeded",
-        "startedAt": "2026-10-21T20:18:46.376Z",
-        "durationMs": 0.04499995708465576
+        "startedAt": "2026-11-04T09:10:24.184Z",
+        "durationMs": 439.8000000715256
       },
       {
         "phase": "compile",
         "status": "succeeded",
-        "startedAt": "2026-10-21T20:18:46.563Z",
-        "durationMs": 2
+        "startedAt": "2026-11-04T09:10:24.029Z",
+        "durationMs": 154.88999998569489
       },
       {
         "phase": "evaluate_schema",
         "status": "succeeded",
-        "startedAt": "2026-10-21T20:18:46.565Z",
-        "durationMs": 0
+        "startedAt": "2026-11-04T09:10:24.624Z",
+        "durationMs": 51.139999985694885
       },
       {
         "phase": "generate_bootstrap",
         "status": "succeeded",
-        "startedAt": "2026-10-21T20:18:46.566Z",
-        "durationMs": 20
-      },
-      {
-        "phase": "open_database",
-        "status": "succeeded",
-        "startedAt": "2026-10-21T20:18:46.588Z",
-        "durationMs": 4
+        "startedAt": "2026-11-04T09:10:24.676Z",
+        "durationMs": 19.705000042915344
       },
       {
         "phase": "apply_bootstrap",
         "status": "succeeded",
-        "startedAt": "2026-10-21T20:18:46.591Z",
-        "durationMs": 8
-      },
-      {
-        "phase": "initialize_context",
-        "status": "succeeded",
-        "startedAt": "2026-10-21T20:18:46.599Z",
-        "durationMs": 0
+        "startedAt": "2026-11-04T09:10:24.696Z",
+        "durationMs": 376.7649999856949
       },
       {
         "phase": "seed",
         "status": "succeeded",
-        "startedAt": "2026-10-21T20:18:46.600Z",
-        "durationMs": 4
+        "startedAt": "2026-11-04T09:10:25.072Z",
+        "durationMs": 7.7799999713897705
       },
       {
         "phase": "run",
         "status": "succeeded",
-        "startedAt": "2026-10-21T20:18:46.606Z",
-        "durationMs": 18
+        "startedAt": "2026-11-04T09:10:25.081Z",
+        "durationMs": 50.19500005245209
       },
       {
         "phase": "inspect",
         "status": "succeeded",
-        "startedAt": "2026-10-21T20:18:46.622Z",
-        "durationMs": 70
+        "startedAt": "2026-11-04T09:10:25.130Z",
+        "durationMs": 51.91499996185303
+      },
+      {
+        "phase": "plan",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:10:25.182Z",
+        "durationMs": 0.029999971389770508
+      },
+      {
+        "phase": "cleanup",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:10:25.183Z",
+        "durationMs": 2.1700000762939453
       }
     ],
     "diagnostics": [],
@@ -114,7 +114,7 @@
         "sql": "BEGIN",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 2
+        "durationMs": 0.999755859375
       },
       {
         "sequence": 3,
@@ -124,7 +124,7 @@
         "sql": "CREATE TABLE \"accounts\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"owner\" text NOT NULL,\n\t\"balance\" integer NOT NULL\n);\n",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 4
+        "durationMs": 12.00048828125
       },
       {
         "sequence": 4,
@@ -134,7 +134,7 @@
         "sql": "COMMIT",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 1
+        "durationMs": 0.999755859375
       },
       {
         "sequence": 5,
@@ -163,7 +163,7 @@
         "outcome": "succeeded",
         "source": "seed.ts",
         "line": 4,
-        "durationMs": 3,
+        "durationMs": 7,
         "rowCount": 2
       },
       {
@@ -176,7 +176,7 @@
         "outcome": "succeeded",
         "source": "query.ts",
         "line": 6,
-        "durationMs": 1
+        "durationMs": 2
       },
       {
         "sequence": 7,
@@ -193,7 +193,7 @@
         "outcome": "succeeded",
         "source": "query.ts",
         "line": 7,
-        "durationMs": 1,
+        "durationMs": 5.000244140625,
         "rowCount": 1
       },
       {
@@ -211,7 +211,7 @@
         "outcome": "succeeded",
         "source": "query.ts",
         "line": 11,
-        "durationMs": 1,
+        "durationMs": 2.999755859375,
         "rowCount": 1
       },
       {
@@ -224,7 +224,7 @@
         "outcome": "succeeded",
         "source": "query.ts",
         "line": 18,
-        "durationMs": 1
+        "durationMs": 0.999755859375
       },
       {
         "sequence": 10,
@@ -245,7 +245,7 @@
         "outcome": "succeeded",
         "source": "query.ts",
         "line": 19,
-        "durationMs": 1,
+        "durationMs": 3.000244140625,
         "rowCount": 1
       },
       {
@@ -258,7 +258,7 @@
         "outcome": "succeeded",
         "source": "query.ts",
         "line": 19,
-        "durationMs": 1
+        "durationMs": 0.999755859375
       },
       {
         "sequence": 12,
@@ -282,7 +282,7 @@
         "outcome": "succeeded",
         "source": "query.ts",
         "line": 28,
-        "durationMs": 0
+        "durationMs": 1
       },
       {
         "sequence": 14,
@@ -306,8 +306,8 @@
         "parameters": [],
         "outcome": "succeeded",
         "source": "query.ts",
-        "line": 29,
-        "durationMs": 1
+        "line": 30,
+        "durationMs": 0.999755859375
       },
       {
         "sequence": 16,
@@ -319,7 +319,7 @@
         "outcome": "succeeded",
         "source": "query.ts",
         "line": 38,
-        "durationMs": 1
+        "durationMs": 1.000244140625
       },
       {
         "sequence": 17,
@@ -336,7 +336,7 @@
         "outcome": "succeeded",
         "source": "query.ts",
         "line": 39,
-        "durationMs": 1,
+        "durationMs": 3.000244140625,
         "rowCount": 1
       },
       {
@@ -348,8 +348,8 @@
         "parameters": [],
         "outcome": "succeeded",
         "source": "query.ts",
-        "line": 39,
-        "durationMs": 0
+        "line": 44,
+        "durationMs": 0.999755859375
       },
       {
         "sequence": 19,
@@ -469,7 +469,7 @@
           "sql": "BEGIN",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 2
+          "durationMs": 0.999755859375
         }
       },
       {
@@ -483,7 +483,7 @@
           "sql": "CREATE TABLE \"accounts\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"owner\" text NOT NULL,\n\t\"balance\" integer NOT NULL\n);\n",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 4
+          "durationMs": 12.00048828125
         }
       },
       {
@@ -497,7 +497,7 @@
           "sql": "COMMIT",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 1
+          "durationMs": 0.999755859375
         }
       },
       {
@@ -530,7 +530,7 @@
           "outcome": "succeeded",
           "source": "seed.ts",
           "line": 4,
-          "durationMs": 3,
+          "durationMs": 7,
           "rowCount": 2
         }
       },
@@ -547,7 +547,7 @@
           "outcome": "succeeded",
           "source": "query.ts",
           "line": 6,
-          "durationMs": 1
+          "durationMs": 2
         }
       },
       {
@@ -568,7 +568,7 @@
           "outcome": "succeeded",
           "source": "query.ts",
           "line": 7,
-          "durationMs": 1,
+          "durationMs": 5.000244140625,
           "rowCount": 1
         }
       },
@@ -590,7 +590,7 @@
           "outcome": "succeeded",
           "source": "query.ts",
           "line": 11,
-          "durationMs": 1,
+          "durationMs": 2.999755859375,
           "rowCount": 1
         }
       },
@@ -607,7 +607,7 @@
           "outcome": "succeeded",
           "source": "query.ts",
           "line": 18,
-          "durationMs": 1
+          "durationMs": 0.999755859375
         }
       },
       {
@@ -632,7 +632,7 @@
           "outcome": "succeeded",
           "source": "query.ts",
           "line": 19,
-          "durationMs": 1,
+          "durationMs": 3.000244140625,
           "rowCount": 1
         }
       },
@@ -649,7 +649,7 @@
           "outcome": "succeeded",
           "source": "query.ts",
           "line": 19,
-          "durationMs": 1
+          "durationMs": 0.999755859375
         }
       },
       {
@@ -681,7 +681,7 @@
           "outcome": "succeeded",
           "source": "query.ts",
           "line": 28,
-          "durationMs": 0
+          "durationMs": 1
         }
       },
       {
@@ -713,8 +713,8 @@
           "parameters": [],
           "outcome": "succeeded",
           "source": "query.ts",
-          "line": 29,
-          "durationMs": 1
+          "line": 30,
+          "durationMs": 0.999755859375
         }
       },
       {
@@ -747,7 +747,7 @@
           "outcome": "succeeded",
           "source": "query.ts",
           "line": 38,
-          "durationMs": 1
+          "durationMs": 1.000244140625
         }
       },
       {
@@ -768,7 +768,7 @@
           "outcome": "succeeded",
           "source": "query.ts",
           "line": 39,
-          "durationMs": 1,
+          "durationMs": 3.000244140625,
           "rowCount": 1
         }
       },
@@ -784,8 +784,8 @@
           "parameters": [],
           "outcome": "succeeded",
           "source": "query.ts",
-          "line": 39,
-          "durationMs": 0
+          "line": 44,
+          "durationMs": 0.999755859375
         }
       },
       {
@@ -883,19 +883,19 @@
       }
     },
     "timings": {
-      "total": 457,
-      "validate": 0.059999942779541016,
-      "resolve": 0.009999990463256836,
-      "load_artifacts": 0.04499995708465576,
-      "compile": 2,
-      "evaluate_schema": 0,
-      "generate_bootstrap": 20,
-      "open_database": 4,
-      "apply_bootstrap": 8,
-      "initialize_context": 0,
-      "seed": 4,
-      "run": 18,
-      "inspect": 70
+      "total": 1251,
+      "validate": 0.034999966621398926,
+      "resolve": 0.004999995231628418,
+      "load_artifacts": 439.8000000715256,
+      "compile": 154.88999998569489,
+      "evaluate_schema": 51.139999985694885,
+      "generate_bootstrap": 19.705000042915344,
+      "apply_bootstrap": 376.7649999856949,
+      "seed": 7.7799999713897705,
+      "run": 50.19500005245209,
+      "inspect": 51.91499996185303,
+      "plan": 0.029999971389770508,
+      "cleanup": 2.1700000762939453
     },
     "ok": true,
     "outcome": "succeeded",
@@ -923,7 +923,7 @@
             "role": "commit"
           }
         ],
-        "durationMs": 10,
+        "durationMs": 16,
         "source": "query.ts",
         "line": 6
       },
@@ -946,7 +946,7 @@
             "role": "release"
           }
         ],
-        "durationMs": 4,
+        "durationMs": 6,
         "parent": 1,
         "source": "query.ts",
         "line": 18
@@ -970,7 +970,7 @@
             "role": "rollback"
           }
         ],
-        "durationMs": 2,
+        "durationMs": 2.999755859375,
         "source": "query.ts",
         "line": 28,
         "reason": "rollback_call",
@@ -1000,7 +1000,7 @@
             "role": "rollback"
           }
         ],
-        "durationMs": 3,
+        "durationMs": 5.000244140625,
         "source": "query.ts",
         "line": 38,
         "reason": "rollback_call",
@@ -1016,7 +1016,7 @@
   "guests": [
     {
       "imageId": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
-      "lockDigest": "sha256-173d5c06268596c4f200f2c55999d19e7020ea73b9767d6f1cb6c8b2851731b1"
+      "lockDigest": "sha256-dabcc2a116ec5e228673a8c074b17ef00b455fc65afad67b9e392fd1ff4d2ad6"
     }
   ]
 }

@@ -1,0 +1,24 @@
+{
+  "id": "c90f68fc-2f2c-4361-ac34-578900c16720",
+  "slug": "typed-json-aggregation-postgresql",
+  "status": "published",
+  "title": "Reuse typed JSON aggregation helpers (PostgreSQL)",
+  "description": "Infer ordered nested arrays, keep a real child with null text, and return an empty collection for a missing child.",
+  "topic": "Queries",
+  "featured": false,
+  "order": 92,
+  "dialect": "postgresql",
+  "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+  "links": [
+    {
+      "kind": "docs",
+      "label": "SQL expressions",
+      "url": "https://orm.drizzle.team/docs/sql"
+    },
+    {
+      "kind": "example",
+      "label": "The SQLite version",
+      "slug": "typed-json-aggregation-sqlite"
+    }
+  ]
+}

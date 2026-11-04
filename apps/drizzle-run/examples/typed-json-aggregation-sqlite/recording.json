@@ -1,0 +1,650 @@
+{
+  "recordingVersion": 1,
+  "snapshotDigest": "d67fc36f9c8415a651deaffb5c871a3f455d53520079caf0d901e4a9835f1ad5",
+  "recordedAt": "2026-11-04T09:42:32.193Z",
+  "result": {
+    "version": 1,
+    "target": {
+      "dialect": "sqlite"
+    },
+    "tuple": {
+      "id": "sqlite-wasm__orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+      "target": {
+        "dialect": "sqlite"
+      },
+      "ormVersion": "1.0.0-rc.5",
+      "kitVersion": "1.0.0-rc.5"
+    },
+    "random": {
+      "effectiveSeed": 9426372,
+      "source": "generated",
+      "derivation": "crypto-u32-v1",
+      "generator": "mulberry32-v1"
+    },
+    "phases": [
+      {
+        "phase": "validate",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:42:30.900Z",
+        "durationMs": 0.02499997615814209
+      },
+      {
+        "phase": "resolve",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:42:30.900Z",
+        "durationMs": 0.009999990463256836
+      },
+      {
+        "phase": "load_artifacts",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:42:31.104Z",
+        "durationMs": 453.50999999046326
+      },
+      {
+        "phase": "compile",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:42:30.937Z",
+        "durationMs": 166.23500001430511
+      },
+      {
+        "phase": "evaluate_schema",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:42:31.557Z",
+        "durationMs": 13.804999947547913
+      },
+      {
+        "phase": "generate_bootstrap",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:42:31.572Z",
+        "durationMs": 1.8949999809265137
+      },
+      {
+        "phase": "apply_bootstrap",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:42:31.574Z",
+        "durationMs": 74.6949999332428
+      },
+      {
+        "phase": "seed",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:42:31.649Z",
+        "durationMs": 4.254999995231628
+      },
+      {
+        "phase": "run",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:42:31.652Z",
+        "durationMs": 29.649999976158142
+      },
+      {
+        "phase": "inspect",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:42:31.682Z",
+        "durationMs": 1.5749999284744263
+      },
+      {
+        "phase": "plan",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:42:31.684Z",
+        "durationMs": 0.039999961853027344
+      },
+      {
+        "phase": "cleanup",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:42:31.684Z",
+        "durationMs": 0.8049999475479126
+      }
+    ],
+    "diagnostics": [],
+    "sql": [
+      {
+        "sequence": 1,
+        "phase": "bootstrap",
+        "origin": "kit",
+        "kind": "generated",
+        "sql": "CREATE TABLE `authors` (\n\t`id` integer PRIMARY KEY,\n\t`name` text NOT NULL\n);\n",
+        "parameters": [],
+        "outcome": "succeeded"
+      },
+      {
+        "sequence": 2,
+        "phase": "bootstrap",
+        "origin": "kit",
+        "kind": "generated",
+        "sql": "CREATE TABLE `comments` (\n\t`id` integer PRIMARY KEY,\n\t`author_id` integer NOT NULL,\n\t`text` text,\n\tCONSTRAINT `fk_comments_author_id_authors_id_fk` FOREIGN KEY (`author_id`) REFERENCES `authors`(`id`)\n);\n",
+        "parameters": [],
+        "outcome": "succeeded"
+      },
+      {
+        "sequence": 3,
+        "phase": "bootstrap",
+        "origin": "adapter",
+        "kind": "executed",
+        "sql": "CREATE TABLE `authors` (\n\t`id` integer PRIMARY KEY,\n\t`name` text NOT NULL\n);\n",
+        "parameters": [],
+        "outcome": "succeeded"
+      },
+      {
+        "sequence": 4,
+        "phase": "bootstrap",
+        "origin": "adapter",
+        "kind": "executed",
+        "sql": "CREATE TABLE `comments` (\n\t`id` integer PRIMARY KEY,\n\t`author_id` integer NOT NULL,\n\t`text` text,\n\tCONSTRAINT `fk_comments_author_id_authors_id_fk` FOREIGN KEY (`author_id`) REFERENCES `authors`(`id`)\n);\n",
+        "parameters": [],
+        "outcome": "succeeded"
+      },
+      {
+        "sequence": 5,
+        "phase": "seed",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "insert into \"authors\" (\"id\", \"name\") values (?, ?), (?, ?), (?, ?)",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": 1
+          },
+          {
+            "type": "primitive",
+            "value": "Ada"
+          },
+          {
+            "type": "primitive",
+            "value": 2
+          },
+          {
+            "type": "primitive",
+            "value": "Grace"
+          },
+          {
+            "type": "primitive",
+            "value": 3
+          },
+          {
+            "type": "primitive",
+            "value": "Linus"
+          }
+        ],
+        "outcome": "succeeded",
+        "source": "seed.ts",
+        "line": 4,
+        "durationMs": 1.999755859375,
+        "rowCount": 3
+      },
+      {
+        "sequence": 6,
+        "phase": "seed",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "insert into \"comments\" (\"id\", \"author_id\", \"text\") values (?, ?, ?), (?, ?, ?), (?, ?, ?)",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": 2
+          },
+          {
+            "type": "primitive",
+            "value": 1
+          },
+          {
+            "type": "primitive",
+            "value": null
+          },
+          {
+            "type": "primitive",
+            "value": 1
+          },
+          {
+            "type": "primitive",
+            "value": 1
+          },
+          {
+            "type": "primitive",
+            "value": "Ready to review"
+          },
+          {
+            "type": "primitive",
+            "value": 3
+          },
+          {
+            "type": "primitive",
+            "value": 3
+          },
+          {
+            "type": "primitive",
+            "value": "Keep this version"
+          }
+        ],
+        "outcome": "succeeded",
+        "source": "seed.ts",
+        "line": 9,
+        "durationMs": 1,
+        "rowCount": 3
+      },
+      {
+        "sequence": 7,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "select \"authors\".\"name\", coalesce(json_group_array(json_object(?, \"comments\".\"id\", ?, \"comments\".\"text\") order by \"comments\".\"id\") filter (where \"comments\".\"id\" is not null), '[]') from \"authors\" left join \"comments\" on \"comments\".\"author_id\" = \"authors\".\"id\" group by \"authors\".\"id\", \"authors\".\"name\" order by \"authors\".\"id\"",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": "id"
+          },
+          {
+            "type": "primitive",
+            "value": "text"
+          }
+        ],
+        "outcome": "succeeded",
+        "source": "query.ts",
+        "line": 8,
+        "durationMs": 1.999755859375,
+        "rowCount": 3
+      }
+    ],
+    "logs": [],
+    "value": {
+      "type": "undefined"
+    },
+    "displays": [
+      {
+        "label": "Authors with ordered comments",
+        "values": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "author": {
+                    "type": "primitive",
+                    "value": "Ada"
+                  },
+                  "comments": {
+                    "type": "array",
+                    "value": [
+                      {
+                        "type": "object",
+                        "value": {
+                          "id": {
+                            "type": "primitive",
+                            "value": 1
+                          },
+                          "text": {
+                            "type": "primitive",
+                            "value": "Ready to review"
+                          }
+                        }
+                      },
+                      {
+                        "type": "object",
+                        "value": {
+                          "id": {
+                            "type": "primitive",
+                            "value": 2
+                          },
+                          "text": {
+                            "type": "primitive",
+                            "value": null
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "author": {
+                    "type": "primitive",
+                    "value": "Grace"
+                  },
+                  "comments": {
+                    "type": "array",
+                    "value": []
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "author": {
+                    "type": "primitive",
+                    "value": "Linus"
+                  },
+                  "comments": {
+                    "type": "array",
+                    "value": [
+                      {
+                        "type": "object",
+                        "value": {
+                          "id": {
+                            "type": "primitive",
+                            "value": 3
+                          },
+                          "text": {
+                            "type": "primitive",
+                            "value": "Keep this version"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "source": "query.ts",
+        "line": 22
+      }
+    ],
+    "events": [
+      {
+        "type": "sql",
+        "sequence": 1,
+        "payload": {
+          "sequence": 1,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "CREATE TABLE `authors` (\n\t`id` integer PRIMARY KEY,\n\t`name` text NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 2,
+        "payload": {
+          "sequence": 2,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "CREATE TABLE `comments` (\n\t`id` integer PRIMARY KEY,\n\t`author_id` integer NOT NULL,\n\t`text` text,\n\tCONSTRAINT `fk_comments_author_id_authors_id_fk` FOREIGN KEY (`author_id`) REFERENCES `authors`(`id`)\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 3,
+        "payload": {
+          "sequence": 3,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "CREATE TABLE `authors` (\n\t`id` integer PRIMARY KEY,\n\t`name` text NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 4,
+        "payload": {
+          "sequence": 4,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "CREATE TABLE `comments` (\n\t`id` integer PRIMARY KEY,\n\t`author_id` integer NOT NULL,\n\t`text` text,\n\tCONSTRAINT `fk_comments_author_id_authors_id_fk` FOREIGN KEY (`author_id`) REFERENCES `authors`(`id`)\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 5,
+        "payload": {
+          "sequence": 5,
+          "phase": "seed",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "insert into \"authors\" (\"id\", \"name\") values (?, ?), (?, ?), (?, ?)",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": 1
+            },
+            {
+              "type": "primitive",
+              "value": "Ada"
+            },
+            {
+              "type": "primitive",
+              "value": 2
+            },
+            {
+              "type": "primitive",
+              "value": "Grace"
+            },
+            {
+              "type": "primitive",
+              "value": 3
+            },
+            {
+              "type": "primitive",
+              "value": "Linus"
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "seed.ts",
+          "line": 4,
+          "durationMs": 1.999755859375,
+          "rowCount": 3
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 6,
+        "payload": {
+          "sequence": 6,
+          "phase": "seed",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "insert into \"comments\" (\"id\", \"author_id\", \"text\") values (?, ?, ?), (?, ?, ?), (?, ?, ?)",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": 2
+            },
+            {
+              "type": "primitive",
+              "value": 1
+            },
+            {
+              "type": "primitive",
+              "value": null
+            },
+            {
+              "type": "primitive",
+              "value": 1
+            },
+            {
+              "type": "primitive",
+              "value": 1
+            },
+            {
+              "type": "primitive",
+              "value": "Ready to review"
+            },
+            {
+              "type": "primitive",
+              "value": 3
+            },
+            {
+              "type": "primitive",
+              "value": 3
+            },
+            {
+              "type": "primitive",
+              "value": "Keep this version"
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "seed.ts",
+          "line": 9,
+          "durationMs": 1,
+          "rowCount": 3
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 7,
+        "payload": {
+          "sequence": 7,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "select \"authors\".\"name\", coalesce(json_group_array(json_object(?, \"comments\".\"id\", ?, \"comments\".\"text\") order by \"comments\".\"id\") filter (where \"comments\".\"id\" is not null), '[]') from \"authors\" left join \"comments\" on \"comments\".\"author_id\" = \"authors\".\"id\" group by \"authors\".\"id\", \"authors\".\"name\" order by \"authors\".\"id\"",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": "id"
+            },
+            {
+              "type": "primitive",
+              "value": "text"
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 8,
+          "durationMs": 1.999755859375,
+          "rowCount": 3
+        }
+      },
+      {
+        "type": "display",
+        "sequence": 8,
+        "payload": {
+          "label": "Authors with ordered comments",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "author": {
+                      "type": "primitive",
+                      "value": "Ada"
+                    },
+                    "comments": {
+                      "type": "array",
+                      "value": [
+                        {
+                          "type": "object",
+                          "value": {
+                            "id": {
+                              "type": "primitive",
+                              "value": 1
+                            },
+                            "text": {
+                              "type": "primitive",
+                              "value": "Ready to review"
+                            }
+                          }
+                        },
+                        {
+                          "type": "object",
+                          "value": {
+                            "id": {
+                              "type": "primitive",
+                              "value": 2
+                            },
+                            "text": {
+                              "type": "primitive",
+                              "value": null
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "author": {
+                      "type": "primitive",
+                      "value": "Grace"
+                    },
+                    "comments": {
+                      "type": "array",
+                      "value": []
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "author": {
+                      "type": "primitive",
+                      "value": "Linus"
+                    },
+                    "comments": {
+                      "type": "array",
+                      "value": [
+                        {
+                          "type": "object",
+                          "value": {
+                            "id": {
+                              "type": "primitive",
+                              "value": 3
+                            },
+                            "text": {
+                              "type": "primitive",
+                              "value": "Keep this version"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 22
+        }
+      }
+    ],
+    "cleanupErrors": [],
+    "cleanup": {
+      "guest": {
+        "mode": "graceful"
+      },
+      "database": {
+        "mode": "graceful"
+      }
+    },
+    "timings": {
+      "total": 788,
+      "validate": 0.02499997615814209,
+      "resolve": 0.009999990463256836,
+      "load_artifacts": 453.50999999046326,
+      "compile": 166.23500001430511,
+      "evaluate_schema": 13.804999947547913,
+      "generate_bootstrap": 1.8949999809265137,
+      "apply_bootstrap": 74.6949999332428,
+      "seed": 4.254999995231628,
+      "run": 29.649999976158142,
+      "inspect": 1.5749999284744263,
+      "plan": 0.039999961853027344,
+      "cleanup": 0.8049999475479126
+    },
+    "ok": true,
+    "outcome": "succeeded"
+  },
+  "guests": [
+    {
+      "imageId": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+      "lockDigest": "sha256-dabcc2a116ec5e228673a8c074b17ef00b455fc65afad67b9e392fd1ff4d2ad6"
+    }
+  ]
+}

@@ -1,0 +1,163 @@
+{
+  "kind": "drizzle-run-guide",
+  "manifestVersion": 1,
+  "id": "b93b6c01-8a9e-4a5a-9b6a-174a51210003",
+  "title": "Typed helpers: SQL-like vs RQB (PostgreSQL)",
+  "description": "Select typed JSON expressions with either API, then load nested author profiles.",
+  "project": {
+    "kind": "drizzle-run-pair",
+    "manifestVersion": 1,
+    "entrypoints": {
+      "schema": "schema.ts",
+      "seed": "seed.ts",
+      "run": "query.ts"
+    },
+    "files": {
+      "schema.ts": "import { defineRelations } from \"drizzle-orm\";\nimport { boolean, integer, pgTable, text } from \"drizzle-orm/pg-core\";\n\nexport const users = pgTable(\"users\", {\n  id: integer(\"id\").primaryKey(),\n  name: text(\"name\").notNull(),\n  bio: text(\"bio\"),\n  active: boolean(\"active\").notNull(),\n});\n\nexport const posts = pgTable(\"posts\", {\n  id: integer(\"id\").primaryKey(),\n  authorId: integer(\"author_id\").notNull().references(() => users.id),\n  title: text(\"title\").notNull(),\n});\n\nexport const relations = defineRelations({ users, posts }, (r) => ({\n  posts: {\n    author: r.one.users({ from: r.posts.authorId, to: r.users.id, optional: false }),\n  },\n}));\n",
+      "seed.ts": "import { db } from \"@drizzle-run/runtime/context\";\n\nimport { posts, users } from \"./schema\";\n\nawait db.insert(users).values([\n  { id: 1, name: \"Ada\", bio: \"Writes about SQL\", active: true },\n  { id: 2, name: \"Grace\", bio: null, active: false },\n]);\n\nawait db.insert(posts).values([\n  { id: 1, authorId: 1, title: \"Small SQL helpers\" },\n  { id: 2, authorId: 2, title: \"Types that follow your query\" },\n  { id: 3, authorId: 1, title: \"Compose your queries\" },\n]);\n",
+      "helpers.ts": "import { type GetColumnData, type SQL, sql } from \"drizzle-orm\";\nimport type { AnyPgColumn } from \"drizzle-orm/pg-core\";\n\ntype JsonValue = string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue };\n\n// These built-in column types keep their JavaScript representation inside JSON.\ntype JsonColumn = AnyPgColumn<{\n  dataType: \"string\" | \"number int32\" | \"boolean\";\n  data: string | number | boolean;\n}>;\n\ntype JsonField = JsonColumn | SQL<JsonValue>;\n\ntype JsonObject<Shape extends Record<string, JsonField>> = {\n  [Key in keyof Shape]: Shape[Key] extends JsonColumn\n    ? GetColumnData<Shape[Key]>\n    : Shape[Key] extends SQL<infer Value>\n      ? Value\n      : never;\n} & {};\n\n/**\n * Build a JSONB object with inferred keys, values and column nullability.\n * Supports built-in text, integer and boolean columns, and JSON-compatible SQL expressions.\n * SQL expression types must match PostgreSQL's JSON output; nested column decoders do not run.\n * Use columns from the source table or inner joins, not the nullable side of an outer join.\n */\nexport function jsonbBuildObject<Shape extends Record<string, JsonField>>(shape: Shape): SQL<JsonObject<Shape>> {\n  const entries = Object.entries(shape).map(([key, value]) => sql`${key}::text, ${value}`);\n\n  return sql<JsonObject<Shape>>`jsonb_build_object(${sql.join(entries, sql`, `)})`;\n}\n"
+    },
+    "sides": [
+      {
+        "name": "SQL-like",
+        "target": {
+          "dialect": "postgresql"
+        },
+        "dependencies": {
+          "drizzle-orm": "1.0.0-rc.5",
+          "drizzle-kit": "1.0.0-rc.5"
+        },
+        "files": {
+          "query.ts": "import { db } from \"@drizzle-run/runtime/context\";\nimport { eq, sql } from \"drizzle-orm\";\n\nimport { jsonbBuildObject } from \"./helpers\";\nimport { posts, users } from \"./schema\";\n\nconst profiles = await db.select({\n  profile: jsonbBuildObject({ id: users.id, displayName: users.name, bio: users.bio, active: users.active }),\n}).from(users).orderBy(users.id);\n\n$.display(\"Profiles\", profiles);\n\nconst cards = await db.select({\n  id: posts.id,\n  title: posts.title,\n  titleLength: sql<number>`length(${posts.title})`,\n  author: {\n    profile: jsonbBuildObject({ id: users.id, displayName: users.name, bio: users.bio, active: users.active }),\n  },\n}).from(posts).innerJoin(users, eq(posts.authorId, users.id)).orderBy(posts.id);\n\n$.display(\"Post cards\", cards);\n"
+        }
+      },
+      {
+        "name": "RQB",
+        "target": {
+          "dialect": "postgresql"
+        },
+        "dependencies": {
+          "drizzle-orm": "1.0.0-rc.5",
+          "drizzle-kit": "1.0.0-rc.5"
+        },
+        "files": {
+          "query.ts": "import { db } from \"@drizzle-run/runtime/context\";\nimport { sql } from \"drizzle-orm\";\n\nimport { jsonbBuildObject } from \"./helpers\";\n\nconst profiles = await db.query.users.findMany({\n  columns: {},\n  extras: {\n    profile: (user) => jsonbBuildObject({ id: user.id, displayName: user.name, bio: user.bio, active: user.active }),\n  },\n  orderBy: { id: \"asc\" },\n});\n\n$.display(\"Profiles\", profiles);\n\nconst cards = await db.query.posts.findMany({\n  columns: { id: true, title: true },\n  extras: { titleLength: (post) => sql<number>`length(${post.title})` },\n  with: {\n    author: {\n      columns: {},\n      extras: {\n        profile: (user) => jsonbBuildObject({ id: user.id, displayName: user.name, bio: user.bio, active: user.active }),\n      },\n    },\n  },\n  orderBy: { id: \"asc\" },\n});\n\n$.display(\"Post cards\", cards);\n"
+        }
+      }
+    ]
+  },
+  "steps": [
+    {
+      "type": "walkthrough",
+      "id": "01-profiles",
+      "label": "Select a helper",
+      "title": "Use the same expression with either API",
+      "body": "You need a profile with an ID, display name, nullable bio and active flag. Both sides use Drizzle ORM **1.0.0-rc.5** and the same `jsonbBuildObject` helper from `helpers.ts`.\n\nThe SQL-like query selects the expression as `profile`. RQB puts it in `extras` and uses `columns: {}` to leave out the table's ordinary fields. Build the expression from the callback's `user` columns so it follows RQB's table alias.\n\nPress **Run**. Both sides return the same two profiles, including Grace's null bio and false active flag. Hover over `profiles`: its fields use normal TypeScript types without a handwritten result interface.",
+      "edits": [
+        {
+          "file": "query.ts",
+          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { eq, sql } from \"drizzle-orm\";\n\nimport { jsonbBuildObject } from \"./helpers\";\nimport { posts, users } from \"./schema\";\n\nconst profiles = await db.select({\n  profile: jsonbBuildObject({ id: users.id, displayName: users.name, bio: users.bio, active: users.active }),\n}).from(users).orderBy(users.id);\n\n$.display(\"Profiles\", profiles);\n\n",
+          "side": 0
+        },
+        {
+          "file": "query.ts",
+          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { sql } from \"drizzle-orm\";\n\nimport { jsonbBuildObject } from \"./helpers\";\n\nconst profiles = await db.query.users.findMany({\n  columns: {},\n  extras: {\n    profile: (user) => jsonbBuildObject({ id: user.id, displayName: user.name, bio: user.bio, active: user.active }),\n  },\n  orderBy: { id: \"asc\" },\n});\n\n$.display(\"Profiles\", profiles);\n\n",
+          "side": 1
+        }
+      ],
+      "focus": {
+        "file": "query.ts",
+        "lines": [
+          6,
+          12
+        ],
+        "side": 1
+      },
+      "run": "required",
+      "highlight": {
+        "displays": [
+          "Profiles"
+        ]
+      },
+      "meta": {
+        "summary": "Select the same inferred JSON expression with select or RQB extras.",
+        "changed": "Both APIs return matching typed profiles."
+      }
+    },
+    {
+      "type": "walkthrough",
+      "id": "02-authors",
+      "label": "Include an author",
+      "title": "Combine extras with a related record",
+      "body": "Each post belongs to an author. The SQL-like side uses an inner join and selects a nested `author.profile`. RQB uses `with: { author: ... }` and builds the profile in that relation's `extras` callback. Each callback receives the columns for its own table alias.\n\nBoth queries add `titleLength` with a typed SQL expression. RQB assembles the author relation, while the helper builds the profile object inside it. The schema marks the relation as required because `authorId` is non-null and references an existing user.\n\nPress **Run**. Both sides return the same three post cards and two profiles. This example uses a scalar helper in `extras`; it does not put a grouped aggregate query there.",
+      "edits": [
+        {
+          "file": "query.ts",
+          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { eq, sql } from \"drizzle-orm\";\n\nimport { jsonbBuildObject } from \"./helpers\";\nimport { posts, users } from \"./schema\";\n\nconst profiles = await db.select({\n  profile: jsonbBuildObject({ id: users.id, displayName: users.name, bio: users.bio, active: users.active }),\n}).from(users).orderBy(users.id);\n\n$.display(\"Profiles\", profiles);\n\nconst cards = await db.select({\n  id: posts.id,\n  title: posts.title,\n  titleLength: sql<number>`length(${posts.title})`,\n  author: {\n    profile: jsonbBuildObject({ id: users.id, displayName: users.name, bio: users.bio, active: users.active }),\n  },\n}).from(posts).innerJoin(users, eq(posts.authorId, users.id)).orderBy(posts.id);\n\n$.display(\"Post cards\", cards);\n",
+          "side": 0
+        },
+        {
+          "file": "query.ts",
+          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { sql } from \"drizzle-orm\";\n\nimport { jsonbBuildObject } from \"./helpers\";\n\nconst profiles = await db.query.users.findMany({\n  columns: {},\n  extras: {\n    profile: (user) => jsonbBuildObject({ id: user.id, displayName: user.name, bio: user.bio, active: user.active }),\n  },\n  orderBy: { id: \"asc\" },\n});\n\n$.display(\"Profiles\", profiles);\n\nconst cards = await db.query.posts.findMany({\n  columns: { id: true, title: true },\n  extras: { titleLength: (post) => sql<number>`length(${post.title})` },\n  with: {\n    author: {\n      columns: {},\n      extras: {\n        profile: (user) => jsonbBuildObject({ id: user.id, displayName: user.name, bio: user.bio, active: user.active }),\n      },\n    },\n  },\n  orderBy: { id: \"asc\" },\n});\n\n$.display(\"Post cards\", cards);\n",
+          "side": 1
+        }
+      ],
+      "focus": {
+        "file": "query.ts",
+        "lines": [
+          16,
+          29
+        ],
+        "side": 1
+      },
+      "run": "required",
+      "highlight": {
+        "displays": [
+          "Profiles",
+          "Post cards"
+        ]
+      },
+      "meta": {
+        "summary": "Use relation-local extras and a computed field without losing inferred types.",
+        "changed": "Both APIs return the same nested author profiles and post fields."
+      }
+    },
+    {
+      "type": "walkthrough",
+      "id": "03-contract",
+      "label": "Read the contract",
+      "title": "Keep the helper's representation rules",
+      "body": "Open `helpers.ts`. The helper accepts built-in text, integer and boolean columns, plus JSON-compatible SQL expressions. Its type maps column data and nullability into a plain object. The `& {}` keeps that object expanded in editor hovers.\n\nPostgreSQL returns the JSONB object through the driver. JSON construction does not run each nested column's decoder, so dates, bigint and custom types need an explicit representation.\n\nA helper's `SQL<T>` type describes the result; it does not validate arbitrary JSON at runtime. Use `with` to load related records, and `extras` when a selected record needs a computed expression.",
+      "focus": {
+        "file": "helpers.ts",
+        "lines": [
+          13,
+          27
+        ]
+      },
+      "run": "none",
+      "links": [
+        {
+          "label": "Build the helper step by step",
+          "href": "/examples/reusable-helpers"
+        },
+        {
+          "label": "Relational queries",
+          "href": "https://orm.drizzle.team/docs/rqb"
+        },
+        {
+          "label": "The other database",
+          "href": "/examples/helper-apis-sqlite"
+        }
+      ],
+      "meta": {
+        "summary": "Keep JSON decoding and supported input types explicit in both APIs."
+      }
+    }
+  ],
+  "meta": {
+    "slug": "helper-apis-postgresql",
+    "status": "published",
+    "example": "a93b6c01-8a9e-4a5a-9b6a-174a51210003"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "id": "a93b6c01-8a9e-4a5a-9b6a-174a51210004",
+  "slug": "helper-apis-sqlite",
+  "status": "published",
+  "title": "Typed helpers: SQL-like vs RQB (SQLite)",
+  "description": "Use the same typed JSON helper in a select and RQB extras, then load authors with joins or with.",
+  "topic": "Queries",
+  "featured": false,
+  "order": 135,
+  "dialect": "sqlite",
+  "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+  "sides": [
+    {
+      "name": "SQL-like"
+    },
+    {
+      "name": "RQB"
+    }
+  ],
+  "links": [
+    {
+      "kind": "docs",
+      "label": "Relational queries",
+      "url": "https://orm.drizzle.team/docs/rqb"
+    },
+    {
+      "kind": "example",
+      "label": "The other database",
+      "slug": "helper-apis-postgresql"
+    }
+  ]
+}

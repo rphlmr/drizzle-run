@@ -36,6 +36,137 @@ async function getRecordedDisplays({ example, step }: { example: string; step?: 
 }
 
 describe("advanced teaching results", () => {
+  it.each(["postgresql", "sqlite"])(
+    "should round-trip real PlainDate objects and bind date filters in %s",
+    async (dialect) => {
+      const converted = await getRecordedDisplays({ example: `temporal-custom-type-${dialect}`, step: "02-custom" });
+      const queried = await getRecordedDisplays({ example: `temporal-custom-type-${dialect}`, step: "03-query" });
+      const starter = await getRecordedDisplays({ example: `temporal-bookings-${dialect}` });
+
+      expect(converted["Decoded dates"]).toEqual([
+        serializeValue([
+          { title: "Workshop", startsOn: "2024-02-28", nextDay: "2024-02-29", followUp: null, isTemporal: true },
+          {
+            title: "Leap-day session",
+            startsOn: "2024-02-29",
+            nextDay: "2024-03-01",
+            followUp: "2024-03-01",
+            isTemporal: true,
+          },
+        ]),
+      ]);
+      expect(queried["Bookings from leap day"]).toEqual([
+        serializeValue([
+          { title: "Leap-day session", startsOn: "2024-02-29" },
+          { title: "March session", startsOn: "2024-03-01" },
+        ]),
+      ]);
+      expect(starter).toEqual(queried);
+    },
+  );
+
+  it.each(["postgresql", "sqlite"])("should enforce schema checks and preserve valid rows in %s", async (dialect) => {
+    const results = await getRecordedDisplays({ example: `check-constraints-${dialect}` });
+
+    expect(results.stock_non_negative).toEqual([serializeValue({ rejected: true })]);
+    expect(results.discount_in_range).toEqual([serializeValue({ rejected: true })]);
+    expect(results["Stored products"]).toEqual([
+      serializeValue([
+        { id: 1, name: "SQL handbook", priceCents: 2000, discountCents: 250, restockThreshold: null, stock: 0 },
+        { id: 3, name: "Pocket notes", priceCents: 500, discountCents: 0, restockThreshold: null, stock: 0 },
+      ]),
+    ]);
+  });
+
+  it.each(["postgresql", "sqlite"])("should compose typed scalar and JSON helpers in %s", async (dialect) => {
+    const scalar = await getRecordedDisplays({ example: `typed-scalar-helpers-${dialect}` });
+    const nested = await getRecordedDisplays({ example: `typed-json-aggregation-${dialect}` });
+    const filtered = await getRecordedDisplays({ example: `typed-json-filters-${dialect}` });
+
+    expect(scalar["Scores with a typed fallback"]).toEqual([
+      serializeValue([
+        { author: "Ada", bestScore: 10, entries: 2 },
+        { author: "Grace", bestScore: 0, entries: 0 },
+        { author: "Linus", bestScore: 0, entries: 1 },
+      ]),
+    ]);
+    expect(nested["Authors with ordered comments"]).toEqual([
+      serializeValue([
+        {
+          author: "Ada",
+          comments: [
+            { id: 1, text: "Ready to review" },
+            { id: 2, text: null },
+          ],
+        },
+        { author: "Grace", comments: [] },
+        { author: "Linus", comments: [{ id: 3, text: "Keep this version" }] },
+      ]),
+    ]);
+    expect(filtered["Selected colors"]).toEqual([
+      serializeValue([
+        { name: "Blue shirt", color: "blue" },
+        { name: "Blue coat", color: "blue" },
+        { name: "Red shirt", color: "red" },
+        { name: "Gift card", color: null },
+        { name: "Uncoloured sample", color: null },
+      ]),
+    ]);
+    expect(filtered["Blue products available in M"]).toEqual([
+      serializeValue([{ id: 1, name: "Blue shirt", attributes: { color: "blue", sizes: ["S", "M"] } }]),
+    ]);
+  });
+
+  it.each(["postgresql", "sqlite"])(
+    "should demonstrate shifted offsets and preserve composite-cursor ties in %s",
+    async (dialect) => {
+      const offset = await getRecordedDisplays({ example: `offset-pagination-${dialect}` });
+      const shift = await getRecordedDisplays({ example: `pagination-${dialect}`, step: "02-shift" });
+      const naive = await getRecordedDisplays({ example: `pagination-${dialect}`, step: "03-ties" });
+      const composite = await getRecordedDisplays({ example: `pagination-${dialect}`, step: "04-composite" });
+      const starter = await getRecordedDisplays({ example: `cursor-pagination-${dialect}` });
+
+      expect(offset["Offset page 1"]).toMatchObject([serializeValue([{ id: 1 }, { id: 2 }])]);
+      expect(offset["Offset page 2"]).toMatchObject([serializeValue([{ id: 3 }, { id: 4 }])]);
+      expect(offset["Jump to page 3"]).toMatchObject([serializeValue([{ id: 5 }, { id: 6 }])]);
+      expect(shift["First page before insert"]).toMatchObject([serializeValue([{ id: 1 }, { id: 2 }])]);
+      expect(shift["Offset page after insert"]).toMatchObject([serializeValue([{ id: 2 }, { id: 3 }])]);
+      expect(naive["Timestamp-only cursor skips a tie"]).toMatchObject([serializeValue([{ id: 4 }, { id: 5 }])]);
+      expect(composite["Cursor page 1"]).toMatchObject([
+        serializeValue({ items: [{ id: 1 }, { id: 2 }], hasNextPage: true, nextCursor: { id: 2 } }),
+      ]);
+      expect(composite["Cursor page 2"]).toMatchObject([
+        serializeValue({ items: [{ id: 3 }, { id: 4 }], hasNextPage: true, nextCursor: { id: 4 } }),
+      ]);
+      expect(composite["Cursor page 3"]).toMatchObject([
+        serializeValue({ items: [{ id: 5 }, { id: 6 }], hasNextPage: false, nextCursor: null }),
+      ]);
+      expect(starter).toEqual(composite);
+    },
+  );
+
+  it.each(["reusable-helpers", "reusable-helpers-sqlite"])(
+    "should preserve profile values and compose nested post cards in %s",
+    async (example) => {
+      const inline = await getRecordedDisplays({ example, step: "01-inline" });
+      const inferred = await getRecordedDisplays({ example, step: "02-infer" });
+      const composed = await getRecordedDisplays({ example, step: "03-compose" });
+      const ada = { id: 1, displayName: "Ada", bio: "Writes about SQL", active: true };
+      const grace = { id: 2, displayName: "Grace", bio: null, active: false };
+
+      expect(inline.Profiles).toEqual([serializeValue([{ profile: ada }, { profile: grace }])]);
+      expect(inferred.Profiles).toEqual(inline.Profiles);
+      expect(composed.Profiles).toEqual(inline.Profiles);
+      expect(composed["Post cards"]).toEqual([
+        serializeValue([
+          { post: { id: 1, title: "Small SQL helpers", titleLength: 17, author: ada } },
+          { post: { id: 2, title: "Types that follow your query", titleLength: 28, author: grace } },
+          { post: { id: 3, title: "Compose your queries", titleLength: 20, author: ada } },
+        ]),
+      ]);
+    },
+  );
+
   it("should reuse prepared placeholders for filters and limits and report a missing value", async () => {
     const bound = await getRecordedDisplays({ example: "prepared-queries", step: "01-bound-values" });
     const prepared = await getRecordedDisplays({ example: "prepared-queries", step: "02-prepare" });

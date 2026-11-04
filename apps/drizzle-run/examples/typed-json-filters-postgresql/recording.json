@@ -1,0 +1,850 @@
+{
+  "recordingVersion": 1,
+  "snapshotDigest": "01137a585c357da18b28be8150ab833be307ef59b185a385b914d8232d0cb538",
+  "recordedAt": "2026-11-04T09:17:11.506Z",
+  "result": {
+    "version": 1,
+    "target": {
+      "dialect": "postgresql"
+    },
+    "tuple": {
+      "id": "postgresql-pglite__orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+      "target": {
+        "dialect": "postgresql"
+      },
+      "ormVersion": "1.0.0-rc.5",
+      "kitVersion": "1.0.0-rc.5"
+    },
+    "random": {
+      "effectiveSeed": 2468461927,
+      "source": "generated",
+      "derivation": "crypto-u32-v1",
+      "generator": "mulberry32-v1"
+    },
+    "phases": [
+      {
+        "phase": "validate",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:17:10.108Z",
+        "durationMs": 0.029999971389770508
+      },
+      {
+        "phase": "resolve",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:17:10.108Z",
+        "durationMs": 0.004999995231628418
+      },
+      {
+        "phase": "load_artifacts",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:17:10.365Z",
+        "durationMs": 429.21999990940094
+      },
+      {
+        "phase": "compile",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:17:10.200Z",
+        "durationMs": 164.75499999523163
+      },
+      {
+        "phase": "evaluate_schema",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:17:10.795Z",
+        "durationMs": 49.25499999523163
+      },
+      {
+        "phase": "generate_bootstrap",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:17:10.844Z",
+        "durationMs": 19.399999976158142
+      },
+      {
+        "phase": "apply_bootstrap",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:17:10.864Z",
+        "durationMs": 365.10000002384186
+      },
+      {
+        "phase": "seed",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:17:11.229Z",
+        "durationMs": 7.215000033378601
+      },
+      {
+        "phase": "run",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:17:11.237Z",
+        "durationMs": 36.62999999523163
+      },
+      {
+        "phase": "inspect",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:17:11.272Z",
+        "durationMs": 51.625
+      },
+      {
+        "phase": "plan",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:17:11.324Z",
+        "durationMs": 0.034999966621398926
+      },
+      {
+        "phase": "cleanup",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:17:11.325Z",
+        "durationMs": 2.0749999284744263
+      }
+    ],
+    "diagnostics": [],
+    "sql": [
+      {
+        "sequence": 1,
+        "phase": "bootstrap",
+        "origin": "kit",
+        "kind": "generated",
+        "sql": "CREATE TABLE \"products\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"attributes\" jsonb NOT NULL\n);\n",
+        "parameters": [],
+        "outcome": "succeeded"
+      },
+      {
+        "sequence": 2,
+        "phase": "bootstrap",
+        "origin": "adapter",
+        "kind": "executed",
+        "sql": "BEGIN",
+        "parameters": [],
+        "outcome": "succeeded",
+        "durationMs": 0.999755859375
+      },
+      {
+        "sequence": 3,
+        "phase": "bootstrap",
+        "origin": "adapter",
+        "kind": "executed",
+        "sql": "CREATE TABLE \"products\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"attributes\" jsonb NOT NULL\n);\n",
+        "parameters": [],
+        "outcome": "succeeded",
+        "durationMs": 9.000244140625
+      },
+      {
+        "sequence": 4,
+        "phase": "bootstrap",
+        "origin": "adapter",
+        "kind": "executed",
+        "sql": "COMMIT",
+        "parameters": [],
+        "outcome": "succeeded",
+        "durationMs": 1
+      },
+      {
+        "sequence": 5,
+        "phase": "seed",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "insert into \"products\" (\"id\", \"name\", \"attributes\") values ($1, $2, $3), ($4, $5, $6), ($7, $8, $9), ($10, $11, $12), ($13, $14, $15)",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": 1
+          },
+          {
+            "type": "primitive",
+            "value": "Blue shirt"
+          },
+          {
+            "type": "object",
+            "value": {
+              "color": {
+                "type": "primitive",
+                "value": "blue"
+              },
+              "sizes": {
+                "type": "array",
+                "value": [
+                  {
+                    "type": "primitive",
+                    "value": "S"
+                  },
+                  {
+                    "type": "primitive",
+                    "value": "M"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "type": "primitive",
+            "value": 2
+          },
+          {
+            "type": "primitive",
+            "value": "Blue coat"
+          },
+          {
+            "type": "object",
+            "value": {
+              "color": {
+                "type": "primitive",
+                "value": "blue"
+              },
+              "sizes": {
+                "type": "array",
+                "value": [
+                  {
+                    "type": "primitive",
+                    "value": "L"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "type": "primitive",
+            "value": 3
+          },
+          {
+            "type": "primitive",
+            "value": "Red shirt"
+          },
+          {
+            "type": "object",
+            "value": {
+              "color": {
+                "type": "primitive",
+                "value": "red"
+              },
+              "sizes": {
+                "type": "array",
+                "value": [
+                  {
+                    "type": "primitive",
+                    "value": "M"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "type": "primitive",
+            "value": 4
+          },
+          {
+            "type": "primitive",
+            "value": "Gift card"
+          },
+          {
+            "type": "object",
+            "value": {}
+          },
+          {
+            "type": "primitive",
+            "value": 5
+          },
+          {
+            "type": "primitive",
+            "value": "Uncoloured sample"
+          },
+          {
+            "type": "object",
+            "value": {
+              "color": {
+                "type": "primitive",
+                "value": null
+              }
+            }
+          }
+        ],
+        "outcome": "succeeded",
+        "source": "seed.ts",
+        "line": 4,
+        "durationMs": 6,
+        "rowCount": 5
+      },
+      {
+        "sequence": 6,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "select \"name\", \"attributes\"->>$1 from \"products\" order by \"products\".\"id\"",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": "color"
+          }
+        ],
+        "outcome": "succeeded",
+        "source": "query.ts",
+        "line": 10,
+        "durationMs": 5,
+        "rowCount": 5
+      },
+      {
+        "sequence": 7,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "select \"id\", \"name\", \"attributes\" from \"products\" where ((\"products\".\"attributes\"->>$1 = $2) and (exists (select 1 from jsonb_array_elements_text(coalesce(\"products\".\"attributes\"->$3, '[]'::jsonb)) as item(value) where item.value = $4))) order by \"products\".\"id\"",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": "color"
+          },
+          {
+            "type": "primitive",
+            "value": "blue"
+          },
+          {
+            "type": "primitive",
+            "value": "sizes"
+          },
+          {
+            "type": "primitive",
+            "value": "M"
+          }
+        ],
+        "outcome": "succeeded",
+        "source": "query.ts",
+        "line": 13,
+        "durationMs": 5.000244140625,
+        "rowCount": 1
+      }
+    ],
+    "logs": [],
+    "value": {
+      "type": "undefined"
+    },
+    "displays": [
+      {
+        "label": "Selected colors",
+        "values": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Blue shirt"
+                  },
+                  "color": {
+                    "type": "primitive",
+                    "value": "blue"
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Blue coat"
+                  },
+                  "color": {
+                    "type": "primitive",
+                    "value": "blue"
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Red shirt"
+                  },
+                  "color": {
+                    "type": "primitive",
+                    "value": "red"
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Gift card"
+                  },
+                  "color": {
+                    "type": "primitive",
+                    "value": null
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "name": {
+                    "type": "primitive",
+                    "value": "Uncoloured sample"
+                  },
+                  "color": {
+                    "type": "primitive",
+                    "value": null
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "source": "query.ts",
+        "line": 10
+      },
+      {
+        "label": "Blue products available in M",
+        "values": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "id": {
+                    "type": "primitive",
+                    "value": 1
+                  },
+                  "name": {
+                    "type": "primitive",
+                    "value": "Blue shirt"
+                  },
+                  "attributes": {
+                    "type": "object",
+                    "value": {
+                      "color": {
+                        "type": "primitive",
+                        "value": "blue"
+                      },
+                      "sizes": {
+                        "type": "array",
+                        "value": [
+                          {
+                            "type": "primitive",
+                            "value": "S"
+                          },
+                          {
+                            "type": "primitive",
+                            "value": "M"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "source": "query.ts",
+        "line": 17
+      }
+    ],
+    "events": [
+      {
+        "type": "sql",
+        "sequence": 1,
+        "payload": {
+          "sequence": 1,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "CREATE TABLE \"products\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"attributes\" jsonb NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 2,
+        "payload": {
+          "sequence": 2,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "BEGIN",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 0.999755859375
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 3,
+        "payload": {
+          "sequence": 3,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "CREATE TABLE \"products\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"attributes\" jsonb NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 9.000244140625
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 4,
+        "payload": {
+          "sequence": 4,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "COMMIT",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 1
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 5,
+        "payload": {
+          "sequence": 5,
+          "phase": "seed",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "insert into \"products\" (\"id\", \"name\", \"attributes\") values ($1, $2, $3), ($4, $5, $6), ($7, $8, $9), ($10, $11, $12), ($13, $14, $15)",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": 1
+            },
+            {
+              "type": "primitive",
+              "value": "Blue shirt"
+            },
+            {
+              "type": "object",
+              "value": {
+                "color": {
+                  "type": "primitive",
+                  "value": "blue"
+                },
+                "sizes": {
+                  "type": "array",
+                  "value": [
+                    {
+                      "type": "primitive",
+                      "value": "S"
+                    },
+                    {
+                      "type": "primitive",
+                      "value": "M"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "type": "primitive",
+              "value": 2
+            },
+            {
+              "type": "primitive",
+              "value": "Blue coat"
+            },
+            {
+              "type": "object",
+              "value": {
+                "color": {
+                  "type": "primitive",
+                  "value": "blue"
+                },
+                "sizes": {
+                  "type": "array",
+                  "value": [
+                    {
+                      "type": "primitive",
+                      "value": "L"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "type": "primitive",
+              "value": 3
+            },
+            {
+              "type": "primitive",
+              "value": "Red shirt"
+            },
+            {
+              "type": "object",
+              "value": {
+                "color": {
+                  "type": "primitive",
+                  "value": "red"
+                },
+                "sizes": {
+                  "type": "array",
+                  "value": [
+                    {
+                      "type": "primitive",
+                      "value": "M"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "type": "primitive",
+              "value": 4
+            },
+            {
+              "type": "primitive",
+              "value": "Gift card"
+            },
+            {
+              "type": "object",
+              "value": {}
+            },
+            {
+              "type": "primitive",
+              "value": 5
+            },
+            {
+              "type": "primitive",
+              "value": "Uncoloured sample"
+            },
+            {
+              "type": "object",
+              "value": {
+                "color": {
+                  "type": "primitive",
+                  "value": null
+                }
+              }
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "seed.ts",
+          "line": 4,
+          "durationMs": 6,
+          "rowCount": 5
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 6,
+        "payload": {
+          "sequence": 6,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "select \"name\", \"attributes\"->>$1 from \"products\" order by \"products\".\"id\"",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": "color"
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 10,
+          "durationMs": 5,
+          "rowCount": 5
+        }
+      },
+      {
+        "type": "display",
+        "sequence": 7,
+        "payload": {
+          "label": "Selected colors",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "name": {
+                      "type": "primitive",
+                      "value": "Blue shirt"
+                    },
+                    "color": {
+                      "type": "primitive",
+                      "value": "blue"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "name": {
+                      "type": "primitive",
+                      "value": "Blue coat"
+                    },
+                    "color": {
+                      "type": "primitive",
+                      "value": "blue"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "name": {
+                      "type": "primitive",
+                      "value": "Red shirt"
+                    },
+                    "color": {
+                      "type": "primitive",
+                      "value": "red"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "name": {
+                      "type": "primitive",
+                      "value": "Gift card"
+                    },
+                    "color": {
+                      "type": "primitive",
+                      "value": null
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "name": {
+                      "type": "primitive",
+                      "value": "Uncoloured sample"
+                    },
+                    "color": {
+                      "type": "primitive",
+                      "value": null
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 10
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 8,
+        "payload": {
+          "sequence": 7,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "select \"id\", \"name\", \"attributes\" from \"products\" where ((\"products\".\"attributes\"->>$1 = $2) and (exists (select 1 from jsonb_array_elements_text(coalesce(\"products\".\"attributes\"->$3, '[]'::jsonb)) as item(value) where item.value = $4))) order by \"products\".\"id\"",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": "color"
+            },
+            {
+              "type": "primitive",
+              "value": "blue"
+            },
+            {
+              "type": "primitive",
+              "value": "sizes"
+            },
+            {
+              "type": "primitive",
+              "value": "M"
+            }
+          ],
+          "outcome": "succeeded",
+          "source": "query.ts",
+          "line": 13,
+          "durationMs": 5.000244140625,
+          "rowCount": 1
+        }
+      },
+      {
+        "type": "display",
+        "sequence": 9,
+        "payload": {
+          "label": "Blue products available in M",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 1
+                    },
+                    "name": {
+                      "type": "primitive",
+                      "value": "Blue shirt"
+                    },
+                    "attributes": {
+                      "type": "object",
+                      "value": {
+                        "color": {
+                          "type": "primitive",
+                          "value": "blue"
+                        },
+                        "sizes": {
+                          "type": "array",
+                          "value": [
+                            {
+                              "type": "primitive",
+                              "value": "S"
+                            },
+                            {
+                              "type": "primitive",
+                              "value": "M"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 17
+        }
+      }
+    ],
+    "cleanupErrors": [],
+    "cleanup": {
+      "guest": {
+        "mode": "graceful"
+      },
+      "database": {
+        "mode": "graceful"
+      }
+    },
+    "timings": {
+      "total": 1222,
+      "validate": 0.029999971389770508,
+      "resolve": 0.004999995231628418,
+      "load_artifacts": 429.21999990940094,
+      "compile": 164.75499999523163,
+      "evaluate_schema": 49.25499999523163,
+      "generate_bootstrap": 19.399999976158142,
+      "apply_bootstrap": 365.10000002384186,
+      "seed": 7.215000033378601,
+      "run": 36.62999999523163,
+      "inspect": 51.625,
+      "plan": 0.034999966621398926,
+      "cleanup": 2.0749999284744263
+    },
+    "ok": true,
+    "outcome": "succeeded"
+  },
+  "guests": [
+    {
+      "imageId": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+      "lockDigest": "sha256-dabcc2a116ec5e228673a8c074b17ef00b455fc65afad67b9e392fd1ff4d2ad6"
+    }
+  ]
+}

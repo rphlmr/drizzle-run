@@ -31,6 +31,54 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     ]
   },
   {
+    "slug": "check-constraints-postgresql",
+    "title": "Enforce product rules with CHECK (PostgreSQL)",
+    "description": "Reject invalid inserts and updates in the database, compare two columns, and see why CHECK does not replace NOT NULL.",
+    "sides": [
+      {
+        "dialect": "postgresql",
+        "ormVersion": "1.0.0-rc.5",
+        "guestFlavor": "slim"
+      }
+    ]
+  },
+  {
+    "slug": "check-constraints-sqlite",
+    "title": "Enforce product rules with CHECK (SQLite)",
+    "description": "Reject invalid inserts and updates in the database, compare two columns, and see why CHECK does not replace NOT NULL.",
+    "sides": [
+      {
+        "dialect": "sqlite",
+        "ormVersion": "1.0.0-rc.5",
+        "guestFlavor": "slim"
+      }
+    ]
+  },
+  {
+    "slug": "cursor-pagination-postgresql",
+    "title": "Page through a composite cursor (PostgreSQL)",
+    "description": "Preserve tied timestamps, fetch one extra row, and derive the next cursor from the last returned row.",
+    "sides": [
+      {
+        "dialect": "postgresql",
+        "ormVersion": "1.0.0-rc.5",
+        "guestFlavor": "slim"
+      }
+    ]
+  },
+  {
+    "slug": "cursor-pagination-sqlite",
+    "title": "Page through a composite cursor (SQLite)",
+    "description": "Preserve tied timestamps, fetch one extra row, and derive the next cursor from the last returned row.",
+    "sides": [
+      {
+        "dialect": "sqlite",
+        "ormVersion": "1.0.0-rc.5",
+        "guestFlavor": "slim"
+      }
+    ]
+  },
+  {
     "slug": "drizzle-in-five-minutes",
     "title": "Drizzle in five minutes",
     "description": "Create, read, update and delete posts, compare query shapes, then keep related writes together.",
@@ -71,6 +119,40 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "title": "Filters, joins, and counts",
     "description": "Combine where clauses, join two tables, and count rows per group.",
     "sides": [
+      {
+        "dialect": "sqlite",
+        "ormVersion": "1.0.0-rc.5",
+        "guestFlavor": "slim"
+      }
+    ]
+  },
+  {
+    "slug": "helper-apis-postgresql",
+    "title": "Typed helpers: SQL-like vs RQB (PostgreSQL)",
+    "description": "Use the same typed JSON helper in a select and RQB extras, then load authors with joins or with.",
+    "sides": [
+      {
+        "dialect": "postgresql",
+        "ormVersion": "1.0.0-rc.5",
+        "guestFlavor": "slim"
+      },
+      {
+        "dialect": "postgresql",
+        "ormVersion": "1.0.0-rc.5",
+        "guestFlavor": "slim"
+      }
+    ]
+  },
+  {
+    "slug": "helper-apis-sqlite",
+    "title": "Typed helpers: SQL-like vs RQB (SQLite)",
+    "description": "Use the same typed JSON helper in a select and RQB extras, then load authors with joins or with.",
+    "sides": [
+      {
+        "dialect": "sqlite",
+        "ormVersion": "1.0.0-rc.5",
+        "guestFlavor": "slim"
+      },
       {
         "dialect": "sqlite",
         "ormVersion": "1.0.0-rc.5",
@@ -133,6 +215,88 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "postgresql",
+        "ormVersion": "1.0.0-rc.5",
+        "guestFlavor": "slim"
+      }
+    ]
+  },
+  {
+    "slug": "offset-pagination-postgresql",
+    "title": "Jump to numbered pages (PostgreSQL)",
+    "description": "Use limit and offset with a unique tie-breaker and a matching index.",
+    "sides": [
+      {
+        "dialect": "postgresql",
+        "ormVersion": "1.0.0-rc.5",
+        "guestFlavor": "slim"
+      }
+    ]
+  },
+  {
+    "slug": "offset-pagination-sqlite",
+    "title": "Jump to numbered pages (SQLite)",
+    "description": "Use limit and offset with a unique tie-breaker and a matching index.",
+    "sides": [
+      {
+        "dialect": "sqlite",
+        "ormVersion": "1.0.0-rc.5",
+        "guestFlavor": "slim"
+      }
+    ]
+  },
+  {
+    "slug": "pagination-apis-postgresql",
+    "title": "Pagination: SQL-like vs RQB (PostgreSQL)",
+    "description": "Compare numbered pages, shifting offsets and composite cursors through both Drizzle query APIs.",
+    "sides": [
+      {
+        "dialect": "postgresql",
+        "ormVersion": "1.0.0-rc.5",
+        "guestFlavor": "slim"
+      },
+      {
+        "dialect": "postgresql",
+        "ormVersion": "1.0.0-rc.5",
+        "guestFlavor": "slim"
+      }
+    ]
+  },
+  {
+    "slug": "pagination-apis-sqlite",
+    "title": "Pagination: SQL-like vs RQB (SQLite)",
+    "description": "Compare numbered pages, shifting offsets and composite cursors through both Drizzle query APIs.",
+    "sides": [
+      {
+        "dialect": "sqlite",
+        "ormVersion": "1.0.0-rc.5",
+        "guestFlavor": "slim"
+      },
+      {
+        "dialect": "sqlite",
+        "ormVersion": "1.0.0-rc.5",
+        "guestFlavor": "slim"
+      }
+    ]
+  },
+  {
+    "slug": "pagination-postgresql",
+    "title": "Paginate with stable ordering (PostgreSQL)",
+    "description": "Compare shifting offset pages, a timestamp-only cursor, and a composite cursor with hasNextPage.",
+    "sides": [
+      {
+        "dialect": "postgresql",
+        "ormVersion": "1.0.0-rc.5",
+        "guestFlavor": "slim"
+      }
+    ]
+  },
+  {
+    "slug": "pagination-sqlite",
+    "title": "Paginate with stable ordering (SQLite)",
+    "description": "Compare shifting offset pages, a timestamp-only cursor, and a composite cursor with hasNextPage.",
+    "sides": [
+      {
+        "dialect": "sqlite",
         "ormVersion": "1.0.0-rc.5",
         "guestFlavor": "slim"
       }
@@ -216,6 +380,30 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     ]
   },
   {
+    "slug": "reusable-helpers",
+    "title": "Write reusable, typed SQL helpers",
+    "description": "Build a JSONB helper that infers its result from your columns, then compose nested objects and SQL expressions.",
+    "sides": [
+      {
+        "dialect": "postgresql",
+        "ormVersion": "1.0.0-rc.5",
+        "guestFlavor": "slim"
+      }
+    ]
+  },
+  {
+    "slug": "reusable-helpers-sqlite",
+    "title": "Write reusable, typed SQL helpers with SQLite",
+    "description": "Infer JSON object types from SQLite columns, decode JSON text, and compose nested expressions.",
+    "sides": [
+      {
+        "dialect": "sqlite",
+        "ormVersion": "1.0.0-rc.5",
+        "guestFlavor": "slim"
+      }
+    ]
+  },
+  {
     "slug": "select-vs-relational-queries",
     "title": "Select vs relational queries",
     "description": "The same authors with their posts, twice: a select with a join on one side, db.query on the other.",
@@ -245,12 +433,132 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     ]
   },
   {
+    "slug": "temporal-bookings-postgresql",
+    "title": "Use Temporal dates in booking queries (PostgreSQL)",
+    "description": "A complete PlainDate column, typed inserts and filters, leap-day arithmetic, and nullable values.",
+    "sides": [
+      {
+        "dialect": "postgresql",
+        "ormVersion": "1.0.0-rc.5",
+        "guestFlavor": "slim"
+      }
+    ]
+  },
+  {
+    "slug": "temporal-bookings-sqlite",
+    "title": "Use Temporal dates in booking queries (SQLite)",
+    "description": "A complete PlainDate column, typed inserts and filters, leap-day arithmetic, and nullable values.",
+    "sides": [
+      {
+        "dialect": "sqlite",
+        "ormVersion": "1.0.0-rc.5",
+        "guestFlavor": "slim"
+      }
+    ]
+  },
+  {
+    "slug": "temporal-custom-type-postgresql",
+    "title": "Store Temporal dates with a custom type (PostgreSQL)",
+    "description": "Build a customType with actual value conversion, preserve nullable dates, and query with typed Temporal values.",
+    "sides": [
+      {
+        "dialect": "postgresql",
+        "ormVersion": "1.0.0-rc.5",
+        "guestFlavor": "slim"
+      }
+    ]
+  },
+  {
+    "slug": "temporal-custom-type-sqlite",
+    "title": "Store Temporal dates with a custom type (SQLite)",
+    "description": "Build a customType with actual value conversion, preserve nullable dates, and query with typed Temporal values.",
+    "sides": [
+      {
+        "dialect": "sqlite",
+        "ormVersion": "1.0.0-rc.5",
+        "guestFlavor": "slim"
+      }
+    ]
+  },
+  {
     "slug": "transactions",
     "title": "Transactions and savepoints",
     "description": "Transfer between accounts, roll back a savepoint, and check which writes are kept.",
     "sides": [
       {
         "dialect": "postgresql",
+        "ormVersion": "1.0.0-rc.5",
+        "guestFlavor": "slim"
+      }
+    ]
+  },
+  {
+    "slug": "typed-json-aggregation-postgresql",
+    "title": "Reuse typed JSON aggregation helpers (PostgreSQL)",
+    "description": "Infer ordered nested arrays, keep a real child with null text, and return an empty collection for a missing child.",
+    "sides": [
+      {
+        "dialect": "postgresql",
+        "ormVersion": "1.0.0-rc.5",
+        "guestFlavor": "slim"
+      }
+    ]
+  },
+  {
+    "slug": "typed-json-aggregation-sqlite",
+    "title": "Reuse typed JSON aggregation helpers (SQLite)",
+    "description": "Infer ordered nested arrays, keep a real child with null text, and return an empty collection for a missing child.",
+    "sides": [
+      {
+        "dialect": "sqlite",
+        "ormVersion": "1.0.0-rc.5",
+        "guestFlavor": "slim"
+      }
+    ]
+  },
+  {
+    "slug": "typed-json-filters-postgresql",
+    "title": "Compose typed JSON filters (PostgreSQL)",
+    "description": "Constrain helper keys to declared text and array fields, bind filter values, and compose predicates with ordinary Drizzle conditions.",
+    "sides": [
+      {
+        "dialect": "postgresql",
+        "ormVersion": "1.0.0-rc.5",
+        "guestFlavor": "slim"
+      }
+    ]
+  },
+  {
+    "slug": "typed-json-filters-sqlite",
+    "title": "Compose typed JSON filters (SQLite)",
+    "description": "Constrain helper keys to declared text and array fields, bind filter values, and compose predicates with ordinary Drizzle conditions.",
+    "sides": [
+      {
+        "dialect": "sqlite",
+        "ormVersion": "1.0.0-rc.5",
+        "guestFlavor": "slim"
+      }
+    ]
+  },
+  {
+    "slug": "typed-scalar-helpers-postgresql",
+    "title": "Compose a typed fallback helper (PostgreSQL)",
+    "description": "Combine a reusable numeric coalesce helper with Drizzle's built-in max and count, preserving null and zero semantics.",
+    "sides": [
+      {
+        "dialect": "postgresql",
+        "ormVersion": "1.0.0-rc.5",
+        "guestFlavor": "slim"
+      }
+    ]
+  },
+  {
+    "slug": "typed-scalar-helpers-sqlite",
+    "title": "Compose a typed fallback helper (SQLite)",
+    "description": "Combine a reusable numeric coalesce helper with Drizzle's built-in max and count, preserving null and zero semantics.",
+    "sides": [
+      {
+        "dialect": "sqlite",
         "ormVersion": "1.0.0-rc.5",
         "guestFlavor": "slim"
       }

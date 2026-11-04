@@ -19,6 +19,14 @@ describe("GUEST_PACKAGE_POLICIES", () => {
     expect(unpoliced).toEqual([]);
   });
 
+  it("should pin Temporal in the rc.5 guests without changing the legacy guest", () => {
+    for (const imageId of Object.keys(GUEST_IMAGES)) {
+      const version = getGuestPackageVersion({ imageId, packageName: "@js-temporal/polyfill" });
+
+      expect(version).toBe(imageId.startsWith("orm-1.0.0-rc.5__") ? "0.5.1" : null);
+    }
+  });
+
   it("should give Effect policies exactly to the effect packages", () => {
     const effectOnly = Object.entries(GUEST_PACKAGE_POLICIES)
       .filter(([, policy]) => policy.role === "user_module" && "guestFlavors" in policy)

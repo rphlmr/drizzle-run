@@ -251,6 +251,7 @@ describe("approved module registry", () => {
       "zod@4.4.3",
     ]);
     expect(toLibrarySpecifiers(asSlim(nextSqlite))).toEqual([
+      "@js-temporal/polyfill@0.5.1",
       "@sinclair/typebox@0.34.52",
       "arktype@2.2.3",
       "drizzle-seed@1.0.0-rc.5",
@@ -260,6 +261,7 @@ describe("approved module registry", () => {
     ]);
     expect(toLibrarySpecifiers({ tuple: nextPostgres, guestFlavor: "effect" })).toEqual([
       "@effect/sql-pg@4.0.5",
+      "@js-temporal/polyfill@0.5.1",
       "@sinclair/typebox@0.34.52",
       "arktype@2.2.3",
       "drizzle-seed@1.0.0-rc.5",

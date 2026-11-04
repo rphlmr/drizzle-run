@@ -1,0 +1,206 @@
+{
+  "steps": {
+    "01-strings": {
+      "String dates": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 1
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Workshop"
+                },
+                "startsOn": {
+                  "type": "primitive",
+                  "value": "2024-02-28"
+                },
+                "followUp": {
+                  "type": "primitive",
+                  "value": null
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 2
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Leap-day session"
+                },
+                "startsOn": {
+                  "type": "primitive",
+                  "value": "2024-02-29"
+                },
+                "followUp": {
+                  "type": "primitive",
+                  "value": "2024-03-01"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "02-custom": {
+      "Decoded dates": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "title": {
+                  "type": "primitive",
+                  "value": "Workshop"
+                },
+                "startsOn": {
+                  "type": "primitive",
+                  "value": "2024-02-28"
+                },
+                "nextDay": {
+                  "type": "primitive",
+                  "value": "2024-02-29"
+                },
+                "followUp": {
+                  "type": "primitive",
+                  "value": null
+                },
+                "isTemporal": {
+                  "type": "primitive",
+                  "value": true
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "title": {
+                  "type": "primitive",
+                  "value": "Leap-day session"
+                },
+                "startsOn": {
+                  "type": "primitive",
+                  "value": "2024-02-29"
+                },
+                "nextDay": {
+                  "type": "primitive",
+                  "value": "2024-03-01"
+                },
+                "followUp": {
+                  "type": "primitive",
+                  "value": "2024-03-01"
+                },
+                "isTemporal": {
+                  "type": "primitive",
+                  "value": true
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "03-query": {
+      "Decoded dates": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "title": {
+                  "type": "primitive",
+                  "value": "Workshop"
+                },
+                "startsOn": {
+                  "type": "primitive",
+                  "value": "2024-02-28"
+                },
+                "nextDay": {
+                  "type": "primitive",
+                  "value": "2024-02-29"
+                },
+                "followUp": {
+                  "type": "primitive",
+                  "value": null
+                },
+                "isTemporal": {
+                  "type": "primitive",
+                  "value": true
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "title": {
+                  "type": "primitive",
+                  "value": "Leap-day session"
+                },
+                "startsOn": {
+                  "type": "primitive",
+                  "value": "2024-02-29"
+                },
+                "nextDay": {
+                  "type": "primitive",
+                  "value": "2024-03-01"
+                },
+                "followUp": {
+                  "type": "primitive",
+                  "value": "2024-03-01"
+                },
+                "isTemporal": {
+                  "type": "primitive",
+                  "value": true
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "Bookings from leap day": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "title": {
+                  "type": "primitive",
+                  "value": "Leap-day session"
+                },
+                "startsOn": {
+                  "type": "primitive",
+                  "value": "2024-02-29"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "title": {
+                  "type": "primitive",
+                  "value": "March session"
+                },
+                "startsOn": {
+                  "type": "primitive",
+                  "value": "2024-03-01"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

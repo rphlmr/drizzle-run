@@ -1,0 +1,323 @@
+{
+  "steps": {
+    "01-inline": {
+      "Profiles": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "profile": {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 1
+                    },
+                    "bio": {
+                      "type": "primitive",
+                      "value": "Writes about SQL"
+                    },
+                    "active": {
+                      "type": "primitive",
+                      "value": true
+                    },
+                    "displayName": {
+                      "type": "primitive",
+                      "value": "Ada"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "profile": {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 2
+                    },
+                    "bio": {
+                      "type": "primitive",
+                      "value": null
+                    },
+                    "active": {
+                      "type": "primitive",
+                      "value": false
+                    },
+                    "displayName": {
+                      "type": "primitive",
+                      "value": "Grace"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "02-infer": {
+      "Profiles": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "profile": {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 1
+                    },
+                    "bio": {
+                      "type": "primitive",
+                      "value": "Writes about SQL"
+                    },
+                    "active": {
+                      "type": "primitive",
+                      "value": true
+                    },
+                    "displayName": {
+                      "type": "primitive",
+                      "value": "Ada"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "profile": {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 2
+                    },
+                    "bio": {
+                      "type": "primitive",
+                      "value": null
+                    },
+                    "active": {
+                      "type": "primitive",
+                      "value": false
+                    },
+                    "displayName": {
+                      "type": "primitive",
+                      "value": "Grace"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "03-compose": {
+      "Post cards": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "post": {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 1
+                    },
+                    "title": {
+                      "type": "primitive",
+                      "value": "Small SQL helpers"
+                    },
+                    "author": {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 1
+                        },
+                        "bio": {
+                          "type": "primitive",
+                          "value": "Writes about SQL"
+                        },
+                        "active": {
+                          "type": "primitive",
+                          "value": true
+                        },
+                        "displayName": {
+                          "type": "primitive",
+                          "value": "Ada"
+                        }
+                      }
+                    },
+                    "titleLength": {
+                      "type": "primitive",
+                      "value": 17
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "post": {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 2
+                    },
+                    "title": {
+                      "type": "primitive",
+                      "value": "Types that follow your query"
+                    },
+                    "author": {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 2
+                        },
+                        "bio": {
+                          "type": "primitive",
+                          "value": null
+                        },
+                        "active": {
+                          "type": "primitive",
+                          "value": false
+                        },
+                        "displayName": {
+                          "type": "primitive",
+                          "value": "Grace"
+                        }
+                      }
+                    },
+                    "titleLength": {
+                      "type": "primitive",
+                      "value": 28
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "post": {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 3
+                    },
+                    "title": {
+                      "type": "primitive",
+                      "value": "Compose your queries"
+                    },
+                    "author": {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 1
+                        },
+                        "bio": {
+                          "type": "primitive",
+                          "value": "Writes about SQL"
+                        },
+                        "active": {
+                          "type": "primitive",
+                          "value": true
+                        },
+                        "displayName": {
+                          "type": "primitive",
+                          "value": "Ada"
+                        }
+                      }
+                    },
+                    "titleLength": {
+                      "type": "primitive",
+                      "value": 20
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "Profiles": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "profile": {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 1
+                    },
+                    "bio": {
+                      "type": "primitive",
+                      "value": "Writes about SQL"
+                    },
+                    "active": {
+                      "type": "primitive",
+                      "value": true
+                    },
+                    "displayName": {
+                      "type": "primitive",
+                      "value": "Ada"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "profile": {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 2
+                    },
+                    "bio": {
+                      "type": "primitive",
+                      "value": null
+                    },
+                    "active": {
+                      "type": "primitive",
+                      "value": false
+                    },
+                    "displayName": {
+                      "type": "primitive",
+                      "value": "Grace"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

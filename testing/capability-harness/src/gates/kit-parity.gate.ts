@@ -30,7 +30,7 @@ const CorpusSchema = z.object({
   ),
 });
 const KitResultsSchema = z.array(z.object({ id: z.string(), statements: z.array(z.string()), empty: z.boolean() }));
-const SnapshotSchema = z.object({ id: z.string() }).passthrough();
+const SnapshotSchema = z.looseObject({ id: z.string() });
 const locator = await createGuestPackageLocator(fileURLToPath(new URL("../../../../guests", import.meta.url)));
 const assetsDirectory = new URL("../../../../packages/runtime/dist/quickjs/", import.meta.url);
 

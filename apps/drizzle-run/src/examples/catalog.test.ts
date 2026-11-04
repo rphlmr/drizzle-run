@@ -83,7 +83,7 @@ describe("official examples in the repository", () => {
 
     for (const run of examples.flatMap(listExampleRuns)) {
       expect(run.entrypoints.run).toBe("query.ts");
-      expect(run.files["query.ts"]).toContain("@drizzle-run/runtime/context");
+      expect(Object.values(run.files).some((source) => source.includes("@drizzle-run/runtime/context"))).toBe(true);
     }
   });
 
@@ -112,12 +112,22 @@ describe("official examples in the repository", () => {
     ).toEqual([
       "drizzle-in-five-minutes",
       "drizzle-with-effect",
+      "helper-apis-postgresql",
+      "helper-apis-sqlite",
       "joins-explained",
       "nested-sql-results",
+      "pagination-apis-postgresql",
+      "pagination-apis-sqlite",
+      "pagination-postgresql",
+      "pagination-sqlite",
       "prepared-queries",
       "relational-queries",
+      "reusable-helpers",
+      "reusable-helpers-sqlite",
       "select-vs-relational-queries",
       "subqueries",
+      "temporal-custom-type-postgresql",
+      "temporal-custom-type-sqlite",
       "transactions",
     ]);
   });

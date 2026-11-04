@@ -1,0 +1,29 @@
+{
+  "id": "d031db96-2a77-4f97-a18e-b3ae93090ed6",
+  "slug": "reusable-helpers",
+  "status": "published",
+  "title": "Write reusable, typed SQL helpers",
+  "description": "Build a JSONB helper that infers its result from your columns, then compose nested objects and SQL expressions.",
+  "topic": "Queries",
+  "featured": false,
+  "order": 80,
+  "dialect": "postgresql",
+  "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+  "links": [
+    {
+      "kind": "example",
+      "label": "The SQLite version",
+      "slug": "reusable-helpers-sqlite"
+    },
+    {
+      "kind": "docs",
+      "label": "Compose SQL expressions",
+      "url": "https://orm.drizzle.team/docs/sql"
+    },
+    {
+      "kind": "example",
+      "label": "Build nested arrays with SQL",
+      "slug": "nested-sql-results"
+    }
+  ]
+}

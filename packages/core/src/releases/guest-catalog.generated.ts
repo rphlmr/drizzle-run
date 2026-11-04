@@ -42,6 +42,7 @@ export const GUEST_IMAGES = {
     "ormApi": "v1",
     "kitApi": "v1",
     "packages": {
+      "@js-temporal/polyfill": "0.5.1",
       "@libsql/client": "0.15.14",
       "@sinclair/typebox": "0.34.52",
       "arktype": "2.2.3",
@@ -57,7 +58,7 @@ export const GUEST_IMAGES = {
       "@types/node": "24.19.2",
       "@types/pg": "8.23.1"
     },
-    "lockDigest": "sha256-173d5c06268596c4f200f2c55999d19e7020ea73b9767d6f1cb6c8b2851731b1"
+    "lockDigest": "sha256-dabcc2a116ec5e228673a8c074b17ef00b455fc65afad67b9e392fd1ff4d2ad6"
   },
   "orm-1.0.0-rc.5__kit-1.0.0-rc.5+effect": {
     "pairId": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
@@ -71,6 +72,7 @@ export const GUEST_IMAGES = {
     "packages": {
       "@effect/sql-libsql": "4.0.5",
       "@effect/sql-pg": "4.0.5",
+      "@js-temporal/polyfill": "0.5.1",
       "@libsql/client": "0.15.14",
       "@sinclair/typebox": "0.34.52",
       "arktype": "2.2.3",
@@ -87,7 +89,7 @@ export const GUEST_IMAGES = {
       "@types/node": "24.19.2",
       "@types/pg": "8.23.1"
     },
-    "lockDigest": "sha256-295491eea02e1d7393ffb59b89a4ddacc0574730e2948ed799e46592d9d6f3ec"
+    "lockDigest": "sha256-20b443c6d9ff4ed1406e665759b2a05278eaba35ee3d50adfba116745693e005"
   }
 } as const;
 

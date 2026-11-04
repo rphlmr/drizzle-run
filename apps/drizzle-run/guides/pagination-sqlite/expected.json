@@ -1,0 +1,479 @@
+{
+  "steps": {
+    "01-offset": {
+      "Offset page 1": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 1
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "First"
+                },
+                "createdAt": {
+                  "type": "primitive",
+                  "value": "2026-01-01T09:00:00.000Z"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 2
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Second"
+                },
+                "createdAt": {
+                  "type": "primitive",
+                  "value": "2026-01-01T09:00:00.000Z"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "Offset page 2": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 3
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Same timestamp"
+                },
+                "createdAt": {
+                  "type": "primitive",
+                  "value": "2026-01-01T09:00:00.000Z"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 4
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Fourth"
+                },
+                "createdAt": {
+                  "type": "primitive",
+                  "value": "2026-01-02T09:00:00.000Z"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "Jump to page 3": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 5
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Fifth"
+                },
+                "createdAt": {
+                  "type": "primitive",
+                  "value": "2026-01-02T09:00:00.000Z"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 6
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Last"
+                },
+                "createdAt": {
+                  "type": "primitive",
+                  "value": "2026-01-03T09:00:00.000Z"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "02-shift": {
+      "First page before insert": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 1
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "First"
+                },
+                "createdAt": {
+                  "type": "primitive",
+                  "value": "2026-01-01T09:00:00.000Z"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 2
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Second"
+                },
+                "createdAt": {
+                  "type": "primitive",
+                  "value": "2026-01-01T09:00:00.000Z"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "Offset page after insert": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 2
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Second"
+                },
+                "createdAt": {
+                  "type": "primitive",
+                  "value": "2026-01-01T09:00:00.000Z"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 3
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Same timestamp"
+                },
+                "createdAt": {
+                  "type": "primitive",
+                  "value": "2026-01-01T09:00:00.000Z"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "03-ties": {
+      "First page": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 1
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "First"
+                },
+                "createdAt": {
+                  "type": "primitive",
+                  "value": "2026-01-01T09:00:00.000Z"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 2
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Second"
+                },
+                "createdAt": {
+                  "type": "primitive",
+                  "value": "2026-01-01T09:00:00.000Z"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "Timestamp-only cursor skips a tie": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 4
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Fourth"
+                },
+                "createdAt": {
+                  "type": "primitive",
+                  "value": "2026-01-02T09:00:00.000Z"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 5
+                },
+                "title": {
+                  "type": "primitive",
+                  "value": "Fifth"
+                },
+                "createdAt": {
+                  "type": "primitive",
+                  "value": "2026-01-02T09:00:00.000Z"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "04-composite": {
+      "Cursor page 1": [
+        {
+          "type": "object",
+          "value": {
+            "items": {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 1
+                    },
+                    "title": {
+                      "type": "primitive",
+                      "value": "First"
+                    },
+                    "createdAt": {
+                      "type": "primitive",
+                      "value": "2026-01-01T09:00:00.000Z"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 2
+                    },
+                    "title": {
+                      "type": "primitive",
+                      "value": "Second"
+                    },
+                    "createdAt": {
+                      "type": "primitive",
+                      "value": "2026-01-01T09:00:00.000Z"
+                    }
+                  }
+                }
+              ]
+            },
+            "hasNextPage": {
+              "type": "primitive",
+              "value": true
+            },
+            "nextCursor": {
+              "type": "object",
+              "value": {
+                "createdAt": {
+                  "type": "primitive",
+                  "value": "2026-01-01T09:00:00.000Z"
+                },
+                "id": {
+                  "type": "primitive",
+                  "value": 2
+                }
+              }
+            }
+          }
+        }
+      ],
+      "Cursor page 2": [
+        {
+          "type": "object",
+          "value": {
+            "items": {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 3
+                    },
+                    "title": {
+                      "type": "primitive",
+                      "value": "Same timestamp"
+                    },
+                    "createdAt": {
+                      "type": "primitive",
+                      "value": "2026-01-01T09:00:00.000Z"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 4
+                    },
+                    "title": {
+                      "type": "primitive",
+                      "value": "Fourth"
+                    },
+                    "createdAt": {
+                      "type": "primitive",
+                      "value": "2026-01-02T09:00:00.000Z"
+                    }
+                  }
+                }
+              ]
+            },
+            "hasNextPage": {
+              "type": "primitive",
+              "value": true
+            },
+            "nextCursor": {
+              "type": "object",
+              "value": {
+                "createdAt": {
+                  "type": "primitive",
+                  "value": "2026-01-02T09:00:00.000Z"
+                },
+                "id": {
+                  "type": "primitive",
+                  "value": 4
+                }
+              }
+            }
+          }
+        }
+      ],
+      "Cursor page 3": [
+        {
+          "type": "object",
+          "value": {
+            "items": {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 5
+                    },
+                    "title": {
+                      "type": "primitive",
+                      "value": "Fifth"
+                    },
+                    "createdAt": {
+                      "type": "primitive",
+                      "value": "2026-01-02T09:00:00.000Z"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 6
+                    },
+                    "title": {
+                      "type": "primitive",
+                      "value": "Last"
+                    },
+                    "createdAt": {
+                      "type": "primitive",
+                      "value": "2026-01-03T09:00:00.000Z"
+                    }
+                  }
+                }
+              ]
+            },
+            "hasNextPage": {
+              "type": "primitive",
+              "value": false
+            },
+            "nextCursor": {
+              "type": "primitive",
+              "value": null
+            }
+          }
+        }
+      ]
+    }
+  }
+}

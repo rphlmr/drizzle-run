@@ -1,7 +1,7 @@
 {
   "recordingVersion": 1,
   "snapshotDigest": "f6ca5dd349757236db69c3b7375a742d9f4ed24adba88eb3f6b922774d5bd23b",
-  "recordedAt": "2026-10-22T08:03:36.958Z",
+  "recordedAt": "2026-11-04T09:11:39.426Z",
   "result": {
     "version": 1,
     "target": {
@@ -16,83 +16,83 @@
       "kitVersion": "1.0.0-rc.5"
     },
     "random": {
-      "effectiveSeed": 4140208308,
-      "source": "derived",
-      "derivation": "run-manifest-sha256-u32-v1",
+      "effectiveSeed": 3381500305,
+      "source": "generated",
+      "derivation": "crypto-u32-v1",
       "generator": "mulberry32-v1"
     },
     "phases": [
       {
         "phase": "validate",
         "status": "succeeded",
-        "startedAt": "2026-10-22T08:03:35.994Z",
-        "durationMs": 0.10500001907348633
+        "startedAt": "2026-11-04T09:11:37.582Z",
+        "durationMs": 0.0700000524520874
       },
       {
         "phase": "resolve",
         "status": "succeeded",
-        "startedAt": "2026-10-22T08:03:35.994Z",
-        "durationMs": 0
+        "startedAt": "2026-11-04T09:11:37.582Z",
+        "durationMs": 0.009999990463256836
       },
       {
         "phase": "load_artifacts",
         "status": "succeeded",
-        "startedAt": "2026-10-22T08:03:35.995Z",
-        "durationMs": 0.03000009059906006
+        "startedAt": "2026-11-04T09:11:37.808Z",
+        "durationMs": 507.47000002861023
       },
       {
         "phase": "compile",
         "status": "succeeded",
-        "startedAt": "2026-10-22T08:03:36.206Z",
-        "durationMs": 2
+        "startedAt": "2026-11-04T09:11:37.634Z",
+        "durationMs": 173.0900000333786
       },
       {
         "phase": "evaluate_schema",
         "status": "succeeded",
-        "startedAt": "2026-10-22T08:03:36.210Z",
-        "durationMs": 1
+        "startedAt": "2026-11-04T09:11:38.316Z",
+        "durationMs": 50.59499990940094
       },
       {
         "phase": "generate_bootstrap",
         "status": "succeeded",
-        "startedAt": "2026-10-22T08:03:36.211Z",
-        "durationMs": 23
-      },
-      {
-        "phase": "open_database",
-        "status": "succeeded",
-        "startedAt": "2026-10-22T08:03:36.236Z",
-        "durationMs": 3
+        "startedAt": "2026-11-04T09:11:38.367Z",
+        "durationMs": 19.424999952316284
       },
       {
         "phase": "apply_bootstrap",
         "status": "succeeded",
-        "startedAt": "2026-10-22T08:03:36.238Z",
-        "durationMs": 12
-      },
-      {
-        "phase": "initialize_context",
-        "status": "succeeded",
-        "startedAt": "2026-10-22T08:03:36.251Z",
-        "durationMs": 0
+        "startedAt": "2026-11-04T09:11:38.387Z",
+        "durationMs": 370.7699999809265
       },
       {
         "phase": "seed",
         "status": "succeeded",
-        "startedAt": "2026-10-22T08:03:36.252Z",
-        "durationMs": 5
+        "startedAt": "2026-11-04T09:11:38.757Z",
+        "durationMs": 7.485000014305115
       },
       {
         "phase": "run",
         "status": "succeeded",
-        "startedAt": "2026-10-22T08:03:36.258Z",
-        "durationMs": 119
+        "startedAt": "2026-11-04T09:11:38.766Z",
+        "durationMs": 53.2849999666214
       },
       {
         "phase": "inspect",
         "status": "succeeded",
-        "startedAt": "2026-10-22T08:03:36.379Z",
-        "durationMs": 76
+        "startedAt": "2026-11-04T09:11:38.818Z",
+        "durationMs": 51.59499990940094
+      },
+      {
+        "phase": "plan",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:11:38.870Z",
+        "durationMs": 0.04499995708465576
+      },
+      {
+        "phase": "cleanup",
+        "status": "succeeded",
+        "startedAt": "2026-11-04T09:11:38.870Z",
+        "durationMs": 2.3249999284744263
       }
     ],
     "diagnostics": [],
@@ -114,7 +114,7 @@
         "sql": "BEGIN",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 3
+        "durationMs": 2.000244140625
       },
       {
         "sequence": 3,
@@ -124,7 +124,7 @@
         "sql": "CREATE TABLE \"users\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"email\" text NOT NULL UNIQUE,\n\t\"credits\" integer NOT NULL\n);\n",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 6
+        "durationMs": 12.999755859375
       },
       {
         "sequence": 4,
@@ -134,7 +134,7 @@
         "sql": "COMMIT",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 2
+        "durationMs": 1
       },
       {
         "sequence": 5,
@@ -171,7 +171,7 @@
         "outcome": "succeeded",
         "source": "seed.ts",
         "line": 4,
-        "durationMs": 4,
+        "durationMs": 7,
         "rowCount": 2
       },
       {
@@ -182,7 +182,7 @@
         "sql": "select \"id\", \"name\", \"email\", \"credits\" from \"users\" order by \"users\".\"id\" asc",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 10,
+        "durationMs": 0.999755859375,
         "rowCount": 2
       }
     ],
@@ -271,7 +271,7 @@
           "sql": "BEGIN",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 3
+          "durationMs": 2.000244140625
         }
       },
       {
@@ -285,7 +285,7 @@
           "sql": "CREATE TABLE \"users\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"email\" text NOT NULL UNIQUE,\n\t\"credits\" integer NOT NULL\n);\n",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 6
+          "durationMs": 12.999755859375
         }
       },
       {
@@ -299,7 +299,7 @@
           "sql": "COMMIT",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 2
+          "durationMs": 1
         }
       },
       {
@@ -340,7 +340,7 @@
           "outcome": "succeeded",
           "source": "seed.ts",
           "line": 4,
-          "durationMs": 4,
+          "durationMs": 7,
           "rowCount": 2
         }
       },
@@ -355,7 +355,7 @@
           "sql": "select \"id\", \"name\", \"email\", \"credits\" from \"users\" order by \"users\".\"id\" asc",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 10,
+          "durationMs": 0.999755859375,
           "rowCount": 2
         }
       },
@@ -428,19 +428,19 @@
       }
     },
     "timings": {
-      "total": 693,
-      "validate": 0.10500001907348633,
-      "resolve": 0,
-      "load_artifacts": 0.03000009059906006,
-      "compile": 2,
-      "evaluate_schema": 1,
-      "generate_bootstrap": 23,
-      "open_database": 3,
-      "apply_bootstrap": 12,
-      "initialize_context": 0,
-      "seed": 5,
-      "run": 119,
-      "inspect": 76
+      "total": 1292,
+      "validate": 0.0700000524520874,
+      "resolve": 0.009999990463256836,
+      "load_artifacts": 507.47000002861023,
+      "compile": 173.0900000333786,
+      "evaluate_schema": 50.59499990940094,
+      "generate_bootstrap": 19.424999952316284,
+      "apply_bootstrap": 370.7699999809265,
+      "seed": 7.485000014305115,
+      "run": 53.2849999666214,
+      "inspect": 51.59499990940094,
+      "plan": 0.04499995708465576,
+      "cleanup": 2.3249999284744263
     },
     "ok": true,
     "outcome": "succeeded"
@@ -448,7 +448,7 @@
   "guests": [
     {
       "imageId": "orm-1.0.0-rc.5__kit-1.0.0-rc.5+effect",
-      "lockDigest": "sha256-295491eea02e1d7393ffb59b89a4ddacc0574730e2948ed799e46592d9d6f3ec"
+      "lockDigest": "sha256-20b443c6d9ff4ed1406e665759b2a05278eaba35ee3d50adfba116745693e005"
     }
   ]
 }

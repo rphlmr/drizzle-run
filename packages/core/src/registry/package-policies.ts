@@ -40,6 +40,7 @@ export const GUEST_PACKAGE_POLICIES = {
   "drizzle-kit": { role: "kit" },
   pg: { role: "database-client" },
   "@libsql/client": { role: "database-client" },
+  "@js-temporal/polyfill": { role: "user_module", specifiers: ["@js-temporal/polyfill"] },
   "drizzle-seed": { role: "user_module", specifiers: ["drizzle-seed"] },
   "drizzle-zod": { role: "user_module", specifiers: ["drizzle-zod"] },
   "drizzle-valibot": { role: "user_module", specifiers: ["drizzle-valibot"] },
