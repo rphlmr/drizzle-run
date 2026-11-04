@@ -34,7 +34,7 @@ jobs:
         run: |
           set -euo pipefail
           pulls=$(gh api --paginate --slurp "repos/$GITHUB_REPOSITORY/pulls?state=open&base=main&per_page=100" \
-            --jq 'flatten | map({number, head, base, merge_commit_sha})')
+            | jq 'flatten | map({number, head, base, merge_commit_sha})')
           records=$(jq -c '.[]' <<< "$pulls")
           while IFS= read -r pull; do
             if [ -z "$pull" ]; then
@@ -61,7 +61,7 @@ jobs:
               if [ -n "$deployment_id" ]; then
                 # Previews share an environment: another PR's deploy can mark this deployment inactive.
                 status=$(gh api --paginate --slurp "repos/$GITHUB_REPOSITORY/deployments/$deployment_id/statuses?per_page=100" \
-                  --jq 'flatten | map(select(.state != "inactive")) | first // {}')
+                  | jq 'flatten | map(select(.state != "inactive")) | first // {}')
                 deployment_state=$(jq -r '.state // "pending"' <<< "$status")
                 target_url=$(jq -r --arg fallback "$target_url" '.log_url | if . == null or . == "" then $fallback else . end' <<< "$status")
                 case "$deployment_state" in
