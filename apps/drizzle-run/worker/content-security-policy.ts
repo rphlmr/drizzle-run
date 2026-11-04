@@ -5,7 +5,8 @@
  * reply, a project's output, or a diagram's styles cannot load an image, font, or media from another
  * site, except GitHub's avatar host for Community cards (it serves only GitHub's own images). Page
  * scripts can reach only this origin (the API, runtime assets, and the AI chat relay socket) and
- * orm.drizzle.team (the guided chat's `read_docs`). Data and blob URLs stay allowed: they carry what
+ * orm.drizzle.team (the guided chat's `read_docs`), plus the analytics collector on the production origin.
+ * Data and blob URLs stay allowed: they carry what
  * the page already holds. Scripts, styles, and workers are left as they are, since the runtime
  * compiles wasm and the editor injects styles; the chat never renders raw HTML. Only Drizzle Run
  * itself may frame an app page.
@@ -27,12 +28,13 @@ export function createEmbedContentSecurityPolicy(pageUrl: URL): string {
 function listResourceDirectives(pageUrl: URL): string[] {
   // Some WebKit versions leave WebSocket schemes out of CSP 'self', so the relay's own socket origin is listed.
   const socketOrigin = `${pageUrl.protocol === "https:" ? "wss:" : "ws:"}//${pageUrl.host}`;
+  const analyticsOrigin = pageUrl.origin === "https://drizzle.run" ? " https://collector.onedollarstats.com" : "";
 
   return [
     "img-src 'self' data: blob: https://avatars.githubusercontent.com",
     "media-src 'self' data: blob:",
     "font-src 'self' data:",
-    `connect-src 'self' ${socketOrigin} https://orm.drizzle.team data: blob:`,
+    `connect-src 'self' ${socketOrigin} https://orm.drizzle.team${analyticsOrigin} data: blob:`,
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",

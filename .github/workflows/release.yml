@@ -175,6 +175,56 @@ jobs:
           if-no-files-found: ignore
           retention-days: 7
 
+  package-releases:
+    name: GitHub Releases for public packages
+    needs: [packages, pack, publish]
+    if: >-
+      !cancelled() &&
+      needs.packages.result == 'success' &&
+      needs.packages.outputs.has-changesets == 'false' &&
+      needs.pack.result == 'success' &&
+      ((needs.pack.outputs.unpublished == 'true' && needs.publish.result == 'success') ||
+       (needs.pack.outputs.unpublished == 'false' && needs.publish.result == 'skipped'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version-file: .node-version
+      - run: node scripts/github-releases.ts packages
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+  app-release:
+    name: GitHub Release for the app
+    needs: [packages, production]
+    # The deployment tag also allows a later run to finish creating a release without redeploying the app.
+    if: >-
+      !cancelled() &&
+      needs.packages.result == 'success' &&
+      needs.packages.outputs.has-changesets == 'false' &&
+      (needs.production.result == 'success' ||
+       (needs.production.result == 'skipped' && needs.packages.outputs.app-deployed == 'true'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version-file: .node-version
+      - run: node scripts/github-releases.ts app
+        env:
+          GH_TOKEN: ${{ github.token }}
+
   production:
     name: Deploy production
     needs: [packages, pack, publish]

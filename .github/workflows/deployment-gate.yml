@@ -34,7 +34,7 @@ jobs:
         run: |
           set -euo pipefail
           pulls=$(gh api --paginate --slurp "repos/$GITHUB_REPOSITORY/pulls?state=open&base=main&per_page=100" \
-            | jq 'flatten | map({number, head, base, merge_commit_sha})')
+            | jq 'flatten | map({number, head, base})')
           records=$(jq -c '.[]' <<< "$pulls")
           while IFS= read -r pull; do
             if [ -z "$pull" ]; then
@@ -47,7 +47,7 @@ jobs:
             head_sha=$(jq -r '.head.sha' <<< "$pull")
             branch=$(jq -r '.head.ref' <<< "$pull")
             environment=preview
-            deployment_sha=$(jq -r '.merge_commit_sha // empty' <<< "$pull")
+            deployment_sha="$head_sha"
             if [ "$branch" = 'changeset-release/main' ]; then
               environment=next
               deployment_sha=$(jq -r '.base.sha' <<< "$pull")

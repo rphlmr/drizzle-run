@@ -262,6 +262,9 @@ importers:
       monaco-editor:
         specifier: 0.57.0
         version: 0.57.0(patch_hash=25352daf3b952b905ccf67cdbd50c32a381ea777375bb48940231001a69f4c6d)
+      onedollarstats:
+        specifier: 0.0.23
+        version: 0.0.23(react@19.3.1)
       pino:
         specifier: 10.4.0
         version: 10.4.0
@@ -3387,6 +3390,20 @@ packages:
     resolution: {integrity: sha512-0eJJY6hXLGf1udHwfNftBqH+g73EU4B504nZeKpz1sYRKafAghwxEJunB2O7rDZkL4PGfsMVnTXZ2EjibbqcsA==}
     engines: {node: '>=14.0.0'}
 
+  onedollarstats@0.0.23:
+    resolution: {integrity: sha512-wn8hy4wDJjeC9+1lVcKyLQ69iWmyIKx55t4IehaaJhDW/P1lbAXV25CDsICgAGbtljyszNpAf9hzr09af8Waxw==}
+    peerDependencies:
+      expo-router: '>=3.0.0'
+      react: '>=18.0.0'
+      react-native: '>=0.73.0'
+    peerDependenciesMeta:
+      expo-router:
+        optional: true
+      react:
+        optional: true
+      react-native:
+        optional: true
+
   oxfmt@0.74.0:
     resolution: {integrity: sha512-G4OP7FgwGYZR5ttRpCOOfJdyRsSyvtn34vSXnjDq6Oqed5Dufg5mB44mank+51nAdHOKuTJ0lj0mksY7L+N61A==}
     engines: {node: ^20.19.0 || >=22.12.0}
@@ -6439,6 +6456,10 @@ snapshots:
   obug@3.0.0: {}
 
   on-exit-leak-free@2.1.2: {}
+
+  onedollarstats@0.0.23(react@19.3.1):
+    optionalDependencies:
+      react: 19.3.1
 
   oxfmt@0.74.0:
     dependencies:

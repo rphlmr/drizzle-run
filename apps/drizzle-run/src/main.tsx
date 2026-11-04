@@ -1,6 +1,7 @@
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router/dom";
 
+import { initializeAnalytics } from "./analytics";
 import { createAppRouter } from "./app";
 import { AppServicesProvider, type AppServices } from "./app-services";
 import { createAuthService } from "./auth/service";
@@ -38,6 +39,7 @@ const services: AppServices = {
 
 const router = createAppRouter(services);
 
+initializeAnalytics({ production: import.meta.env.PROD, origin: window.location.origin });
 followSystemTheme();
 createRoot(root).render(
   <AppServicesProvider services={services}>
