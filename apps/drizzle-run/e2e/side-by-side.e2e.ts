@@ -238,7 +238,7 @@ test("should keep every file tab of the guided editor bar in view at 1280 px, an
   await expect(tabs.getByRole("tab")).toHaveText(["query.ts", "schema.ts", "seed.ts"]);
   await expect(header.getByRole("tablist", { name: "Project files" })).toHaveCount(0);
   expect(await tabs.evaluate((list) => list.scrollWidth > list.clientWidth)).toBe(false);
-  const title = header.getByText("Relational queries", { exact: true });
+  const title = header.getByText("Migrate relational queries to v1", { exact: true });
   const fit = {
     headerScroll: await header.evaluate((element) => element.scrollWidth > element.clientWidth),
     titleOneLine: await title.evaluate((element) => getComputedStyle(element).whiteSpace === "nowrap"),

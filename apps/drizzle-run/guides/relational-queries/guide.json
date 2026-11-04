@@ -2,7 +2,7 @@
   "kind": "drizzle-run-guide",
   "manifestVersion": 1,
   "id": "58b9a8cb-aa44-44a5-ace3-0824b87f2b71",
-  "title": "Relational queries, 0.45 to 1.0",
+  "title": "Migrate relational queries to v1",
   "description": "Compare relational queries on Drizzle ORM 0.45.4 and 1.0.0-rc.5, side by side.",
   "project": {
     "kind": "drizzle-run-pair",

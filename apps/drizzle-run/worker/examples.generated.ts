@@ -369,8 +369,8 @@ export const exampleSummaries: readonly ExampleSummary[] = [
   },
   {
     "slug": "relational-queries",
-    "title": "Relational queries",
-    "description": "Users, posts, and comments declared with defineRelations, loaded in one query with db.query and nested with.",
+    "title": "Migrate relational queries to v1",
+    "description": "Migrate from Drizzle ORM 0.45 to v1: compare relation definitions and relational queries side by side.",
     "sides": [
       {
         "dialect": "postgresql",

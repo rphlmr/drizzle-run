@@ -17,7 +17,7 @@ export interface ExampleCardProps {
   className?: string;
 }
 
-function getCallToAction(guided: boolean, progress: GuideProgress | undefined): string {
+export function getExampleCallToAction(guided: boolean, progress: GuideProgress | undefined): string {
   if (!guided) {
     return "Open example";
   }
@@ -63,7 +63,7 @@ export function ExampleCard({ example, featured = false, progress, viewedAt, cla
       return sides[0].ormVersion === sides[1].ormVersion ? side.name : `${side.name} (${side.ormVersion})`;
     })
     .join(" vs ");
-  const cta = `${getCallToAction(steps !== undefined, progress)} →`;
+  const cta = `${getExampleCallToAction(steps !== undefined, progress)} →`;
   const EntryIcon = steps === undefined ? Code2Icon : BookOpenIcon;
   const entryProgress = started && (
     <span className="flex flex-wrap items-center justify-end gap-1.5">

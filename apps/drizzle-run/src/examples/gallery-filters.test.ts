@@ -13,10 +13,10 @@ function search(query: string) {
 }
 
 describe("gallery filters", () => {
-  it("should combine topics, layout, kind, database and search", () => {
-    expect(
-      search("topic=JSON&layout=side_by_side&kind=guided&db=postgresql&q=typed+helpers").map(({ slug }) => slug),
-    ).toEqual(["helper-apis-postgresql"]);
+  it("should combine comparisons, kind, database and search", () => {
+    expect(search("topic=Comparisons&kind=guided&db=postgresql&q=typed+helpers").map(({ slug }) => slug)).toEqual([
+      "helper-apis-postgresql",
+    ]);
   });
 
   it("should find the same entry through each of its topics", () => {
@@ -45,10 +45,22 @@ describe("gallery filters", () => {
     expect(search("topic=wrong&db=wrong&layout=wrong")).toEqual(listExamples());
   });
 
-  it("should derive layout from the comparison project", () => {
-    expect(search("layout=side_by_side").map(({ slug }) => slug)).toContain("postgresql-vs-sqlite");
-    expect(search("layout=single").map(({ slug }) => slug)).not.toContain("helper-apis-postgresql");
-    expect(search("layout=side_by_side&db=sqlite").map(({ slug }) => slug)).toContain("postgresql-vs-sqlite");
+  it("should derive Comparisons from two-sided examples and guides", () => {
+    const comparisons = search("topic=Comparisons").map(({ slug }) => slug);
+
+    expect(comparisons).toContain("postgresql-vs-sqlite");
+    expect(comparisons).toContain("helper-apis-postgresql");
+    expect(comparisons).toContain("relational-queries");
+    expect(comparisons).not.toContain("quick-start-postgresql");
+    expect(search("topic=Comparisons&db=sqlite").map(({ slug }) => slug)).toContain("postgresql-vs-sqlite");
+  });
+
+  it("should match any selected topic while retaining other filters", () => {
+    const matches = search("topic=Helpers&topic=Validation&db=postgresql").map(({ slug }) => slug);
+
+    expect(matches).toContain("reusable-helpers");
+    expect(matches).toContain("insert-validators");
+    expect(matches).not.toContain("reusable-helpers-sqlite");
   });
 
   it("should derive progress without turning a revisit into an unfinished guide", () => {

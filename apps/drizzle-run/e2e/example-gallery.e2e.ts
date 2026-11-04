@@ -4,7 +4,7 @@ import { callStore } from "./store";
 
 const examples = readOfficialExamples();
 
-test("should combine search with topics, database, kind and layout on desktop and phone", async ({ page }) => {
+test("should combine search with topics, database, kind and comparisons on desktop and phone", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 1000 });
   await page.goto("/examples");
   await page.getByRole("searchbox", { name: "Search examples and guides" }).fill("typed helpers");
@@ -12,23 +12,51 @@ test("should combine search with topics, database, kind and layout on desktop an
     .getByRole("group", { name: "Topic", exact: true })
     .getByRole("button", { name: "JSON", exact: true })
     .click();
-  await page.getByRole("group", { name: "Database" }).getByRole("button", { name: "PostgreSQL", exact: true }).click();
-  await page.getByRole("group", { name: "Kind" }).getByRole("button", { name: "Guided", exact: true }).click();
-  await page.getByRole("group", { name: "Layout" }).getByRole("button", { name: "Side by side", exact: true }).click();
+  await page.getByLabel("Database", { exact: true }).selectOption("postgresql");
+  await page.getByLabel("Kind", { exact: true }).selectOption("guided");
+  await page
+    .getByRole("group", { name: "Topic", exact: true })
+    .getByRole("button", { name: "JSON", exact: true })
+    .click();
+  await page
+    .getByRole("group", { name: "Topic", exact: true })
+    .getByRole("button", { name: "Comparisons", exact: true })
+    .click();
 
-  const cards = page.getByRole("list", { name: "Example list" }).getByRole("link");
+  const cards = page.getByRole("list", { name: "Example list" }).getByRole("button");
   await expect(cards).toHaveCount(1);
-  await expect(cards.first()).toHaveAttribute("href", "/examples/helper-apis-postgresql");
+  await expect(cards.first()).toContainText("Typed helpers: SQL-like vs RQB (PostgreSQL)");
   await expect(page.getByRole("region", { name: "Featured example" })).toHaveCount(0);
-  await expect(page).toHaveURL(/layout=side_by_side/);
+  await expect(page).toHaveURL(/topic=Comparisons/);
   await page.reload();
   await expect(page.getByRole("searchbox")).toHaveValue("typed helpers");
   await expect(cards).toHaveCount(1);
   await page.screenshot({ path: "/tmp/drizzle-gallery-desktop.png" });
 
   await page.setViewportSize({ width: 390, height: 844 });
-  await expect(page.getByRole("group", { name: "Layout" })).toBeVisible();
+  const filterToggle = page.getByRole("button", { name: "Filters (3)", exact: true });
+  await expect(filterToggle).toHaveAttribute("aria-expanded", "false");
+  await expect(page.getByLabel("Progress", { exact: true })).toBeHidden();
+  const collapsedHeight = await page
+    .getByRole("list", { name: "Example list" })
+    .evaluate((element) => element.clientHeight);
+  await filterToggle.click();
+  await expect(
+    page.getByRole("group", { name: "Topic", exact: true }).getByRole("button", { name: "Comparisons", exact: true }),
+  ).toBeVisible();
   await expect(page.getByLabel("Progress", { exact: true })).toBeVisible();
+  const expandedHeight = await page
+    .locator('ul[aria-label="Example list"]')
+    .evaluate((element) => element.clientHeight);
+  expect(expandedHeight).toBe(collapsedHeight);
+  await page.screenshot({ path: "/tmp/drizzle-gallery-filters-sheet.png" });
+  await page.getByRole("button", { name: "Show 1 results", exact: true }).click();
+  await expect(filterToggle).toBeFocused();
+  await filterToggle.click();
+  await page.keyboard.press("Escape");
+  await expect(filterToggle).toBeFocused();
+  await expect(cards).toHaveCount(1);
+  await expect(page.getByLabel("Progress", { exact: true })).toBeHidden();
   await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   await page.screenshot({ path: "/tmp/drizzle-gallery-phone.png" });
 
@@ -42,9 +70,10 @@ test("should combine search with topics, database, kind and layout on desktop an
 
 test("should persist a plain example visit and refresh progress after returning to the gallery", async ({ page }) => {
   await page.goto("/examples?kind=example&progress=not_viewed&q=insert+validators");
-  const card = page.getByRole("list", { name: "Example list" }).getByRole("link");
+  const card = page.getByRole("list", { name: "Example list" }).getByRole("button");
   await expect(card).toHaveCount(1);
   await card.click();
+  await page.getByRole("region", { name: "Example preview" }).getByRole("link", { name: "Open example" }).click();
   await expect(page.getByText("Temporary copy, not saved")).toBeVisible();
   await page.goBack();
   await expect(page.getByText("No example matches these filters yet.")).toBeVisible();
@@ -80,13 +109,13 @@ test("should preserve completed guides on a direct revisit and distinguish viewe
   await page.goto(`/examples/${completed.slug}`);
   await expect(page.getByRole("complementary", { name: "Guide" })).toBeVisible();
   await page.goto("/examples?progress=completed");
-  const cards = page.getByRole("list", { name: "Example list" }).getByRole("link");
+  const cards = page.getByRole("list", { name: "Example list" }).getByRole("button");
   await expect(cards).toHaveCount(1);
   await expect(cards.locator("[data-slot=guide-status]")).toHaveText("Completed");
 
   await page.getByLabel("Progress", { exact: true }).selectOption("viewed");
   await expect(cards).toHaveCount(1);
-  await expect(cards).toHaveAttribute("href", `/examples/${started.slug}`);
+  await expect(cards).toContainText(started.title);
   await expect(cards.locator("[data-slot=guide-status]")).toHaveText("Viewed");
 
   await callStore(page, "writeSetting", `guide:${startedGuide.id}`, {
@@ -98,4 +127,151 @@ test("should preserve completed guides on a direct revisit and distinguish viewe
   await page.goto("/examples?progress=in_progress");
   await expect(cards).toHaveCount(1);
   await expect(cards.locator("[data-slot=guide-status]")).toHaveText("In progress");
+});
+
+test("should open examples and guides with Enter on desktop", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  for (const slug of ["quick-start-sqlite", "drizzle-in-five-minutes"]) {
+    await page.goto("/examples");
+    const row = page.locator(`[data-example-slug="${slug}"]`);
+    await row.focus();
+    await page.keyboard.press("ArrowDown");
+    await page.keyboard.press("ArrowUp");
+    await expect(row).toBeFocused();
+    await expect(row).toHaveCSS("outline-offset", "-2px");
+    await page.screenshot({ path: `/tmp/drizzle-gallery-focus-${slug}.png` });
+    await page.keyboard.press("Enter");
+    await expect(page).toHaveURL(new RegExp(`/examples/${slug}$`));
+    if (slug === "drizzle-in-five-minutes") {
+      await expect(page.getByRole("complementary", { name: "Guide" })).toBeVisible();
+    } else {
+      await expect(page.getByText("Temporary copy, not saved")).toBeVisible();
+    }
+  }
+});
+
+test("should navigate matching examples with arrow keys and keep selection visible", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto("/examples?topic=Helpers");
+  const list = page.getByRole("list", { name: "Example list" });
+  const rows = list.getByRole("button");
+  const preview = page.getByRole("region", { name: "Example preview" });
+  await expect(rows.first()).toBeVisible();
+  await rows.first().focus();
+  await page.keyboard.press("ArrowUp");
+  await expect(rows.first()).toBeFocused();
+  await page.keyboard.press("ArrowDown");
+  await expect(rows.nth(1)).toBeFocused();
+  await expect(rows.nth(1)).toHaveAttribute("aria-pressed", "true");
+  await expect(preview.getByRole("heading", { level: 2 })).toHaveText(
+    await rows.nth(1).locator("span").first().innerText(),
+  );
+  await page.keyboard.press("End");
+  await expect(rows.last()).toBeFocused();
+  await expect(rows.last()).toBeInViewport({ ratio: 1 });
+  await page.keyboard.press("ArrowDown");
+  await expect(rows.last()).toBeFocused();
+  await page.keyboard.press("Home");
+  await expect(rows.first()).toBeFocused();
+  await expect(rows.first()).toBeInViewport({ ratio: 1 });
+  await page.keyboard.press("Tab");
+  await expect(rows.first()).not.toBeFocused();
+  expect(await page.getByRole("main").evaluate((element) => element.scrollTop)).toBe(0);
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await rows.first().focus();
+  await page.keyboard.press("ArrowDown");
+  await expect(rows.nth(1)).toBeFocused();
+  await expect(list).toBeVisible();
+  await page.keyboard.press("Enter");
+  await expect(preview).toBeVisible();
+  await page.getByRole("button", { name: "Back to examples" }).click();
+  await expect(rows.nth(1)).toBeFocused();
+});
+
+test("should keep the page fixed while the catalog and preview scroll independently", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto("/examples");
+  const list = page.getByRole("list", { name: "Example list" });
+  const preview = page.getByRole("region", { name: "Example preview" });
+  await expect(list.getByRole("button")).toHaveCount(examples.length);
+  const initialPreview = await preview.boundingBox();
+  await list.evaluate((element) => {
+    element.scrollTop = 600;
+  });
+  await expect.poll(() => list.evaluate((element) => element.scrollTop)).toBe(600);
+  const before = await list.evaluate((element) => element.scrollTop);
+  const visibleIndex = await list.getByRole("button").evaluateAll((buttons) =>
+    buttons.findIndex((button) => {
+      const bounds = button.getBoundingClientRect();
+      const viewport = button.closest("ul")!.getBoundingClientRect();
+
+      return bounds.top >= viewport.top && bounds.bottom <= viewport.bottom;
+    }),
+  );
+  expect(visibleIndex).toBeGreaterThanOrEqual(0);
+  const visible = list.getByRole("button").nth(visibleIndex);
+  const title = await visible.locator("span").first().innerText();
+  await visible.click();
+  await expect(preview.getByRole("heading", { level: 2 })).toHaveText(title);
+  await expect.poll(() => list.evaluate((element) => element.scrollTop)).toBe(before);
+  expect(await preview.boundingBox()).toEqual(initialPreview);
+  expect(await page.getByRole("main").evaluate((element) => element.scrollHeight <= element.clientHeight)).toBe(true);
+  expect(await page.evaluate(() => document.documentElement.scrollHeight <= innerHeight)).toBe(true);
+  await preview.locator('[data-slot="gallery-preview-content"]').evaluate((element) => {
+    element.scrollTop = 200;
+  });
+  await expect.poll(() => list.evaluate((element) => element.scrollTop)).toBe(before);
+  await expect(preview.getByRole("link", { name: /Start guide|Open example/ })).toBeVisible();
+});
+
+test("should reveal the selected row when a top preview button is clicked, including repeated selections", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 1000 });
+  await page.goto("/examples");
+  const list = page.getByRole("list", { name: "Example list" });
+  const preview = page.getByRole("region", { name: "Example preview" });
+  await expect(list.getByRole("button")).toHaveCount(examples.length);
+
+  const startingPoints = page.getByRole("region", { name: "Starting points" });
+  expect(await startingPoints.evaluate((element) => element.clientHeight)).toBeLessThan(150);
+  const postgres = startingPoints.getByRole("button", { name: "PostgreSQL quick start Preview ↓", exact: true });
+  const sqlite = startingPoints.getByRole("button", { name: "SQLite quick start Preview ↓", exact: true });
+  expect((await postgres.boundingBox())?.y).toBe((await sqlite.boundingBox())?.y);
+  await page.screenshot({ path: "/tmp/drizzle-gallery-compact-starters.png" });
+
+  for (const [buttonName, title] of [
+    ["Preview guide ↓", "Drizzle in five minutes"],
+    ["Preview guide ↓", "Drizzle in five minutes"],
+    ["PostgreSQL quick start Preview ↓", "PostgreSQL quick start"],
+    ["SQLite quick start Preview ↓", "SQLite quick start"],
+  ]) {
+    await list.evaluate((element) => {
+      element.scrollTop = element.scrollHeight;
+    });
+    await page.getByRole("button", { name: buttonName, exact: true }).click();
+    await expect(preview.getByRole("heading", { level: 2 })).toHaveText(title);
+    await expect(list.getByRole("button", { pressed: true })).toBeInViewport({ ratio: 1 });
+    expect(await page.getByRole("main").evaluate((element) => element.scrollTop)).toBe(0);
+  }
+});
+
+test("should preview on phone without recording a visit and return to the same list position", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/examples?topic=Helpers");
+  const list = page.getByRole("list", { name: "Example list" });
+  const row = list.getByRole("button").first();
+  await expect(row).toBeVisible();
+  await row.click();
+  await expect(page.getByRole("region", { name: "Example preview" })).toBeVisible();
+  await expect(list).toBeHidden();
+  await page.getByRole("button", { name: "Back to examples" }).click();
+  await expect(list).toBeVisible();
+  await expect(page.getByRole("region", { name: "Example preview" })).toBeHidden();
+  await page.getByRole("button", { name: "Filters (1)", exact: true }).click();
+  await page.getByLabel("Progress", { exact: true }).selectOption("viewed");
+  await page.getByRole("button", { name: "Show 0 results", exact: true }).click();
+  await expect(page.getByText("No example matches these filters yet.")).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollHeight <= innerHeight)).toBe(true);
 });

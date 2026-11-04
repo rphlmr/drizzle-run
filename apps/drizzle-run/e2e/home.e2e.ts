@@ -268,11 +268,11 @@ test("phone: my projects fits 375 px with a project list", async ({ page }) => {
 test("gallery filters by topic and database", async ({ page }) => {
   await page.goto("/examples");
 
-  await expect(page.getByText("Start here")).toBeVisible();
-  await page.getByRole("group", { name: "Database" }).getByRole("button", { name: "SQLite" }).click();
+  await expect(page.getByRole("button", { name: "Start here", exact: true })).toBeVisible();
+  await page.getByLabel("Database", { exact: true }).selectOption("sqlite");
   await expect(page).toHaveURL(/db=sqlite/);
 
-  const cards = page.getByRole("list", { name: "Example list" }).getByRole("link");
+  const cards = page.getByRole("list", { name: "Example list" }).getByRole("button");
   await expect(cards).toHaveCount(examples.filter((example) => example.dialects.has("sqlite")).length);
 
   for (const card of await cards.all()) {
@@ -281,41 +281,25 @@ test("gallery filters by topic and database", async ({ page }) => {
 });
 
 for (const scrollTop of [0, 140]) {
-  test(`gallery filters retain control and column positions at scroll ${scrollTop}`, async ({ page }) => {
+  test(`gallery keeps the page fixed after filtering from list scroll ${scrollTop}`, async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 1000 });
     await page.goto("/examples");
-    await expect(page.getByText("Start here")).toBeVisible();
-    await page.evaluate(async () => {
-      await document.fonts.ready;
-    });
-
-    const main = page.getByRole("main");
-    const database = page.getByRole("group", { name: "Database" });
-    const readPositions = () =>
-      page.locator("main h1, main fieldset, main fieldset button").evaluateAll((elements) =>
-        elements.map((element) => {
-          const { x, y, width } = element.getBoundingClientRect();
-
-          return { x, y, width };
-        }),
-      );
-
-    await main.evaluate((element, top) => {
+    const list = page.getByRole("list", { name: "Example list" });
+    await expect(list.getByRole("button")).toHaveCount(examples.length);
+    await list.evaluate((element, top) => {
       element.scrollTop = top;
     }, scrollTop);
-    await expect.poll(() => main.evaluate((element) => element.scrollTop)).toBe(scrollTop);
-    const initialPositions = await readPositions();
-    await database.getByRole("button", { name: "SQLite", exact: true }).click();
+    await expect.poll(() => list.evaluate((element) => element.scrollTop)).toBe(scrollTop);
+    await page.getByLabel("Database", { exact: true }).selectOption("sqlite");
     await expect(page).toHaveURL(/db=sqlite/);
-    await expect(page.getByRole("list", { name: "Example list" }).getByRole("link")).toHaveCount(
+    await expect(list.getByRole("button")).toHaveCount(
       examples.filter((example) => example.dialects.has("sqlite")).length,
     );
-    await expect.poll(() => main.evaluate((element) => element.scrollTop)).toBe(scrollTop);
-    await expect.poll(readPositions).toEqual(initialPositions);
-
-    await database.getByRole("button", { name: "Any database", exact: true }).click();
-    await expect.poll(() => main.evaluate((element) => element.scrollTop)).toBe(scrollTop);
-    await expect.poll(readPositions).toEqual(initialPositions);
+    await expect.poll(() => list.evaluate((element) => element.scrollTop)).toBe(0);
+    expect(await page.getByRole("main").evaluate((element) => element.scrollHeight <= element.clientHeight)).toBe(true);
+    await page.getByLabel("Database", { exact: true }).selectOption("all");
+    await expect(list.getByRole("button")).toHaveCount(examples.length);
+    expect(await page.evaluate(() => document.documentElement.scrollHeight <= innerHeight)).toBe(true);
   });
 }
 
@@ -342,9 +326,11 @@ for (const example of examples.filter((item) => !item.guided && item.sideNames !
     const sideNames = example.sideNames ?? [];
 
     await page.goto("/examples");
-    const card = page.getByRole("list", { name: "Example list" }).getByRole("link", { name: example.title });
-    await expect(card).toContainText(sideNames.join(" vs "));
+    const card = page.getByRole("list", { name: "Example list" }).getByRole("button", { name: example.title });
     await card.click();
+    const preview = page.getByRole("region", { name: "Example preview" });
+    await expect(preview).toContainText(sideNames.join(" vs "));
+    await preview.getByRole("link", { name: "Open example" }).click();
     await expect(page).toHaveURL(new RegExp(`/examples/${example.slug}$`));
 
     await expect(page.getByText("Temporary copy, not saved")).toBeVisible();
@@ -394,7 +380,11 @@ test("site pages crossfade into each other, but not on a filter change or into a
   await nav.getByRole("link", { name: "Examples & Guides" }).click();
   await expect.poll(countTransitions).toBe(2);
 
-  await page.locator('a[href="/examples/filters-and-joins"]').first().click();
+  await page
+    .getByRole("list", { name: "Example list" })
+    .getByRole("button", { name: "Filters, joins, and counts" })
+    .click();
+  await page.getByRole("region", { name: "Example preview" }).getByRole("link", { name: "Open example" }).click();
   await expect(page).toHaveURL(/\/examples\/filters-and-joins$/);
   await page.waitForTimeout(500);
   expect(await countTransitions()).toBe(2);

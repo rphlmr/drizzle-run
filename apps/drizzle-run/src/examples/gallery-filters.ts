@@ -17,11 +17,7 @@ export const GALLERY_KINDS = [
   { value: "example", label: "Examples" },
 ] as const;
 
-export const GALLERY_LAYOUTS = [
-  { value: "all", label: "Any layout" },
-  { value: "single", label: "Single" },
-  { value: "side_by_side", label: "Side by side" },
-] as const;
+export const GALLERY_TOPICS = [...EXAMPLE_TOPICS, "Comparisons"] as const;
 
 export const GALLERY_PROGRESS = [
   { value: "all", label: "Any progress" },
@@ -33,10 +29,9 @@ export const GALLERY_PROGRESS = [
 
 const GalleryFiltersSchema = z.object({
   search: z.string(),
-  topic: z.catch(z.optional(z.enum(EXAMPLE_TOPICS)), undefined),
+  topics: z.array(z.enum(GALLERY_TOPICS)),
   database: z.catch(z.enum(GALLERY_DATABASES.map(({ value }) => value)), "all"),
   kind: z.catch(z.enum(GALLERY_KINDS.map(({ value }) => value)), "all"),
-  layout: z.catch(z.enum(GALLERY_LAYOUTS.map(({ value }) => value)), "all"),
   progress: z.catch(z.enum(GALLERY_PROGRESS.map(({ value }) => value)), "all"),
 });
 
@@ -46,10 +41,13 @@ export type GalleryFilters = z.output<typeof GalleryFiltersSchema>;
 export function readGalleryFilters(params: URLSearchParams): GalleryFilters {
   return GalleryFiltersSchema.parse({
     search: params.get("q") ?? "",
-    topic: params.get("topic") ?? undefined,
+    topics: params.getAll("topic").flatMap((topic) => {
+      const parsed = z.enum(GALLERY_TOPICS).safeParse(topic);
+
+      return parsed.success ? [parsed.data] : [];
+    }),
     database: params.get("db"),
     kind: params.get("kind"),
-    layout: params.get("layout"),
     progress: params.get("progress"),
   });
 }
@@ -57,15 +55,14 @@ export function readGalleryFilters(params: URLSearchParams): GalleryFilters {
 export function hasGalleryFilters(filters: GalleryFilters): boolean {
   return (
     filters.search.trim() !== "" ||
-    filters.topic !== undefined ||
+    filters.topics.length > 0 ||
     filters.database !== "all" ||
     filters.kind !== "all" ||
-    filters.layout !== "all" ||
     filters.progress !== "all"
   );
 }
 
-/** Every search word must match the title, description or topics; the other filters combine with AND. */
+/** Match any selected topic, every search word, and all remaining filters. */
 export function filterExamples({
   examples,
   filters,
@@ -80,17 +77,21 @@ export function filterExamples({
   const words = filters.search.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);
 
   return examples.filter((example) => {
-    const searchable = [example.title, example.description, ...example.topics].join(" ").toLocaleLowerCase();
-    const layout = resolveExampleSides(example) ? "side_by_side" : "single";
+    const topics = getGalleryTopics(example);
+    const searchable = [example.title, example.description, ...topics].join(" ").toLocaleLowerCase();
     const status = getExampleProgress({ progress: progress[example.slug], viewedAt: views[example.slug] });
 
     return (
       words.every((word) => searchable.includes(word)) &&
-      (filters.topic === undefined || example.topics.includes(filters.topic)) &&
+      (filters.topics.length === 0 || filters.topics.some((topic) => topics.includes(topic))) &&
       (filters.database === "all" || listProjectDialects(example.manifest).includes(filters.database)) &&
       (filters.kind === "all" || getExampleKind(example) === filters.kind) &&
-      (filters.layout === "all" || layout === filters.layout) &&
       (filters.progress === "all" || status === filters.progress)
     );
   });
+}
+
+/** Comparisons are derived from the two-sided example or guide, rather than its visual layout. */
+export function getGalleryTopics(example: OfficialExample): (typeof GALLERY_TOPICS)[number][] {
+  return resolveExampleSides(example) ? [...example.topics, "Comparisons"] : [...example.topics];
 }
