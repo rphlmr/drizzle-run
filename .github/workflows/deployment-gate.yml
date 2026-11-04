@@ -1,0 +1,82 @@
+name: Deployment gate
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, edited]
+  workflow_run:
+    workflows: [Preview, Release]
+    types: [completed]
+
+permissions:
+  contents: read
+  deployments: read
+  pull-requests: read
+  statuses: write
+
+concurrency:
+  group: deployment-gate
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    name: Verify deployment records
+    if: >-
+      github.event_name == 'workflow_run' ||
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      # pull_request_target uses the base workflow. Never check out or execute a PR's code with this token.
+      - name: Update deployment merge checks
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          pulls=$(gh api --paginate --slurp "repos/$GITHUB_REPOSITORY/pulls?state=open&base=main&per_page=100" \
+            --jq 'flatten | map({number, head, base, merge_commit_sha})')
+          records=$(jq -c '.[]' <<< "$pulls")
+          while IFS= read -r pull; do
+            if [ -z "$pull" ]; then
+              continue
+            fi
+            source_repo=$(jq -r '.head.repo.full_name' <<< "$pull")
+            if [ "$source_repo" != "$GITHUB_REPOSITORY" ]; then
+              continue
+            fi
+            head_sha=$(jq -r '.head.sha' <<< "$pull")
+            branch=$(jq -r '.head.ref' <<< "$pull")
+            environment=preview
+            deployment_sha=$(jq -r '.merge_commit_sha // empty' <<< "$pull")
+            if [ "$branch" = 'changeset-release/main' ]; then
+              environment=next
+              deployment_sha=$(jq -r '.base.sha' <<< "$pull")
+            fi
+            state=pending
+            description="Waiting for $environment deployment and browser tests"
+            target_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions"
+            if [ -n "$deployment_sha" ]; then
+              deployment_id=$(gh api "repos/$GITHUB_REPOSITORY/deployments?sha=$deployment_sha&environment=$environment&per_page=1" \
+                --jq '.[0].id // empty')
+              if [ -n "$deployment_id" ]; then
+                # Previews share an environment: another PR's deploy can mark this deployment inactive.
+                status=$(gh api --paginate --slurp "repos/$GITHUB_REPOSITORY/deployments/$deployment_id/statuses?per_page=100" \
+                  --jq 'flatten | map(select(.state != "inactive")) | first // {}')
+                deployment_state=$(jq -r '.state // "pending"' <<< "$status")
+                target_url=$(jq -r --arg fallback "$target_url" '.log_url | if . == null or . == "" then $fallback else . end' <<< "$status")
+                case "$deployment_state" in
+                  success)
+                    state=success
+                    description="$environment deployment and browser tests passed"
+                    ;;
+                  failure|error)
+                    state=failure
+                    description="$environment deployment or browser tests failed"
+                    ;;
+                esac
+              fi
+            fi
+            gh api --method POST "repos/$GITHUB_REPOSITORY/statuses/$head_sha" \
+              -f context='Deployment verified' -f state="$state" \
+              -f description="$description" -f target_url="$target_url"
+          done <<< "$records"
