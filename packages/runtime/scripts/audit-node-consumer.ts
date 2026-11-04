@@ -57,13 +57,13 @@ try {
   );
   await writeFile(
     join(consumer, "pnpm-workspace.yaml"),
-    `overrides:\n  rolldown: 1.2.14\n${Object.entries(packages)
+    `nodeLinker: hoisted\noverrides:\n  rolldown: 1.2.14\n${Object.entries(packages)
       .map(([name, path]) => `  ${JSON.stringify(name)}: ${JSON.stringify(path)}`)
       .join("\n")}\n`,
   );
   run({
     command: "pnpm",
-    args: ["add", "--prefer-offline", "--ignore-scripts", "--config.node-linker=hoisted", ...Object.values(packages)],
+    args: ["add", "--prefer-offline", "--ignore-scripts", ...Object.values(packages)],
     cwd: consumer,
   });
   const workspacePackages = await readdir(join(consumer, "node_modules/@drizzle-run"));
