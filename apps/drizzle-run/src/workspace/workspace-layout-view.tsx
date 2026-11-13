@@ -30,7 +30,7 @@ export interface WorkspaceAside {
   /** Names the panel and its phone view. */
   label: string;
   content: ReactNode;
-  /** A phone shows it as a bottom sheet over the code and output instead of a view of its own. */
+  /** A phone shows it as a bottom sheet below the code and output instead of a view of its own. */
   sheet?: boolean;
   /** Drawn at its content's width, without a resize handle. */
   collapsed?: boolean;
@@ -199,7 +199,7 @@ export function WorkspaceLayout({
       <div
         className={
           work.shape === "sides"
-            ? "flex min-h-0 flex-1"
+            ? cn("flex min-h-0 flex-1", phone && aside?.sheet && "flex-col")
             : cn(
                 "flex min-h-0 flex-1 flex-col p-3",
                 compact && "p-0",
@@ -212,7 +212,11 @@ export function WorkspaceLayout({
         {aside &&
           (phone && aside.sheet ? (
             <section
-              className="absolute inset-x-0 bottom-0 z-10 flex max-h-[70%] min-h-0 flex-col"
+              className={cn(
+                "relative z-10 order-last flex max-h-[70%] min-h-0 shrink-0 flex-col",
+                // Keep result updates from resizing the editor and its panel observers during a run.
+                !aside.collapsed && "h-[70%]",
+              )}
               aria-label={aside.label}
             >
               {aside.content}
