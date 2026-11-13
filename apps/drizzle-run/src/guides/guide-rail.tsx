@@ -17,12 +17,14 @@ import {
   CheckIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
   LockIcon,
   PauseIcon,
   PencilIcon,
   RotateCcwIcon,
 } from "lucide-react";
-import type { ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
 import { Link } from "react-router";
 
 import { Button } from "../components/ui/button";
@@ -403,6 +405,7 @@ const phoneCardTextClass = cn("m-0 text-muted", phoneTextClass);
 
 /** The guided example's rail (desktop) or bottom sheet (phone), rendered from the guide manifest. */
 export function GuideRail({ guide, controls, leave: leaveMode, done, collapsed, onCollapsedChange }: GuideRailProps) {
+  const sheetGesture = useRef<{ id: number; y: number; moved: boolean } | null>(null);
   const view = useGuideStep();
   const guideOutput = useRunOutput();
   const output = {
@@ -533,16 +536,45 @@ export function GuideRail({ guide, controls, leave: leaveMode, done, collapsed, 
   if (phone) {
     return (
       <div
-        className="flex min-h-0 flex-col gap-3 rounded-t-[20px] border-t-[1.5px] border-card-border bg-surface px-4 pt-2 pb-5 shadow-pop"
+        className="flex min-h-0 flex-1 flex-col gap-3 rounded-t-[20px] border-t-[1.5px] border-card-border bg-surface px-4 pt-2 pb-5 shadow-pop"
         aria-labelledby={collapsed ? undefined : "guide-title"}
       >
         <button
           type="button"
-          className="grid h-5 w-15 place-items-center self-center border-0 bg-transparent after:h-1.25 after:w-10 after:rounded-pill after:bg-faint after:content-['']"
+          className="-mx-4 -mt-2 flex min-h-11 touch-none items-center justify-between gap-3 rounded-t-[20px] border-0 border-b border-border bg-surface px-4 text-[12px] font-semibold text-muted select-none"
           aria-label={collapsed ? "Expand guide" : "Collapse guide"}
           aria-expanded={!collapsed}
-          onClick={() => onCollapsedChange(!collapsed)}
-        />
+          onPointerDown={(event) => {
+            if (!event.isPrimary || event.button !== 0) return;
+            sheetGesture.current = { id: event.pointerId, y: event.clientY, moved: false };
+            event.currentTarget.setPointerCapture(event.pointerId);
+          }}
+          onPointerMove={(event) => {
+            const gesture = sheetGesture.current;
+            if (gesture?.id === event.pointerId && Math.abs(event.clientY - gesture.y) > 10) {
+              gesture.moved = true;
+            }
+          }}
+          onPointerUp={(event) => {
+            const gesture = sheetGesture.current;
+            if (gesture?.id !== event.pointerId) return;
+            const distance = event.clientY - gesture.y;
+            if (Math.abs(distance) >= 30) onCollapsedChange(distance > 0);
+          }}
+          onPointerCancel={() => {
+            sheetGesture.current = null;
+          }}
+          onClick={(event) => {
+            if (event.detail === 0 || !sheetGesture.current?.moved) onCollapsedChange(!collapsed);
+            sheetGesture.current = null;
+          }}
+        >
+          <span>{collapsed ? "Show guide steps" : "Hide guide steps"}</span>
+          <span className="flex items-center gap-1.5 font-normal">
+            Swipe {collapsed ? "up" : "down"}
+            {collapsed ? <ChevronUpIcon aria-hidden="true" /> : <ChevronDownIcon aria-hidden="true" />}
+          </span>
+        </button>
         <div className="flex items-center gap-2.5">
           <span className="text-[11px] font-bold tracking-[0.06em] whitespace-nowrap text-muted uppercase">
             {label}
