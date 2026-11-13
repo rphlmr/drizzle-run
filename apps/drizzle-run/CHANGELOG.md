@@ -1,5 +1,11 @@
 # @drizzle-run/app
 
+## 0.0.2
+
+### Patch Changes
+
+- d72a8dc: Fix mobile guide editor scrolling by keeping the code above the guide sheet. Add a labeled Show/Hide guide steps control with swipe gestures to expand and collapse the sheet, and keep its expanded height stable when results change.
+
 ## 0.0.1
 
 ### Patch Changes
