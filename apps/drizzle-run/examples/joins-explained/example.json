@@ -5,7 +5,7 @@
   "title": "Choose which rows a join keeps",
   "description": "Compare five joins and learn where to put filters when unmatched rows matter.",
   "topics": ["Queries"],
-  "featured": false,
+  "section": "querying",
   "order": 33,
   "dialect": "postgresql",
   "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",

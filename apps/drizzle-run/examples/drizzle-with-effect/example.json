@@ -5,7 +5,7 @@
   "title": "Drizzle with Effect",
   "description": "Query with Effect, catch a failed insert by its tag, roll back a transaction with your own error, and retry.",
   "topics": ["Effect"],
-  "featured": false,
+  "section": "integrations",
   "order": 80,
   "dialect": "postgresql",
   "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",

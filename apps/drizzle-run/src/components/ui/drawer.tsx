@@ -64,7 +64,10 @@ function DrawerClose({ ...props }: DrawerPrimitive.Close.Props) {
   return <DrawerPrimitive.Close data-slot="drawer-close" {...props} />;
 }
 
-function DrawerOverlay({ className, ...props }: DrawerPrimitive.Backdrop.Props) {
+function DrawerOverlay({
+  className,
+  ...props
+}: DrawerPrimitive.Backdrop.Props) {
   return (
     <DrawerPrimitive.Backdrop
       data-slot="drawer-overlay"
@@ -77,7 +80,10 @@ function DrawerOverlay({ className, ...props }: DrawerPrimitive.Backdrop.Props) 
   );
 }
 
-function DrawerSwipeHandle({ className, ...props }: React.ComponentProps<"div">) {
+function DrawerSwipeHandle({
+  className,
+  ...props
+}: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="drawer-swipe-handle"
@@ -91,13 +97,20 @@ function DrawerSwipeHandle({ className, ...props }: React.ComponentProps<"div">)
   );
 }
 
-function DrawerContent({ className, children, ...props }: DrawerPrimitive.Popup.Props) {
+function DrawerContent({
+  className,
+  children,
+  ...props
+}: DrawerPrimitive.Popup.Props) {
   const { hasSnapPoints, modal, showSwipeHandle, swipeDirection } = useDrawer();
-  const swipeAxis = swipeDirection === "down" || swipeDirection === "up" ? "y" : "x";
+  const swipeAxis =
+    swipeDirection === "down" || swipeDirection === "up" ? "y" : "x";
 
   return (
     <DrawerPortal data-slot="drawer-portal">
-      {modal === true && <DrawerOverlay data-snap-points={hasSnapPoints ? "" : undefined} />}
+      {modal === true && (
+        <DrawerOverlay data-snap-points={hasSnapPoints ? "" : undefined} />
+      )}
       <DrawerPrimitive.Viewport
         data-slot="drawer-viewport"
         data-modal={modal}
@@ -123,7 +136,7 @@ function DrawerContent({ className, children, ...props }: DrawerPrimitive.Popup.
             // Axis: y.
             "data-[swipe-axis=y]:inset-x-0 data-[swipe-axis=y]:data-nested-drawer-open:h-(--stack-height)",
             // Axis: x.
-            "data-[swipe-axis=x]:inset-y-0 data-[swipe-axis=x]:flex-row",
+            "data-[swipe-axis=x]:inset-y-0 data-[swipe-axis=x]:max-h-dvh data-[swipe-axis=x]:flex-row",
             // Direction: down.
             "data-[swipe-direction=down]:bottom-0 data-[swipe-direction=down]:origin-bottom data-[swipe-direction=down]:[--closed-transform:translate3d(0,calc(100%+var(--drawer-inset,0px)+2px),0)] data-[swipe-direction=down]:[--translate-y:calc(var(--drawer-snap-point-offset,0px)+var(--drawer-swipe-movement-y)-var(--stack-peek-offset)-(var(--stack-shrink)*var(--stack-height)))]",
             // Direction: up.
@@ -155,14 +168,23 @@ function DrawerHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="drawer-header"
-      className={cn("flex shrink-0 flex-col group-data-[swipe-axis=y]/drawer-popup:text-center", className)}
+      className={cn(
+        "flex shrink-0 flex-col group-data-[swipe-axis=y]/drawer-popup:text-center",
+        className,
+      )}
       {...props}
     />
   );
 }
 
 function DrawerFooter({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="drawer-footer" className={cn("mt-auto flex shrink-0 flex-col", className)} {...props} />;
+  return (
+    <div
+      data-slot="drawer-footer"
+      className={cn("mt-auto flex shrink-0 flex-col", className)}
+      {...props}
+    />
+  );
 }
 
 function DrawerTitle({ className, ...props }: DrawerPrimitive.Title.Props) {
@@ -175,11 +197,17 @@ function DrawerTitle({ className, ...props }: DrawerPrimitive.Title.Props) {
   );
 }
 
-function DrawerDescription({ className, ...props }: DrawerPrimitive.Description.Props) {
+function DrawerDescription({
+  className,
+  ...props
+}: DrawerPrimitive.Description.Props) {
   return (
     <DrawerPrimitive.Description
       data-slot="drawer-description"
-      className={cn("mt-2 mb-5 text-[14px] leading-[1.6] text-balance text-muted", className)}
+      className={cn(
+        "mt-2 mb-5 text-[14px] leading-[1.6] text-balance text-muted",
+        className,
+      )}
       {...props}
     />
   );

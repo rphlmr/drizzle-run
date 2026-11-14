@@ -120,25 +120,25 @@ test("should ask to sign in before sharing, and share once signed in", async ({ 
   const dialog = page.getByRole("dialog");
   await page.getByRole("button", { name: "Share", exact: true }).click();
   await expect(dialog.getByRole("heading", { name: "Sign in to share" })).toBeVisible();
-  await expect(dialog.getByRole("checkbox", { name: /nothing private/ })).toHaveCount(0);
+  await expect(dialog.getByRole("checkbox", { name: /secrets/ })).toHaveCount(0);
   await dialog.getByRole("button", { name: "Sign in with GitHub" }).click();
 
   await expect(page).toHaveURL(/\/p\/[0-9a-f-]+$/);
   await expect(getAccountButton(page)).toHaveAccessibleName("Account: signed in as @octocat");
   await expect(page.getByRole("button", { name: "Run", exact: true })).toBeEnabled({ timeout: 120_000 });
   await page.getByRole("button", { name: "Share", exact: true }).click();
-  await dialog.getByRole("checkbox", { name: /nothing private/ }).click();
-  await dialog.getByRole("button", { name: "Publish", exact: true }).click();
-  await expect(dialog.getByText("Your snapshot is published.")).toBeVisible({ timeout: 60_000 });
-  await dialog.getByRole("tab", { name: "Community" }).click();
-  await expect(
-    dialog.getByRole("tabpanel", { name: "Community" }).getByRole("button", { name: "List in Community", exact: true }),
-  ).toBeEnabled();
+  // A first share starts in Community: one click publishes and lists it.
+  await expect(dialog.getByRole("radio", { name: "Community" })).toBeChecked();
+  await dialog.getByRole("checkbox", { name: /secrets/ }).click();
+  await dialog.getByRole("button", { name: "Publish to Community", exact: true }).click();
+  await expect(dialog.getByText("Published to Community.")).toBeVisible({ timeout: 60_000 });
+  await expect(dialog.getByRole("radio", { name: "Community" })).toBeChecked();
   await page.keyboard.press("Escape");
+  await expect(page.getByRole("button", { name: "In Community", exact: true })).toBeVisible();
 
   await page.goto("/projects/shares");
   await expect(page.getByRole("table", { name: "My shares" }).getByRole("row").filter({ hasText: name })).toContainText(
-    "Link only",
+    "In Community",
   );
 });
 
@@ -150,9 +150,10 @@ test("should push changes to an owned link from another browser, and only for it
 
   const dialog = page.getByRole("dialog");
   await page.getByRole("button", { name: "Share", exact: true }).click();
-  await dialog.getByRole("checkbox", { name: /nothing private/ }).click();
-  await dialog.getByRole("button", { name: "Publish", exact: true }).click();
-  await expect(dialog.getByText("Your snapshot is published.")).toBeVisible({ timeout: 60_000 });
+  await dialog.getByRole("radio", { name: "Link only" }).click();
+  await dialog.getByRole("checkbox", { name: /secrets/ }).click();
+  await dialog.getByRole("button", { name: "Create link", exact: true }).click();
+  await expect(dialog.getByText("Your link is ready.")).toBeVisible({ timeout: 60_000 });
   const linkPath = new URL(await dialog.getByRole("textbox", { name: "Link", exact: true }).inputValue()).pathname;
 
   const laptop = await openAnotherBrowser(browser);
@@ -169,10 +170,10 @@ test("should push changes to an owned link from another browser, and only for it
   const laptopDialog = laptopPage.getByRole("dialog");
   await laptopPage.getByRole("button", { name: "Shared", exact: true }).click();
   await expect(laptopDialog.getByRole("heading", { name: "Share", exact: true })).toBeVisible();
-  await laptopDialog.getByRole("button", { name: "Push changes", exact: true }).click();
+  await laptopDialog.getByRole("button", { name: "Update share", exact: true }).click();
   await laptopDialog.getByRole("checkbox", { name: /nothing private/ }).click();
-  await laptopDialog.getByRole("button", { name: "Push changes", exact: true }).click();
-  await expect(laptopPage.getByRole("status").filter({ hasText: "Changes pushed to the link." })).toBeVisible({
+  await laptopDialog.getByRole("button", { name: "Update share", exact: true }).click();
+  await expect(laptopPage.getByRole("status").filter({ hasText: "Share updated." })).toBeVisible({
     timeout: 60_000,
   });
   await expect(laptopDialog).toBeHidden();
@@ -180,7 +181,7 @@ test("should push changes to an owned link from another browser, and only for it
 
   await page.keyboard.press("Escape");
   await page.getByRole("button", { name: "Shared", exact: true }).click();
-  await expect(dialog.getByRole("note")).toContainText("Unpublished changes");
+  await expect(dialog.getByRole("note")).toContainText("You edited the project since you shared it");
   await page.keyboard.press("Escape");
 
   const stranger = await openAnotherBrowser(browser);
@@ -191,8 +192,6 @@ test("should push changes to an owned link from another browser, and only for it
   await strangerPage.getByRole("button", { name: "Fork to my projects" }).click();
   await expect(strangerPage.getByRole("button", { name: "Run", exact: true })).toBeEnabled({ timeout: 120_000 });
   await strangerPage.getByRole("button", { name: "Share", exact: true }).click();
-  await expect(
-    strangerPage.getByRole("dialog").getByRole("heading", { name: "Share a public snapshot" }),
-  ).toBeVisible();
+  await expect(strangerPage.getByRole("dialog").getByRole("heading", { name: /^Share / })).toBeVisible();
   await stranger.close();
 });

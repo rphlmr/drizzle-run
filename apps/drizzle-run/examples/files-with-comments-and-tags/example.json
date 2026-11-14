@@ -5,7 +5,7 @@
   "title": "Files with comments, authors and tags",
   "description": "A complete PostgreSQL starter: aggregate each relation separately and filter files without losing their other tags.",
   "topics": ["Queries", "JSON", "RQB"],
-  "featured": false,
+  "section": "json",
   "order": 80,
   "dialect": "postgresql",
   "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",

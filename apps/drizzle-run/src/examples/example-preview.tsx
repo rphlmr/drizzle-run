@@ -1,13 +1,14 @@
 import { pairSide } from "@drizzle-run/core/pair";
 import type { GuideProgress } from "@drizzle-run/runtime/machines";
-import { useEffect, useState } from "react";
+import { CheckIcon } from "lucide-react";
+import { useEffect, useState, type ReactNode } from "react";
 import { Link } from "react-router";
 
 import { buttonVariants } from "../components/ui/button";
+import { cn } from "../lib/utils";
 import { formatProjectDialects, isPairManifest } from "../project/projects";
 import { resolveExampleSides, type OfficialExample } from "./catalog";
-import { getExampleCallToAction } from "./example-card";
-import { getGalleryTopics } from "./gallery-filters";
+import { getExampleCallToAction, getResumeStep } from "./gallery-model";
 import { LinkList } from "./link-list";
 
 function QueryCode({ code }: { code: string }) {
@@ -43,13 +44,28 @@ function QueryCode({ code }: { code: string }) {
   return colored?.code === code ? <code dangerouslySetInnerHTML={{ __html: colored.html }} /> : <code>{code}</code>;
 }
 
+/** What the quick look shows around the example: its title element and controls such as a database switch. */
+export interface ExamplePreviewProps {
+  example: OfficialExample;
+  /** Saved progress, for a guide started in this browser. */
+  progress?: GuideProgress;
+  /** The title to show, such as the family title without its database. */
+  title: string;
+  /** Renders the title, so a dialog can name itself by it. */
+  renderTitle: (title: string) => ReactNode;
+  /** Shown under the description, such as the database switch of an example written for both. */
+  controls?: ReactNode;
+}
+
 /** Read-only catalog details; opening the example, rather than previewing it, records a visit. */
-export function ExamplePreview({ example, progress }: { example: OfficialExample; progress?: GuideProgress }) {
+export function ExamplePreview({ example, progress, title, renderTitle, controls }: ExamplePreviewProps) {
   const project = example.guide?.project ?? example.manifest;
   const run = isPairManifest(project) ? pairSide(project, 0) : project;
   const query = run.entrypoints.run === undefined ? undefined : run.files[run.entrypoints.run];
   const sides = resolveExampleSides(example);
   const comparison = sides?.map((side) => side.name ?? `Drizzle ${side.ormVersion}`).join(" vs ");
+  const resumeStep = getResumeStep(example, progress);
+  const completed = new Set(progress?.completed);
 
   return (
     <>
@@ -58,28 +74,41 @@ export function ExamplePreview({ example, progress }: { example: OfficialExample
         className="min-h-0 flex-1 [scrollbar-gutter:stable] overflow-y-auto overscroll-contain p-5.5 max-phone:p-5"
       >
         <p className="text-[12px] text-muted">
-          {example.guide ? "Guide" : "Example"} · {formatProjectDialects(example.manifest)}
+          {example.guide ? `Guide · ${example.guide.steps.length} steps` : "Example"} ·{" "}
+          {formatProjectDialects(example.manifest)}
         </p>
-        <h2 className="mt-2 text-[20px]/[1.3] font-semibold tracking-[-0.02em]" id="example-preview-title">
-          {example.title}
-        </h2>
+        {renderTitle(title)}
         <p className="mt-3 text-[13px]/[1.7] text-muted">{example.description}</p>
-        <p className="mt-3 flex flex-wrap items-center gap-1.5 text-[11px] text-muted">
-          {example.guide && `${example.guide.steps.length} steps · `}
-          {getGalleryTopics(example).map((topic) => (
-            <span key={topic} className="rounded-sm border border-border px-1.5 py-0.5">
-              {topic}
-            </span>
-          ))}
-        </p>
         {comparison && <p className="mt-3 text-[13px] font-medium">{comparison}</p>}
+        {controls && <div className="mt-4">{controls}</div>}
         {example.guide && (
           <section className="mt-6 border-t border-border pt-5" aria-label="Guide outline">
             <h3 className="mb-3 text-[13px] font-medium">What you’ll explore</h3>
-            <ol className="list-decimal space-y-2.5 pl-5 text-[13px] text-soft marker:text-muted">
-              {example.guide.steps.map((step) => (
-                <li key={step.id}>{step.title}</li>
-              ))}
+            <ol className="flex flex-col gap-2.5 text-[13px] text-soft">
+              {example.guide.steps.map((step, index) => {
+                const done = progress?.finished === true || completed.has(step.id);
+                const current = progress !== undefined && !progress.finished && resumeStep === index + 1;
+
+                return (
+                  <li key={step.id} className={cn("flex items-start gap-2.5", current && "font-medium text-text")}>
+                    <span
+                      className={cn(
+                        "mt-px flex size-4.5 shrink-0 items-center justify-center rounded-full border border-card-border text-[10px] font-semibold text-muted",
+                        done && "border-ok bg-ok text-surface",
+                        current && "border-text text-text",
+                      )}
+                      aria-hidden="true"
+                    >
+                      {done ? <CheckIcon className="size-3" /> : index + 1}
+                    </span>
+                    <span>
+                      {step.title}
+                      {done && <span className="sr-only"> (done)</span>}
+                      {current && <span className="sr-only"> (current step)</span>}
+                    </span>
+                  </li>
+                );
+              })}
             </ol>
           </section>
         )}
@@ -124,7 +153,7 @@ export function ExamplePreview({ example, progress }: { example: OfficialExample
           to={`/examples/${example.slug}`}
           className={buttonVariants({ variant: "sticker", className: "rounded-md" })}
         >
-          {getExampleCallToAction(Boolean(example.guide), progress)} →
+          {getExampleCallToAction(example, progress)} →
         </Link>
         <p className="mt-2 text-[12px] text-muted">Opens an editable copy. Fork it to keep your changes.</p>
       </div>

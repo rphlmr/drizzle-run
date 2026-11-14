@@ -12,6 +12,7 @@ import { fakeRunResult, legacyGuest } from "@drizzle-run/test-fixtures";
 import { describe, expect, it, vi } from "vitest";
 import { createActor, type InputFrom, type SnapshotFrom } from "xstate";
 
+import { createCommunityService } from "../community/service";
 import { createRecordedRunsService } from "../embed/recorded-runs-service";
 import { createProject } from "../project/projects";
 import { VolatileProjectStorage, type ShareLinkRecord } from "../store/storage";
@@ -124,6 +125,7 @@ function makeInput({
   return {
     services: {
       playgrounds: createPlaygroundsService(dependencies),
+      community: createCommunityService(dependencies),
       recordedRuns: createRecordedRunsService(dependencies),
     },
     recording: recording ? makeRecording() : undefined,

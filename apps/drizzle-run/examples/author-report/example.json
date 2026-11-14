@@ -5,7 +5,7 @@
   "title": "Author report with a CTE",
   "description": "Count published posts and views per author, keep authors with no posts, and filter by a computed total.",
   "topics": ["Queries"],
-  "featured": false,
+  "section": "querying",
   "order": 70,
   "dialect": "postgresql",
   "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",

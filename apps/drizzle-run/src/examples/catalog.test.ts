@@ -11,10 +11,8 @@ import {
   collectSources,
   findExample,
   findNextGuidedExample,
-  getExampleKind,
   getPairLabel,
   listExamples,
-  listExampleTopics,
   loadExamples,
   parseExample,
   resolveExampleSides,
@@ -41,7 +39,7 @@ function makeSource(metadata: Record<string, unknown> = {}, folder = "sample"): 
       title: "Sample",
       description: "A sample.",
       topics: ["Queries"],
-      featured: false,
+      section: "querying",
       order: 1,
       dialect: "sqlite",
       releasePair: "orm-0.45.4__kit-0.31.11",
@@ -95,18 +93,14 @@ describe("official examples in the repository", () => {
     expect(findExample("missing")).toBeUndefined();
   });
 
-  it("should have one featured example and the bundled quick starts", () => {
-    expect(listExamples().filter((example) => example.featured)).toHaveLength(1);
+  it("should bundle the quick starts", () => {
     expect(findExample("quick-start-sqlite")?.manifest).toMatchObject({ target: { dialect: "sqlite" } });
   });
 
-  it("should feature a guided example and open the guides that share a slug", () => {
-    const featured = listExamples().find((example) => example.featured);
-
-    expect(featured?.guide?.steps.length).toBeGreaterThan(1);
+  it("should open the guides that share a slug", () => {
     expect(
       listExamples()
-        .filter((example) => getExampleKind(example) === "guided")
+        .filter((example) => example.guide !== undefined)
         .map(({ slug }) => slug)
         .toSorted(),
     ).toEqual([
@@ -185,13 +179,6 @@ describe("official examples in the repository", () => {
     expect(manifest.sides[0].files["query.ts"]).toContain(".leftJoin(");
     expect(manifest.sides[1].files["query.ts"]).toContain("db.query.users.findMany");
   });
-
-  it("should list only the topics in use, in the fixed order", () => {
-    const topics = listExampleTopics();
-
-    expect(topics[0]).toBe("Queries");
-    expect(new Set(topics).size).toBe(topics.length);
-  });
 });
 
 describe("parseExample", () => {
@@ -199,7 +186,6 @@ describe("parseExample", () => {
     const example = parseExample(makeSource({ topics: ["Queries", "Helpers", "JSON"] }));
 
     expect(example.topics).toEqual(["Queries", "Helpers", "JSON"]);
-    expect(listExampleTopics([example])).toEqual(["Queries", "Helpers", "JSON"]);
   });
 
   it("should build a manifest with the pair", () => {
@@ -231,7 +217,8 @@ describe("parseExample", () => {
     [{ topics: ["Cooking"] }, /topics/],
     [{ topics: [] }, /topics/],
     [{ topics: ["Queries", "Queries"] }, /topics/],
-    [{ featured: "yes" }, /featured/],
+    [{ section: undefined }, /section/],
+    [{ section: "cooking" }, /section/],
     [{ dialect: "mysql" }, /dialect/],
     [{ releasePair: "0.45.4" }, /releasePair/],
     [{ releasePair: "orm-9.9.9__kit-9.9.9" }, /Example "sample"/],
@@ -450,7 +437,6 @@ describe("guided examples", () => {
 
     expect(loaded.guide?.id).toBe(GUIDE_ID);
     expect(loaded.guideFolder).toBe("sample");
-    expect(getExampleKind(loaded)).toBe("guided");
   });
 
   it("should attach a draft guide only when drafts show", () => {

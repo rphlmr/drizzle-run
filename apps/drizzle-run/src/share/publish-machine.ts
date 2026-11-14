@@ -1,17 +1,23 @@
 import { digestPlaygroundSnapshot, type PlaygroundSnapshot, type RecordedRun } from "@drizzle-run/core/contracts";
 import { assign, enqueueActions, fromPromise, setup } from "xstate";
 
+import type { CommunityService } from "../community/contract";
+import { DEFAULT_COMMUNITY_TOPIC, type CommunityTopic } from "../community/topics";
 import type { RecordedRunsService } from "../embed/recorded-runs-contract";
 import { declareType } from "../lib/declare-type";
 import { getErrorText } from "../lib/error-text";
 import type { ShareLinkRecord, ShareLinkStore } from "../store/storage";
 import type { PlaygroundsService, PublishedPlaygroundLink } from "./playgrounds-contract";
 
-/** The APIs a share publishes with: the snapshot and its recorded run. */
+/** The APIs a share publishes with: the snapshot, its Community listing, and its recorded run. */
 export interface SharePublishServices {
   playgrounds: Pick<PlaygroundsService, "publishPlaygroundSnapshot" | "pushChanges">;
+  community: Pick<CommunityService, "listShareInCommunity">;
   recordedRuns: Pick<RecordedRunsService, "recordRun">;
 }
+
+/** Who can find a share: everyone browsing Community, or only the people who get its link. */
+export type ShareVisibility = "community" | "link";
 
 /** Where the dialog opens for a link shared before: its Link tab, or straight on the push step. */
 export type ShareStartView = "link" | "push";
@@ -31,6 +37,10 @@ interface SharePublishInput {
 
 interface PublishRequest {
   playgrounds: SharePublishServices["playgrounds"];
+  community: SharePublishServices["community"];
+  /** Where a new link is listed; a push keeps the link's listing as it is. */
+  visibility: ShareVisibility;
+  topic: CommunityTopic;
   snapshot: PlaygroundSnapshot;
   idempotencyKey: string;
   description: string;
@@ -54,12 +64,16 @@ export interface PublishOutcome {
   record: ShareLinkRecord;
   /** False when the link is public but this browser could not keep it with the project. */
   linkSaved: boolean;
+  /** Why the link is public but its Community card was not listed or updated. */
+  listingError?: string;
 }
 
 /** What the share publication machine hears. */
 export type SharePublishEvent =
   | { type: "consent.change"; consent: boolean }
   | { type: "description.change"; description: string }
+  | { type: "visibility.change"; visibility: ShareVisibility }
+  | { type: "topic.change"; topic: CommunityTopic }
   /** The link as this browser keeps it now, after a Community change or a check with the server. */
   | { type: "link.change"; record: ShareLinkRecord }
   | { type: "push.open" }
@@ -73,15 +87,59 @@ export type SharePublishEvent =
  */
 export type SharePublishEmitted = { type: "record.saved"; record: ShareLinkRecord } | { type: "push.done" };
 
-/** The form's starting choices: the link's description when it was shared before. */
+/**
+ * The form's starting choices: the link's description and listing when it was shared before. A first share starts in
+ * Community, which is why sharing exists; the owner picks Link only to keep it to the people they send it to.
+ */
 function toShareChoices(existing: ShareLinkRecord | undefined) {
-  return { existing, description: existing?.description ?? "" };
+  const visibility: ShareVisibility = existing === undefined || existing.listing !== undefined ? "community" : "link";
+
+  return {
+    existing,
+    description: existing?.description ?? "",
+    visibility,
+    topic: existing?.listing?.topic ?? DEFAULT_COMMUNITY_TOPIC,
+  };
+}
+
+/**
+ * The listing a publish leaves: a new link chosen for Community is listed, and a listed link whose description changed
+ * gets the new one on its card. Anything else keeps the listing it had. A failed listing keeps the public link.
+ */
+async function settleListing(
+  input: PublishRequest,
+  linkId: string,
+  description: string,
+  signal: AbortSignal,
+): Promise<{ listing: ShareLinkRecord["listing"]; listingError?: string }> {
+  const current = input.existing?.listing;
+  const wanted =
+    input.existing === undefined
+      ? input.visibility === "community"
+        ? { topic: input.topic, description }
+        : undefined
+      : current !== undefined && (current.description ?? "") !== description
+        ? { topic: current.topic, description }
+        : undefined;
+
+  if (wanted === undefined) {
+    return { listing: current };
+  }
+
+  try {
+    await input.community.listShareInCommunity({ linkId, choice: wanted, signal });
+
+    return { listing: { topic: wanted.topic, ...(description === "" ? {} : { description }) } };
+  } catch (cause) {
+    return { listing: current, listingError: getErrorText(cause) };
+  }
 }
 
 /**
  * Reads whether this browser shared the project before, then, after consent, publishes a frozen snapshot as a new link
- * or pushes it to the existing one, then records the author's run on it. A Community listing always shows what the
- * link shows, so a push never lists, unlists, or moves it. The record this browser keeps emits `record.saved`, and a
+ * or pushes it to the existing one, then records the author's run on it. A new link chosen for Community is listed in
+ * the same step. A push never lists, unlists, or moves a link: it only carries a new description to a listed card. The
+ * record this browser keeps emits `record.saved`, and a
  * finished push emits `push.done`. A failed recording keeps the published link and waits for `recording.retry`.
  */
 export const sharePublishMachine = setup({
@@ -93,6 +151,10 @@ export const sharePublishMachine = setup({
         consent: boolean;
         /** Every share's optional one-line description, starting from the link's current one. */
         description: string;
+        /** Where a first share goes: Community or the link only. */
+        visibility: ShareVisibility;
+        /** What a Community share shows. */
+        topic: CommunityTopic;
         result: PublishOutcome | undefined;
         /** Why the recording failed after the snapshot was published. */
         recordingError: string;
@@ -107,6 +169,8 @@ export const sharePublishMachine = setup({
     setDescription: assign(({ event }) =>
       event.type === "description.change" ? { description: event.description } : {},
     ),
+    setVisibility: assign(({ event }) => (event.type === "visibility.change" ? { visibility: event.visibility } : {})),
+    setTopic: assign(({ event }) => (event.type === "topic.change" ? { topic: event.topic } : {})),
   },
   guards: {
     hasLink: ({ context }) => context.existing !== undefined,
@@ -135,7 +199,7 @@ export const sharePublishMachine = setup({
             idempotencyKey: input.idempotencyKey,
             signal,
           });
-      const listing = existing?.listing;
+      const { listing, listingError } = await settleListing(input, link.id, description, signal);
       const record: ShareLinkRecord = {
         linkId: link.id,
         publishedAt: link.updatedAt,
@@ -143,12 +207,13 @@ export const sharePublishMachine = setup({
         publishedDigest: digestPlaygroundSnapshot(input.snapshot),
         ...(listing === undefined ? {} : { listing }),
       };
+      const outcome = { link, record, ...(listingError === undefined ? {} : { listingError }) };
 
       try {
         await input.links.saveShareLink(input.projectId, record);
-        return { link, record, linkSaved: true };
+        return { ...outcome, linkSaved: true };
       } catch {
-        return { link, record, linkSaved: false };
+        return { ...outcome, linkSaved: false };
       }
     }),
     recordRun: fromPromise<void, RecordingRequest>(({ input, signal }) =>
@@ -195,6 +260,8 @@ export const sharePublishMachine = setup({
       on: {
         "consent.change": { actions: "setConsent" },
         "description.change": { actions: "setDescription" },
+        "visibility.change": { actions: "setVisibility" },
+        "topic.change": { actions: "setTopic" },
         "share.publish": { guard: "canPublish", target: "publishing", actions: assign({ error: "" }) },
       },
     },
@@ -216,6 +283,9 @@ export const sharePublishMachine = setup({
 
           return {
             playgrounds: context.services.playgrounds,
+            community: context.services.community,
+            visibility: context.visibility,
+            topic: context.topic,
             snapshot: context.snapshot,
             idempotencyKey: context.idempotencyKey,
             description: context.description,

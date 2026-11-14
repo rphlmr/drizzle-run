@@ -1,6 +1,12 @@
 import { SearchIcon } from "lucide-react";
 import { useState } from "react";
-import { NavLink, Outlet, useLoaderData, useSearchParams, type LoaderFunctionArgs } from "react-router";
+import {
+  NavLink,
+  Outlet,
+  useLoaderData,
+  useSearchParams,
+  type LoaderFunctionArgs,
+} from "react-router";
 
 import { appServicesContext } from "../app-services";
 import { useAuth } from "../auth/auth-provider";
@@ -30,7 +36,13 @@ const DIALECTS: readonly { value: DialectFilter; label: string }[] = [
   { value: "sqlite", label: "SQLite" },
 ];
 
-const tabLinkClass = ({ isActive, isPending }: { isActive: boolean; isPending: boolean }) =>
+const tabLinkClass = ({
+  isActive,
+  isPending,
+}: {
+  isActive: boolean;
+  isPending: boolean;
+}) =>
   cn(
     "relative inline-flex items-center py-2.25 text-[14px] font-medium whitespace-nowrap no-underline max-phone:min-h-touch",
     "after:absolute after:inset-x-0 after:-bottom-px after:h-0.5 after:bg-text after:opacity-0",
@@ -40,7 +52,10 @@ const tabLinkClass = ({ isActive, isPending }: { isActive: boolean; isPending: b
 
 function ProjectsTabs() {
   return (
-    <nav className="flex gap-6 border-b border-border" aria-label="My projects and shares">
+    <nav
+      className="flex gap-6 border-b border-border"
+      aria-label="My projects and shares"
+    >
       <NavLink to="/projects" end className={tabLinkClass}>
         My projects
       </NavLink>
@@ -85,9 +100,13 @@ export function ProjectsLayout() {
  *
  * Share links only add a column, so an unreadable store shows every project as not shared.
  */
-export async function loadProjectShares({ context }: LoaderFunctionArgs): Promise<Record<string, ProjectShare>> {
+export async function loadProjectShares({
+  context,
+}: LoaderFunctionArgs): Promise<Record<string, ProjectShare>> {
   try {
-    return toProjectShares(await context.get(appServicesContext).localShares.listShareLinks());
+    return toProjectShares(
+      await context.get(appServicesContext).localShares.listShareLinks(),
+    );
   } catch {
     return {};
   }
@@ -112,26 +131,42 @@ export function ProjectsPage() {
   const [params, setParams] = useSearchParams();
   const query = readListQuery(params);
   const page = listProjects(workspace.projects, query);
-  const [selected, setSelected] = useState<ReadonlySet<string>>(() => new Set());
-  const selectedProjects = workspace.projects.filter((project) => selected.has(project.id));
+  const [selected, setSelected] = useState<ReadonlySet<string>>(
+    () => new Set(),
+  );
+  const selectedProjects = workspace.projects.filter((project) =>
+    selected.has(project.id),
+  );
   const total = workspace.projects.length;
 
   const setQuery = (next: Partial<ProjectListQuery>) => {
-    setParams(writeListQuery({ ...query, page: 1, ...next }), { replace: true });
+    setParams(writeListQuery({ ...query, page: 1, ...next }), {
+      replace: true,
+    });
   };
 
   return (
-    <section className="flex min-w-0 flex-col gap-4.5 max-phone:gap-3.5" aria-labelledby="projects-title">
+    <section
+      className="flex min-w-0 flex-col gap-4.5 max-phone:gap-3.5"
+      aria-labelledby="projects-title"
+    >
       <div className="flex flex-col items-start gap-4.5 max-phone:gap-3.5">
         <div>
-          <h1 id="projects-title" className="font-display text-[24px] font-semibold tracking-[-0.03em]">
+          <h1
+            id="projects-title"
+            className="font-display text-[24px] font-semibold tracking-[-0.03em]"
+          >
             My projects{" "}
-            <span className="ml-1 font-sans text-[15px] font-medium tracking-normal text-muted">{total}</span>
+            <span className="ml-1 font-sans text-[15px] font-medium tracking-normal text-muted">
+              {total}
+            </span>
           </h1>
-          <p className="mt-1 text-[13px] text-muted">Your saved work, ready to run.</p>
+          <p className="mt-1 text-[13px] text-muted">
+            Your saved work, ready to run.
+          </p>
         </div>
         <div className="flex w-full flex-wrap items-center gap-2">
-          <div className="relative min-w-40 flex-1 max-phone:basis-full">
+          <div className="relative min-w-40 flex-1 sm:max-w-90 max-phone:basis-full">
             <SearchIcon
               className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted"
               aria-hidden="true"
@@ -150,12 +185,17 @@ export function ProjectsPage() {
             options={DIALECTS}
             value={query.dialect}
             onChange={(dialect) => setQuery({ dialect })}
-            className="max-phone:hidden"
+            className="ml-auto max-phone:hidden"
           />
           <Button
             variant="outline"
             className="rounded-md max-phone:hidden"
-            onClick={() => workspace.exportProjects(workspace.projects, "drizzle-run-projects.json")}
+            onClick={() =>
+              workspace.exportProjects(
+                workspace.projects,
+                "drizzle-run-projects.json",
+              )
+            }
           >
             Export all
           </Button>
@@ -170,7 +210,9 @@ export function ProjectsPage() {
         onSelectedChange={setSelected}
         onSortChange={(sort) => setQuery({ sort, page: query.page })}
         onPageChange={(next) => setQuery({ page: next })}
-        onClearFilters={() => setParams(new URLSearchParams(), { replace: true })}
+        onClearFilters={() =>
+          setParams(new URLSearchParams(), { replace: true })
+        }
         filtered={query.search.trim() !== "" || query.dialect !== "all"}
         selection={
           selectedProjects.length > 0 && (
@@ -182,14 +224,27 @@ export function ProjectsPage() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => workspace.exportProjects(selectedProjects, "drizzle-run-projects.json")}
+                onClick={() =>
+                  workspace.exportProjects(
+                    selectedProjects,
+                    "drizzle-run-projects.json",
+                  )
+                }
               >
                 Export
               </Button>
-              <Button variant="destructive" size="sm" onClick={() => workspace.remove(selectedProjects)}>
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={() => workspace.remove(selectedProjects)}
+              >
                 Delete
               </Button>
-              <Button variant="ghost" size="sm" onClick={() => setSelected(new Set())}>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setSelected(new Set())}
+              >
                 Clear
               </Button>
             </fieldset>

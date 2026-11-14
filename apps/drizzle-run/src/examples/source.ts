@@ -29,7 +29,7 @@ const WebLinkKindSchema = z.enum(["docs", "notes"]);
 /**
  * Read one field of an example folder
  *
- * @param problem - What the field must be, as the error names it: `"featured must be true or false."`
+ * @param problem - What the field must be, as the error names it: `"order must be an integer."`
  * @returns The field as the schema parses it; throws an `ExampleError` with `problem` when it does not parse.
  */
 export function readExampleField<Schema extends z.core.$ZodType>(

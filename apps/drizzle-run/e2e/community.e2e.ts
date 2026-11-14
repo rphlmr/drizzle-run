@@ -196,7 +196,7 @@ test("should ask only a signed-out visitor to sign in before listing a share", a
   await expect(page.getByText("Add yours: share a project")).toBeVisible();
 });
 
-test("should list a project in Community from the Share dialog, and unlist it without editing the project", async ({
+test("should publish a project to Community in one step, and unlist it without editing the project", async ({
   page,
 }) => {
   const name = makeUniqueName("Listed from the dialog");
@@ -209,18 +209,17 @@ test("should list a project in Community from the Share dialog, and unlist it wi
   const dialog = page.getByRole("dialog");
   await page.getByRole("button", { name: "Share", exact: true }).click();
   await dialog.getByRole("textbox", { name: /Description/ }).fill("Listed by the e2e spec.");
-  await dialog.getByRole("checkbox", { name: /nothing private/ }).click();
-  await dialog.getByRole("button", { name: "Publish", exact: true }).click();
-  await expect(dialog.getByText("Your snapshot is published.")).toBeVisible({ timeout: 60_000 });
+  await expect(dialog.getByRole("radio", { name: "Community" })).toBeChecked();
+  await expect(dialog.getByRole("radio", { name: "How something works" })).toBeChecked();
+  await dialog.getByRole("radio", { name: "A Drizzle bug" }).click();
+  await dialog.getByRole("checkbox", { name: /secrets/ }).click();
+  await dialog.getByRole("button", { name: "Publish to Community", exact: true }).click();
+  await expect(dialog.getByText("Published to Community.")).toBeVisible({ timeout: 60_000 });
+  await expect(dialog.getByText(/Listed under @octocat/)).toBeVisible();
+  await expect(dialog.getByRole("radio", { name: "A Drizzle bug" })).toBeChecked();
   const shareUrl = await dialog.getByRole("textbox", { name: "Link", exact: true }).inputValue();
-
-  await dialog.getByRole("tab", { name: "Community" }).click();
-  await expect(dialog.getByRole("radio", { name: "Playground" })).toBeChecked();
-  await expect(dialog.getByRole("textbox", { name: /Description/ })).toHaveValue("Listed by the e2e spec.");
-  await dialog.getByRole("radio", { name: "Bug repro" }).click();
-  await dialog.getByRole("button", { name: "List in Community", exact: true }).click();
-  await expect(dialog.getByText("Listed · @octocat")).toBeVisible({ timeout: 60_000 });
   await page.keyboard.press("Escape");
+  await expect(page.getByRole("button", { name: "In Community", exact: true })).toBeVisible();
 
   const community = await page.context().newPage();
   await community.addInitScript(() => {
@@ -250,12 +249,12 @@ test("should list a project in Community from the Share dialog, and unlist it wi
   );
   await expect(community).toHaveURL(/\/community\?/);
 
-  await page.getByRole("button", { name: "Shared", exact: true }).click();
+  await page.getByRole("button", { name: "In Community", exact: true }).click();
   await expect(dialog.getByRole("heading", { name: "Share", exact: true })).toBeVisible();
-  await expect(dialog.getByRole("note")).toContainText("All changes are published");
-  await dialog.getByRole("tab", { name: "Community" }).click();
-  await dialog.getByRole("button", { name: "Unlist", exact: true }).click();
-  await expect(dialog.getByRole("button", { name: "List in Community", exact: true })).toBeEnabled({ timeout: 60_000 });
+  await expect(dialog.getByRole("note")).toContainText("Shows your latest code");
+  await dialog.getByRole("radio", { name: "Link only" }).click();
+  await expect(dialog.getByText(/Pick Community to let others find and fork it/)).toBeVisible({ timeout: 60_000 });
+  await expect(dialog.getByRole("radio", { name: "Link only" })).toBeChecked();
   await page.keyboard.press("Escape");
   await expect(page.getByRole("button", { name: "Shared", exact: true })).toBeVisible();
 
@@ -267,7 +266,7 @@ test("should list a project in Community from the Share dialog, and unlist it wi
   await expect(community.locator("[data-slot=share-description]")).toHaveText("Listed by the e2e spec.");
 });
 
-test("should show pushed changes in Community without listing the share again", async ({ page }) => {
+test("should show updated code in Community without listing the share again", async ({ page }) => {
   const name = makeUniqueName("Listed then pushed");
   await signInWithGitHub(page.request);
 
@@ -277,31 +276,28 @@ test("should show pushed changes in Community without listing the share again", 
 
   const dialog = page.getByRole("dialog");
   await page.getByRole("button", { name: "Share", exact: true }).click();
-  await dialog.getByRole("checkbox", { name: /nothing private/ }).click();
-  await dialog.getByRole("button", { name: "Publish", exact: true }).click();
-  await expect(dialog.getByText("Your snapshot is published.")).toBeVisible({ timeout: 60_000 });
-  await dialog.getByRole("tab", { name: "Community" }).click();
-  await dialog.getByRole("button", { name: "List in Community", exact: true }).click();
-  await expect(dialog.getByText("Listed · @octocat")).toBeVisible({ timeout: 60_000 });
+  await dialog.getByRole("checkbox", { name: /secrets/ }).click();
+  await dialog.getByRole("button", { name: "Publish to Community", exact: true }).click();
+  await expect(dialog.getByText("Published to Community.")).toBeVisible({ timeout: 60_000 });
   await page.keyboard.press("Escape");
 
   const editor = page.locator(".monaco-editor .view-lines");
   await editor.click();
   await page.keyboard.press("ControlOrMeta+End");
   await page.keyboard.insertText("\n// pushed to Community\n");
-  await page.getByRole("button", { name: "Push changes", exact: true }).click();
-  await expect(dialog.getByRole("heading", { name: "Push changes" })).toBeVisible();
+  await page.getByRole("button", { name: "Update share", exact: true }).click();
+  await expect(dialog.getByRole("heading", { name: "Update share" })).toBeVisible();
+  await expect(dialog).toContainText("The link, its embeds and its Community card show your current code.");
   await dialog.getByRole("checkbox", { name: /nothing private/ }).click();
-  await dialog.getByRole("button", { name: "Push changes", exact: true }).click();
-  await expect(page.getByRole("status").filter({ hasText: "Changes pushed to the link." })).toBeVisible({
+  await dialog.getByRole("button", { name: "Update share", exact: true }).click();
+  await expect(page.getByRole("status").filter({ hasText: "Share updated." })).toBeVisible({
     timeout: 60_000,
   });
   await expect(dialog).toBeHidden();
-  await page.getByRole("button", { name: "Shared", exact: true }).click();
-  await dialog.getByRole("tab", { name: "Community" }).click();
-  await expect(dialog.getByText("Listed · @octocat")).toBeVisible();
+  await page.getByRole("button", { name: "In Community", exact: true }).click();
+  await expect(dialog.getByText(/Listed under @octocat/)).toBeVisible();
   await page.keyboard.press("Escape");
-  await expect(page.getByRole("button", { name: "Shared", exact: true })).toHaveText("Shared");
+  await expect(page.getByRole("button", { name: "In Community", exact: true })).toHaveText("In Community");
   await expect(
     page.getByRole("contentinfo").getByRole("button", { name: "Local. Where this project is kept" }),
   ).toBeVisible();

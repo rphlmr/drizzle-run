@@ -5,7 +5,7 @@
   "title": "Reuse queries with named placeholders",
   "description": "Learn bound values, prepared query reuse, named filters and limits, and missing-value errors.",
   "topics": ["Queries"],
-  "featured": false,
+  "section": "querying",
   "order": 60,
   "dialect": "postgresql",
   "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",

@@ -5,7 +5,7 @@
   "title": "Insert validators",
   "description": "Derive a Zod schema from a table and check rows before they reach the database.",
   "topics": ["Validation"],
-  "featured": false,
+  "section": "writes",
   "order": 60,
   "dialect": "postgresql",
   "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",

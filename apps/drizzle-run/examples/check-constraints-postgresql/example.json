@@ -5,7 +5,7 @@
   "title": "Enforce product rules with CHECK (PostgreSQL)",
   "description": "Reject invalid inserts and updates in the database, compare two columns, and see why CHECK does not replace NOT NULL.",
   "topics": ["Schema"],
-  "featured": false,
+  "section": "schema",
   "order": 110,
   "dialect": "postgresql",
   "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",

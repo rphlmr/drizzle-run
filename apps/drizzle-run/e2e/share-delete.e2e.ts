@@ -7,9 +7,10 @@ import { callStore } from "./store";
 async function publishFromDialog(page: Page): Promise<string> {
   const dialog = page.getByRole("dialog");
 
-  await dialog.getByRole("checkbox", { name: /nothing private/ }).click();
-  await dialog.getByRole("button", { name: "Publish", exact: true }).click();
-  await expect(dialog.getByText("Your snapshot is published.")).toBeVisible({ timeout: 60_000 });
+  await dialog.getByRole("radio", { name: "Link only" }).click();
+  await dialog.getByRole("checkbox", { name: /secrets/ }).click();
+  await dialog.getByRole("button", { name: "Create link", exact: true }).click();
+  await expect(dialog.getByText("Your link is ready.")).toBeVisible({ timeout: 60_000 });
 
   const url = await dialog.getByRole("textbox", { name: "Link", exact: true }).inputValue();
   await page.keyboard.press("Escape");
@@ -21,8 +22,8 @@ async function pushFromDialog(page: Page) {
   const dialog = page.getByRole("dialog");
 
   await dialog.getByRole("checkbox", { name: /nothing private/ }).click();
-  await dialog.getByRole("button", { name: "Push changes", exact: true }).click();
-  await expect(page.getByRole("status").filter({ hasText: "Changes pushed to the link." })).toBeVisible({
+  await dialog.getByRole("button", { name: "Update share", exact: true }).click();
+  await expect(page.getByRole("status").filter({ hasText: "Share updated." })).toBeVisible({
     timeout: 60_000,
   });
   await expect(dialog).toBeHidden();
@@ -48,7 +49,7 @@ test("should delete a share with its recorded run and keep the local project", a
   await page.keyboard.press("ControlOrMeta+End");
   await page.keyboard.insertText("\n// second version\n");
   await expect(editor).toContainText("second version");
-  await page.getByRole("button", { name: "Push changes", exact: true }).click();
+  await page.getByRole("button", { name: "Update share", exact: true }).click();
   const dialog = page.getByRole("dialog");
   await expect(dialog.getByRole("radio")).toHaveCount(0);
   await pushFromDialog(page);
@@ -58,10 +59,9 @@ test("should delete a share with its recorded run and keep the local project", a
 
   await page.getByRole("button", { name: "Shared", exact: true }).click();
   await expect(dialog.getByRole("heading", { name: "Share", exact: true })).toBeVisible();
-  const shareActions = dialog.getByRole("button", { name: "Share actions", exact: true });
+  const stopSharing = dialog.getByRole("button", { name: "Stop sharing…", exact: true });
 
-  await shareActions.click();
-  await page.getByRole("menuitem", { name: "Stop sharing…", exact: true }).click();
+  await stopSharing.click();
   await expect(dialog.getByRole("heading", { name: "Stop sharing?" })).toBeVisible();
   await expect(dialog).toContainText("stays in My projects");
   await expect(dialog).toContainText("Copies people already made stay theirs");
@@ -69,11 +69,10 @@ test("should delete a share with its recorded run and keep the local project", a
   await expect(cancel).toBeFocused();
   await cancel.click();
   await expect(dialog.getByRole("heading", { name: "Share", exact: true })).toBeVisible();
-  await expect(shareActions).toBeFocused();
+  await expect(stopSharing).toBeFocused();
   expect((await page.request.get(apiPath)).status()).toBe(200);
 
-  await shareActions.click();
-  await page.getByRole("menuitem", { name: "Stop sharing…", exact: true }).click();
+  await stopSharing.click();
   await dialog.getByRole("button", { name: "Stop sharing", exact: true }).click();
   await expect(dialog).toBeHidden({ timeout: 30_000 });
 
@@ -95,8 +94,8 @@ test("should delete a share with its recorded run and keep the local project", a
   expect(await callStore(page, "readShareLink", stored.id)).toBeUndefined();
 
   await page.getByRole("button", { name: "Share", exact: true }).click();
-  await expect(dialog.getByRole("heading", { name: "Share a public snapshot" })).toBeVisible();
-  await expect(dialog.getByRole("button", { name: "Publish", exact: true })).toBeVisible();
+  await expect(dialog.getByRole("heading", { name: /^Share / })).toBeVisible();
+  await expect(dialog.getByRole("button", { name: "Publish to Community", exact: true })).toBeVisible();
   await dialog.getByRole("button", { name: "Cancel", exact: true }).click();
   await expect(dialog).toBeHidden();
 });

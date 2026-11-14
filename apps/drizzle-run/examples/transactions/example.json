@@ -5,7 +5,7 @@
   "title": "Transactions and savepoints",
   "description": "Transfer between accounts, roll back a savepoint, and check which writes are kept.",
   "topics": ["Transactions"],
-  "featured": false,
+  "section": "writes",
   "order": 40,
   "dialect": "postgresql",
   "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",

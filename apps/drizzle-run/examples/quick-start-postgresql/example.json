@@ -5,7 +5,7 @@
   "title": "PostgreSQL quick start",
   "description": "A users table, two seeded rows, and a first select.",
   "topics": ["Queries"],
-  "featured": false,
+  "section": "start",
   "order": 10,
   "dialect": "postgresql",
   "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",

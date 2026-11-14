@@ -45,13 +45,18 @@ import {
 } from "./contract";
 import { localReportedShares } from "./reported-shares";
 import { getCommunitySharePath } from "./share-labels";
-import { CommunityTopicSchema, DEFAULT_COMMUNITY_TOPIC, type CommunityTopic } from "./topics";
+import {
+  CommunityTopicSchema,
+  DEFAULT_COMMUNITY_TOPIC,
+  type CommunityTopic,
+} from "./topics";
 
-const DATABASES: readonly { value: "all" | CommunityDialect; label: string }[] = [
-  { value: "all", label: "Any database" },
-  { value: "postgresql", label: "PostgreSQL" },
-  { value: "sqlite", label: "SQLite" },
-];
+const DATABASES: readonly { value: "all" | CommunityDialect; label: string }[] =
+  [
+    { value: "all", label: "Any database" },
+    { value: "postgresql", label: "PostgreSQL" },
+    { value: "sqlite", label: "SQLite" },
+  ];
 
 const TOPIC_FILTERS: readonly { value: CommunityTopic; label: string }[] = [
   { value: "playground", label: "All" },
@@ -106,7 +111,10 @@ function writeQuery(query: CommunityQuery): URLSearchParams {
 }
 
 /** One page of Community shares for the filters, or why it failed; `cursor` is the cursor it was asked for. */
-export type CommunityPageData = { query: CommunityQuery; cursor: string | undefined } & (
+export type CommunityPageData = {
+  query: CommunityQuery;
+  cursor: string | undefined;
+} & (
   | { status: "loaded"; page: CommunitySharesPage }
   | { status: "failed"; error: string }
 );
@@ -116,14 +124,21 @@ export type CommunityPageData = { query: CommunityQuery; cursor: string | undefi
  *
  * The filters come from the URL; a `cursor` parameter loads the page after it, for Show more.
  */
-export async function loadCommunityPage({ request, context }: LoaderFunctionArgs): Promise<CommunityPageData> {
+export async function loadCommunityPage({
+  request,
+  context,
+}: LoaderFunctionArgs): Promise<CommunityPageData> {
   const { community } = context.get(appServicesContext);
   const { searchParams } = new URL(request.url);
   const query = readQuery(searchParams);
   const cursor = searchParams.get("cursor") ?? undefined;
 
   try {
-    const page = await community.fetchCommunityPage({ query, cursor, signal: request.signal });
+    const page = await community.fetchCommunityPage({
+      query,
+      cursor,
+      signal: request.signal,
+    });
 
     return { query, cursor, status: "loaded", page };
   } catch (cause) {
@@ -131,7 +146,10 @@ export async function loadCommunityPage({ request, context }: LoaderFunctionArgs
       query,
       cursor,
       status: "failed",
-      error: cause instanceof Error ? cause.message : "Community shares could not be loaded.",
+      error:
+        cause instanceof Error
+          ? cause.message
+          : "Community shares could not be loaded.",
     };
   }
 }
@@ -153,22 +171,32 @@ export type CommunityActionResult =
  * `report` sends the share to the moderators and remembers in this browser that it was reported. `hide_notice`
  * remembers "Don't show this again for community shares" in this browser.
  */
-export async function communityAction({ request, context }: ActionFunctionArgs): Promise<CommunityActionResult> {
+export async function communityAction({
+  request,
+  context,
+}: ActionFunctionArgs): Promise<CommunityActionResult> {
   const { community, settings } = context.get(appServicesContext);
-  const form = CommunityActionFormSchema.safeParse(Object.fromEntries(await request.formData()));
+  const form = CommunityActionFormSchema.safeParse(
+    Object.fromEntries(await request.formData()),
+  );
 
   if (!form.success) {
     return { status: "failed", error: "This share cannot be reported." };
   }
 
   if (form.data.intent === "hide_notice") {
-    await settings.writeSetting(COMMUNITY_NOTICE_SETTING, true).catch(() => undefined);
+    await settings
+      .writeSetting(COMMUNITY_NOTICE_SETTING, true)
+      .catch(() => undefined);
 
     return { status: "notice_hidden" };
   }
 
   try {
-    await community.reportCommunityShare({ shareId: form.data.shareId, signal: request.signal });
+    await community.reportCommunityShare({
+      shareId: form.data.shareId,
+      signal: request.signal,
+    });
   } catch (cause) {
     return { status: "failed", error: getErrorText(cause) };
   }
@@ -180,11 +208,18 @@ export async function communityAction({ request, context }: ActionFunctionArgs):
 
 const emptyPage: CommunitySharesPage = { shares: [], nextCursor: undefined };
 
-const shareGridClass = cn("grid grid-cols-1 gap-3");
+const shareGridClass = cn(
+  "grid grid-cols-[repeat(auto-fill,minmax(min(100%,440px),1fr))] gap-3",
+);
 
 function LoadingShares() {
   return (
-    <ul className={shareGridClass} role="list" aria-label="Loading community shares" aria-busy="true">
+    <ul
+      className={shareGridClass}
+      role="list"
+      aria-label="Loading community shares"
+      aria-busy="true"
+    >
       {Array.from({ length: 6 }, (_, index) => (
         <li key={index}>
           <Skeleton className="h-35.5 w-full rounded-lg" />
@@ -213,25 +248,45 @@ export function CommunityPage() {
   const navigate = useNavigate();
   const revalidator = useRevalidator();
   const more = useFetcher<typeof loadCommunityPage>();
-  const pendingList = navigation.state === "loading" && navigation.location.pathname === location.pathname;
-  const leavingPage = navigation.state !== "idle" && navigation.location.pathname !== location.pathname;
-  const query = readQuery(new URLSearchParams(pendingList ? navigation.location.search : location.search));
+  const pendingList =
+    navigation.state === "loading" &&
+    navigation.location.pathname === location.pathname;
+  const leavingPage =
+    navigation.state !== "idle" &&
+    navigation.location.pathname !== location.pathname;
+  const query = readQuery(
+    new URLSearchParams(
+      pendingList ? navigation.location.search : location.search,
+    ),
+  );
   const moreData =
-    more.data !== undefined && writeQuery(more.data.query).toString() === writeQuery(loaded.query).toString()
+    more.data !== undefined &&
+    writeQuery(more.data.query).toString() ===
+      writeQuery(loaded.query).toString()
       ? more.data
       : undefined;
   const nextPage =
     moreData?.status === "loaded" && moreData.cursor !== undefined
       ? { cursor: moreData.cursor, page: moreData.page }
       : undefined;
-  const { shares, nextCursor } = useAppendedPages(loaded.status === "loaded" ? loaded.page : emptyPage, nextPage);
+  const { shares, nextCursor } = useAppendedPages(
+    loaded.status === "loaded" ? loaded.page : emptyPage,
+    nextPage,
+  );
   const loadingMore = more.state === "loading";
   const moreError =
-    !loadingMore && moreData?.status === "failed" && moreData.cursor === nextCursor ? moreData.error : "";
+    !loadingMore &&
+    moreData?.status === "failed" &&
+    moreData.cursor === nextCursor
+      ? moreData.error
+      : "";
   const retrying = revalidator.state === "loading";
   const searchInput = useRef<HTMLInputElement>(null);
   const searchPause = useRef<ReturnType<typeof setTimeout>>(undefined);
-  const filtered = query.search.trim() !== "" || query.topic !== DEFAULT_COMMUNITY_TOPIC || query.dialect !== undefined;
+  const filtered =
+    query.search.trim() !== "" ||
+    query.topic !== DEFAULT_COMMUNITY_TOPIC ||
+    query.dialect !== undefined;
 
   useEffect(() => () => clearTimeout(searchPause.current), []);
 
@@ -256,7 +311,10 @@ export function CommunityPage() {
 
     const search = searchInput.current?.value ?? query.search;
 
-    void navigate({ search: writeQuery({ ...query, search, ...next }).toString() }, { replace: true });
+    void navigate(
+      { search: writeQuery({ ...query, search, ...next }).toString() },
+      { replace: true },
+    );
   };
 
   const searchAfterPause = () => {
@@ -295,17 +353,24 @@ export function CommunityPage() {
       <SiteMain className="gap-4.5 pt-7">
         <div className="flex items-end gap-6 max-phone:flex-col max-phone:items-start max-phone:gap-2">
           <div className="flex flex-1 flex-col gap-2">
-            <h1 className="font-display text-[24px] font-semibold tracking-[-0.03em]">Community shares</h1>
-            <p className="text-[13px] text-muted">Explore what others are building with Drizzle.</p>
+            <h1 className="font-display text-[24px] font-semibold tracking-[-0.03em]">
+              Community shares
+            </h1>
+            <p className="text-[13px] text-muted">
+              Explore what others are building with Drizzle.
+            </p>
           </div>
           <p className="max-w-60 text-right text-[12px]/[1.5] text-muted max-phone:text-left">
-            {signedIn ? "Add yours: share a project" : "Add yours: sign in with GitHub, share a project"}
-            <br className="max-phone:hidden" /> and tick <b className="font-semibold text-text">List in Community</b>.
+            {signedIn
+              ? "Add yours: share a project"
+              : "Add yours: sign in with GitHub, share a project"}
+            <br className="max-phone:hidden" /> and pick{" "}
+            <b className="font-semibold text-text">Community</b>.
           </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          <div className="relative min-w-40 flex-1 max-phone:basis-full">
+          <div className="relative min-w-40 flex-1 sm:max-w-90 max-phone:basis-full">
             <SearchIcon
               className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted"
               aria-hidden="true"
@@ -346,7 +411,12 @@ export function CommunityPage() {
           />
           <DropdownMenu>
             <DropdownMenuTrigger
-              render={<Button variant="outline" className="h-9 rounded-md px-3 font-normal max-phone:h-touch" />}
+              render={
+                <Button
+                  variant="outline"
+                  className="h-9 rounded-md px-3 font-normal max-phone:h-touch"
+                />
+              }
               aria-label={`Sort: ${SORTS.find((sort) => sort.value === query.sort)?.label ?? ""}`}
             >
               {SORTS.find((sort) => sort.value === query.sort)?.label}
@@ -356,7 +426,9 @@ export function CommunityPage() {
               <DropdownMenuRadioGroup
                 value={query.sort}
                 onValueChange={(value) => {
-                  const sort = SORTS.find((item) => item.value === value)?.value;
+                  const sort = SORTS.find(
+                    (item) => item.value === value,
+                  )?.value;
 
                   if (sort !== undefined) {
                     change({ sort });
@@ -376,7 +448,10 @@ export function CommunityPage() {
         {loaded.status === "failed" && !retrying && !pendingList ? (
           <div className="my-6 flex flex-col items-start gap-3">
             <FieldError>{loaded.error}</FieldError>
-            <Button variant="outline" onClick={() => void revalidator.revalidate()}>
+            <Button
+              variant="outline"
+              onClick={() => void revalidator.revalidate()}
+            >
               Try again
             </Button>
           </div>
@@ -394,15 +469,20 @@ export function CommunityPage() {
             ) : (
               <p>
                 {signedIn
-                  ? "No shares yet. Share a project and tick List in Community to add the first one."
-                  : "No shares yet. Sign in with GitHub, share a project and tick List in Community to add the first one."}
+                  ? "No shares yet. Share a project and pick Community to add the first one."
+                  : "No shares yet. Sign in with GitHub, share a project and pick Community to add the first one."}
               </p>
             )}
           </div>
         ) : (
           <>
             {/* role="list" because Safari drops list semantics from a list without bullets. */}
-            <ul className={shareGridClass} role="list" aria-label="Community shares" aria-busy={pendingList}>
+            <ul
+              className={shareGridClass}
+              role="list"
+              aria-label="Community shares"
+              aria-busy={pendingList}
+            >
               {shares.map((share) => (
                 <li key={share.id} className="flex min-w-0">
                   <CommunityCard share={share} onOpen={openShare} />
@@ -413,7 +493,11 @@ export function CommunityPage() {
               <div className="flex flex-col items-center gap-2">
                 {moreError && <FieldError>{moreError}</FieldError>}
                 {nextCursor !== undefined && (
-                  <Button variant="outline" disabled={loadingMore} onClick={showMore}>
+                  <Button
+                    variant="outline"
+                    disabled={loadingMore}
+                    onClick={showMore}
+                  >
                     {loadingMore ? "Loading…" : "Show more shares"}
                   </Button>
                 )}

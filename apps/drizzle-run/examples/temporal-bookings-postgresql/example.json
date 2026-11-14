@@ -5,7 +5,7 @@
   "title": "Use Temporal dates in booking queries (PostgreSQL)",
   "description": "A complete PlainDate column, typed inserts and filters, leap-day arithmetic, and nullable values.",
   "topics": ["Schema"],
-  "featured": false,
+  "section": "schema",
   "order": 132,
   "dialect": "postgresql",
   "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",

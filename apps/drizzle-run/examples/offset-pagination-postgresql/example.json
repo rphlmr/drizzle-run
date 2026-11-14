@@ -5,7 +5,7 @@
   "title": "Jump to numbered pages (PostgreSQL)",
   "description": "Use limit and offset with a unique tie-breaker and a matching index.",
   "topics": ["Queries", "Pagination"],
-  "featured": false,
+  "section": "pagination",
   "order": 122,
   "dialect": "postgresql",
   "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
