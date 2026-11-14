@@ -936,7 +936,7 @@ function CommunityVisibility({ auth, lister }: { auth: Auth; lister: CommunityLi
   const owner = auth.user === null ? "your GitHub name" : `@${auth.user.login}`;
 
   return (
-    <div className="flex flex-col gap-2">
+    <div aria-busy={busy} className={cn("flex flex-col gap-2", busy && "[&_[data-disabled]]:opacity-100")}>
       <span id={labelId} className={sectionLabelClass}>
         Who can see it
       </span>
@@ -975,8 +975,6 @@ function CommunityVisibility({ auth, lister }: { auth: Auth; lister: CommunityLi
             </Button>
           </div>
         )
-      ) : busy ? (
-        <FieldNote live>{saving ? "Listing in Community…" : "Removing from Community…"}</FieldNote>
       ) : record.listing ? (
         <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
           <p className="text-[12.5px] text-muted">
@@ -998,6 +996,11 @@ function CommunityVisibility({ auth, lister }: { auth: Auth; lister: CommunityLi
         <FieldNote>
           Only people you send the link to can open it. Pick Community to let others find and fork it.
         </FieldNote>
+      )}
+      {busy && (
+        <span role="status" className="sr-only">
+          {saving ? "Listing in Community…" : "Removing from Community…"}
+        </span>
       )}
       {error && <FieldError>{error}</FieldError>}
     </div>
