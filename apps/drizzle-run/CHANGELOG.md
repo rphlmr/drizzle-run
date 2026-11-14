@@ -1,5 +1,12 @@
 # @drizzle-run/app
 
+## 0.1.0
+
+### Minor Changes
+
+- 81438d5: Rebuild the examples gallery around sections. PostgreSQL and SQLite versions of the same example share one card, a card opens its example directly, and Quick look shows the steps and query without leaving the page. Search matches titles, steps and code, guides in progress come back first, and Back returns to the same scroll position.
+- 81438d5: Simplify sharing around one question, who can see it. A first share starts in Community and one click publishes and lists it, or Link only makes a link to send. The shared link drops its tabs: the link, the same Community or Link only choice, whether it shows the latest code, the embed code on demand, and Stop sharing in view. Push changes is now Update share, and the header button says In Community or Shared.
+
 ## 0.0.2
 
 ### Patch Changes
