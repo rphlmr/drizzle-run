@@ -13,9 +13,7 @@ const navLinkClass = ({ isActive }: { isActive: boolean }) =>
   cn(
     "inline-flex items-center justify-center gap-2 rounded-base px-3 py-1.75 text-[13px] font-medium whitespace-nowrap no-underline transition-colors",
     "max-phone:flex-1 max-phone:rounded-[9px] max-phone:py-2.5 max-phone:text-center max-phone:text-[13.5px]",
-    isActive
-      ? "bg-surface-2 text-text"
-      : "text-muted hover:bg-surface-2 hover:text-text",
+    isActive ? "bg-surface-2 text-text" : "text-muted hover:bg-surface-2 hover:text-text",
   );
 
 const NAV = [
@@ -56,13 +54,7 @@ function SiteNav({ phone }: { phone: boolean }) {
 }
 
 /** The scrolling page column under the site header, then the site footer: My projects and the gallery. */
-export function SiteMain({
-  className,
-  children,
-}: {
-  className?: string;
-  children: ReactNode;
-}) {
+export function SiteMain({ className, children }: { className?: string; children: ReactNode }) {
   const phone = useMediaQuery(PHONE_QUERY);
 
   return (

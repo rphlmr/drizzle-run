@@ -1,11 +1,5 @@
 import { SearchIcon, XIcon } from "lucide-react";
-import {
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-  type ReactNode,
-} from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import {
   Link,
   NavigationType,
@@ -28,12 +22,7 @@ import { SiteMain } from "../shell/site-header";
 import { ToggleGroup } from "../ui/toggle-group";
 import { PHONE_QUERY, useMediaQuery } from "../ui/use-media-query";
 import { useWorkspace } from "../workspace/context";
-import {
-  DOCS_ORIGIN,
-  EXAMPLE_SECTIONS,
-  listExamples,
-  type ExampleSectionId,
-} from "./catalog";
+import { DOCS_ORIGIN, EXAMPLE_SECTIONS, listExamples, type ExampleSectionId } from "./catalog";
 import { EXAMPLE_COLLECTIONS, findExampleCollection } from "./collections";
 import { ExampleCard } from "./example-card";
 import { ExamplePreview } from "./example-preview";
@@ -48,12 +37,7 @@ import {
   type ExampleFamily,
   type GalleryDialect,
 } from "./families";
-import {
-  getVersionProgress,
-  listPickUp,
-  searchGallery,
-  type GalleryProgress,
-} from "./gallery-model";
+import { getVersionProgress, listPickUp, searchGallery, type GalleryProgress } from "./gallery-model";
 import { readExampleViews } from "./progress";
 
 /** The database the gallery opens examples on, remembered in this browser. */
@@ -125,9 +109,7 @@ function readView(params: URLSearchParams): GalleryView {
     return { kind: "search", query };
   }
 
-  const section = EXAMPLE_SECTIONS.find(
-    ({ id }) => id === params.get("section"),
-  );
+  const section = EXAMPLE_SECTIONS.find(({ id }) => id === params.get("section"));
 
   if (section) {
     return { kind: "section", section: section.id };
@@ -135,9 +117,7 @@ function readView(params: URLSearchParams): GalleryView {
 
   const collection = findExampleCollection(params.get("collection") ?? "");
 
-  return collection
-    ? { kind: "collection", id: collection.id }
-    : { kind: "overview" };
+  return collection ? { kind: "collection", id: collection.id } : { kind: "overview" };
 }
 
 let documentRendered = false;
@@ -156,9 +136,7 @@ function isFreshDocument(): boolean {
   documentRendered = true;
   const [entry] = performance.getEntriesByType("navigation");
 
-  return (
-    entry instanceof PerformanceNavigationTiming && entry.type === "navigate"
-  );
+  return entry instanceof PerformanceNavigationTiming && entry.type === "navigate";
 }
 
 /**
@@ -166,10 +144,7 @@ function isFreshDocument(): boolean {
  *
  * The site scrolls its `main` element rather than the window, so the router's own restoration does not reach it.
  */
-function useGalleryScroll(
-  anchor: React.RefObject<HTMLElement | null>,
-  viewKey: string,
-) {
+function useGalleryScroll(anchor: React.RefObject<HTMLElement | null>, viewKey: string) {
   const location = useLocation();
   const navigationType = useNavigationType();
   const storageKey = `${SCROLL_KEY}${location.key}`;
@@ -206,10 +181,7 @@ function useGalleryScroll(
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
         try {
-          sessionStorage.setItem(
-            storageKey,
-            String(Math.round(main.scrollTop)),
-          );
+          sessionStorage.setItem(storageKey, String(Math.round(main.scrollTop)));
         } catch {
           // Without session storage, Back opens the gallery at the top.
         }
@@ -276,9 +248,7 @@ export function ExampleGallery() {
 
   const changeDialect = (next: GalleryDialect) => {
     setDialect(next);
-    void settings
-      .writeSetting(GALLERY_DIALECT_SETTING, next)
-      .catch(() => undefined);
+    void settings.writeSetting(GALLERY_DIALECT_SETTING, next).catch(() => undefined);
   };
 
   const setSearch = (query: string) => {
@@ -291,10 +261,7 @@ export function ExampleGallery() {
     setParams(next, { replace: true, preventScrollReset: true });
   };
 
-  const card = (
-    family: ExampleFamily,
-    extra: Partial<Parameters<typeof ExampleCard>[0]> = {},
-  ) => {
+  const card = (family: ExampleFamily, extra: Partial<Parameters<typeof ExampleCard>[0]> = {}) => {
     const version = extra.version ?? pickFamilyVersion(family, dialect);
     const onlyOn = familyRuns(family, dialect)
       ? undefined
@@ -314,30 +281,21 @@ export function ExampleGallery() {
     );
   };
 
-  const sectionFamilies = (section: ExampleSectionId) =>
-    families.filter((family) => family.section === section);
+  const sectionFamilies = (section: ExampleSectionId) => families.filter((family) => family.section === section);
 
   let content: ReactNode;
 
   if (view.kind === "search") {
     const results = searchGallery(families, view.query, dialect);
-    const count =
-      results.families.length + results.steps.length + results.code.length;
+    const count = results.families.length + results.steps.length + results.code.length;
 
     content =
       count === 0 ? (
         <div className="flex flex-col items-start gap-2 rounded-lg border border-dashed border-card-border bg-surface p-6 text-[13px]">
-          <p className="font-semibold">
-            Nothing for “{view.query.trim()}” yet.
-          </p>
+          <p className="font-semibold">Nothing for “{view.query.trim()}” yet.</p>
           <p className="text-muted">No example uses it so far.</p>
           <p className="flex flex-wrap gap-x-3 gap-y-1">
-            <a
-              href={DOCS_ORIGIN}
-              target="_blank"
-              rel="noreferrer"
-              className="text-accent-text underline"
-            >
+            <a href={DOCS_ORIGIN} target="_blank" rel="noreferrer" className="text-accent-text underline">
               Browse the Drizzle docs ↗
             </a>
             <a
@@ -349,26 +307,18 @@ export function ExampleGallery() {
               Request an example ↗
             </a>
           </p>
-          <Button
-            variant="outline"
-            size="sm"
-            className="mt-2"
-            onClick={() => setSearch("")}
-          >
+          <Button variant="outline" size="sm" className="mt-2" onClick={() => setSearch("")}>
             Clear search
           </Button>
         </div>
       ) : (
         <>
           <output className="text-[13px] text-muted" aria-live="polite">
-            {count} {count === 1 ? "result" : "results"} for “
-            {view.query.trim()}”
+            {count} {count === 1 ? "result" : "results"} for “{view.query.trim()}”
           </output>
           {results.families.length > 0 && (
             <GallerySection title="Titles and descriptions">
-              <CardGrid label={"Matching examples"}>
-                {results.families.map((family) => card(family))}
-              </CardGrid>
+              <CardGrid label={"Matching examples"}>{results.families.map((family) => card(family))}</CardGrid>
             </GallerySection>
           )}
           {results.steps.length > 0 && (
@@ -397,9 +347,7 @@ export function ExampleGallery() {
                     detail: (
                       <p className="flex min-w-0 flex-col gap-0.5 text-[12px] text-soft">
                         <span className="text-[11px] text-muted">{file}</span>
-                        <code className="truncate font-mono text-[11.5px]">
-                          {line}
-                        </code>
+                        <code className="truncate font-mono text-[11.5px]">{line}</code>
                       </p>
                     ),
                   }),
@@ -410,26 +358,18 @@ export function ExampleGallery() {
         </>
       );
   } else if (view.kind === "section") {
-    const section =
-      EXAMPLE_SECTIONS.find(({ id }) => id === view.section) ??
-      EXAMPLE_SECTIONS[0];
+    const section = EXAMPLE_SECTIONS.find(({ id }) => id === view.section) ?? EXAMPLE_SECTIONS[0];
 
     content = (
       <>
         <Breadcrumb current={section.label} />
-        <h2 className="font-display text-[20px] font-semibold tracking-[-0.02em]">
-          {section.label}
-        </h2>
-        <CardGrid label={section.label}>
-          {sectionFamilies(section.id).map((family) => card(family))}
-        </CardGrid>
+        <h2 className="font-display text-[20px] font-semibold tracking-[-0.02em]">{section.label}</h2>
+        <CardGrid label={section.label}>{sectionFamilies(section.id).map((family) => card(family))}</CardGrid>
       </>
     );
   } else if (view.kind === "collection") {
     const collection = findExampleCollection(view.id) ?? EXAMPLE_COLLECTIONS[0];
-    const members = collection.families.flatMap(
-      (key) => findExampleFamily(key, families) ?? [],
-    );
+    const members = collection.families.flatMap((key) => findExampleFamily(key, families) ?? []);
 
     content = (
       <>
@@ -438,9 +378,7 @@ export function ExampleGallery() {
           <p className="text-[11px] font-medium tracking-[0.02em] text-muted uppercase">
             {collection.kind} · {members.length} in order
           </p>
-          <h2 className="font-display text-[20px] font-semibold tracking-[-0.02em]">
-            {collection.title}
-          </h2>
+          <h2 className="font-display text-[20px] font-semibold tracking-[-0.02em]">{collection.title}</h2>
         </div>
         <ol className="flex flex-col gap-2.5" aria-label={collection.title}>
           {members.map((family, index) => {
@@ -448,10 +386,7 @@ export function ExampleGallery() {
             const done = getVersionProgress(version, saved) === "completed";
 
             return (
-              <li
-                key={family.key}
-                className="grid grid-cols-[24px_minmax(0,1fr)] items-start gap-2.5"
-              >
+              <li key={family.key} className="grid grid-cols-[24px_minmax(0,1fr)] items-start gap-2.5">
                 <span
                   className={cn(
                     "mt-3.5 flex size-6 items-center justify-center rounded-full border border-card-border bg-surface text-[11px] font-semibold text-muted",
@@ -483,15 +418,9 @@ export function ExampleGallery() {
         <GallerySection title="Collections" note="Short sets, in order">
           <CardGrid label={"Collections"}>
             {EXAMPLE_COLLECTIONS.map((collection) => {
-              const members = collection.families.flatMap(
-                (key) => findExampleFamily(key, families) ?? [],
-              );
+              const members = collection.families.flatMap((key) => findExampleFamily(key, families) ?? []);
               const done = members.filter(
-                (family) =>
-                  getVersionProgress(
-                    pickFamilyVersion(family, dialect),
-                    saved,
-                  ) === "completed",
+                (family) => getVersionProgress(pickFamilyVersion(family, dialect), saved) === "completed",
               ).length;
 
               return (
@@ -511,14 +440,7 @@ export function ExampleGallery() {
                     </Link>
                   </h3>
                   <p className="line-clamp-2 text-[12.5px]/[1.5] text-soft">
-                    {members
-                      .map((family) =>
-                        getFamilyTitle(
-                          family,
-                          pickFamilyVersion(family, dialect),
-                        ),
-                      )
-                      .join(" → ")}
+                    {members.map((family) => getFamilyTitle(family, pickFamilyVersion(family, dialect))).join(" → ")}
                   </p>
                   {done > 0 && (
                     <span className="mt-auto w-fit rounded-[4px] bg-ok-bg px-1.75 py-px text-[11px] font-semibold text-ok">
@@ -551,9 +473,7 @@ export function ExampleGallery() {
                 }
               >
                 <CardGrid label={section.label}>
-                  {items
-                    .slice(0, OVERVIEW_PER_SECTION)
-                    .map((family) => card(family))}
+                  {items.slice(0, OVERVIEW_PER_SECTION).map((family) => card(family))}
                 </CardGrid>
               </GallerySection>
             )
@@ -563,20 +483,15 @@ export function ExampleGallery() {
     );
   }
 
-  const quickLookFamily =
-    quickLook === null ? undefined : findExampleFamily(quickLook, families);
+  const quickLookFamily = quickLook === null ? undefined : findExampleFamily(quickLook, families);
   const quickLookVersion =
-    quickLookFamily?.versions.find((version) => version.slug === quickLook) ??
-    quickLookFamily?.versions[0];
+    quickLookFamily?.versions.find((version) => version.slug === quickLook) ?? quickLookFamily?.versions[0];
 
   return (
     <>
       {workspace.banners}
       <SiteMain className="gap-4 pt-7">
-        <div
-          ref={anchor}
-          className="flex flex-wrap items-center gap-x-4 gap-y-2"
-        >
+        <div ref={anchor} className="flex flex-wrap items-center gap-x-4 gap-y-2">
           <h1 className="flex-1 font-display text-[24px] font-semibold tracking-[-0.03em] whitespace-nowrap">
             Examples &amp; guides
           </h1>
@@ -589,19 +504,12 @@ export function ExampleGallery() {
               ref={searchInput}
               className="h-10 w-full rounded-md border border-border bg-surface pr-16 pl-9 text-[13px] text-text focus-visible:border-accent-text focus-visible:outline-transparent max-phone:h-touch"
               type="search"
-              placeholder={
-                phone
-                  ? "Search a task or an API"
-                  : "Search a task or an API: cursor, leftJoin, jsonb_set…"
-              }
+              placeholder={phone ? "Search a task or an API" : "Search a task or an API: cursor, leftJoin, jsonb_set…"}
               aria-label="Search examples and guides"
               value={view.kind === "search" ? view.query : ""}
               onChange={(event) => setSearch(event.target.value)}
               onKeyDown={(event) => {
-                if (
-                  event.key === "Escape" &&
-                  event.currentTarget.value !== ""
-                ) {
+                if (event.key === "Escape" && event.currentTarget.value !== "") {
                   event.preventDefault();
                   setSearch("");
                 }
@@ -612,9 +520,7 @@ export function ExampleGallery() {
             </kbd>
           </div>
           <span className="flex items-center gap-2 max-phone:w-full">
-            <span className="text-[13px] text-muted max-phone:hidden">
-              I use
-            </span>
+            <span className="text-[13px] text-muted max-phone:hidden">I use</span>
             <ToggleGroup
               label="Database"
               options={GALLERY_DIALECTS}
@@ -625,11 +531,7 @@ export function ExampleGallery() {
           </span>
         </div>
         <div className="grid grid-cols-[180px_minmax(0,1fr)] items-start gap-8 max-phone:grid-cols-1 max-phone:gap-3">
-          <SectionNav
-            view={view}
-            counts={(section) => sectionFamilies(section).length}
-            total={families.length}
-          />
+          <SectionNav view={view} counts={(section) => sectionFamilies(section).length} total={families.length} />
           <div className="flex min-w-0 flex-col gap-6">{content}</div>
         </div>
       </SiteMain>
@@ -696,13 +598,7 @@ export function ExampleGallery() {
 }
 
 /** Cards in as many columns as fit. */
-function CardGrid({
-  label,
-  children,
-}: {
-  label: string;
-  children: readonly ReactNode[];
-}) {
+function CardGrid({ label, children }: { label: string; children: readonly ReactNode[] }) {
   return (
     <ul
       className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,220px),1fr))] gap-2.5"
@@ -736,14 +632,8 @@ function GallerySection({
     <section className="flex flex-col gap-2.5" aria-label={title}>
       <div className="flex items-baseline gap-2">
         <h2 className="text-[15px] font-semibold">{title}</h2>
-        {count !== undefined && (
-          <span className="text-[13px] text-muted">{count}</span>
-        )}
-        {note && (
-          <span className="text-[13px] text-muted max-phone:hidden">
-            {note}
-          </span>
-        )}
+        {count !== undefined && <span className="text-[13px] text-muted">{count}</span>}
+        {note && <span className="text-[13px] text-muted max-phone:hidden">{note}</span>}
         {more && <span className="ml-auto">{more}</span>}
       </div>
       {children}
@@ -754,10 +644,7 @@ function GallerySection({
 function Breadcrumb({ current }: { current: string }) {
   return (
     <nav aria-label="Breadcrumb" className="text-[12px] text-muted">
-      <Link
-        to="?"
-        className="text-muted no-underline hover:text-text hover:underline"
-      >
+      <Link to="?" className="text-muted no-underline hover:text-text hover:underline">
         Examples &amp; guides
       </Link>{" "}
       / <span aria-current="page">{current}</span>
@@ -809,12 +696,7 @@ function SectionNav({
           )}
         >
           {item.label}
-          <span
-            className={cn(
-              "text-[12px] text-muted",
-              item.active && "max-phone:text-segment-fg/70",
-            )}
-          >
+          <span className={cn("text-[12px] text-muted", item.active && "max-phone:text-segment-fg/70")}>
             {item.count}
           </span>
         </Link>
