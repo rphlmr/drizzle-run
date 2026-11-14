@@ -100,7 +100,7 @@ test("should show the signed-in account's shares in the My shares tab, newest fi
   await page.goto("/projects/shares");
   await table.getByRole("button", { name: "Listed share", exact: true }).click();
   await expect(page).toHaveURL(/\/p\//);
-  await expect(page.getByRole("button", { name: "Shared", exact: true })).toBeVisible({ timeout: 60_000 });
+  await expect(page.getByRole("button", { name: "In Community", exact: true })).toBeVisible({ timeout: 60_000 });
   await page.goBack();
   await expect(table.getByRole("link", { name: "Listed share", exact: true })).toHaveAttribute("href", /^\/p\//);
 });
@@ -116,14 +116,11 @@ test("should open, unlist and stop a share from My shares, and forget its link i
 
   const dialog = page.getByRole("dialog");
   await page.getByRole("button", { name: "Share", exact: true }).click();
-  await dialog.getByRole("checkbox", { name: /nothing private/ }).click();
-  await dialog.getByRole("button", { name: "Publish", exact: true }).click();
-  await expect(dialog.getByText("Your snapshot is published.")).toBeVisible({ timeout: 60_000 });
-  await dialog.getByRole("tab", { name: "Community" }).click();
-  await dialog.getByRole("button", { name: "List in Community", exact: true }).click();
-  await expect(dialog.getByText(/^Listed · /)).toBeVisible({ timeout: 60_000 });
+  await dialog.getByRole("checkbox", { name: /secrets/ }).click();
+  await dialog.getByRole("button", { name: "Publish to Community", exact: true }).click();
+  await expect(dialog.getByText("Published to Community.")).toBeVisible({ timeout: 60_000 });
   await page.keyboard.press("Escape");
-  await expect(page.getByRole("button", { name: "Shared", exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "In Community", exact: true })).toBeVisible();
 
   await page.goto("/projects");
   await page.getByRole("checkbox", { name: `Select ${name}` }).click();
@@ -175,17 +172,17 @@ test("should edit a share from My shares in a browser without its project, and p
   await page.getByRole("menuitem", { name: "Edit in My projects" }).click();
   await expect(page).toHaveURL(/\/p\//);
   await expect(page.getByRole("button", { name: "Run", exact: true })).toBeEnabled({ timeout: 120_000 });
-  await expect(page.getByRole("button", { name: "Shared", exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "In Community", exact: true })).toBeVisible();
 
   const editor = page.locator(".monaco-editor .view-lines");
   await editor.click();
   await page.keyboard.press("ControlOrMeta+End");
   await page.keyboard.insertText("\n// pushed from My shares\n");
   const dialog = page.getByRole("dialog");
-  await page.getByRole("button", { name: "Push changes", exact: true }).click();
+  await page.getByRole("button", { name: "Update share", exact: true }).click();
   await dialog.getByRole("checkbox", { name: /nothing private/ }).click();
-  await dialog.getByRole("button", { name: "Push changes", exact: true }).click();
-  await expect(page.getByRole("status").filter({ hasText: "Changes pushed to the link." })).toBeVisible({
+  await dialog.getByRole("button", { name: "Update share", exact: true }).click();
+  await expect(page.getByRole("status").filter({ hasText: "Share updated." })).toBeVisible({
     timeout: 60_000,
   });
   await expect(dialog).toBeHidden();

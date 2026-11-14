@@ -45,6 +45,21 @@ export const EXAMPLE_TOPICS = [
 /** A topic an example is filed under. */
 export type ExampleTopic = (typeof EXAMPLE_TOPICS)[number];
 
+/** The gallery's sections, in the order it shows them: each example sits in exactly one. */
+export const EXAMPLE_SECTIONS = [
+  { id: "start", label: "Start here" },
+  { id: "querying", label: "Querying" },
+  { id: "pagination", label: "Paginate" },
+  { id: "json", label: "Work with JSON" },
+  { id: "relational-queries", label: "Relational queries" },
+  { id: "helpers", label: "Typed helpers" },
+  { id: "schema", label: "Schema & dates" },
+  { id: "writes", label: "Writes & validation" },
+  { id: "integrations", label: "Integrations" },
+] as const;
+/** The gallery section an example sits in. */
+export type ExampleSectionId = (typeof EXAMPLE_SECTIONS)[number]["id"];
+
 /** One version of an official example, parsed from its folder under `examples/`. */
 export interface OfficialExample extends CatalogVersion {
   /** Its folder under `examples/`, where its files and recording live. */
@@ -52,7 +67,7 @@ export interface OfficialExample extends CatalogVersion {
   title: string;
   description: string;
   topics: readonly ExampleTopic[];
-  featured: boolean;
+  section: ExampleSectionId;
   order: number;
   links: readonly ExampleLink[];
   /** One version, or both sides of a side-by-side example. */
@@ -81,7 +96,7 @@ const METADATA_FIELDS = new Set([
   "title",
   "description",
   "topics",
-  "featured",
+  "section",
   "order",
   "dialect",
   "releasePair",
@@ -93,6 +108,7 @@ const METADATA_FIELDS = new Set([
 const PAIR_ID = /^orm-([^_]+)__kit-([^_]+)$/;
 
 const ExampleTopicSchema = z.enum(EXAMPLE_TOPICS);
+const ExampleSectionSchema = z.enum(EXAMPLE_SECTIONS.map(({ id }) => id));
 const ExampleDialectSchema = z.enum(DIALECT_IDS);
 const ExampleGuestFlavorSchema = z.enum(GUEST_FLAVORS);
 
@@ -222,7 +238,12 @@ export function parseExample(source: ExampleSource): OfficialExample {
     metadata.topics,
     `topics must be a non-empty list of unique values from ${EXAMPLE_TOPICS.join(", ")}.`,
   );
-  const featured = readExampleField(folder, z.boolean(), metadata.featured, "featured must be true or false.");
+  const section = readExampleField(
+    folder,
+    ExampleSectionSchema,
+    metadata.section,
+    `section must be one of ${EXAMPLE_SECTIONS.map((item) => item.id).join(", ")}.`,
+  );
   const order = readExampleField(folder, IntegerSchema, metadata.order, "order must be an integer.");
   const dialect =
     metadata.dialect === undefined
@@ -340,7 +361,7 @@ export function parseExample(source: ExampleSource): OfficialExample {
     title,
     description,
     topics,
-    featured,
+    section,
     order,
     links: links.map((link) => parseLink(folder, link)),
     manifest,
@@ -541,19 +562,6 @@ export function listExamples(): readonly OfficialExample[] {
 /** The official example shown at this permanent slug, if there is one. */
 export function findExample(slug: string): OfficialExample | undefined {
   return listExamples().find((example) => example.slug === slug);
-}
-
-/** Topics that at least one example uses, in the fixed topic order. */
-export function listExampleTopics(examples: readonly OfficialExample[] = listExamples()): ExampleTopic[] {
-  return EXAMPLE_TOPICS.filter((topic) => examples.some((example) => example.topics.includes(topic)));
-}
-
-/** Guided examples first, then plain ones, as the gallery's Kind filter names them. */
-export type ExampleKind = "guided" | "example";
-
-/** Whether the gallery files an example as guided or plain. */
-export function getExampleKind(example: OfficialExample): ExampleKind {
-  return example.guide ? "guided" : "example";
 }
 
 /** The pair by its ORM version, as the gallery shows it: "orm 0.45.4", titled "ORM 0.45.4 with Kit 0.31.11". */

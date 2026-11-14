@@ -106,10 +106,10 @@ function writeQuery(query: CommunityQuery): URLSearchParams {
 }
 
 /** One page of Community shares for the filters, or why it failed; `cursor` is the cursor it was asked for. */
-export type CommunityPageData = { query: CommunityQuery; cursor: string | undefined } & (
-  | { status: "loaded"; page: CommunitySharesPage }
-  | { status: "failed"; error: string }
-);
+export type CommunityPageData = {
+  query: CommunityQuery;
+  cursor: string | undefined;
+} & ({ status: "loaded"; page: CommunitySharesPage } | { status: "failed"; error: string });
 
 /**
  * Load one page of the Community list
@@ -123,7 +123,11 @@ export async function loadCommunityPage({ request, context }: LoaderFunctionArgs
   const cursor = searchParams.get("cursor") ?? undefined;
 
   try {
-    const page = await community.fetchCommunityPage({ query, cursor, signal: request.signal });
+    const page = await community.fetchCommunityPage({
+      query,
+      cursor,
+      signal: request.signal,
+    });
 
     return { query, cursor, status: "loaded", page };
   } catch (cause) {
@@ -168,7 +172,10 @@ export async function communityAction({ request, context }: ActionFunctionArgs):
   }
 
   try {
-    await community.reportCommunityShare({ shareId: form.data.shareId, signal: request.signal });
+    await community.reportCommunityShare({
+      shareId: form.data.shareId,
+      signal: request.signal,
+    });
   } catch (cause) {
     return { status: "failed", error: getErrorText(cause) };
   }
@@ -180,7 +187,7 @@ export async function communityAction({ request, context }: ActionFunctionArgs):
 
 const emptyPage: CommunitySharesPage = { shares: [], nextCursor: undefined };
 
-const shareGridClass = cn("grid grid-cols-1 gap-3");
+const shareGridClass = cn("grid grid-cols-[repeat(auto-fill,minmax(min(100%,440px),1fr))] gap-3");
 
 function LoadingShares() {
   return (
@@ -300,12 +307,12 @@ export function CommunityPage() {
           </div>
           <p className="max-w-60 text-right text-[12px]/[1.5] text-muted max-phone:text-left">
             {signedIn ? "Add yours: share a project" : "Add yours: sign in with GitHub, share a project"}
-            <br className="max-phone:hidden" /> and tick <b className="font-semibold text-text">List in Community</b>.
+            <br className="max-phone:hidden" /> and pick <b className="font-semibold text-text">Community</b>.
           </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          <div className="relative min-w-40 flex-1 max-phone:basis-full">
+          <div className="relative min-w-40 flex-1 max-phone:basis-full sm:max-w-90">
             <SearchIcon
               className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted"
               aria-hidden="true"
@@ -394,8 +401,8 @@ export function CommunityPage() {
             ) : (
               <p>
                 {signedIn
-                  ? "No shares yet. Share a project and tick List in Community to add the first one."
-                  : "No shares yet. Sign in with GitHub, share a project and tick List in Community to add the first one."}
+                  ? "No shares yet. Share a project and pick Community to add the first one."
+                  : "No shares yet. Sign in with GitHub, share a project and pick Community to add the first one."}
               </p>
             )}
           </div>

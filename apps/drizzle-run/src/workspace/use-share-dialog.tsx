@@ -78,7 +78,9 @@ export function useShareDialog({ project, links, executions }: UseShareDialogOpt
   const shareDialog = (
     <>
       {dialog}
-      {pushedToastShown && <Toast onDismiss={() => setPushedToastShown(false)}>Changes pushed to the link.</Toast>}
+      {pushedToastShown && (
+        <Toast onDismiss={() => setPushedToastShown(false)}>Share updated. The link shows your latest code.</Toast>
+      )}
     </>
   );
 

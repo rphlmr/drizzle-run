@@ -5,7 +5,7 @@
   "title": "Drizzle in five minutes",
   "description": "Create, read, update and delete posts, compare query shapes, then keep related writes together.",
   "topics": ["Schema"],
-  "featured": true,
+  "section": "start",
   "order": 5,
   "dialect": "postgresql",
   "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",

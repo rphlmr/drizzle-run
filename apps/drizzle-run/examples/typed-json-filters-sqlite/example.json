@@ -5,7 +5,7 @@
   "title": "Compose typed JSON filters (SQLite)",
   "description": "Constrain helper keys to declared text and array fields, bind filter values, and compose predicates with ordinary Drizzle conditions.",
   "topics": ["Queries", "Helpers", "JSON"],
-  "featured": false,
+  "section": "json",
   "order": 95,
   "dialect": "sqlite",
   "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",

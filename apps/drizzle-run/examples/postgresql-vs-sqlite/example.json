@@ -5,7 +5,7 @@
   "title": "PostgreSQL vs SQLite",
   "description": "One query and one seed on two databases: each side declares the same tasks table with its own column types.",
   "topics": ["Schema"],
-  "featured": false,
+  "section": "schema",
   "order": 45,
   "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
   "sides": [

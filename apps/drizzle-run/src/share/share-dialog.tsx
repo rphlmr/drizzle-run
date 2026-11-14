@@ -6,10 +6,10 @@ import {
   BugIcon,
   CheckIcon,
   ChevronRightIcon,
+  CodeIcon,
   CopyIcon,
-  EllipsisIcon,
   GlobeIcon,
-  InfoIcon,
+  Link2Icon,
   Link2OffIcon,
   LoaderCircleIcon,
   PlayIcon,
@@ -26,6 +26,7 @@ import { useAuth, type Auth } from "../auth/auth-provider";
 import { COMMUNITY_TOPICS, MAX_SHARE_DESCRIPTION_LENGTH, type CommunityTopic } from "../community/topics";
 import { Button } from "../components/ui/button";
 import { Checkbox } from "../components/ui/checkbox";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../components/ui/collapsible";
 import {
   Dialog,
   DialogContent,
@@ -34,16 +35,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../components/ui/dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../components/ui/dropdown-menu";
 import { Input } from "../components/ui/input";
 import { RadioGroup, RadioGroupItem } from "../components/ui/radio-group";
 import { Skeleton } from "../components/ui/skeleton";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
 import type { PlaygroundPreview, PlaygroundTheme } from "../embed-loader/index";
 import { resolveRecordingOffer, type RecordingOffer } from "../embed/recorded-run-offer";
 import { cn } from "../lib/utils";
@@ -69,7 +63,7 @@ import {
   writeEmbedSnippetTheme,
   type EmbedHeightPresetId,
 } from "./embed-snippet";
-import { sharePublishMachine, type ShareStartView } from "./publish-machine";
+import { sharePublishMachine, type ShareStartView, type ShareVisibility } from "./publish-machine";
 import { shareDeleteMachine } from "./share-delete-machine";
 import { ShareLinkField } from "./share-link-field";
 import type { loadSharePublication } from "./share-publication-loader";
@@ -79,18 +73,14 @@ const shareDialogClass = cn(
 );
 const shareDescriptionClass = cn("mt-1.5 mb-0");
 const headerCodeClass = cn("font-mono text-[11px] whitespace-nowrap text-text");
-
-/** A warning box with its icon. */
-const shareWarningClass = cn(
-  "flex items-start gap-2.5 rounded-[10px] bg-err-bg p-3 text-[13px]/[1.5] [&>svg]:mt-px [&>svg]:size-[18px] [&>svg]:shrink-0 [&>svg]:text-err",
-);
+const sectionLabelClass = cn("text-[14px] font-medium text-text");
 
 /** What stopping a share does beyond this browser, said the same wherever it is asked. */
 export function StopSharingNote() {
   return (
     <p className="m-0 text-[14px]/[1.5]">
-      The link and its embeds stop working for everyone. Copies people already made stay theirs. Sharing again makes a
-      new link.
+      The link, its embeds and its Community card stop working for everyone. Copies people already made stay theirs.
+      Sharing again makes a new link.
     </p>
   );
 }
@@ -98,25 +88,37 @@ export function StopSharingNote() {
 /** The "I checked it" checkbox row. */
 export const shareConsentClass = cn("flex min-h-touch cursor-pointer items-center gap-2.5 text-[14px] font-medium");
 
-/** A status row inside a tab: what stands, then the one action that changes it. */
+/** A status row: what stands, then the one action that changes it. */
 const shareStatusRowClass = cn(
-  "flex min-w-0 flex-wrap items-center justify-between gap-x-3 gap-y-2 rounded-xl border border-border bg-surface-2 px-3 py-2.5 text-[14px]",
+  "flex min-w-0 flex-wrap items-center justify-between gap-x-3 gap-y-2 rounded-xl border border-border bg-surface px-3 py-2.5 text-[14px]",
 );
 
-/** The Share dialog's tabs, once the project has a link. */
-const SHARE_TABS = ["link", "embed", "community"] as const;
+/** A segmented radio track and its options, for short choices. */
+const segmentTrackClass = cn("grid gap-0.5 rounded-md bg-surface-2 p-0.75");
+const segmentOptionClass = cn(
+  "flex min-h-8 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-sm px-3 py-1.5 text-center text-[13px] leading-[1.35] font-medium text-muted transition-colors duration-(--motion-fast) hover:text-text data-checked:bg-surface data-checked:text-text data-checked:shadow-[0_0_0_1px_var(--border)] data-disabled:cursor-default data-disabled:opacity-60 [&>svg]:size-3.5 [&>svg]:shrink-0",
+);
 
-type ShareTab = (typeof SHARE_TABS)[number];
+const visibilityChoices = {
+  community: {
+    label: "Community",
+    hint: "Listed on the Community page under your GitHub name. Anyone can find and fork it.",
+    Icon: GlobeIcon,
+  },
+  link: { label: "Link only", hint: "Only people you send the link to can open it.", Icon: Link2Icon },
+} satisfies Record<ShareVisibility, { label: string; hint: string; Icon: typeof GlobeIcon }>;
+
+const VISIBILITIES = ["community", "link"] as const satisfies readonly ShareVisibility[];
 
 const topicChoices = {
-  playground: { label: "Playground", hint: "Shows how something works", Icon: PlayIcon },
-  "bug-repros": { label: "Bug repro", hint: "Reproduces a Drizzle bug", Icon: BugIcon },
-} satisfies Record<CommunityTopic, { label: string; hint: string; Icon: typeof PlayIcon }>;
+  playground: { label: "How something works", noun: "playground", Icon: PlayIcon },
+  "bug-repros": { label: "A Drizzle bug", noun: "bug repro", Icon: BugIcon },
+} satisfies Record<CommunityTopic, { label: string; noun: string; Icon: typeof PlayIcon }>;
 
 export interface ShareDialogProps {
   project: ProjectRecord;
   links: ShareLinkStore;
-  /** Where a project shared before opens: its Link tab, or the push step. */
+  /** Where a project shared before opens: its shared link, or the Update share step. */
   startView: ShareStartView;
   /**
    * The latest settled run of the project, or of each side in side order, when the dialog opens. A succeeded run of
@@ -125,7 +127,7 @@ export interface ShareDialogProps {
   latestRuns: readonly (RunRecord | undefined)[];
   /** The link as this browser keeps it now, as soon as a publish, a Community change or a check saves it. */
   onLinkChange: (record: ShareLinkRecord) => void;
-  /** A push to the existing link finished: the dialog has nothing left to show. */
+  /** An update to the existing link finished: the dialog has nothing left to show. */
   onPushed: () => void;
   onClose: () => void;
 }
@@ -154,7 +156,13 @@ function capture(project: ProjectRecord, latestRuns: ShareDialogProps["latestRun
   }
 }
 
-/** Reads whether this browser shared the project before, then opens its link's tabs or the publish step. */
+/**
+ * Reads whether this browser shared the project before, then opens its shared link or the share step
+ *
+ * The share step asks one question, who can see it, so a first share lists in Community or makes a link only in one
+ * click. A shared link shows its address, the same choice to move it in or out of Community, whether it shows the
+ * latest code, its embed code, and Stop sharing.
+ */
 export function ShareDialog({
   project,
   links,
@@ -165,11 +173,11 @@ export function ShareDialog({
   onClose,
 }: ShareDialogProps) {
   const auth = useAuth();
-  const { playgrounds, recordedRuns } = useAppServices();
+  const { playgrounds, recordedRuns, community } = useAppServices();
   const signedIn = auth.status === "signedIn";
   const [{ offer, snapshotDigest, ...input }] = useState(() => ({
     ...capture(project, latestRuns),
-    services: { playgrounds, recordedRuns },
+    services: { playgrounds, recordedRuns, community },
     projectId: project.id,
     links,
     startView,
@@ -180,17 +188,16 @@ export function ShareDialog({
   });
   const deletion = useSelector(deleter, (snapshot) => snapshot);
   const deletionBusy = deletion.matches("deleting") || deletion.matches("cleaningUp");
-  const menuTriggerRef = useRef<HTMLButtonElement>(null);
+  const stopTriggerRef = useRef<HTMLButtonElement>(null);
   const deleteCancelRef = useRef<HTMLButtonElement>(null);
   const deleteConfirmRef = useRef<HTMLButtonElement>(null);
   const cleanupRetryRef = useRef<HTMLButtonElement>(null);
   const previousDeletionState = useRef(deletion.value);
-  const [tab, setTab] = useState<ShareTab>("link");
+  const [embedOpen, setEmbedOpen] = useState(false);
   const [focusPush, setFocusPush] = useState(false);
 
-  // Focus follows the deletion: Cancel on the question, the button that retries after a failure, and back to the
-  // menu that offered "Stop sharing…" when the owner keeps the share. Once the share is deleted and forgotten here,
-  // the dialog closes.
+  // Focus follows the deletion: Cancel on the question, the button that retries after a failure, and back to Stop
+  // sharing when the owner keeps the share. Once the share is deleted and forgotten here, the dialog closes.
   useEffect(() => {
     const previous = previousDeletionState.current;
     previousDeletionState.current = deletion.value;
@@ -206,7 +213,7 @@ export function ShareDialog({
     } else if (deletion.value === "cleanupFailed") {
       cleanupRetryRef.current?.focus();
     } else if (deletion.value === "idle") {
-      menuTriggerRef.current?.focus();
+      stopTriggerRef.current?.focus();
     } else if (deletion.value === "deleted") {
       onClose();
     }
@@ -226,7 +233,7 @@ export function ShareDialog({
   }, [publisher]);
 
   const state = useSelector(publisher, (snapshot) => snapshot);
-  const { existing, result, error, consent, description, recordingError } = state.context;
+  const { existing, result, error, consent, description, recordingError, visibility, topic } = state.context;
   const publishing = state.matches("publishing");
   const descriptionId = useId();
   const [clipboardMachine] = useState(() =>
@@ -245,7 +252,7 @@ export function ShareDialog({
   const copy = (text: string, message: string) => copier.send({ type: "clipboard.copy", text, message });
 
   const settling = state.matches({ published: "uploading" });
-  // A push stays on its form until its run's output is added, then the dialog closes.
+  // An update stays on its form until its run's output is added, then the dialog closes.
   const formBusy =
     publishing ||
     (existing !== undefined && result?.linkSaved === true && (settling || state.matches({ published: "done" })));
@@ -299,6 +306,11 @@ export function ShareDialog({
               <>
                 <ShareLinkField label="Link to stop" url={deletingUrl} />
                 <StopSharingNote />
+                {deletingLink.listing !== undefined && (
+                  <FieldNote>
+                    Only want it off Community? Pick <b className="font-semibold text-text">Link only</b> instead.
+                  </FieldNote>
+                )}
                 {deleting && <FieldNote live>Stopping the share…</FieldNote>}
                 {deletion.matches("failed") && (
                   <FieldError>
@@ -365,8 +377,17 @@ export function ShareDialog({
       <>
         <output className="flex items-center gap-2 text-[14px] font-medium">
           <CheckIcon className="size-4 shrink-0" aria-hidden="true" />
-          {existing ? "Your changes are pushed." : "Your snapshot is published."}
+          {existing
+            ? "Your share is updated."
+            : result.record.listing !== undefined
+              ? "Published to Community."
+              : "Your link is ready."}
         </output>
+        {result.listingError !== undefined && (
+          <FieldError>
+            Your link works, but it is not in Community yet. {result.listingError} Pick Community below to try again.
+          </FieldError>
+        )}
         {state.matches({ published: "uploading" }) && <FieldNote live>Adding your run's output…</FieldNote>}
         {state.matches({ published: "failed" }) && (
           <div className="flex flex-wrap items-center gap-2">
@@ -392,52 +413,27 @@ export function ShareDialog({
             "top-[max(16px,12dvh)] flex max-h-[calc(100dvh-max(16px,12dvh)-16px)] min-w-0 translate-y-0 flex-col gap-4 overflow-hidden p-6 sm:p-7",
           )}
         >
-          <DialogHeader className="min-w-0 pr-16">
+          <DialogHeader className="min-w-0 pr-10">
             <DialogTitle>Share</DialogTitle>
             <DialogDescription className="sr-only">
-              Copy the link to {project.name}, embed it in a page, or list it in Community.
+              Copy the link to {project.name}, choose who can see it, or embed it in a page.
             </DialogDescription>
           </DialogHeader>
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              ref={menuTriggerRef}
-              disabled={settling}
-              render={
-                <Button variant="ghost" size="icon-sm" className="absolute top-3 right-12" aria-label="Share actions" />
-              }
-            >
-              <EllipsisIcon />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent
-              align="end"
-              className="w-auto"
-              // The delete question focuses its Cancel button, which the closing menu must not take back.
-              finalFocus={() => !deleter.getSnapshot().matches("confirming")}
-            >
-              <DropdownMenuItem
-                variant="destructive"
-                onClick={() => deleter.send({ type: "delete.open", link: sharedLink })}
-              >
-                <Link2OffIcon className="size-4" aria-hidden="true" />
-                Stop sharing…
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
           <div className="-m-1 min-h-0 min-w-0 flex-1 [scrollbar-gutter:stable] overflow-y-auto p-1">
-            <SharedLinkTabs
-              // A new record, after a publish or a Community change, starts the tabs over from it.
+            <SharedLink
+              // A new record, after a publish or a Community change, starts the view over from it.
               key={JSON.stringify(sharedLink)}
               project={project}
               links={links}
               record={sharedLink}
               auth={auth}
-              tab={tab}
-              onTabChange={setTab}
               snapshotDigest={snapshotDigest}
               published={published}
               canPublish={result === undefined}
               copyFeedback={copyFeedback}
               onCopy={copy}
+              embedOpen={embedOpen}
+              onEmbedOpenChange={setEmbedOpen}
               focusPush={focusPush}
               onPush={() => {
                 setFocusPush(false);
@@ -449,6 +445,21 @@ export function ShareDialog({
               }}
             />
           </div>
+          <DialogFooter className="mt-0 flex-row items-center justify-between gap-3 sm:justify-between">
+            <Button
+              ref={stopTriggerRef}
+              variant="ghost"
+              disabled={settling}
+              className="-ml-2.5 px-2.5 text-err hover:text-err"
+              onClick={() => deleter.send({ type: "delete.open", link: sharedLink })}
+            >
+              <Link2OffIcon aria-hidden="true" />
+              Stop sharing…
+            </Button>
+            <Button variant="outline" disabled={settling} onClick={onClose}>
+              Done
+            </Button>
+          </DialogFooter>
           <output className={copyState.matches("failed") ? "text-[12px] text-muted" : "sr-only"}>
             {copyFeedback.message}
           </output>
@@ -471,7 +482,7 @@ export function ShareDialog({
         <DialogContent className={shareDialogClass}>
           <AutoHeight className="flex flex-col gap-4">
             <DialogHeader className="min-w-0">
-              <DialogTitle>{existing ? "Sign in to push changes" : "Sign in to share"}</DialogTitle>
+              <DialogTitle>{existing ? "Sign in to update this share" : "Sign in to share"}</DialogTitle>
               <DialogDescription className={shareDescriptionClass}>
                 {existing
                   ? "Only the GitHub account that shared this link can change it."
@@ -485,25 +496,41 @@ export function ShareDialog({
     );
   }
 
-  const publishLabel = existing ? "Push changes" : "Publish";
   const frozen = formBusy || state.matches("failed");
+  const listed = existing ? existing.listing !== undefined : visibility === "community";
   const exposed =
     offer.status === "offered"
-      ? "every file, environment value, and your last run's output"
+      ? "every file, environment value and your last run's output"
       : "every file and environment value";
+  const actionLabel = existing ? "Update share" : visibility === "community" ? "Publish to Community" : "Create link";
+  const ActionIcon = existing ? UploadIcon : visibility === "community" ? GlobeIcon : Link2Icon;
 
   return (
     <Dialog open onOpenChange={close}>
       <DialogContent className={shareDialogClass}>
-        <AutoHeight className="flex flex-col gap-4">
+        <AutoHeight className="flex flex-col gap-5">
           <DialogHeader className="min-w-0">
-            <DialogTitle>{existing ? publishLabel : "Share a public snapshot"}</DialogTitle>
+            <DialogTitle>{existing ? "Update share" : `Share ${project.name}`}</DialogTitle>
             <DialogDescription className={shareDescriptionClass}>
               {existing
-                ? "The link and its embeds show your new code to everyone. What they show now is replaced."
-                : `We publish a copy of ${project.name}. Your local project stays private and keeps its edits.`}
+                ? `${listed ? "The link, its embeds and its Community card" : "The link and its embeds"} show your current code. The same link keeps working.`
+                : "Publishes a read-only copy. Your project stays yours and keeps every edit."}
             </DialogDescription>
           </DialogHeader>
+          {!existing && (
+            <VisibilityChoice
+              value={visibility}
+              disabled={frozen}
+              onChange={(next) => publisher.send({ type: "visibility.change", visibility: next })}
+            />
+          )}
+          {!existing && visibility === "community" && (
+            <TopicPicker
+              value={topic}
+              disabled={frozen}
+              onChange={(next) => publisher.send({ type: "topic.change", topic: next })}
+            />
+          )}
           <div className={fieldClass}>
             <label htmlFor={descriptionId}>
               Description <span className="font-normal text-muted">(optional)</span>
@@ -517,22 +544,25 @@ export function ShareDialog({
               placeholder="What it shows, in one line"
               onChange={(event) => publisher.send({ type: "description.change", description: event.target.value })}
             />
-            <FieldNote>Shown in link previews.</FieldNote>
+            <FieldNote>
+              {listed ? "Shown on the Community card and in link previews." : "Shown in link previews."}
+            </FieldNote>
           </div>
-          <div className={shareWarningClass}>
-            <TriangleAlertIcon aria-hidden="true" />
-            <span>Anyone with the link can read {exposed}. Remove credentials, personal data, and secrets first.</span>
+          <div className="flex flex-col rounded-[10px] bg-err-bg">
+            <p className="flex items-start gap-2.5 px-3 pt-3 pb-1 text-[13px]/[1.5]">
+              <TriangleAlertIcon className="mt-px size-4.5 shrink-0 text-err" aria-hidden="true" />
+              <span>Anyone who opens it can read {exposed}.</span>
+            </p>
+            <label className={cn(shareConsentClass, "px-3 pb-1 pl-10")}>
+              <Checkbox
+                checked={consent}
+                disabled={formBusy}
+                onCheckedChange={(checked) => publisher.send({ type: "consent.change", consent: checked })}
+              />
+              {existing ? "My changes contain nothing private" : "I removed credentials, personal data and secrets"}
+            </label>
           </div>
-          <label className={shareConsentClass}>
-            <Checkbox
-              checked={consent}
-              disabled={formBusy}
-              onCheckedChange={(checked) => publisher.send({ type: "consent.change", consent: checked })}
-            />
-            {existing
-              ? "I checked these changes and they contain nothing private."
-              : "I checked this project and it contains nothing private."}
-          </label>
+          {!existing && visibility === "community" && <FieldNote>{COMMUNITY_REUSE_NOTE}</FieldNote>}
           {offer.status === "too_large" && (
             <FieldNote>Your last run's output is over {offer.maxBytes / 1024} KiB, so it isn't included.</FieldNote>
           )}
@@ -546,20 +576,125 @@ export function ShareDialog({
               onClick={() => publisher.send({ type: "share.publish" })}
               disabled={!consent || formBusy || !input.snapshot || !input.idempotencyKey}
             >
-              {formBusy
-                ? existing
-                  ? "Pushing…"
-                  : "Publishing…"
-                : state.matches("failed")
-                  ? existing
-                    ? "Retry push"
-                    : "Retry publish"
-                  : publishLabel}
+              {formBusy ? (
+                existing ? (
+                  "Updating…"
+                ) : (
+                  "Publishing…"
+                )
+              ) : state.matches("failed") ? (
+                "Retry"
+              ) : (
+                <>
+                  <ActionIcon aria-hidden="true" />
+                  {actionLabel}
+                </>
+              )}
             </Button>
           </DialogFooter>
         </AutoHeight>
       </DialogContent>
     </Dialog>
+  );
+}
+
+/** The share step's one question: Community or the link only, each with what it means. */
+function VisibilityChoice({
+  value,
+  disabled,
+  onChange,
+}: {
+  value: ShareVisibility;
+  disabled: boolean;
+  onChange: (visibility: ShareVisibility) => void;
+}) {
+  const labelId = useId();
+
+  return (
+    <div className="flex flex-col gap-2">
+      <span id={labelId} className={sectionLabelClass}>
+        Who can see it
+      </span>
+      <RadioGroup
+        aria-labelledby={labelId}
+        className={cn(choiceGridClass, "max-phone:grid-cols-1")}
+        value={value}
+        disabled={disabled}
+        onValueChange={(next) => {
+          const picked = VISIBILITIES.find((candidate) => candidate === next);
+
+          if (picked !== undefined) {
+            onChange(picked);
+          }
+        }}
+      >
+        {VISIBILITIES.map((candidate) => {
+          const { label, hint, Icon } = visibilityChoices[candidate];
+
+          return (
+            <ChoiceCard
+              key={candidate}
+              checked={value === candidate}
+              className={cn("items-start", value === candidate && "bg-mark")}
+            >
+              <RadioGroupItem value={candidate} aria-label={label} className="mt-0.5" />
+              <span className="flex min-w-0 flex-col gap-1">
+                <span className="flex items-center gap-1.5">
+                  <Icon className="size-3.5" aria-hidden="true" />
+                  {label}
+                </span>
+                <span className="text-[12px]/[1.4] font-normal text-muted">{hint}</span>
+              </span>
+            </ChoiceCard>
+          );
+        })}
+      </RadioGroup>
+    </div>
+  );
+}
+
+/** What a Community share shows, as a segmented choice. */
+function TopicPicker({
+  value,
+  disabled,
+  onChange,
+}: {
+  value: CommunityTopic;
+  disabled: boolean;
+  onChange: (topic: CommunityTopic) => void;
+}) {
+  const labelId = useId();
+
+  return (
+    <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+      <span id={labelId} className={sectionLabelClass}>
+        It shows
+      </span>
+      <RadioGroup
+        aria-labelledby={labelId}
+        className={cn(segmentTrackClass, "grid-cols-2 max-phone:w-full")}
+        value={value}
+        disabled={disabled}
+        onValueChange={(next) => {
+          const picked = COMMUNITY_TOPICS.find((candidate) => candidate === next);
+
+          if (picked !== undefined) {
+            onChange(picked);
+          }
+        }}
+      >
+        {COMMUNITY_TOPICS.map((candidate) => {
+          const { label, Icon } = topicChoices[candidate];
+
+          return (
+            <RadioPrimitive.Root key={candidate} value={candidate} className={segmentOptionClass}>
+              <Icon aria-hidden="true" />
+              {label}
+            </RadioPrimitive.Root>
+          );
+        })}
+      </RadioGroup>
+    </div>
   );
 }
 
@@ -591,45 +726,45 @@ function SignInToShare({ auth, onBack, backLabel }: { auth: Auth; onBack: () => 
   );
 }
 
-interface SharedLinkTabsProps {
+interface SharedLinkProps {
   project: ProjectRecord;
   links: ShareLinkStore;
   record: ShareLinkRecord;
   auth: Auth;
-  tab: ShareTab;
-  onTabChange: (tab: ShareTab) => void;
   /** The project's digest when the dialog opened, compared with the published one. */
   snapshotDigest: string | undefined;
   /** What a publish just did, shown above the link; undefined until then. */
   published: ReactNode;
-  /** False right after a publish or a push: the dialog captured the project once, so there is nothing new to push. */
+  /** False right after a publish or an update: the dialog captured the project once, so there is nothing new to send. */
   canPublish: boolean;
   copyFeedback: { text: string };
   onCopy: (text: string, message: string) => void;
-  /** Focus the Push changes button once it shows, after Back from the push step. */
+  embedOpen: boolean;
+  onEmbedOpenChange: (open: boolean) => void;
+  /** Focus the Update share button once it shows, after Back from the update step. */
   focusPush: boolean;
   onPush: () => void;
   /** The link as this browser keeps it now, after a Community change or a check with the server. */
   onRecordChange: (record: ShareLinkRecord) => void;
 }
 
-/** A published link's Link, Embed and Community tabs. */
-function SharedLinkTabs({
+/** A published link: its address, who can see it, whether it shows the latest code, and its embed code. */
+function SharedLink({
   project,
   links,
   record,
   auth,
-  tab,
-  onTabChange,
   snapshotDigest,
   published,
   canPublish,
   copyFeedback,
   onCopy,
+  embedOpen,
+  onEmbedOpenChange,
   focusPush,
   onPush,
   onRecordChange,
-}: SharedLinkTabsProps) {
+}: SharedLinkProps) {
   const { community } = useAppServices();
   const lister = useActorRef(communityListingMachine, {
     input: { services: { community, links }, projectId: project.id, record },
@@ -680,55 +815,46 @@ function SharedLinkTabs({
   });
 
   return (
-    <Tabs
-      value={tab}
-      onValueChange={(next) => {
-        const picked = SHARE_TABS.find((candidate) => candidate === next);
-
-        if (picked !== undefined) {
-          onTabChange(picked);
-        }
-      }}
-      className="min-w-0 gap-4"
-    >
-      <TabsList variant="line">
-        <TabsTrigger value="link">Link</TabsTrigger>
-        <TabsTrigger value="embed">Embed</TabsTrigger>
-        <TabsTrigger value="community">Community</TabsTrigger>
-      </TabsList>
-      <TabsContent value="link" className="flex min-w-0 flex-col gap-4 pt-0 text-[14px]">
-        {published}
-        <ShareLinkField label="Link" url={url}>
-          <CopyButton
-            variant="sticker"
-            className="w-full sm:w-auto"
-            copied={copyFeedback.text === url}
-            onClick={() => onCopy(url, "Link copied.")}
-          >
-            Copy link
-          </CopyButton>
-        </ShareLinkField>
-        {canPublish && (
-          <PublicationStatus
-            loading={publication.state !== "idle" || publication.data === undefined}
-            failed={publication.data?.status === "failed" || snapshotDigest === undefined}
-            changed={publishedDigest !== snapshotDigest}
-            focusPush={focusPush}
-            onPush={onPush}
-          />
-        )}
-      </TabsContent>
-      <TabsContent value="embed" className="pt-0">
-        <EmbedCode snapshotId={record.linkId} preview={preview} copiedText={copyFeedback.text} onCopy={onCopy} />
-      </TabsContent>
-      <TabsContent value="community" className="pt-0">
-        <CommunityListing auth={auth} lister={lister} />
-      </TabsContent>
-    </Tabs>
+    <div className="flex min-w-0 flex-col gap-5 text-[14px]">
+      {published}
+      <ShareLinkField label="Link" url={url}>
+        <CopyButton
+          variant="sticker"
+          className="w-full sm:w-auto"
+          copied={copyFeedback.text === url}
+          onClick={() => onCopy(url, "Link copied.")}
+        >
+          Copy link
+        </CopyButton>
+      </ShareLinkField>
+      <CommunityVisibility auth={auth} lister={lister} />
+      {canPublish && (
+        <PublicationStatus
+          loading={publication.state !== "idle" || publication.data === undefined}
+          failed={publication.data?.status === "failed" || snapshotDigest === undefined}
+          changed={publishedDigest !== snapshotDigest}
+          focusPush={focusPush}
+          onPush={onPush}
+        />
+      )}
+      <Collapsible open={embedOpen} onOpenChange={onEmbedOpenChange} className="border-t border-border pt-1">
+        <CollapsibleTrigger className="min-h-touch gap-2 text-[14px] font-medium">
+          <ChevronRightIcon aria-hidden="true" />
+          <CodeIcon aria-hidden="true" />
+          Embed in a page
+          <span className="font-normal text-muted max-phone:hidden">Blog, docs, slides</span>
+        </CollapsibleTrigger>
+        <CollapsibleContent>
+          <div className="pt-1 pb-1 pl-5.5">
+            <EmbedCode snapshotId={record.linkId} preview={preview} copiedText={copyFeedback.text} onCopy={onCopy} />
+          </div>
+        </CollapsibleContent>
+      </Collapsible>
+    </div>
   );
 }
 
-/** Whether the project changed since the link's code, with the button that pushes the changes. */
+/** Whether the link shows the project as it is now, with Update share once it changed. */
 function PublicationStatus({
   loading,
   failed,
@@ -743,18 +869,18 @@ function PublicationStatus({
   onPush: () => void;
 }) {
   const focusOnMount = focusPush ? (button: HTMLButtonElement | null) => button?.focus() : undefined;
-  const publishButton = (
+  const updateButton = (
     <Button variant="outline" size="sm" ref={focusOnMount} onClick={onPush}>
       <UploadIcon className="size-3.5" aria-hidden="true" />
-      Push changes
+      Update share
     </Button>
   );
 
   if (loading) {
     return (
-      <p role="note" aria-live="polite" className={cn(shareStatusRowClass, "justify-start")}>
-        <LoaderCircleIcon className="size-4 shrink-0 animate-spin" aria-hidden="true" />
-        Checking for unpublished changes…
+      <p role="note" aria-live="polite" className="flex items-center gap-2 text-[13px] text-muted">
+        <LoaderCircleIcon className="size-3.5 shrink-0 animate-spin" aria-hidden="true" />
+        Checking whether it shows your latest code…
       </p>
     );
   }
@@ -766,154 +892,117 @@ function PublicationStatus({
           <TriangleAlertIcon className="size-4 shrink-0" aria-hidden="true" />
           Couldn't check for changes
         </span>
-        {publishButton}
+        {updateButton}
       </div>
     );
   }
 
   if (!changed) {
     return (
-      <div role="note" aria-live="polite" className={shareStatusRowClass}>
-        <span className="flex items-center gap-2">
-          <CheckIcon className="size-4 shrink-0" aria-hidden="true" />
-          All changes are published
-        </span>
-      </div>
+      <p role="note" aria-live="polite" className="flex items-center gap-2 text-[13px] text-muted">
+        <CheckIcon className="size-3.5 shrink-0" aria-hidden="true" />
+        Shows your latest code
+      </p>
     );
   }
 
   return (
     <div role="note" aria-live="polite" className={shareStatusRowClass}>
       <span className="flex items-center gap-2">
-        <InfoIcon className="size-4 shrink-0" aria-hidden="true" />
-        Unpublished changes
+        <span aria-hidden="true" className="size-2 shrink-0 rounded-full bg-warn" />
+        You edited the project since you shared it
       </span>
-      {publishButton}
+      {updateButton}
     </div>
   );
 }
 
 type CommunityLister = ActorRefFrom<typeof communityListingMachine>;
 
-/** The Community tab: list the link, edit its card, or unlist it. */
-function CommunityListing({ auth, lister }: { auth: Auth; lister: CommunityLister }) {
+/**
+ * Who can see a shared link: the same choice as the share step. Picking Community lists it at once with the link's
+ * description, Link only unlists it, and a listed link can change what it shows.
+ */
+function CommunityVisibility({ auth, lister }: { auth: Auth; lister: CommunityLister }) {
   const listingState = useSelector(lister, (snapshot) => snapshot);
-  const { record, topic, description, error } = listingState.context;
-  const listing = record.listing;
-  const busy = !listingState.matches("idle");
-  const descriptionId = useId();
-  const topicLabelId = useId();
-  const owner = auth.user === null ? "your GitHub account" : `@${auth.user.login}`;
-
-  if (auth.status !== "signedIn") {
-    return (
-      <div className="flex flex-col gap-3 text-[14px]">
-        {listing && (
-          <p className={cn(shareStatusRowClass, "justify-start")}>
-            <GlobeIcon className="size-4 shrink-0" aria-hidden="true" />
-            Listed in Community
-          </p>
-        )}
-        <p>List this share on the Community page so others can find it.</p>
-        {auth.status === "unavailable" ? (
-          <FieldNote>Listing needs a GitHub sign-in, which is not set up on this deployment.</FieldNote>
-        ) : (
-          <>
-            <FieldNote>Sign in with the GitHub account that shared this link to list it.</FieldNote>
-            <Button variant="outline" className="self-start" onClick={auth.signIn}>
-              Sign in with GitHub
-            </Button>
-          </>
-        )}
-      </div>
-    );
-  }
-
-  const cardChanged =
-    listing !== undefined && (topic !== listing.topic || description.trim() !== (listing.description ?? ""));
+  const { record, topic, error } = listingState.context;
+  const labelId = useId();
+  const signedIn = auth.status === "signedIn";
+  const saving = listingState.matches("saving");
+  const removing = listingState.matches("removing");
+  const busy = saving || removing;
+  // While a change runs, the choice shows where it is going.
+  const value: ShareVisibility = saving ? "community" : removing ? "link" : record.listing ? "community" : "link";
+  const owner = auth.user === null ? "your GitHub name" : `@${auth.user.login}`;
 
   return (
-    <div className="flex flex-col gap-4 text-[14px]">
-      {listing ? (
-        <div className={shareStatusRowClass}>
-          <span className="flex items-center gap-2">
-            <GlobeIcon className="size-4 shrink-0" aria-hidden="true" />
-            Listed · {owner}
-          </span>
-          <Button variant="outline" size="sm" disabled={busy} onClick={() => lister.send({ type: "listing.remove" })}>
-            {listingState.matches("removing") ? "Unlisting…" : "Unlist"}
-          </Button>
+    <div aria-busy={busy} className={cn("flex flex-col gap-2", busy && "[&_[data-disabled]]:opacity-100")}>
+      <span id={labelId} className={sectionLabelClass}>
+        Who can see it
+      </span>
+      <RadioGroup
+        aria-labelledby={labelId}
+        className={cn(segmentTrackClass, "grid-cols-2")}
+        value={value}
+        disabled={busy || !signedIn}
+        onValueChange={(next) => {
+          if (next === "community" && !record.listing) {
+            lister.send({ type: "listing.save" });
+          } else if (next === "link" && record.listing) {
+            lister.send({ type: "listing.remove" });
+          }
+        }}
+      >
+        {VISIBILITIES.map((candidate) => {
+          const { label, Icon } = visibilityChoices[candidate];
+
+          return (
+            <RadioPrimitive.Root key={candidate} value={candidate} className={segmentOptionClass}>
+              <Icon aria-hidden="true" />
+              {label}
+            </RadioPrimitive.Root>
+          );
+        })}
+      </RadioGroup>
+      {!signedIn ? (
+        auth.status === "unavailable" ? (
+          <FieldNote>Listing needs a GitHub sign-in, which is not set up on this deployment.</FieldNote>
+        ) : (
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+            <FieldNote>Sign in with the GitHub account that shared this link to change who can see it.</FieldNote>
+            <Button variant="outline" size="sm" onClick={auth.signIn}>
+              Sign in with GitHub
+            </Button>
+          </div>
+        )
+      ) : record.listing ? (
+        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+          <p className="text-[12.5px] text-muted">
+            Listed under {owner}, marked as not official.{" "}
+            <a className="font-medium text-accent-text underline-offset-2 hover:underline" href="/community">
+              See Community
+            </a>
+          </p>
+          <TopicPicker
+            value={topic}
+            disabled={busy}
+            onChange={(next) => {
+              lister.send({ type: "topic.change", topic: next });
+              lister.send({ type: "listing.save" });
+            }}
+          />
         </div>
       ) : (
         <FieldNote>
-          Others find it on the Community page under {owner}, marked as not official. It shows the link&apos;s current
-          code. {COMMUNITY_REUSE_NOTE}
+          Only people you send the link to can open it. Pick Community to let others find and fork it.
         </FieldNote>
       )}
-      <div className="flex flex-col gap-2">
-        <span id={topicLabelId} className="font-medium">
-          Kind
+      {busy && (
+        <span role="status" className="sr-only">
+          {saving ? "Listing in Community…" : "Removing from Community…"}
         </span>
-        <RadioGroup
-          aria-labelledby={topicLabelId}
-          className={choiceGridClass}
-          value={topic}
-          disabled={busy}
-          onValueChange={(next) => {
-            const picked = COMMUNITY_TOPICS.find((candidate) => candidate === next);
-
-            if (picked !== undefined) {
-              lister.send({ type: "topic.change", topic: picked });
-            }
-          }}
-        >
-          {COMMUNITY_TOPICS.map((candidate) => {
-            const { label, hint, Icon } = topicChoices[candidate];
-
-            return (
-              <ChoiceCard key={candidate} checked={topic === candidate} className="flex-col items-stretch gap-1">
-                <span className="flex items-center gap-2">
-                  <RadioGroupItem value={candidate} aria-label={label} />
-                  <Icon className="size-4" aria-hidden="true" />
-                  {label}
-                </span>
-                <span className="text-[12px] font-normal text-muted">{hint}</span>
-              </ChoiceCard>
-            );
-          })}
-        </RadioGroup>
-      </div>
-      <div className={fieldClass}>
-        <label htmlFor={descriptionId}>
-          Description <span className="font-normal text-muted">(optional)</span>
-        </label>
-        <Input
-          id={descriptionId}
-          className={fieldInputClass}
-          value={description}
-          maxLength={MAX_SHARE_DESCRIPTION_LENGTH}
-          disabled={busy}
-          placeholder="What it shows, in one line"
-          onChange={(event) => lister.send({ type: "description.change", description: event.target.value })}
-        />
-        <FieldNote>Shown on the Community card.</FieldNote>
-      </div>
+      )}
       {error && <FieldError>{error}</FieldError>}
-      <div className="flex justify-end">
-        {listing ? (
-          <Button
-            variant="outline"
-            disabled={busy || !cardChanged}
-            onClick={() => lister.send({ type: "listing.save" })}
-          >
-            {listingState.matches("saving") ? "Saving…" : "Save card"}
-          </Button>
-        ) : (
-          <Button variant="sticker" disabled={busy} onClick={() => lister.send({ type: "listing.save" })}>
-            {listingState.matches("saving") ? "Listing…" : "List in Community"}
-          </Button>
-        )}
-      </div>
     </div>
   );
 }

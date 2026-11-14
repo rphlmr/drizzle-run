@@ -265,44 +265,6 @@ test("phone: my projects fits 375 px with a project list", async ({ page }) => {
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });
 
-test("gallery filters by topic and database", async ({ page }) => {
-  await page.goto("/examples");
-
-  await expect(page.getByRole("button", { name: "Start here", exact: true })).toBeVisible();
-  await page.getByLabel("Database", { exact: true }).selectOption("sqlite");
-  await expect(page).toHaveURL(/db=sqlite/);
-
-  const cards = page.getByRole("list", { name: "Example list" }).getByRole("button");
-  await expect(cards).toHaveCount(examples.filter((example) => example.dialects.has("sqlite")).length);
-
-  for (const card of await cards.all()) {
-    await expect(card).toContainText("SQLite");
-  }
-});
-
-for (const scrollTop of [0, 140]) {
-  test(`gallery keeps the page fixed after filtering from list scroll ${scrollTop}`, async ({ page }) => {
-    await page.setViewportSize({ width: 1280, height: 1000 });
-    await page.goto("/examples");
-    const list = page.getByRole("list", { name: "Example list" });
-    await expect(list.getByRole("button")).toHaveCount(examples.length);
-    await list.evaluate((element, top) => {
-      element.scrollTop = top;
-    }, scrollTop);
-    await expect.poll(() => list.evaluate((element) => element.scrollTop)).toBe(scrollTop);
-    await page.getByLabel("Database", { exact: true }).selectOption("sqlite");
-    await expect(page).toHaveURL(/db=sqlite/);
-    await expect(list.getByRole("button")).toHaveCount(
-      examples.filter((example) => example.dialects.has("sqlite")).length,
-    );
-    await expect.poll(() => list.evaluate((element) => element.scrollTop)).toBe(0);
-    expect(await page.getByRole("main").evaluate((element) => element.scrollHeight <= element.clientHeight)).toBe(true);
-    await page.getByLabel("Database", { exact: true }).selectOption("all");
-    await expect(list.getByRole("button")).toHaveCount(examples.length);
-    expect(await page.evaluate(() => document.documentElement.scrollHeight <= innerHeight)).toBe(true);
-  });
-}
-
 for (const example of examples.filter((item) => !item.guided && item.sideNames === undefined)) {
   test(`official example ${example.slug} opens, runs, and saves`, async ({ page }) => {
     await page.goto(`/examples/${example.slug}`);
@@ -325,12 +287,10 @@ for (const example of examples.filter((item) => !item.guided && item.sideNames !
   test(`official side-by-side example ${example.slug} opens, runs both sides, and saves`, async ({ page }) => {
     const sideNames = example.sideNames ?? [];
 
-    await page.goto("/examples");
-    const card = page.getByRole("list", { name: "Example list" }).getByRole("button", { name: example.title });
-    await card.click();
-    const preview = page.getByRole("region", { name: "Example preview" });
-    await expect(preview).toContainText(sideNames.join(" vs "));
-    await preview.getByRole("link", { name: "Open example" }).click();
+    await page.goto(`/examples?q=${encodeURIComponent(example.title)}`);
+    const card = page.locator(`article[data-example-slug="${example.slug}"]`);
+    await expect(card).toContainText(sideNames.join(" vs "));
+    await card.getByRole("link").first().click();
     await expect(page).toHaveURL(new RegExp(`/examples/${example.slug}$`));
 
     await expect(page.getByText("Temporary copy, not saved")).toBeVisible();
@@ -381,10 +341,13 @@ test("site pages crossfade into each other, but not on a filter change or into a
   await expect.poll(countTransitions).toBe(2);
 
   await page
-    .getByRole("list", { name: "Example list" })
-    .getByRole("button", { name: "Filters, joins, and counts" })
+    .getByRole("navigation", { name: "Gallery sections" })
+    .getByRole("link", { name: /^Querying/ })
     .click();
-  await page.getByRole("region", { name: "Example preview" }).getByRole("link", { name: "Open example" }).click();
+  await expect(page).toHaveURL(/section=querying/);
+  await page.waitForTimeout(500);
+  expect(await countTransitions()).toBe(2);
+  await page.getByRole("link", { name: "Filters, joins, and counts", exact: true }).click();
   await expect(page).toHaveURL(/\/examples\/filters-and-joins$/);
   await page.waitForTimeout(500);
   expect(await countTransitions()).toBe(2);

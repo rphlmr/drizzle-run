@@ -5,7 +5,7 @@
   "title": "Prepared product search",
   "description": "Reuse one query with category, minimum price and result-limit placeholders.",
   "topics": ["Queries"],
-  "featured": false,
+  "section": "querying",
   "order": 65,
   "dialect": "postgresql",
   "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",

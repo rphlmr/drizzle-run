@@ -5,7 +5,7 @@
   "title": "Select vs relational queries",
   "description": "The same authors with their posts, twice: a select with a join on one side, db.query on the other.",
   "topics": ["Queries", "RQB"],
-  "featured": false,
+  "section": "relational-queries",
   "order": 35,
   "dialect": "postgresql",
   "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",

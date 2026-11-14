@@ -3,6 +3,8 @@ import { fakeRunResult, legacyGuest } from "@drizzle-run/test-fixtures";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createActor, waitFor, type SnapshotFrom } from "xstate";
 
+import type { CommunityShare } from "../community/contract";
+import { createCommunityService } from "../community/service";
 import { createRecordedRunsService } from "../embed/recorded-runs-service";
 import type { Fetch } from "../lib/api";
 import { createProject } from "../project/projects";
@@ -75,8 +77,22 @@ function makeServices(fetch: Fetch): SharePublishServices {
 
   return {
     playgrounds: createPlaygroundsService(dependencies),
+    community: createCommunityService(dependencies),
     recordedRuns: createRecordedRunsService(dependencies),
   };
+}
+
+/** Services whose calls are mocks: a publish, a push, a listing and a recording that all succeed. */
+function makeMockServices(frozen: ReturnType<typeof makeSnapshot>) {
+  return {
+    playgrounds: {
+      publishPlaygroundSnapshot: vi.fn(async () => makePublished(frozen)),
+      pushChanges: vi.fn(async () => makePublished(frozen)),
+    },
+    // The listed share it answers is never read: the actor keeps its own choice.
+    community: { listShareInCommunity: vi.fn(async () => ({}) as CommunityShare) },
+    recordedRuns: { recordRun: vi.fn(async () => undefined) },
+  } satisfies SharePublishServices;
 }
 
 interface StartOptions {
@@ -184,6 +200,7 @@ describe("share publication actor", () => {
     const finished = countFinishedPushes(actor);
 
     expect(actor.getSnapshot().value).toBe("ready");
+    actor.send({ type: "visibility.change", visibility: "link" });
     actor.send({ type: "share.publish" });
     expect(actor.getSnapshot().value).toBe("ready");
     expect(fetchMock).not.toHaveBeenCalled();
@@ -309,6 +326,7 @@ describe("share publication actor", () => {
     const actor = await start(frozen, { fetch: fetchMock, links });
     const saved = collectSavedRecords(actor);
 
+    actor.send({ type: "visibility.change", visibility: "link" });
     actor.send({ type: "consent.change", consent: true });
     actor.send({ type: "share.publish" });
     await waitFor(actor, isSettled);
@@ -325,57 +343,130 @@ describe("share publication actor", () => {
     expect(unshared.getSnapshot().value).toBe("ready");
   });
 
-  it("should never list a link it publishes for the first time", async () => {
+  it("should start a first share in Community, and a shared link where it stands", async () => {
+    const fresh = await start(makeSnapshot());
+    const linkOnly = await start(makeSnapshot(), { link: existing, openPushStep: false });
+    const listed = await start(makeSnapshot(), {
+      link: { ...existing, listing: { topic: "bug-repros" } },
+      openPushStep: false,
+    });
+
+    expect(fresh.getSnapshot().context).toMatchObject({ visibility: "community", topic: "playground" });
+    expect(linkOnly.getSnapshot().context).toMatchObject({ visibility: "link", topic: "playground" });
+    expect(listed.getSnapshot().context).toMatchObject({ visibility: "community", topic: "bug-repros" });
+  });
+
+  it("should list a first Community share in the same step, with its topic and description", async () => {
     const frozen = makeSnapshot();
     const links = new VolatileProjectStorage();
-    const fetchMock = vi.fn().mockResolvedValue(makeResponse(makePublished(frozen)));
-    const actor = await start(frozen, { fetch: fetchMock, links });
+    const services = makeMockServices(frozen);
+    const actor = await start(frozen, { services, links });
 
-    actor.send({ type: "consent.change", consent: true });
+    actor.send({ type: "topic.change", topic: "bug-repros" });
     actor.send({ type: "description.change", description: "  Soft deletes  " });
+    actor.send({ type: "consent.change", consent: true });
     actor.send({ type: "share.publish" });
     await waitFor(actor, isSettled);
 
-    expect(fetchMock).toHaveBeenCalledTimes(1);
-    expect(readJsonBody(fetchMock.mock.calls[0]?.[1] as RequestInit)).toMatchObject({ description: "Soft deletes" });
+    expect(services.community.listShareInCommunity).toHaveBeenCalledWith({
+      linkId,
+      choice: { topic: "bug-repros", description: "Soft deletes" },
+      signal: expect.any(AbortSignal),
+    });
+    expect(actor.getSnapshot().context.result?.listingError).toBeUndefined();
+    expect(await links.shareLink("project-1")).toMatchObject({
+      description: "Soft deletes",
+      listing: { topic: "bug-repros", description: "Soft deletes" },
+    });
+  });
+
+  it("should keep a published link unlisted and say why when Community refuses it", async () => {
+    const frozen = makeSnapshot();
+    const links = new VolatileProjectStorage();
+    const services = makeMockServices(frozen);
+    services.community.listShareInCommunity.mockRejectedValue(new Error("Community is closed."));
+    const actor = await start(frozen, { services, links });
+
+    actor.send({ type: "consent.change", consent: true });
+    actor.send({ type: "share.publish" });
+    await waitFor(actor, isSettled);
+
+    expect(actor.getSnapshot().context.result).toMatchObject({ linkSaved: true, listingError: "Community is closed." });
+    expect(await links.shareLink("project-1")).toMatchObject({ linkId });
     expect((await links.shareLink("project-1"))?.listing).toBeUndefined();
   });
 
-  it("should push to a listed link without touching Community, and keep its listing here", async () => {
+  it("should make a link only without touching Community", async () => {
+    const frozen = makeSnapshot();
+    const links = new VolatileProjectStorage();
+    const services = makeMockServices(frozen);
+    const actor = await start(frozen, { services, links });
+
+    actor.send({ type: "visibility.change", visibility: "link" });
+    actor.send({ type: "consent.change", consent: true });
+    actor.send({ type: "share.publish" });
+    await waitFor(actor, isSettled);
+
+    expect(services.community.listShareInCommunity).not.toHaveBeenCalled();
+    expect((await links.shareLink("project-1"))?.listing).toBeUndefined();
+  });
+
+  it("should push to a listed link without touching Community while its description stays", async () => {
     const frozen = makeSnapshot();
     const links = new VolatileProjectStorage();
     const fetchMock = vi.fn().mockResolvedValue(makeResponse(makePublished(frozen)));
     const actor = await start(frozen, { fetch: fetchMock, link: existing, links, openPushStep: false });
     const listedHere: ShareLinkRecord = {
       ...existing,
-      description: "Old words",
-      listing: { topic: "bug-repros", description: "Card words" },
+      description: "Same words",
+      listing: { topic: "bug-repros", description: "Same words" },
     };
 
     actor.send({ type: "link.change", record: listedHere });
     actor.send({ type: "push.open" });
-    expect(actor.getSnapshot().context).toMatchObject({ description: "Old words" });
+    expect(actor.getSnapshot().context).toMatchObject({ description: "Same words" });
     actor.send({ type: "consent.change", consent: true });
     actor.send({ type: "share.publish" });
     await waitFor(actor, isSettled);
 
     expect(fetchMock.mock.calls.map(([url]) => url)).toEqual([`${origin}/api/playgrounds/${linkId}`]);
     expect(await links.shareLink("project-1")).toMatchObject({
-      description: "Old words",
-      listing: { topic: "bug-repros", description: "Card words" },
+      description: "Same words",
+      listing: { topic: "bug-repros", description: "Same words" },
+    });
+  });
+
+  it("should carry a new description to a listed link's Community card, keeping its topic", async () => {
+    const frozen = makeSnapshot();
+    const links = new VolatileProjectStorage();
+    const services = makeMockServices(frozen);
+    const actor = await start(frozen, {
+      services,
+      links,
+      link: { ...existing, description: "Old words", listing: { topic: "bug-repros", description: "Old words" } },
+    });
+
+    actor.send({ type: "description.change", description: "New words" });
+    actor.send({ type: "consent.change", consent: true });
+    actor.send({ type: "share.publish" });
+    await waitFor(actor, isSettled);
+
+    expect(services.playgrounds.publishPlaygroundSnapshot).not.toHaveBeenCalled();
+    expect(services.community.listShareInCommunity).toHaveBeenCalledWith({
+      linkId,
+      choice: { topic: "bug-repros", description: "New words" },
+      signal: expect.any(AbortSignal),
+    });
+    expect(await links.shareLink("project-1")).toMatchObject({
+      description: "New words",
+      listing: { topic: "bug-repros", description: "New words" },
     });
   });
 
   it("should publish and record through the injected services, each with the actor's abort signal", async () => {
     const frozen = makeSnapshot();
     const recording = makeRecording(frozen);
-    const services = {
-      playgrounds: {
-        publishPlaygroundSnapshot: vi.fn(async () => makePublished(frozen)),
-        pushChanges: vi.fn(async () => makePublished(frozen)),
-      },
-      recordedRuns: { recordRun: vi.fn(async () => undefined) },
-    } satisfies SharePublishServices;
+    const services = makeMockServices(frozen);
     const actor = await start(frozen, { services, recording });
 
     actor.send({ type: "consent.change", consent: true });
@@ -386,6 +477,11 @@ describe("share publication actor", () => {
       snapshot: frozen,
       description: "",
       idempotencyKey: key,
+      signal: expect.any(AbortSignal),
+    });
+    expect(services.community.listShareInCommunity).toHaveBeenCalledWith({
+      linkId,
+      choice: { topic: "playground", description: "" },
       signal: expect.any(AbortSignal),
     });
     expect(services.recordedRuns.recordRun).toHaveBeenCalledWith({

@@ -3,8 +3,14 @@ import { digestPlaygroundSnapshot, parsePlaygroundSnapshot } from "@drizzle-run/
 import type { ProjectRecord } from "../project/projects";
 import type { ShareLinkRecord } from "../store/storage";
 
-/** Where a project's share stands, as the editor's Share button shows it. */
-export type ShareStatus = { status: "not_shared" } | { status: "published" } | { status: "changed" };
+/**
+ * Where a project's share stands, as the editor's Share button shows it: whether its link shows the project as it is,
+ * and whether this browser keeps it listed in Community.
+ */
+export type ShareStatus =
+  | { status: "not_shared" }
+  | { status: "published"; listed: boolean }
+  | { status: "changed"; listed: boolean };
 
 /**
  * The content digest of the project as the Share dialog would publish it
@@ -32,9 +38,11 @@ export function getShareStatus(record: ShareLinkRecord | undefined, projectDiges
     return { status: "not_shared" };
   }
 
+  const listed = record.listing !== undefined;
+
   if (record.publishedDigest === undefined || projectDigest === undefined || record.publishedDigest === projectDigest) {
-    return { status: "published" };
+    return { status: "published", listed };
   }
 
-  return { status: "changed" };
+  return { status: "changed", listed };
 }

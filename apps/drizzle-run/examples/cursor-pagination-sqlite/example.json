@@ -5,7 +5,7 @@
   "title": "Page through a composite cursor (SQLite)",
   "description": "Preserve tied timestamps, fetch one extra row, and derive the next cursor from the last returned row.",
   "topics": ["Queries", "Pagination"],
-  "featured": false,
+  "section": "pagination",
   "order": 125,
   "dialect": "sqlite",
   "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",

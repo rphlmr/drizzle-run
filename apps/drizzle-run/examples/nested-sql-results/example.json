@@ -5,7 +5,7 @@
   "title": "Build nested results with SQL",
   "description": "Learn why joins multiply rows, aggregate each relation, keep empty arrays, and compare the result with RQB.",
   "topics": ["Queries", "JSON"],
-  "featured": false,
+  "section": "json",
   "order": 75,
   "dialect": "postgresql",
   "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",

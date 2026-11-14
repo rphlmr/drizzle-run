@@ -89,10 +89,11 @@ run `pnpm record:official` and commit the recordings. Set `OFFICIAL_RECORDINGS_F
 
 ## Sharing
 
-**Share** publishes a public snapshot after sign-in and explicit consent. The Worker stores published source and
-metadata in D1, never a playground database. Shared source and synthetic environment values are visible to anyone
-with the link. **Push changes** replaces the stored snapshot at the same shared link. Copying an existing link
-does not publish pending edits.
+**Share** publishes a public snapshot after sign-in and explicit consent. The dialog asks one question, who can see
+it: **Community** (the default) publishes and lists it in one step, **Link only** keeps it to the people who get the
+link. The Worker stores published source and metadata in D1, never a playground database. Shared source and synthetic
+environment values are visible to anyone with the link. **Update share** replaces the stored snapshot at the same
+shared link. Copying an existing link does not publish pending edits.
 
 Opening `/s/:id` creates a temporary editable copy and never runs shared code on its own; **Fork to my projects**
 saves a copy locally. `/embed/:id` is the compact read-only view that the standalone loader loads in an iframe (see
@@ -101,11 +102,12 @@ last run, which embeds show where the browser cannot run the project.
 
 ### Community
 
-Ticking **List in Community** in the Share dialog lists the published snapshot on `/community`. Listing needs a
-GitHub sign-in, and the card shows the owner's `@login`. A listing is a `playground` or, when **It reproduces a bug**
-is ticked, a `bug-repros` entry, with its own filter. The Worker reads the title, each side's database and pair, and the files from
+Picking **Community** in the Share dialog lists the published snapshot on `/community`, and the shared link can move
+in or out of Community later with the same choice. Listing needs a GitHub sign-in, and the card shows the owner's
+`@login` and the share's one description. A listing is a `playground` or, when it shows **A Drizzle bug**, a
+`bug-repros` entry, with its own filter. The Worker reads the title, each side's database and pair, and the files from
 the stored snapshot, never from the request. The database filter matches a side-by-side share on either side's
-database, so PostgreSQL vs SQLite lists under both. Pushing changes updates the listing; unticking unlists it.
+database, so PostgreSQL vs SQLite lists under both. Updating the share updates the listing; picking **Link only** unlists it.
 **Report** on a card only counts reports; moderation is manual ([docs/cloudflare.md](../../docs/cloudflare.md#community-moderation)).
 
 ### Link previews

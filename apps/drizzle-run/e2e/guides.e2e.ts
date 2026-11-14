@@ -5,6 +5,7 @@ import type { Locator, Page } from "@playwright/test";
 
 import { replaceEditorCode } from "./editor";
 import { answerLeaveWarnings, expect, test } from "./fixtures";
+import { readOfficialExamples } from "./official-examples";
 import { readSetting } from "./settings";
 
 /** The id of the transactions guide's version: its progress is saved under it. */
@@ -185,11 +186,10 @@ test("should apply each step's edit in a guided example, run it, and show what c
   // The example is a temporary copy, so leaving it with an edit warns first.
   const warnings = await answerLeaveWarnings(page, "accept", () => page.goto("/examples"));
   expect(warnings.map((warning) => warning.type())).toEqual(["beforeunload"]);
-  const card = page
-    .getByRole("list", { name: "Example list" })
-    .getByRole("link", { name: /Transactions and savepoints/ });
-  await expect(card).toContainText("Revisit guide →");
-  await expect(card.locator("[data-slot=guide-status]")).toContainText("Completed");
+  const card = page.locator('article[data-example-slug="transactions"]').first();
+  await expect(card.locator("[data-slot=example-status]")).toHaveText("Done");
+  await card.getByRole("button", { name: "Quick look: Transactions and savepoints" }).click();
+  await expect(page.getByRole("dialog").getByRole("link", { name: /Revisit guide/ })).toBeVisible();
 });
 
 test("should finish the guide with an editable query that finds Grace's seeded post", async ({ page }) => {
@@ -446,40 +446,26 @@ test("should show one side at a time on a phone during the relations step", asyn
   await expect(sqlLike).toBeHidden();
 });
 
+const officialExamples = readOfficialExamples();
+
 test("should tell guided examples and examples apart in the gallery", async ({ page }) => {
   await page.goto("/examples");
-  const featured = page.getByRole("region", { name: "Featured example" }).getByRole("link");
+  const start = page.getByRole("region", { name: "Start here" });
+  const guided = start.locator('article[data-example-slug="drizzle-in-five-minutes"]');
 
-  await expect(featured).toContainText("Start here");
-  await expect(featured).toContainText("Guide · 7 steps");
-  await expect(featured).toContainText("Start guide →");
-  await expect(featured.getByRole("heading", { name: "Drizzle in five minutes" })).toBeVisible();
-  await expect(page.getByRole("group", { name: "Kind" }).getByRole("button")).toHaveText([
-    "Any kind",
-    "Guided",
-    "Examples",
-  ]);
+  await expect(guided).toContainText("Guide · 7 steps");
+  await expect(start.locator('article[data-example-slug="quick-start-postgresql"]')).toContainText(/^Example/);
 
-  const cards = page.getByRole("list", { name: "Example list" }).getByRole("link");
-  await expect(cards.first()).not.toContainText(/orm \S+/);
+  for (const section of ["querying", "pagination", "json", "relational-queries"]) {
+    await page.goto(`/examples?section=${section}`);
+    const cards = page.locator("article[data-example-slug]");
+    await expect(cards.first()).toBeVisible();
 
-  await page.getByRole("group", { name: "Kind" }).getByRole("button", { name: "Guided" }).click();
-  await expect(page).toHaveURL(/kind=guided/);
-  await expect(cards).toHaveCount(9);
-
-  for (const card of await cards.all()) {
-    await expect(card).toContainText(/Guide · \d steps/);
-    await expect(card).toContainText("Start guide →");
-  }
-
-  await page.getByRole("group", { name: "Kind" }).getByRole("button", { name: "Examples" }).click();
-  await expect(page).toHaveURL(/kind=example/);
-  await expect(cards.first()).toBeVisible();
-
-  for (const card of await cards.all()) {
-    await expect(card).toContainText("Example");
-    await expect(card).not.toContainText("Guide ·");
-    await expect(card).toContainText("Open example →");
+    for (const card of await cards.all()) {
+      const slug = await card.getAttribute("data-example-slug");
+      const example = officialExamples.find((item) => item.slug === slug);
+      await expect(card).toContainText(example?.guide ? /^Guide · \d steps/ : /^Example/);
+    }
   }
 });
 

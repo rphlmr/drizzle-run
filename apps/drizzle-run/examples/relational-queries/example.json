@@ -5,7 +5,7 @@
   "title": "Migrate relational queries to v1",
   "description": "Migrate from Drizzle ORM 0.45 to v1: compare relation definitions and relational queries side by side.",
   "topics": ["Queries", "RQB"],
-  "featured": false,
+  "section": "relational-queries",
   "order": 30,
   "dialect": "postgresql",
   "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",

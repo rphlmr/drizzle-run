@@ -5,7 +5,7 @@
   "title": "Typed helpers: SQL-like vs RQB (PostgreSQL)",
   "description": "Use the same typed JSON helper in a select and RQB extras, then load authors with joins or with.",
   "topics": ["Queries", "Helpers", "JSON", "RQB"],
-  "featured": false,
+  "section": "relational-queries",
   "order": 134,
   "dialect": "postgresql",
   "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",

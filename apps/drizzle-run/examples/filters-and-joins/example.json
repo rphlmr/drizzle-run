@@ -5,7 +5,7 @@
   "title": "Filters, joins, and counts",
   "description": "Combine where clauses, join two tables, and count rows per group.",
   "topics": ["Queries"],
-  "featured": false,
+  "section": "querying",
   "order": 50,
   "dialect": "sqlite",
   "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",

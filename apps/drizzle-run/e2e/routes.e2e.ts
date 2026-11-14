@@ -90,10 +90,10 @@ const journeys: Record<AppPageRoute, RouteJourney> = {
   "/examples": async (page) => {
     await page.goto("/examples");
     await markLoadedDocument(page);
+    await page.getByRole("group", { name: "Database" }).getByRole("button", { name: "SQLite" }).click();
     await page
-      .getByRole("list", { name: "Example list" })
-      .getByRole("link")
-      .filter({ hasText: "SQLite quick start" })
+      .getByRole("region", { name: "Start here" })
+      .getByRole("link", { name: "Quick start", exact: true })
       .click();
     await expect(page).toHaveURL(/\/examples\/quick-start-sqlite$/);
     await runOpenProject(page);

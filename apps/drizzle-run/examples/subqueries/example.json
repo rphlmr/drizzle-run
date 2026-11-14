@@ -5,7 +5,7 @@
   "title": "Use one query inside another",
   "description": "Learn membership, existence, grouped subqueries, scalar counts and CTEs with one author report.",
   "topics": ["Queries"],
-  "featured": false,
+  "section": "querying",
   "order": 68,
   "dialect": "postgresql",
   "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",

@@ -21,7 +21,17 @@ describe("getShareStatus", () => {
   });
 
   it("should read the project as published while it matches the digest its link shows", () => {
-    expect(getShareStatus(makeRecord({ publishedDigest: digest }), digest)).toEqual({ status: "published" });
+    expect(getShareStatus(makeRecord({ publishedDigest: digest }), digest)).toEqual({
+      status: "published",
+      listed: false,
+    });
+  });
+
+  it("should say whether the link is listed in Community", () => {
+    expect(getShareStatus(makeRecord({ publishedDigest: digest, listing: { topic: "playground" } }), digest)).toEqual({
+      status: "published",
+      listed: true,
+    });
   });
 
   it("should read an edit since what its link shows as changed", () => {
@@ -39,12 +49,14 @@ describe("getShareStatus", () => {
 
     expect(getShareStatus(makeRecord({ publishedDigest: digest }), resolveProjectDigest(edited))).toEqual({
       status: "changed",
+      listed: false,
     });
   });
 
   it("should read a link whose published digest is not known yet as published", () => {
     expect(getShareStatus(makeRecord(), digest)).toEqual({
       status: "published",
+      listed: false,
     });
   });
 });

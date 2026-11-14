@@ -117,7 +117,9 @@ export function ProjectsPage() {
   const total = workspace.projects.length;
 
   const setQuery = (next: Partial<ProjectListQuery>) => {
-    setParams(writeListQuery({ ...query, page: 1, ...next }), { replace: true });
+    setParams(writeListQuery({ ...query, page: 1, ...next }), {
+      replace: true,
+    });
   };
 
   return (
@@ -131,7 +133,7 @@ export function ProjectsPage() {
           <p className="mt-1 text-[13px] text-muted">Your saved work, ready to run.</p>
         </div>
         <div className="flex w-full flex-wrap items-center gap-2">
-          <div className="relative min-w-40 flex-1 max-phone:basis-full">
+          <div className="relative min-w-40 flex-1 max-phone:basis-full sm:max-w-90">
             <SearchIcon
               className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted"
               aria-hidden="true"
@@ -150,7 +152,7 @@ export function ProjectsPage() {
             options={DIALECTS}
             value={query.dialect}
             onChange={(dialect) => setQuery({ dialect })}
-            className="max-phone:hidden"
+            className="ml-auto max-phone:hidden"
           />
           <Button
             variant="outline"

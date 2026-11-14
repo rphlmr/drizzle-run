@@ -17,9 +17,24 @@ const navLinkClass = ({ isActive }: { isActive: boolean }) =>
   );
 
 const NAV = [
-  { to: "/examples", label: "Examples & Guides", phoneLabel: "Examples & Guides", icon: BookOpenIcon },
-  { to: "/projects", label: "My projects", phoneLabel: "Projects", icon: FolderIcon },
-  { to: "/community", label: "Community", phoneLabel: "Community", icon: UsersIcon },
+  {
+    to: "/examples",
+    label: "Examples & Guides",
+    phoneLabel: "Examples & Guides",
+    icon: BookOpenIcon,
+  },
+  {
+    to: "/projects",
+    label: "My projects",
+    phoneLabel: "Projects",
+    icon: FolderIcon,
+  },
+  {
+    to: "/community",
+    label: "Community",
+    phoneLabel: "Community",
+    icon: UsersIcon,
+  },
 ] as const;
 
 function SiteNav({ phone }: { phone: boolean }) {
@@ -47,7 +62,7 @@ export function SiteMain({ className, children }: { className?: string; children
       <main className="min-h-0 w-full flex-1 [scrollbar-gutter:stable] overflow-y-auto">
         <div
           className={cn(
-            "mx-auto flex min-h-full w-full max-w-260 flex-col gap-5 px-8 pt-7 pb-8 max-phone:gap-3.5 max-phone:p-4",
+            "mx-auto flex min-h-full w-full max-w-400 flex-col gap-5 px-8 pt-7 pb-8 max-phone:gap-3.5 max-phone:p-4",
             className,
           )}
         >

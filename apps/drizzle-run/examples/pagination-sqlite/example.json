@@ -5,7 +5,7 @@
   "title": "Paginate with stable ordering (SQLite)",
   "description": "Compare shifting offset pages, a timestamp-only cursor, and a composite cursor with hasNextPage.",
   "topics": ["Queries", "Pagination"],
-  "featured": false,
+  "section": "pagination",
   "order": 121,
   "dialect": "sqlite",
   "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",

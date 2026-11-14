@@ -5,7 +5,7 @@
   "title": "Filter products by JSONB attributes",
   "description": "Read nested attributes, filter by containment, and distinguish missing keys from JSON null.",
   "topics": ["Queries", "JSON"],
-  "featured": false,
+  "section": "json",
   "order": 85,
   "dialect": "postgresql",
   "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",

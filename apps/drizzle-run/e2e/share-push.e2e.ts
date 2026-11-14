@@ -4,12 +4,14 @@ import type { Page } from "@playwright/test";
 import { expect, SELECT_TO_DOCUMENT_END, test } from "./fixtures";
 import { signInWithGitHub, useGitHubAccount } from "./github";
 
+/** Shares the open project as a link only, then closes the dialog and returns the link. */
 async function publishFromDialog(page: Page): Promise<string> {
   const dialog = page.getByRole("dialog");
 
-  await dialog.getByRole("checkbox", { name: /nothing private/ }).click();
-  await dialog.getByRole("button", { name: "Publish", exact: true }).click();
-  await expect(dialog.getByText("Your snapshot is published.")).toBeVisible({ timeout: 60_000 });
+  await dialog.getByRole("radio", { name: "Link only" }).click();
+  await dialog.getByRole("checkbox", { name: /secrets/ }).click();
+  await dialog.getByRole("button", { name: "Create link", exact: true }).click();
+  await expect(dialog.getByText("Your link is ready.")).toBeVisible({ timeout: 60_000 });
 
   const url = await dialog.getByRole("textbox", { name: "Link", exact: true }).inputValue();
   await page.keyboard.press("Escape");
@@ -21,8 +23,8 @@ async function pushFromDialog(page: Page) {
   const dialog = page.getByRole("dialog");
 
   await dialog.getByRole("checkbox", { name: /nothing private/ }).click();
-  await dialog.getByRole("button", { name: "Push changes", exact: true }).click();
-  await expect(page.getByRole("status").filter({ hasText: "Changes pushed to the link." })).toBeVisible({
+  await dialog.getByRole("button", { name: "Update share", exact: true }).click();
+  await expect(page.getByRole("status").filter({ hasText: "Share updated." })).toBeVisible({
     timeout: 60_000,
   });
   await expect(dialog).toBeHidden();
@@ -49,7 +51,7 @@ test("should push changes to a shared link, which viewers get at the same addres
   await expect(page.getByRole("button", { name: "Run", exact: true })).toBeEnabled({ timeout: 120_000 });
 
   await page.getByRole("button", { name: "Share", exact: true }).click();
-  await expect(page.getByRole("dialog").getByRole("heading", { name: "Share a public snapshot" })).toBeVisible();
+  await expect(page.getByRole("dialog").getByRole("heading", { name: /^Share / })).toBeVisible();
   expect(await page.getByRole("dialog").evaluate((dialog) => dialog.getBoundingClientRect().width)).toBe(520);
   await page
     .getByRole("dialog")
@@ -64,22 +66,21 @@ test("should push changes to a shared link, which viewers get at the same addres
   await page.keyboard.press("ControlOrMeta+End");
   await page.keyboard.insertText("\n// second version\n");
   await expect(editor).toContainText("second version");
-  await expect(page.getByRole("button", { name: "Push changes", exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Update share", exact: true })).toBeVisible();
 
   await page.getByRole("button", { name: "Shared", exact: true }).click();
   const dialog = page.getByRole("dialog");
   await expect(dialog.getByRole("heading", { name: "Share", exact: true })).toBeVisible();
   await expect(dialog.getByRole("button", { name: /new link/i })).toHaveCount(0);
-  await dialog.getByRole("tab", { name: "Embed" }).click();
+  await dialog.getByRole("button", { name: /Embed in a page/ }).click();
   await dialog.getByText("Show code", { exact: true }).click();
   const embedCode = dialog.locator("pre");
   await expect(embedCode).toContainText(`snapshotId: "${new URL(firstUrl).pathname.split("/").at(-1)}"`);
   await expect(embedCode).toContainText('"description": "Original example."');
-  await dialog.getByRole("tab", { name: "Link" }).click();
-  await expect(dialog.getByRole("note")).toContainText("Unpublished changes");
-  await dialog.getByRole("button", { name: "Push changes", exact: true }).click();
-  await expect(dialog.getByRole("heading", { name: "Push changes" })).toBeVisible();
-  await expect(dialog).toContainText("The link and its embeds show your new code to everyone.");
+  await expect(dialog.getByRole("note")).toContainText("You edited the project since you shared it");
+  await dialog.getByRole("button", { name: "Update share", exact: true }).click();
+  await expect(dialog.getByRole("heading", { name: "Update share" })).toBeVisible();
+  await expect(dialog).toContainText("The link and its embeds show your current code.");
   await expect(dialog.getByRole("textbox", { name: /Description/ })).toHaveValue("Original example.");
   await dialog.getByRole("textbox", { name: /Description/ }).fill("Example with a comment.");
   await pushFromDialog(page);
@@ -88,7 +89,7 @@ test("should push changes to a shared link, which viewers get at the same addres
     page.getByRole("contentinfo").getByRole("button", { name: "Local. Where this project is kept" }),
   ).toBeVisible();
   await expect(page.getByRole("button", { name: "Shared", exact: true })).toHaveText("Shared");
-  await expect(page.getByRole("button", { name: "Push changes", exact: true })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Update share", exact: true })).toHaveCount(0);
 
   const viewerContext = await browser.newContext();
   const viewer = await viewerContext.newPage();
@@ -127,10 +128,13 @@ test("should copy the existing shared link without pushing changes", async ({ pa
   const firstUrl = await publishFromDialog(page);
 
   await page.getByRole("button", { name: "Shared", exact: true }).click();
-  await expect(page.getByRole("dialog").getByRole("note")).toContainText("All changes are published");
-  await expect(page.getByRole("dialog").getByRole("button", { name: "Push changes", exact: true })).toHaveCount(0);
+  await expect(page.getByRole("dialog").getByRole("note")).toContainText("Shows your latest code");
+  await expect(page.getByRole("dialog").getByRole("button", { name: "Update share", exact: true })).toHaveCount(0);
   await expect(page.getByRole("dialog").getByRole("checkbox")).toHaveCount(0);
-  await page.getByRole("dialog").getByRole("tab", { name: "Embed" }).click();
+  await page
+    .getByRole("dialog")
+    .getByRole("button", { name: /Embed in a page/ })
+    .click();
   await page.getByRole("dialog").getByText("Show code", { exact: true }).click();
   const embedCode = page.getByRole("dialog").locator("pre");
   await expect(embedCode).toContainText(`snapshotId: "${new URL(firstUrl).pathname.split("/").at(-1)}"`);
@@ -157,13 +161,13 @@ test("should copy the existing shared link without pushing changes", async ({ pa
   const dialog = page.getByRole("dialog", { name: "Share", exact: true });
   await expect(dialog.getByRole("textbox", { name: "Link", exact: true })).toHaveValue(firstUrl);
   await expect(dialog.getByRole("checkbox")).toHaveCount(0);
-  await expect(dialog.getByRole("note")).toContainText("Unpublished changes");
-  await expect(dialog.getByRole("button", { name: "Push changes", exact: true })).toBeEnabled();
-  await dialog.getByRole("button", { name: "Push changes", exact: true }).click();
-  const pushForm = page.getByRole("dialog", { name: "Push changes", exact: true });
+  await expect(dialog.getByRole("note")).toContainText("You edited the project since you shared it");
+  await expect(dialog.getByRole("button", { name: "Update share", exact: true })).toBeEnabled();
+  await dialog.getByRole("button", { name: "Update share", exact: true }).click();
+  const pushForm = page.getByRole("dialog", { name: "Update share", exact: true });
   await pushForm.getByRole("checkbox", { name: /nothing private/ }).click();
   await pushForm.getByRole("button", { name: "Back", exact: true }).click();
-  await expect(dialog.getByRole("button", { name: "Push changes", exact: true })).toBeFocused();
+  await expect(dialog.getByRole("button", { name: "Update share", exact: true })).toBeFocused();
   await expect(dialog.getByRole("checkbox")).toHaveCount(0);
   await dialog.getByRole("button", { name: "Copy link", exact: true }).click();
   await expect(dialog.getByRole("button", { name: "Copied", exact: true })).toBeVisible();
@@ -237,8 +241,8 @@ test("should copy the existing shared link without pushing changes", async ({ pa
   await page.keyboard.press("Delete");
   await expect(editor).not.toContainText("unpublished changes");
   await page.getByRole("button", { name: "Shared", exact: true }).click();
-  await expect(dialog.getByRole("note")).toContainText("All changes are published");
-  await expect(dialog.getByRole("button", { name: "Push changes", exact: true })).toHaveCount(0);
+  await expect(dialog.getByRole("note")).toContainText("Shows your latest code");
+  await expect(dialog.getByRole("button", { name: "Update share", exact: true })).toHaveCount(0);
   await test.info().attach("all-changes-published", { body: await dialog.screenshot(), contentType: "image/png" });
   await page.keyboard.press("Escape");
 
@@ -272,21 +276,23 @@ test("should copy the link and embed code without moving the dialog", async ({ p
   await page.locator(".monaco-editor .view-lines").click();
   await page.keyboard.press("ControlOrMeta+End");
   await page.keyboard.insertText("\n// Pushed changes\n");
-  await page.getByRole("button", { name: "Push changes", exact: true }).click();
+  await page.getByRole("button", { name: "Update share", exact: true }).click();
 
   const dialog = page.getByRole("dialog");
   await pushFromDialog(page);
   await page.getByRole("button", { name: "Shared", exact: true }).click();
 
-  for (const [tab, button, message] of [
-    ["Link", "Copy link", "Link copied."],
-    ["Embed", "Copy embed code", "Embed code copied."],
+  for (const [button, message] of [
+    ["Copy link", "Link copied."],
+    ["Copy embed code", "Embed code copied."],
   ]) {
-    await dialog.getByRole("tab", { name: tab }).click();
-    // The panel left behind stays in view for a frame after the switch.
-    await expect(dialog.getByRole("tabpanel")).toHaveCount(1);
+    if (button === "Copy embed code") {
+      await dialog.getByRole("button", { name: /Embed in a page/ }).click();
+      await expect(dialog.getByRole("button", { name: button, exact: true })).toBeVisible();
+    }
+
     const expectedText =
-      tab === "Link"
+      button === "Copy link"
         ? await dialog.getByRole("textbox", { name: "Link", exact: true }).inputValue()
         : await dialog.locator("pre").textContent();
     const before = await dialog.boundingBox();
@@ -372,10 +378,11 @@ test("should record the last run with a share, and offer it only for a run of th
 
   await page.getByRole("button", { name: "Share", exact: true }).click();
   const dialog = page.getByRole("dialog");
-  await expect(dialog).toContainText("every file, environment value, and your last run's output");
-  await dialog.getByRole("checkbox", { name: /nothing private/ }).click();
-  await dialog.getByRole("button", { name: "Publish", exact: true }).click();
-  await expect(dialog.getByText("Your snapshot is published.")).toBeVisible({ timeout: 60_000 });
+  await expect(dialog).toContainText("every file, environment value and your last run's output");
+  await dialog.getByRole("radio", { name: "Link only" }).click();
+  await dialog.getByRole("checkbox", { name: /secrets/ }).click();
+  await dialog.getByRole("button", { name: "Create link", exact: true }).click();
+  await expect(dialog.getByText("Your link is ready.")).toBeVisible({ timeout: 60_000 });
   await expect(dialog.getByText("Adding your run's output…")).toHaveCount(0, { timeout: 60_000 });
   await expect(dialog.getByText(/your run's output was not added/)).toHaveCount(0);
   const linkId = new URL(await dialog.getByRole("textbox", { name: "Link", exact: true }).inputValue()).pathname
@@ -396,8 +403,8 @@ test("should record the last run with a share, and offer it only for a run of th
   await page.keyboard.press("ControlOrMeta+End");
   await page.keyboard.insertText("\n// edited after the run\n");
   await expect(editor).toContainText("edited after the run");
-  await page.getByRole("button", { name: "Push changes", exact: true }).click();
-  await expect(dialog.getByRole("heading", { name: "Push changes" })).toBeVisible();
+  await page.getByRole("button", { name: "Update share", exact: true }).click();
+  await expect(dialog.getByRole("heading", { name: "Update share" })).toBeVisible();
   await expect(dialog).toContainText("every file and environment value.");
   await expect(dialog).not.toContainText("your last run's output");
 });

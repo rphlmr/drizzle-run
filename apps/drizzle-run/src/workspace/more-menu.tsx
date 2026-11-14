@@ -271,7 +271,7 @@ function ProjectMenuGroup({ phone, actions, runOptions }: ProjectMenuGroupProps)
     <>
       <DropdownMenuGroup>
         {phone && actions && <DropdownMenuItem onClick={actions.onShare}>Share…</DropdownMenuItem>}
-        {phone && actions?.onPush && <DropdownMenuItem onClick={actions.onPush}>Push changes…</DropdownMenuItem>}
+        {phone && actions?.onPush && <DropdownMenuItem onClick={actions.onPush}>Update share…</DropdownMenuItem>}
         {phone && actions?.onDuplicate && <DropdownMenuItem onClick={actions.onDuplicate}>Duplicate</DropdownMenuItem>}
         {actions?.seed && (
           <DropdownMenuItem onClick={actions.seed.onToggle}>

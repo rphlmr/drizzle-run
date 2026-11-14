@@ -7,7 +7,7 @@ test.skip(
   "This regression exercises Chromium's classic scrollbar gutter.",
 );
 
-test("should keep every Share tab inside the dialog with classic scrollbars", async ({ page }) => {
+test("should keep every part of the shared link inside the dialog with classic scrollbars", async ({ page }) => {
   await signInWithGitHub(page.request);
   await page.setViewportSize({ width: 1280, height: 1440 });
   await page.goto("/");
@@ -15,9 +15,12 @@ test("should keep every Share tab inside the dialog with classic scrollbars", as
   await expect(page.getByRole("button", { name: "Run", exact: true })).toBeEnabled({ timeout: 120_000 });
   await page.getByRole("button", { name: "Share", exact: true }).click();
   const dialog = page.getByRole("dialog");
-  await dialog.getByRole("checkbox", { name: /nothing private/ }).click();
-  await dialog.getByRole("button", { name: "Publish", exact: true }).click();
-  await expect(dialog.getByText("Your snapshot is published.")).toBeVisible({ timeout: 60_000 });
+  await dialog.getByRole("radio", { name: "Link only" }).click();
+  await dialog.getByRole("checkbox", { name: /secrets/ }).click();
+  await dialog.getByRole("button", { name: "Create link", exact: true }).click();
+  await expect(dialog.getByText("Your link is ready.")).toBeVisible({ timeout: 60_000 });
+  await dialog.getByRole("button", { name: /Embed in a page/ }).click();
+  await expect(dialog.getByRole("button", { name: "Copy embed code", exact: true })).toBeVisible();
   await page.addStyleTag({ content: "::-webkit-scrollbar { width: 14px; height: 14px; }" });
 
   for (const viewport of [
@@ -25,8 +28,6 @@ test("should keep every Share tab inside the dialog with classic scrollbars", as
     { width: 390, height: 600 },
   ]) {
     await page.setViewportSize(viewport);
-    await dialog.getByRole("tab", { name: "Community" }).click();
-    await expect(dialog.getByRole("button", { name: "List in Community", exact: true })).toBeVisible();
     const scrollBody = dialog.locator("div.overflow-y-auto").first();
     expect(
       await scrollBody.evaluate((element) =>
@@ -52,7 +53,6 @@ test("should keep every Share tab inside the dialog with classic scrollbars", as
           .map((control) => control.getAttribute("aria-label") ?? control.textContent?.trim());
       }),
     ).toEqual([]);
-    await dialog.getByRole("tab", { name: "Link" }).click();
     const linkField = dialog.getByRole("textbox", { name: "Link", exact: true });
     await linkField.focus();
     expect(

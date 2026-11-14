@@ -5,7 +5,7 @@
   "title": "Compose a typed fallback helper (PostgreSQL)",
   "description": "Combine a reusable numeric coalesce helper with Drizzle's built-in max and count, preserving null and zero semantics.",
   "topics": ["Queries", "Helpers"],
-  "featured": false,
+  "section": "helpers",
   "order": 90,
   "dialect": "postgresql",
   "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",

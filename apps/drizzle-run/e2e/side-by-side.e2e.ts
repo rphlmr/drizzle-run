@@ -479,11 +479,12 @@ test("should run one release on both sides, label them (1) and (2), and keep the
 
   await page.getByRole("button", { name: "Share", exact: true }).click();
   const share = page.getByRole("dialog");
-  await share.getByRole("checkbox", { name: /nothing private/ }).click();
-  await share.getByRole("button", { name: "Publish", exact: true }).click();
-  await expect(share.getByText("Your snapshot is published.")).toBeVisible({ timeout: 60_000 });
+  await share.getByRole("radio", { name: "Link only" }).click();
+  await share.getByRole("checkbox", { name: /secrets/ }).click();
+  await share.getByRole("button", { name: "Create link", exact: true }).click();
+  await expect(share.getByText("Your link is ready.")).toBeVisible({ timeout: 60_000 });
   const url = await share.getByRole("textbox", { name: "Link", exact: true }).inputValue();
-  await share.getByRole("tab", { name: "Embed" }).click();
+  await share.getByRole("button", { name: /Embed in a page/ }).click();
   await share.getByText("Show code", { exact: true }).click();
   await expect(share.locator("pre")).toContainText('"name": "Classic"');
   await expect(share.locator("pre")).toContainText('"name": "RQB"');
@@ -501,12 +502,13 @@ test("should open both sides of a share link, idle", async ({ page }) => {
 
   await page.getByRole("button", { name: "Share", exact: true }).click();
   const dialog = page.getByRole("dialog");
-  await expect(dialog.getByRole("heading", { name: "Share a public snapshot" })).toBeVisible();
-  await dialog.getByRole("checkbox", { name: /nothing private/ }).click();
-  await dialog.getByRole("button", { name: "Publish", exact: true }).click();
-  await expect(dialog.getByText("Your snapshot is published.")).toBeVisible({ timeout: 60_000 });
+  await expect(dialog.getByRole("heading", { name: /^Share / })).toBeVisible();
+  await dialog.getByRole("radio", { name: "Link only" }).click();
+  await dialog.getByRole("checkbox", { name: /secrets/ }).click();
+  await dialog.getByRole("button", { name: "Create link", exact: true }).click();
+  await expect(dialog.getByText("Your link is ready.")).toBeVisible({ timeout: 60_000 });
   const url = await dialog.getByRole("textbox", { name: "Link", exact: true }).inputValue();
-  await dialog.getByRole("tab", { name: "Embed" }).click();
+  await dialog.getByRole("button", { name: /Embed in a page/ }).click();
   await dialog.getByText("Show code", { exact: true }).click();
   await expect(dialog.locator("pre")).toContainText('"drizzleOrm": "0.45.4"');
   await expect(dialog.locator("pre")).toContainText('"drizzleOrm": "1.0.0-rc.5"');
@@ -530,16 +532,13 @@ test("should open a side-by-side share listed in Community as a side-by-side cop
 
   await page.getByRole("button", { name: "Share", exact: true }).click();
   const dialog = page.getByRole("dialog");
-  await dialog.getByRole("checkbox", { name: /nothing private/ }).click();
-  await dialog.getByRole("button", { name: "Publish", exact: true }).click();
-  await expect(dialog.getByText("Your snapshot is published.")).toBeVisible({ timeout: 60_000 });
+  await dialog.getByRole("textbox", { name: /Description/ }).fill("Both releases, listed by the e2e spec.");
+  await dialog.getByRole("checkbox", { name: /secrets/ }).click();
+  await dialog.getByRole("button", { name: "Publish to Community", exact: true }).click();
+  await expect(dialog.getByText("Published to Community.")).toBeVisible({ timeout: 60_000 });
   const id = new URL(await dialog.getByRole("textbox", { name: "Link", exact: true }).inputValue()).pathname
     .split("/")
     .at(-1);
-  await dialog.getByRole("tab", { name: "Community" }).click();
-  await dialog.getByRole("textbox", { name: /Description/ }).fill("Both releases, listed by the e2e spec.");
-  await dialog.getByRole("button", { name: "List in Community", exact: true }).click();
-  await expect(dialog.getByText("Listed · @octocat")).toBeVisible({ timeout: 60_000 });
   await page.keyboard.press("Escape");
   // Signed out, as a visitor: the owner of a share skips its Community notice.
   await page.context().clearCookies();

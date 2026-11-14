@@ -5,7 +5,7 @@
   "title": "SQLite quick start",
   "description": "The same starter on SQLite: a users table, seed rows, and a select.",
   "topics": ["Queries"],
-  "featured": false,
+  "section": "start",
   "order": 20,
   "dialect": "sqlite",
   "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
