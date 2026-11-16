@@ -3,10 +3,11 @@ import type { RunManifest } from "@drizzle-run/core/manifest";
 import { useRunController } from "@drizzle-run/react";
 import { RunProvider } from "@drizzle-run/react";
 import { CircleDotIcon } from "lucide-react";
-import { useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useState, type CSSProperties } from "react";
 
 import { buttonVariants } from "../components/ui/button";
 import { resolveDiagnosticFile } from "../editor/diagnostics";
+import { useColorizedLines } from "../editor/use-colorized-lines";
 import { formatLongDate } from "../lib/dates";
 import { cn } from "../lib/utils";
 import { embedViews } from "../project/project-view";
@@ -111,8 +112,8 @@ export interface RecordedEmbedProps {
 
 /**
  * A one-version embed that cannot run in its page: the read-only code and its recorded run in the embed's
- * Results, Story and SQL. It loads no editor and no runtime. Run becomes "Run in a new tab" when only the page is
- * the problem.
+ * Results, Story and SQL. It loads no editor and no runtime, only Monaco's colorizer for the code. Run becomes
+ * "Run in a new tab" when only the page is the problem.
  */
 export function RecordedEmbed({ project, result, recordedAt, reason, recordedBy, playgroundHref }: RecordedEmbedProps) {
   const manifest = project.manifest;
@@ -124,6 +125,11 @@ export function RecordedEmbed({ project, result, recordedAt, reason, recordedBy,
     Math.max(...Object.values(manifest.files).map((content) => content.split("\n").length)),
     MAX_CODE_LINES,
   );
+  const coloredLines = useColorizedLines(code);
+  // A custom property, which React's `CSSProperties` does not list.
+  const codeHeight: CSSProperties & Record<"--code-height", string> = {
+    "--code-height": `${codeLines * CODE_LINE_PX + CODE_PADDING_PX}px`,
+  };
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
@@ -145,30 +151,40 @@ export function RecordedEmbed({ project, result, recordedAt, reason, recordedBy,
           </>
         }
       />
-      <section
-        className="flex shrink-0 flex-col border-b border-border bg-code"
-        style={{ height: codeLines * CODE_LINE_PX + CODE_PADDING_PX }}
-        aria-label="Code, read only"
-      >
-        <CodePreview code={code} />
-      </section>
-      <RecordedNote recordedAt={recordedAt} reason={reason} recordedBy={recordedBy} />
-      <div className="flex min-h-70 flex-1 flex-col">
-        <RunProvider controller={execution}>
-          <OutputPanel
-            revision={project.revision}
-            framed={false}
-            runPicker={false}
-            views={embedViews}
-            onDiagnostic={(diagnostic) => {
-              const path = resolveDiagnosticFile(diagnostic.source, Object.keys(manifest.files));
+      {/*
+        Like the live embed: the code beside the run from 900px wide, else over it. Stacked, the code takes its own
+        height but never more than 40% of the embed, so the run keeps the larger part of its fixed height.
+      */}
+      <div className="@container flex min-h-0 flex-1 flex-col">
+        <div className="flex min-h-0 flex-1 flex-col @min-[900px]:flex-row">
+          <section
+            className="flex h-(--code-height) max-h-[40%] shrink-0 flex-col border-b border-border bg-code @min-[900px]:h-auto @min-[900px]:max-h-none @min-[900px]:flex-1 @min-[900px]:shrink @min-[900px]:border-r @min-[900px]:border-b-0"
+            style={codeHeight}
+            aria-label="Code, read only"
+          >
+            <CodePreview code={code} coloredLines={coloredLines} />
+          </section>
+          <div className="flex min-h-0 min-w-0 flex-1 flex-col">
+            <RecordedNote recordedAt={recordedAt} reason={reason} recordedBy={recordedBy} />
+            <div className="flex min-h-0 flex-1 flex-col">
+              <RunProvider controller={execution}>
+                <OutputPanel
+                  revision={project.revision}
+                  framed={false}
+                  runPicker={false}
+                  views={embedViews}
+                  onDiagnostic={(diagnostic) => {
+                    const path = resolveDiagnosticFile(diagnostic.source, Object.keys(manifest.files));
 
-              if (path !== undefined) {
-                setSelected(path);
-              }
-            }}
-          />
-        </RunProvider>
+                    if (path !== undefined) {
+                      setSelected(path);
+                    }
+                  }}
+                />
+              </RunProvider>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

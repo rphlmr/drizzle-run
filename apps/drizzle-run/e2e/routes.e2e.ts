@@ -65,7 +65,7 @@ const journeys: Record<AppPageRoute, RouteJourney> = {
   "/": async (page) => {
     await page.goto("/");
     await markLoadedDocument(page);
-    await page.getByRole("button", { name: "SQLite Create →" }).click();
+    await page.getByRole("button", { name: "SQLite Starter project and guide" }).click();
     await expect(page).toHaveURL(/\/p\/[\w-]+/);
     await runOpenProject(page);
   },

@@ -1,4 +1,3 @@
-import type { ChatMode } from "@drizzle-run/core/connect";
 import type { ConnectActivity } from "@drizzle-run/runtime/machines";
 import { useActorRef, useSelector } from "@xstate/react";
 import { useEffect, useEffectEvent, useLayoutEffect, useMemo, useState } from "react";
@@ -9,41 +8,30 @@ import {
   getHistorySetting,
   mergeHistory,
   readHistory,
-  type ChatAnswer,
   type ChatHistory,
   type ChatTuning,
 } from "./chat-history";
 import { createChatHistoryMachine } from "./chat-history-machine";
 
-/** A chat's stored rows, mode and answers, as `useChatHistory` returns them. */
+/** A chat's stored rows and tuning, as `useChatHistory` returns them. */
 export interface ChatHistoryState {
   /** False until stored history loads. Until then, entries contain only this tab's live rows. */
   loaded: boolean;
   entries: readonly ConnectActivity[];
-  mode: ChatMode;
-  answers: Readonly<Record<string, ChatAnswer>>;
   /** The chat's own agent, model and effort, once its first message or a pick set them. */
   tuning: ChatTuning | undefined;
-  setMode(mode: ChatMode): void;
-  answer(toolId: string, answer: ChatAnswer): void;
   setTuning(tuning: ChatTuning): void;
 }
 
-/**
- * A conversation's stored rows merged with the machine's live ones, saved back as they change
- *
- * `applyMode` hears the chat's mode once its history loads, and each time `setMode` changes it.
- */
+/** A conversation's stored rows merged with the machine's live ones, saved back as they change. */
 export function useChatHistory({
   settings,
   conversation,
   live,
-  applyMode,
 }: {
   settings: ConnectSettingStore;
   conversation: string;
   live: readonly ConnectActivity[];
-  applyMode: (conversation: string, mode: ChatMode) => void;
 }): ChatHistoryState {
   const load = useEffectEvent(
     async (opened: string) => readHistory(await settings.readSetting(getHistorySetting(opened))) ?? EMPTY_HISTORY,
@@ -53,12 +41,10 @@ export function useChatHistory({
       console.error(`Saving the chat history of ${saved} failed`, cause);
     });
   });
-  const applyChatMode = useEffectEvent((opened: string, mode: ChatMode) => applyMode(opened, mode));
   const [chatHistoryMachine] = useState(() =>
     createChatHistoryMachine({
       load: (opened) => load(opened),
       save: (saved, history) => save(saved, history),
-      applyMode: (opened, mode) => applyChatMode(opened, mode),
     }),
   );
   const actor = useActorRef(chatHistoryMachine, { input: { conversation } });
@@ -90,11 +76,7 @@ export function useChatHistory({
   return {
     loaded: stored !== undefined,
     entries,
-    mode: stored?.mode ?? "ask",
-    answers: stored?.answers ?? EMPTY_HISTORY.answers,
     tuning: stored?.tuning,
-    setMode: (mode) => actor.send({ type: "mode.set", mode }),
-    answer: (toolId, value) => change((current) => ({ ...current, answers: { ...current.answers, [toolId]: value } })),
     setTuning: (tuning) => change((current) => ({ ...current, tuning })),
   };
 }

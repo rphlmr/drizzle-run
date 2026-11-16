@@ -46,7 +46,6 @@ describe("companion cancellation", () => {
           type: "chat.send",
           conversation: "chat",
           text: "Run",
-          mode: "ask",
         },
       });
       const conversation = actor.getSnapshot().context.conversations.get("chat");

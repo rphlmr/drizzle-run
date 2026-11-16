@@ -57,6 +57,7 @@ export const CODEX_CHOICES: AgentChoices = {
     { id: "gpt-6-luna", name: "GPT-6 Luna", efforts: AGENT_EFFORTS },
   ],
   defaults: [
+    { model: "gpt-6.1-sol", effort: "medium" },
     { model: "gpt-6-sol", effort: "medium" },
     { model: "gpt-6-luna", effort: "medium" },
   ],

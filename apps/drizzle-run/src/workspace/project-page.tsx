@@ -222,6 +222,11 @@ function SideBySideProjectView({ project, rememberedFile }: { project: SideBySid
         connect={connect}
         onExportProjects={() => workspace.exportProjects(workspace.projects, "drizzle-run-projects.json")}
         onDuplicate={() => workspace.duplicate(project)}
+        projectManagement={{
+          onRename: () => workspace.rename(project),
+          onExport: () => workspace.exportProjects([project]),
+          onDelete: () => workspace.remove([project]),
+        }}
       />
       {trustDialog}
     </>
@@ -247,6 +252,11 @@ function OneVersionProjectView({ project, rememberedFile }: { project: OneVersio
         banner={workspace.banners}
         onExportProjects={() => workspace.exportProjects(workspace.projects, "drizzle-run-projects.json")}
         onDuplicate={() => workspace.duplicate(project)}
+        projectManagement={{
+          onRename: () => workspace.rename(project),
+          onExport: () => workspace.exportProjects([project]),
+          onDelete: () => workspace.remove([project]),
+        }}
         onForkSideBySide={() => setForking(true)}
         connect={connect}
       />
@@ -296,6 +306,11 @@ function GuidedProject({ project, guide }: { project: OneVersionProject; guide: 
       saveState={workspace.saveState}
       banner={workspace.banners}
       projectActions
+      projectManagement={{
+        onRename: () => workspace.rename(project),
+        onExport: () => workspace.exportProjects([project]),
+        onDelete: () => workspace.remove([project]),
+      }}
       renderLeading={() => (
         <span className="flex min-w-0 items-center gap-2">
           {workspace.renderSwitcher(project)}

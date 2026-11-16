@@ -61,7 +61,7 @@ export function PhoneViewSwitch({ view, onChange, hasNewOutput, badge, aside }: 
 
   return (
     <nav className="shrink-0 bg-surface px-3 pt-2 pb-0.75" aria-label="Workspace views">
-      <div ref={trackRef} className="relative flex rounded-[11px] bg-surface-2 p-0.75">
+      <div ref={trackRef} className="relative flex rounded-md bg-surface-2 p-0.75">
         {indicatorStyle && (
           <span
             aria-hidden="true"

@@ -96,7 +96,7 @@ const copyErrorLabels = {
 
 /** The card's buttons: drawn at 30 px (36 on phones, with a 44 px hit area). */
 const cardButtonClass = cn(
-  "relative min-h-7.5 rounded-[8px] px-3 text-[12.5px] max-phone:min-h-9 max-phone:rounded-[9px] max-phone:text-[13px] max-phone:after:absolute max-phone:after:inset-x-0 max-phone:after:top-1/2 max-phone:after:h-touch max-phone:after:-translate-y-1/2",
+  "relative min-h-7.5 rounded-md px-3 text-[12.5px] max-phone:min-h-9 max-phone:rounded-md max-phone:text-[13px] max-phone:after:absolute max-phone:after:inset-x-0 max-phone:after:top-1/2 max-phone:after:h-touch max-phone:after:-translate-y-1/2",
 );
 
 function CopyErrorButton({ problem, dialect }: { problem: TimelineProblem; dialect: Dialect | undefined }) {
@@ -160,7 +160,7 @@ function ProblemCard({ problem, entrypoints, dialect, onDiagnostic }: ProblemCar
   return (
     <article
       className={cn(
-        "overflow-hidden rounded-[14px] bg-surface",
+        "overflow-hidden rounded-lg bg-surface",
         error ? "border-[1.5px] border-err" : "border border-border",
       )}
       data-kind="problem"

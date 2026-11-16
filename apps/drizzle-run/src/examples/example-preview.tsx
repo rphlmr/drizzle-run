@@ -93,7 +93,7 @@ export function ExamplePreview({ example, progress, title, renderTitle, controls
                   <li key={step.id} className={cn("flex items-start gap-2.5", current && "font-medium text-text")}>
                     <span
                       className={cn(
-                        "mt-px flex size-4.5 shrink-0 items-center justify-center rounded-full border border-card-border text-[10px] font-semibold text-muted",
+                        "mt-px flex size-4.5 shrink-0 items-center justify-center rounded-full border border-border text-[10px] font-semibold text-muted",
                         done && "border-ok bg-ok text-surface",
                         current && "border-text text-text",
                       )}

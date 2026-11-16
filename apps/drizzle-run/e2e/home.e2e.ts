@@ -38,14 +38,6 @@ test("zero projects: the welcome page creates a starter in one click", async ({ 
     "href",
     "/examples/drizzle-in-five-minutes",
   );
-  const strip = page.getByRole("list", { name: "More official examples" });
-  const stripTitles = (await strip.getByRole("link").allInnerTexts()).map((text) => text.replace(/^Official\s*/, ""));
-  expect(stripTitles.toSorted()).toEqual(
-    examples
-      .filter((example) => example.slug !== "drizzle-in-five-minutes" && !example.slug.startsWith("quick-start-"))
-      .map((example) => example.title)
-      .toSorted(),
-  );
   await expect(page.getByRole("link", { name: "All examples →" })).toBeVisible();
   await expect(page.getByRole("navigation", { name: "Main" }).getByRole("link")).toHaveText([
     "Examples & Guides",
@@ -128,28 +120,6 @@ test("what we use: the footer opens the credits, each linking to its official si
   await expect(dialog).toHaveCount(0);
 });
 
-test("reduced motion holds the drizzle rain still", async ({ page }) => {
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("/");
-
-  const names = await page
-    .locator(".animate-drizzle")
-    .evaluateAll((drops) => drops.map((drop) => getComputedStyle(drop).animationName));
-  expect(names.length).toBeGreaterThan(0);
-  expect(new Set(names)).toEqual(new Set(["none"]));
-  await expect(page.locator(".animate-marquee")).toHaveCSS("animation-name", "none");
-
-  await page.emulateMedia({ reducedMotion: "no-preference" });
-  await expect
-    .poll(() =>
-      page
-        .locator(".animate-drizzle")
-        .first()
-        .evaluate((drop) => getComputedStyle(drop).animationName),
-    )
-    .toBe("drizzle");
-});
-
 test("my projects: 45 projects with search, filter, and pages", async ({ page }) => {
   await storeProjects(
     page,
@@ -194,9 +164,9 @@ test("new project: imports an exported project file from the modal", async ({ pa
 
   await page.getByRole("button", { name: "New project", exact: true }).click();
   const dialog = page.getByRole("dialog", { name: "New project" });
-  await expect(dialog).toContainText("Or import a project file");
+  await expect(dialog.getByLabel("Import file")).toBeAttached();
 
-  await dialog.getByLabel("Choose file").setInputFiles({
+  await dialog.getByLabel("Import file").setInputFiles({
     name: "broken.json",
     mimeType: "application/json",
     buffer: Buffer.from("{ not json"),
@@ -204,7 +174,7 @@ test("new project: imports an exported project file from the modal", async ({ pa
   await expect(dialog.getByRole("alert")).toBeVisible();
   await expect(dialog).toBeVisible();
 
-  await dialog.getByLabel("Choose file").setInputFiles({
+  await dialog.getByLabel("Import file").setInputFiles({
     name: "transfers.json",
     mimeType: "application/json",
     buffer: Buffer.from(JSON.stringify(exported)),
@@ -216,7 +186,7 @@ test("new project: imports an exported project file from the modal", async ({ pa
   await page.getByRole("button", { name: "Switch project" }).click();
   const switcher = page.getByRole("dialog", { name: "Your projects" });
   await expect(switcher.getByRole("button", { name: "Import project JSON" })).toHaveCount(0);
-  await switcher.getByRole("link", { name: /^My projects/ }).click();
+  await switcher.getByRole("link", { name: /^All projects/ }).click();
   await expect(page).toHaveURL(/\/projects$/);
   await expect(page.getByRole("link", { name: "Imported transfers", exact: true })).toBeVisible();
 });
@@ -230,7 +200,7 @@ test("new project: imports an Export all backup, all of its projects at once", a
 
   await page.getByRole("button", { name: "New project", exact: true }).click();
   const dialog = page.getByRole("dialog", { name: "New project" });
-  await dialog.getByLabel("Choose file").setInputFiles({
+  await dialog.getByLabel("Import file").setInputFiles({
     name: "drizzle-run-projects.json",
     mimeType: "application/json",
     buffer: Buffer.from(JSON.stringify(backup)),
@@ -253,7 +223,7 @@ test("phone: my projects fits 375 px with a project list", async ({ page }) => {
 
   await expect(page.getByRole("list", { name: "Projects" }).getByRole("link")).toHaveCount(5);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
-  await page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "Examples & Guides" }).click();
+  await page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "Examples" }).click();
   await expect(page.getByRole("heading", { name: "Examples & guides", exact: true })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   await page.goto("/");
@@ -347,8 +317,8 @@ test("site pages crossfade into each other, but not on a filter change or into a
   await expect(page).toHaveURL(/section=querying/);
   await page.waitForTimeout(500);
   expect(await countTransitions()).toBe(2);
-  await page.getByRole("link", { name: "Filters, joins, and counts", exact: true }).click();
-  await expect(page).toHaveURL(/\/examples\/filters-and-joins$/);
+  await page.getByRole("link", { name: "Prepared product search", exact: true }).click();
+  await expect(page).toHaveURL(/\/examples\/prepared-product-search$/);
   await page.waitForTimeout(500);
   expect(await countTransitions()).toBe(2);
 });

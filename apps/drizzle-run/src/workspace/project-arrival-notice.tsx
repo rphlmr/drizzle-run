@@ -186,7 +186,7 @@ function ProjectIntroDialog({
     >
       <DialogContent
         showCloseButton={false}
-        className="flex max-w-110 flex-col gap-4 rounded-[18px] p-6 shadow-sticker-lg"
+        className="flex max-w-110 flex-col gap-4 rounded-lg p-6 shadow-sticker-lg"
         data-slot="project-intro"
       >
         <DialogTitle className="m-0 font-display text-[24px]/[1.15] font-extrabold tracking-[-0.02em]">
@@ -196,7 +196,7 @@ function ProjectIntroDialog({
           {copy.points.map(({ icon: Icon, text }, index) => (
             <li key={index} className="flex items-start gap-3">
               <span
-                className="grid size-8 shrink-0 place-items-center rounded-[9px] bg-surface-2 text-text"
+                className="grid size-8 shrink-0 place-items-center rounded-md bg-surface-2 text-text"
                 aria-hidden="true"
               >
                 <Icon className="size-4" />

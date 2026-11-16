@@ -225,7 +225,8 @@ for (const { release, releaseChoice, zodModule } of [
     const dialog = page.getByRole("dialog", { name: "New project" });
     await dialog.getByLabel("Name", { exact: true }).fill(`${zodModule} types`);
     await dialog.getByRole("radiogroup", { name: "Database" }).getByRole("radio", { name: "PostgreSQL" }).click();
-    await dialog.getByRole("radio", { name: releaseChoice }).click();
+    await dialog.getByRole("button", { name: /^Change Drizzle release/ }).click();
+    await page.getByRole("group", { name: "Drizzle release" }).getByRole("radio", { name: releaseChoice }).click();
     await dialog.getByRole("button", { name: "Create project", exact: true }).click();
     await waitForRun(page);
 
@@ -1158,7 +1159,7 @@ test("should paint the dark theme before the app loads", async ({ page }) => {
   await page.goto("/", { waitUntil: "domcontentloaded" });
 
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
-  await expect(page.locator("body")).toHaveCSS("background-color", "rgb(10, 10, 10)");
+  await expect(page.locator("body")).toHaveCSS("background-color", "rgb(9, 9, 11)");
 });
 
 test("should follow the system theme when storage is blocked", async ({ page }) => {
@@ -1385,7 +1386,7 @@ test("should ask for a new pair before importing an export on a removed Next pai
   await page.getByRole("button", { name: "New project", exact: true }).click();
   await page
     .getByRole("dialog", { name: "New project" })
-    .getByLabel("Choose file")
+    .getByLabel("Import file")
     .setInputFiles({
       name: "old-pair.json",
       mimeType: "application/json",
@@ -1418,7 +1419,7 @@ test("should report a mixed backup in one banner that follows the release choose
   await page.getByRole("button", { name: "New project", exact: true }).click();
   await page
     .getByRole("dialog", { name: "New project" })
-    .getByLabel("Choose file")
+    .getByLabel("Import file")
     .setInputFiles({
       name: "drizzle-run-projects.json",
       mimeType: "application/json",

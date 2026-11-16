@@ -12,7 +12,7 @@ const tones = {
 const headerTones = {
   neutral: "bg-surface-2 text-text",
   lime: "bg-lime text-on-lime",
-  outline: "border border-card-border py-px text-text",
+  outline: "border border-border py-px text-text",
 } as const;
 
 /** A small tag naming what something is: Official, Guided, Example. */

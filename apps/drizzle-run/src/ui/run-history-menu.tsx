@@ -18,7 +18,7 @@ export interface RunHistoryMenuProps {
 
 /** Drawn at 32 px (36 on phones) with a 44 px hit area; viewing an older run, it names it: "Run 3". */
 const triggerClass = cn(
-  "relative inline-flex size-8 min-w-8 shrink-0 items-center justify-center gap-1.5 rounded-[8px] border border-border bg-surface p-0 text-[12.5px] font-semibold whitespace-nowrap text-text after:absolute after:top-1/2 after:left-1/2 after:size-touch after:-translate-1/2 hover:bg-surface-2 disabled:opacity-60 data-popup-open:bg-surface-2 data-popup-open:shadow-[0_0_0_2px_var(--lime)] max-phone:size-9 max-phone:min-w-9 [&>svg]:size-3.5 max-phone:[&>svg]:size-3.75",
+  "relative inline-flex size-8 min-w-8 shrink-0 items-center justify-center gap-1.5 rounded-md border border-border bg-surface p-0 text-[12.5px] font-semibold whitespace-nowrap text-text after:absolute after:top-1/2 after:left-1/2 after:size-touch after:-translate-1/2 hover:bg-surface-2 disabled:opacity-60 data-popup-open:bg-surface-2 data-popup-open:shadow-[0_0_0_2px_var(--lime)] max-phone:size-9 max-phone:min-w-9 [&>svg]:size-3.5 max-phone:[&>svg]:size-3.75",
 );
 
 /**
@@ -67,7 +67,7 @@ export function RunHistoryMenu({ runs, shown, disabled = false, onView }: RunHis
         {shown !== latest && <span>Run {shown}</span>}
       </PopoverTrigger>
       <PopoverContent
-        className="w-[min(360px,calc(100vw-24px))] overflow-hidden rounded-[12px] border-[1.5px] border-card-border p-0 shadow-[var(--shadow-sticker-card),var(--shadow-pop)]"
+        className="w-[min(360px,calc(100vw-24px))] overflow-hidden rounded-lg border border-border p-0 shadow-pop"
         align="end"
       >
         <div className="flex items-baseline gap-2 px-3.5 pt-3 pb-2">

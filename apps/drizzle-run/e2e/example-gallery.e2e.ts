@@ -52,7 +52,8 @@ test("should group examples by section and list a whole section on its own page"
   await querying.getByRole("link", { name: /^See all \d+ ›$/ }).click();
   await expect(page).toHaveURL(/\?section=querying$/);
   await expect(nav.getByRole("link", { name: /^Querying/ })).toHaveAttribute("aria-current", "page");
-  await expect(page.getByRole("list", { name: "Querying" }).locator("article")).toHaveCount(6);
+  // Five on PostgreSQL: the gallery leaves out the SQLite-only example.
+  await expect(page.getByRole("list", { name: "Querying" }).locator("article")).toHaveCount(5);
 
   await page.getByRole("navigation", { name: "Breadcrumb" }).getByRole("link").click();
   await expect(page).toHaveURL(/\/examples$/);
@@ -68,14 +69,15 @@ test("should open the reader's database and remember it", async ({ page }) => {
     "href",
     "/examples/quick-start-postgresql",
   );
-  await expect(getCard(page, "filters-and-joins")).toContainText("SQLite only");
+  // An example with no PostgreSQL version is left out.
+  await expect(getCard(page, "filters-and-joins")).toHaveCount(0);
 
   await database.getByRole("button", { name: "SQLite" }).click();
   await expect(start.getByRole("link", { name: "Quick start", exact: true })).toHaveAttribute(
     "href",
     "/examples/quick-start-sqlite",
   );
-  await expect(getCard(page, "filters-and-joins")).not.toContainText("only");
+  await expect(getCard(page, "filters-and-joins").first()).toBeVisible();
 
   await page.reload();
   await expect(database.getByRole("button", { name: "SQLite" })).toHaveAttribute("aria-pressed", "true");
@@ -113,7 +115,8 @@ test("should search titles, guide steps and code, and say when nothing matches",
 test("should open a card directly and return to the same gallery position", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.goto("/examples");
-  const main = page.getByRole("main");
+  // On desktop only the card column scrolls.
+  const main = page.locator("[data-gallery-scroller]");
   const card = getCard(page, "nested-sql-results").first();
   await card.scrollIntoViewIfNeeded();
   await main.evaluate((element) => {
@@ -127,7 +130,7 @@ test("should open a card directly and return to the same gallery position", asyn
   await expect(page.getByRole("complementary", { name: "Guide" })).toBeVisible();
   await page.goBack();
   await expect(page).toHaveURL(/\/examples$/);
-  await expect.poll(() => page.getByRole("main").evaluate((element) => element.scrollTop)).toBe(scrollTop);
+  await expect.poll(() => main.evaluate((element) => element.scrollTop)).toBe(scrollTop);
 });
 
 test("should open the quick look with Space and close it with Escape", async ({ page }) => {

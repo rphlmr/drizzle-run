@@ -138,7 +138,7 @@ function JsonChip({
   return (
     <button
       type="button"
-      className="relative inline-flex h-5.5 items-center gap-1.25 rounded-[6px] border border-border bg-surface px-1.75 font-mono text-[11px] leading-none font-medium whitespace-nowrap text-text after:absolute after:top-1/2 after:left-1/2 after:h-11 after:w-[max(100%,44px)] after:-translate-1/2 hover:border-accent-text hover:bg-mark max-phone:h-6 max-phone:px-1.5 [&_svg]:size-2.75"
+      className="relative inline-flex h-5.5 items-center gap-1.25 rounded-md border border-border bg-surface px-1.75 font-mono text-[11px] leading-none font-medium whitespace-nowrap text-text after:absolute after:top-1/2 after:left-1/2 after:h-11 after:w-[max(100%,44px)] after:-translate-1/2 hover:border-accent-text hover:bg-mark max-phone:h-6 max-phone:px-1.5 [&_svg]:size-2.75"
       aria-label={`Open ${name} in JSON, ${size}`}
       onClick={() => context.openInJson(path)}
     >
@@ -232,7 +232,7 @@ function NestedTable({
   return (
     <table
       className={cn(
-        "w-full border-separate border-spacing-0 overflow-hidden rounded-[8px] border border-border bg-surface whitespace-normal",
+        "w-full border-separate border-spacing-0 overflow-hidden rounded-md border border-border bg-surface whitespace-normal",
         level > 1 ? "text-[12px]" : "text-[12.5px]",
       )}
     >
@@ -443,7 +443,7 @@ function ResultViewToggle({
             type="button"
             aria-pressed={view === item}
             className={cn(
-              "rounded-[6px] border-0 font-medium max-phone:relative max-phone:h-8 max-phone:py-0 max-phone:text-[12px] max-phone:after:absolute max-phone:after:inset-x-0 max-phone:after:-inset-y-1.5",
+              "rounded-md border-0 font-medium max-phone:relative max-phone:h-8 max-phone:py-0 max-phone:text-[12px] max-phone:after:absolute max-phone:after:inset-x-0 max-phone:after:-inset-y-1.5",
               small
                 ? "relative px-2 py-0.5 text-[11.5px] after:absolute after:inset-x-0 after:-inset-y-1.5"
                 : "px-2.5 py-0.75 text-[12.5px]",
@@ -751,7 +751,7 @@ export function ResultCard({
   if (compact) {
     return (
       <section
-        className="relative min-w-0 shrink-0 overflow-hidden rounded-[12px] border-[1.5px] border-card-border bg-surface shadow-sticker-card"
+        className="relative min-w-0 shrink-0 overflow-hidden rounded-lg border border-border bg-surface shadow-sticker-card"
         ref={card}
         aria-label={cardLabel}
         data-slot="result-card"
@@ -789,7 +789,7 @@ export function ResultCard({
   return (
     <section
       // Relative keeps the Copy announcement inside the output's scroll area, so it cannot give the page a scrollbar.
-      className="relative min-w-0 scroll-my-4.5 overflow-hidden rounded-lg border-[1.5px] border-card-border bg-surface shadow-sticker-card max-phone:scroll-my-3.5"
+      className="relative min-w-0 scroll-my-4.5 overflow-hidden rounded-lg border border-border bg-surface shadow-sticker-card max-phone:scroll-my-3.5"
       ref={card}
       aria-label={cardLabel}
       data-slot="result-card"

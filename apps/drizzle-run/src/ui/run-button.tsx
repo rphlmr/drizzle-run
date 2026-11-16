@@ -30,7 +30,7 @@ export function RunShortcut({ className }: { className?: string }) {
   return (
     <kbd
       className={cn(
-        "-mr-1.5 inline-flex h-5.5 items-center gap-0.5 rounded-[5px] bg-kbd px-1.25 font-sans text-[12px] leading-none font-semibold max-phone:hidden [&_svg]:size-3.25 [&_svg]:fill-none [&_svg]:stroke-[2.25]",
+        "-mr-1.5 inline-flex h-5.5 items-center gap-0.5 rounded-sm bg-kbd px-1.25 font-sans text-[12px] leading-none font-semibold max-phone:hidden [&_svg]:size-3.25 [&_svg]:fill-none [&_svg]:stroke-[2.25]",
         className,
       )}
       aria-hidden="true"

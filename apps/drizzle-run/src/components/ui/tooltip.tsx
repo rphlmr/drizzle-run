@@ -29,7 +29,7 @@ function TooltipContent({
         <TooltipPrimitive.Popup
           data-slot="tooltip-content"
           className={cn(
-            "z-50 max-w-65 origin-(--transform-origin) rounded-[6px] bg-segment px-2 py-1.5 text-[12px] text-segment-fg",
+            "z-50 max-w-65 origin-(--transform-origin) rounded-md bg-segment px-2 py-1.5 text-[12px] text-segment-fg",
             popupMotionClass,
             "data-instant:duration-0",
             className,

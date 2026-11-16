@@ -4,6 +4,7 @@ import type { ChatTarget } from "../connect/chat-panel";
 import { ChatDock } from "../connect/chat-panel";
 import { cn } from "../lib/utils";
 import { AppHeader } from "../shell/app-header";
+import { SiteNav } from "../shell/site-header";
 import { EditorBar } from "../ui/editor-bar";
 import { PhoneViewSwitch, phonePaneMotionClass, type PhoneView } from "../ui/phone-view-switch";
 import { RailResizeHandle } from "../ui/rail-resize-handle";
@@ -159,10 +160,23 @@ export function WorkspaceLayout({
   return (
     <div className="flex min-h-0 flex-1 flex-col" onKeyDownCapture={runShortcut}>
       <AppHeader
+        className={!compact && !phone ? "border-b-0 bg-transparent" : undefined}
         logo={!compact}
         compact={compact}
         playground={!compact && !isBlocked}
-        leading={compact ? undefined : header.leading}
+        leading={
+          compact ? undefined : phone ? (
+            header.leading
+          ) : (
+            // The site sections stay one click away from any project, then the project itself.
+            <>
+              {/* The site header spaces its nav 8px further from the logo: keep the links where they are on every page. */}
+              <SiteNav phone={false} iconsUnderWide className="ml-2" />
+              <span aria-hidden="true" className="mx-1 h-5 w-px shrink-0 bg-border" />
+              {header.leading}
+            </>
+          )
+        }
         tabs={placement.tabsInHeader ? fileTabs : undefined}
         actions={
           <>
@@ -303,7 +317,7 @@ function WorkspaceRail({ aside, shape, phone, shown, resizable, widthPx, onWidth
 function PhoneAsideSwitch({ label, view }: { label: string; view: WorkspaceView }) {
   return (
     <nav className="flex shrink-0 gap-1 bg-surface px-4 pt-3" aria-label="Workspace views">
-      <div className="flex flex-1 rounded-[11px] bg-surface-2 p-0.75">
+      <div className="flex flex-1 rounded-md bg-surface-2 p-0.75">
         {[label, "Sides"].map((item, index) => (
           <button
             key={item}

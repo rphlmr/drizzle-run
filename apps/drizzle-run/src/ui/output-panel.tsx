@@ -123,7 +123,7 @@ function CountChip({ tab, held = false, children }: { tab: TimelineFilter; held?
 /** A filter with nothing to show after a run, as a dashed note. */
 function EmptyNote({ children }: { children: ReactNode }) {
   return (
-    <p className="m-4.5 rounded-[12px] border border-dashed border-faint bg-surface px-5 py-7 text-center text-[13px] leading-[1.55] text-muted max-phone:mx-3 max-phone:my-3.5 max-phone:px-4.5 max-phone:py-6.5">
+    <p className="m-4.5 rounded-lg border border-dashed border-faint bg-surface px-5 py-7 text-center text-[13px] leading-[1.55] text-muted max-phone:mx-3 max-phone:my-3.5 max-phone:px-4.5 max-phone:py-6.5">
       {children}
     </p>
   );
@@ -404,7 +404,7 @@ export function OutputPanel({
   return (
     <section
       className={cn(
-        "@container relative flex h-full min-h-0 flex-col overflow-clip rounded-lg border border-border bg-panel max-phone:rounded-none max-phone:border-0",
+        "@container relative flex h-full min-h-0 flex-col overflow-clip rounded-lg border border-border bg-surface shadow-sticker max-phone:rounded-none max-phone:border-0 max-phone:shadow-none",
         !framed && "rounded-none border-0",
       )}
       aria-label={label === undefined ? "Execution output" : `${label} output`}
@@ -433,7 +433,7 @@ export function OutputPanel({
             aria-label={label === undefined ? "Output views" : `${label} output`}
             indicatorClassName="rounded-base bg-surface-2 shadow-none max-phone:rounded-pill max-phone:bg-segment"
             className={cn(
-              "max-w-full min-w-0 shrink scrollbar-none gap-0.5 overflow-x-auto rounded-[10px] bg-transparent p-0.75 max-phone:max-w-none max-phone:shrink-0 max-phone:basis-full max-phone:gap-1.5 max-phone:rounded-none max-phone:px-3 max-phone:pt-1.25 max-phone:pb-2.5 [&::-webkit-scrollbar]:hidden",
+              "max-w-full min-w-0 shrink scrollbar-none gap-0.5 overflow-x-auto rounded-md bg-transparent p-0.75 max-phone:max-w-none max-phone:shrink-0 max-phone:basis-full max-phone:gap-1.5 max-phone:rounded-none max-phone:px-3 max-phone:pt-1.25 max-phone:pb-2.5 [&::-webkit-scrollbar]:hidden",
               stacked.tabs,
               !bar && "hidden",
             )}

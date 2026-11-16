@@ -66,7 +66,7 @@ export function ReleasePicker({
         <PopoverTrigger
           render={<button type="button" aria-label={label.accessibleName} aria-busy={busy || undefined} />}
           disabled={busy}
-          className="inline-flex h-5.5 shrink-0 items-center gap-1.5 rounded-[6px] border border-border bg-surface-2 pr-1.5 pl-2 text-text hover:border-faint disabled:opacity-60 data-popup-open:shadow-[0_0_0_2px_var(--lime)] max-phone:min-h-touch [&>svg]:size-2.75 [&>svg]:stroke-[2.2]"
+          className="inline-flex h-5.5 shrink-0 items-center gap-1.5 rounded-md border border-border bg-surface-2 pr-1.5 pl-2 text-text hover:border-faint disabled:opacity-60 data-popup-open:shadow-[0_0_0_2px_var(--lime)] max-phone:min-h-touch [&>svg]:size-2.75 [&>svg]:stroke-[2.2]"
           data-slot="release"
           data-unavailable={unavailable ? "" : undefined}
         >
@@ -77,7 +77,7 @@ export function ReleasePicker({
       </Hint>
       <PopoverContent
         side="top"
-        className="flex w-[min(400px,calc(100vw-24px))] flex-col gap-0.5 rounded-[12px] border-[1.5px] border-card-border p-1.5 text-[13px] shadow-[var(--shadow-sticker-card),var(--shadow-pop)]"
+        className="flex w-[min(400px,calc(100vw-24px))] flex-col gap-0.5 rounded-lg border border-border p-1.5 text-[13px] shadow-pop"
       >
         <div className="flex items-baseline gap-2 px-2.5 pt-2 pb-1.5">
           <PopoverTitle className="text-[13.5px] font-[650]">Drizzle version</PopoverTitle>
@@ -104,7 +104,7 @@ export interface ReleaseDialogProps extends Omit<ReleasePickerProps, "readOnly" 
 export function ReleaseDialog({ target, current, files, onChange, open, onOpenChange }: ReleaseDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="flex max-h-[calc(100dvh-32px)] w-[min(400px,calc(100vw-24px))] flex-col gap-0.5 overflow-y-auto rounded-[18px] bg-surface p-2 text-[14px]">
+      <DialogContent className="flex max-h-[calc(100dvh-32px)] w-[min(400px,calc(100vw-24px))] flex-col gap-0.5 overflow-y-auto rounded-lg bg-surface p-2 text-[14px]">
         <DialogHeader className="flex-row items-baseline gap-2 px-2.5 pt-2 pb-1.5">
           <DialogTitle className="font-display text-[17px] font-bold">Drizzle release</DialogTitle>
           <span className="text-[12px] text-muted">Tested ORM and Kit pairs</span>

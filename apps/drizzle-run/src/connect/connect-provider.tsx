@@ -1,11 +1,5 @@
 import type { AgentTuning, ChatContextEntry, ChatProject, CompanionInfo } from "@drizzle-run/core/connect";
-import {
-  AGENT_NAMES,
-  connectCommand,
-  type AgentId,
-  type ChatMode,
-  type ConnectToolScope,
-} from "@drizzle-run/core/connect";
+import { AGENT_NAMES, connectCommand, type AgentId, type ConnectToolScope } from "@drizzle-run/core/connect";
 import {
   connectQuota,
   connectStatus,
@@ -453,7 +447,6 @@ export interface ConnectApi {
   /** This tab's share of today's AI chat, once the relay told it. */
   quota: ConnectQuota | undefined;
   companion: CompanionInfo | undefined;
-  mode: ChatMode;
   /** User messages, streamed agent text, turns, and tool rows, oldest first. */
   activity: readonly ConnectActivity[];
   pendingEdits: readonly PendingEdit[];
@@ -475,10 +468,8 @@ export interface ConnectApi {
   disconnect: () => void;
   retry: () => void;
   chooseAgent: (agent: AgentId) => void;
-  /** Sets a chat's mode; the machine keeps it for that chat's turns. */
-  setMode: (mode: ChatMode, conversation: string) => void;
   /**
-   * `scope` is the chat's view: a guided chat sends `guide`, always in Ask mode. `tuning` is the chat's agent, model
+   * `scope` is the chat's view: a guided chat sends `guide`, with the read tools only. `tuning` is the chat's agent, model
    * and effort; without it, the companion's agent on the CLI's defaults. `context` is the chat so far, which the
    * companion gives only to an agent session that starts without it.
    */
@@ -555,7 +546,6 @@ export function useConnect(): ConnectApi {
   const status = useSelector(actor, connectStatus, isEqual);
   const quota = useSelector(actor, connectQuota, isEqual);
   const companion = useSelector(actor, (snapshot) => snapshot.context.companion);
-  const mode = useSelector(actor, (snapshot) => snapshot.context.mode);
   const activity = useSelector(actor, (snapshot) => snapshot.context.activity);
   const pendingEdits = useSelector(actor, (snapshot) => snapshot.context.pendingEdits);
   const pendingRuns = useSelector(actor, (snapshot) => snapshot.context.pendingRuns);
@@ -567,7 +557,6 @@ export function useConnect(): ConnectApi {
     status,
     quota,
     companion,
-    mode,
     activity,
     pendingEdits,
     pendingRuns,
@@ -579,7 +568,6 @@ export function useConnect(): ConnectApi {
     disconnect: () => actor.send({ type: "link.disconnect" }),
     retry: () => actor.send({ type: "link.retry" }),
     chooseAgent: (agent) => actor.send({ type: "chat.agent.choose", agent }),
-    setMode: (next, conversation) => actor.send({ type: "chat.mode.set", mode: next, conversation }),
     send: (conversation, text, options = {}) =>
       actor.send({
         type: "chat.message.send",
@@ -623,7 +611,6 @@ declare global {
       status(): ConnectStatus;
       command(): string | undefined;
       context(): {
-        mode: ChatMode;
         pendingEdits: readonly PendingEdit[];
         pendingRuns: readonly PendingRun[];
         activity: readonly ConnectActivity[];
@@ -648,8 +635,8 @@ function useConnectDebugHook(actor: Actor<ConnectMachine>, openProject: () => Co
       status: () => connectStatus(actor.getSnapshot()),
       command: () => getCompanionCommand(connectStatus(actor.getSnapshot()), window.location.origin),
       context: () => {
-        const { mode, pendingEdits, pendingRuns, activity } = actor.getSnapshot().context;
-        return { mode, pendingEdits, pendingRuns, activity };
+        const { pendingEdits, pendingRuns, activity } = actor.getSnapshot().context;
+        return { pendingEdits, pendingRuns, activity };
       },
       openProject: () => readOpenProject(),
       send: (event) => actor.send(event),

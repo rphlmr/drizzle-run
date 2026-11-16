@@ -13,7 +13,7 @@ export type OutputSettingsProps = QueryPlansControlsProps;
 
 /** Drawn at 32 px (36 on phones) with a 44 px hit area, like the history button beside it. */
 const gearClass = cn(
-  "relative inline-flex size-8 shrink-0 items-center justify-center rounded-[8px] border border-border bg-surface p-0 text-text after:absolute after:top-1/2 after:left-1/2 after:size-touch after:-translate-1/2 hover:bg-surface-2 data-popup-open:bg-surface-2 data-popup-open:shadow-[0_0_0_2px_var(--lime)] max-phone:size-9 [&>svg]:size-3.5 max-phone:[&>svg]:size-3.75",
+  "relative inline-flex size-8 shrink-0 items-center justify-center rounded-md border border-border bg-surface p-0 text-text after:absolute after:top-1/2 after:left-1/2 after:size-touch after:-translate-1/2 hover:bg-surface-2 data-popup-open:bg-surface-2 data-popup-open:shadow-[0_0_0_2px_var(--lime)] max-phone:size-9 [&>svg]:size-3.5 max-phone:[&>svg]:size-3.75",
 );
 
 /** The lime dot that says Query plans are on, so the setting shows while its popover is closed. */
@@ -66,10 +66,10 @@ export function OutputSettings({ flag, dialect, onChange }: OutputSettingsProps)
       <PopoverContent
         align="end"
         sideOffset={6}
-        className="flex w-90 flex-col gap-0.5 rounded-[12px] border-[1.5px] border-card-border p-1.5 text-[13px] whitespace-normal shadow-[var(--shadow-sticker-card),var(--shadow-pop)]"
+        className="flex w-90 flex-col gap-0.5 rounded-lg border border-border p-1.5 text-[13px] whitespace-normal shadow-pop"
       >
         <PopoverTitle className="px-2.5 pt-2 pb-1 text-[12px] font-semibold text-muted">Output</PopoverTitle>
-        <label className="flex min-h-touch cursor-pointer items-center gap-2.5 rounded-[8px] px-2.5 py-1.5 hover:bg-surface-2">
+        <label className="flex min-h-touch cursor-pointer items-center gap-2.5 rounded-md px-2.5 py-1.5 hover:bg-surface-2">
           <span className="flex flex-1 flex-col gap-0.5">
             <span id={switchLabel} className="font-semibold">
               Query plans

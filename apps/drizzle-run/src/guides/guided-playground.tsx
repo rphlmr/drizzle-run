@@ -57,7 +57,7 @@ type Files = Readonly<Record<string, string>>;
 
 export interface GuidedPlaygroundProps extends Pick<
   ProjectViewProps,
-  "storage" | "saveState" | "banner" | "projectActions"
+  "storage" | "saveState" | "banner" | "projectActions" | "projectManagement"
 > {
   guide: GuideManifest;
   /** The one-version project the guide walks; steps that split show a temporary side-by-side copy instead. */
@@ -232,6 +232,7 @@ function GuidedSession({
   lockedSaveState = saveState,
   banner,
   projectActions = false,
+  projectManagement,
   renderLeading,
   leave,
   lockedMessage,
@@ -295,7 +296,7 @@ function GuidedSession({
 
   const editorBar = locked ? (
     <p
-      className="m-0 flex h-9.5 shrink-0 items-center gap-2 overflow-hidden border-b border-border bg-panel px-3.5 text-[12.5px] whitespace-nowrap text-muted [&>svg]:size-3.5 [&>svg]:shrink-0"
+      className="m-0 flex h-9.5 shrink-0 items-center gap-2 overflow-hidden border-b border-border bg-surface px-3.5 text-[12.5px] whitespace-nowrap text-muted [&>svg]:size-3.5 [&>svg]:shrink-0"
       data-slot="editor-bar"
     >
       <LockIcon aria-hidden="true" />
@@ -391,6 +392,7 @@ function GuidedSession({
       unsavedCopy={saveState === "temporary" && !locked && !hasSameFiles(project.manifest.files, view.project.files)}
       reportError={workspace.reportError}
       projectActions={projectActions}
+      projectManagement={projectManagement}
       leading={leading}
       fork={locked ? undefined : renderFork?.(project)}
       forkBeforeLeaving={forkBeforeLeaving && (() => forkBeforeLeaving(project))}

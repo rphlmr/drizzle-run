@@ -37,7 +37,7 @@ import type { RunNote } from "../ui/run-notes";
 import type { TimelineFilter } from "../ui/run-timeline";
 import { SeedBar } from "../ui/seed-bar";
 import { StatusBar } from "../ui/status-bar";
-import { WorkspaceMoreMenu } from "../workspace/more-menu";
+import { WorkspaceMoreMenu, type ProjectMenuActions } from "../workspace/more-menu";
 import type { RunNotesMode } from "../workspace/run-marks";
 import { isStoreSaveState, saveStateLabels, type SaveState } from "../workspace/save-state";
 import { ShareButton } from "../workspace/share-button";
@@ -147,6 +147,8 @@ export interface ProjectViewProps {
   };
   /** Offers "Duplicate": in the header's project actions box, or the more menu on a phone. */
   onDuplicate?: () => void;
+  /** Rename, Export and Delete for the more menu; undefined where the project is not the user's. */
+  projectManagement?: Pick<ProjectMenuActions, "onRename" | "onExport" | "onDelete">;
   /** Offers "Fork as side by side…" in the more menu. */
   onForkSideBySide?: () => void;
   /**
@@ -177,6 +179,7 @@ export function ProjectView(props: ProjectViewProps) {
     phoneHeaderRun = true,
     aside,
     onDuplicate,
+    projectManagement,
     onForkSideBySide,
     connect,
   } = props;
@@ -253,6 +256,7 @@ export function ProjectView(props: ProjectViewProps) {
                   onShare: workspace.openShare,
                   onPush: workspace.shareStatus.status === "changed" ? workspace.openPush : undefined,
                   onDuplicate,
+                  ...projectManagement,
                   onForkSideBySide,
                   trust: connect?.trust,
                   seed: fileRoles.seedFileShown ? { on: fileRoles.seedOn, onToggle: workspace.toggleSeed } : undefined,
@@ -270,8 +274,8 @@ export function ProjectView(props: ProjectViewProps) {
   const renderEditor = (filesBar: ReactNode) => (
     <section
       className={cn(
-        "relative flex h-full flex-col overflow-hidden rounded-lg border border-border bg-code",
-        (phone || compact) && "rounded-none border-0",
+        "relative flex h-full flex-col overflow-hidden rounded-lg border border-border bg-code shadow-sticker",
+        (phone || compact) && "rounded-none border-0 shadow-none",
       )}
       aria-label="Editor"
     >

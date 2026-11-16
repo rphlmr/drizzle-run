@@ -19,6 +19,8 @@ import { Skeleton } from "../components/ui/skeleton";
 import { readExampleProgress } from "../guides/guide-progress";
 import { cn } from "../lib/utils";
 import { SiteMain } from "../shell/site-header";
+import { DialectMenu } from "../ui/dialect-menu";
+import { SiteFooter } from "../ui/site-footer";
 import { ToggleGroup } from "../ui/toggle-group";
 import { PHONE_QUERY, useMediaQuery } from "../ui/use-media-query";
 import { useWorkspace } from "../workspace/context";
@@ -151,7 +153,12 @@ function useGalleryScroll(anchor: React.RefObject<HTMLElement | null>, viewKey: 
   const firstView = useRef(true);
 
   useLayoutEffect(() => {
-    const main = anchor.current?.closest("main");
+    // The card column scrolls on desktop; on phones it flows and the site panel scrolls the page.
+    const column = anchor.current?.parentElement?.querySelector<HTMLElement>("[data-gallery-scroller]");
+    const main =
+      column && getComputedStyle(column).overflowY !== "visible"
+        ? column
+        : anchor.current?.closest<HTMLElement>("[data-site-scroller]");
 
     if (!main) {
       return;
@@ -212,7 +219,9 @@ export function ExampleGallery() {
   const anchor = useRef<HTMLDivElement>(null);
   const quickLookClose = useRef<HTMLButtonElement>(null);
   const view = readView(params);
-  const families = listExampleFamilies();
+  const allFamilies = listExampleFamilies();
+  // The database picker filters: an example that has no version for it is left out, not only marked.
+  const families = allFamilies.filter((family) => familyRuns(family, dialect));
   const saved: GalleryProgress = loaded;
   const viewKey =
     view.kind === "search"
@@ -263,9 +272,6 @@ export function ExampleGallery() {
 
   const card = (family: ExampleFamily, extra: Partial<Parameters<typeof ExampleCard>[0]> = {}) => {
     const version = extra.version ?? pickFamilyVersion(family, dialect);
-    const onlyOn = familyRuns(family, dialect)
-      ? undefined
-      : GALLERY_DIALECTS.find(({ value }) => value !== dialect)?.label;
 
     return (
       <ExampleCard
@@ -274,7 +280,6 @@ export function ExampleGallery() {
         title={getFamilyTitle(family, version)}
         status={getVersionProgress(version, saved)}
         progress={saved.progress[version.slug]}
-        onlyOn={onlyOn}
         onQuickLook={() => setQuickLook(version.slug)}
         {...extra}
       />
@@ -389,7 +394,7 @@ export function ExampleGallery() {
               <li key={family.key} className="grid grid-cols-[24px_minmax(0,1fr)] items-start gap-2.5">
                 <span
                   className={cn(
-                    "mt-3.5 flex size-6 items-center justify-center rounded-full border border-card-border bg-surface text-[11px] font-semibold text-muted",
+                    "mt-3.5 flex size-6 items-center justify-center rounded-full border border-border bg-surface text-[11px] font-semibold text-muted",
                     done && "border-ok bg-ok text-surface",
                   )}
                   aria-hidden="true"
@@ -423,10 +428,14 @@ export function ExampleGallery() {
                 (family) => getVersionProgress(pickFamilyVersion(family, dialect), saved) === "completed",
               ).length;
 
+              if (members.length === 0) {
+                return null;
+              }
+
               return (
                 <article
                   key={collection.id}
-                  className="relative flex min-w-0 flex-col gap-1.5 rounded-lg border border-border bg-surface p-3.5 transition-[border-color,box-shadow] hover:border-card-border hover:shadow-sticker-card has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-offset-2 has-[a:focus-visible]:outline-accent-text"
+                  className="relative flex min-w-0 flex-col gap-1.5 rounded-lg border border-border bg-surface p-3.5 shadow-sticker-card transition-[border-color,box-shadow] hover:border-card-border hover:shadow-sticker-lg has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-offset-2 has-[a:focus-visible]:outline-accent-text"
                 >
                   <span className="text-[11px] font-medium tracking-[0.02em] text-muted uppercase">
                     {collection.kind} · {members.length}
@@ -483,19 +492,20 @@ export function ExampleGallery() {
     );
   }
 
-  const quickLookFamily = quickLook === null ? undefined : findExampleFamily(quickLook, families);
+  const quickLookFamily = quickLook === null ? undefined : findExampleFamily(quickLook, allFamilies);
   const quickLookVersion =
     quickLookFamily?.versions.find((version) => version.slug === quickLook) ?? quickLookFamily?.versions[0];
 
   return (
     <>
       {workspace.banners}
-      <SiteMain className="gap-4 pt-7">
-        <div ref={anchor} className="flex flex-wrap items-center gap-x-4 gap-y-2">
-          <h1 className="flex-1 font-display text-[24px] font-semibold tracking-[-0.03em] whitespace-nowrap">
+      <SiteMain fill className="gap-4 pt-7">
+        {/* The search and database controls overhang the title row, so the title starts where every page's does. */}
+        <div ref={anchor} className="flex flex-wrap items-center gap-x-4 gap-y-2 phone:[&>:not(h1)]:-my-1.25">
+          <h1 className="flex-1 font-display text-[20px] font-semibold tracking-[-0.02em] whitespace-nowrap max-phone:basis-full">
             Examples &amp; guides
           </h1>
-          <div className="relative w-full max-w-110 max-phone:order-last max-phone:max-w-none">
+          <div className="relative w-full max-w-110 max-phone:w-auto max-phone:max-w-none max-phone:min-w-0 max-phone:flex-1">
             <SearchIcon
               className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted"
               aria-hidden="true"
@@ -504,7 +514,7 @@ export function ExampleGallery() {
               ref={searchInput}
               className="h-10 w-full rounded-md border border-border bg-surface pr-16 pl-9 text-[13px] text-text focus-visible:border-accent-text focus-visible:outline-transparent max-phone:h-touch"
               type="search"
-              placeholder={phone ? "Search a task or an API" : "Search a task or an API: cursor, leftJoin, jsonb_set…"}
+              placeholder={phone ? "Search tasks and APIs" : "Search a task or an API: cursor, leftJoin, jsonb_set…"}
               aria-label="Search examples and guides"
               value={view.kind === "search" ? view.query : ""}
               onChange={(event) => setSearch(event.target.value)}
@@ -519,20 +529,25 @@ export function ExampleGallery() {
               /
             </kbd>
           </div>
-          <span className="flex items-center gap-2 max-phone:w-full">
-            <span className="text-[13px] text-muted max-phone:hidden">I use</span>
-            <ToggleGroup
-              label="Database"
-              options={GALLERY_DIALECTS}
-              value={dialect}
-              onChange={changeDialect}
-              className="max-phone:flex-1"
-            />
-          </span>
+          {phone ? (
+            <DialectMenu label="Database" options={GALLERY_DIALECTS} value={dialect} onChange={changeDialect} />
+          ) : (
+            <span className="flex items-center gap-2">
+              <span className="text-[13px] text-muted">I use</span>
+              <ToggleGroup label="Database" options={GALLERY_DIALECTS} value={dialect} onChange={changeDialect} />
+            </span>
+          )}
         </div>
-        <div className="grid grid-cols-[180px_minmax(0,1fr)] items-start gap-8 max-phone:grid-cols-1 max-phone:gap-3">
+        {/* On desktop the title row and the sections stay still, and only the cards scroll. */}
+        <div className="grid min-h-0 flex-1 grid-cols-[190px_minmax(0,1fr)] grid-rows-[minmax(0,1fr)] gap-8 max-phone:grid-cols-1 max-phone:grid-rows-[auto_minmax(0,1fr)] max-phone:gap-3">
           <SectionNav view={view} counts={(section) => sectionFamilies(section).length} total={families.length} />
-          <div className="flex min-w-0 flex-col gap-6">{content}</div>
+          <div
+            data-gallery-scroller
+            className="-mx-2 flex min-w-0 flex-col overflow-y-auto px-2 max-phone:-mx-4 max-phone:px-4"
+          >
+            <div className="flex flex-col gap-6 pb-8">{content}</div>
+            <SiteFooter className="mt-auto border-border bg-transparent px-0 max-phone:px-0" />
+          </div>
         </div>
       </SiteMain>
       <Drawer
@@ -652,7 +667,7 @@ function Breadcrumb({ current }: { current: string }) {
   );
 }
 
-/** The gallery's table of contents: a sticky column on desktop, a row of chips that scrolls on phones. */
+/** The gallery's table of contents: a still column on desktop, a row of chips that scrolls on phones. */
 function SectionNav({
   view,
   counts,
@@ -680,7 +695,7 @@ function SectionNav({
   return (
     <nav
       aria-label="Gallery sections"
-      className="sticky top-0 flex flex-col gap-px text-[13px] max-phone:static max-phone:-mx-4 max-phone:scrollbar-none max-phone:flex-row max-phone:gap-1.5 max-phone:overflow-x-auto max-phone:px-4"
+      className="flex min-h-0 scrollbar-none flex-col gap-px overflow-y-auto pb-8 text-[13px] max-phone:-mx-4 max-phone:scrollbar-none max-phone:flex-row max-phone:gap-1.5 max-phone:overflow-x-auto max-phone:px-4 max-phone:pb-0"
     >
       {items.map((item) => (
         <Link
@@ -691,7 +706,7 @@ function SectionNav({
             "flex items-center justify-between gap-2 rounded-md px-2.5 py-1.5 whitespace-nowrap no-underline",
             "max-phone:min-h-9 max-phone:rounded-full max-phone:border max-phone:border-border max-phone:bg-surface max-phone:px-3",
             item.active
-              ? "bg-surface-2 font-semibold text-text max-phone:border-segment max-phone:bg-segment max-phone:text-segment-fg"
+              ? "bg-surface-2 font-medium text-text max-phone:border-segment max-phone:bg-segment max-phone:text-segment-fg"
               : "text-soft hover:bg-surface-2 hover:text-text",
           )}
         >

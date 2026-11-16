@@ -68,8 +68,6 @@ export interface ConnectToolDefinition {
   name: ConnectToolName;
   description: string;
   inputSchema: Readonly<Record<string, unknown>>;
-  /** Refused in Ask mode: the user must allow edits in the chat first. */
-  edits: boolean;
   /** The views that offer it; anywhere else the tab refuses it and the companion does not list it. */
   scopes: readonly ConnectToolScope[];
 }
@@ -262,21 +260,18 @@ export const CONNECT_TOOLS: readonly ConnectToolDefinition[] = [
     description:
       "Describes the Drizzle Run project open in the browser: name, database, Drizzle ORM and Kit release with its flavor (slim or effect) per side, the libraries its guest ships (zod, valibot, effect, ...) with their versions, entry files, every file with its size, the releases it can switch to with their flavors, and the latest run's outcome.",
     inputSchema: toInputJsonSchema("get_project"),
-    edits: false,
     scopes: READ_SCOPES,
   },
   {
     name: "read_file",
     description: "Reads one file of the open project, with line numbers.",
     inputSchema: toInputJsonSchema("read_file"),
-    edits: false,
     scopes: READ_SCOPES,
   },
   {
     name: "get_problems",
     description: "Lists TypeScript problems in the editor and the problems of the latest run, with file and line.",
     inputSchema: toInputJsonSchema("get_problems"),
-    edits: false,
     scopes: READ_SCOPES,
   },
   {
@@ -284,15 +279,13 @@ export const CONNECT_TOOLS: readonly ConnectToolDefinition[] = [
     description:
       "Reads the latest run of the open project: outcome, error, displayed results, console lines, and SQL statements, as the output panel shows them.",
     inputSchema: toInputJsonSchema("get_latest_run"),
-    edits: false,
     scopes: READ_SCOPES,
   },
   {
     name: "apply_edits",
     description:
-      "Changes files of the open project. Each edit replaces old_text (it must match exactly once) with new_text, or writes the whole file when old_text is left out. The change shows in the editor at once and waits for the user to Keep or Undo it; runs use it meanwhile. Needs Edit mode.",
+      "Changes files of the open project. Each edit replaces old_text (it must match exactly once) with new_text, or writes the whole file when old_text is left out. The change shows in the editor at once and waits for the user to Keep or Undo it; runs use it meanwhile.",
     inputSchema: toInputJsonSchema("apply_edits"),
-    edits: true,
     scopes: PROJECT_ONLY,
   },
   {
@@ -300,23 +293,20 @@ export const CONNECT_TOOLS: readonly ConnectToolDefinition[] = [
     description:
       "Runs the open project in the browser (a side-by-side project runs both sides) with a fresh database, as the Run button does, and returns the run like get_latest_run. Query plans are planned when they are turned on.",
     inputSchema: toInputJsonSchema("run"),
-    edits: false,
     scopes: PROJECT_ONLY,
   },
   {
     name: "switch_release",
     description:
-      "Moves the open project (or one side) to another tested Drizzle ORM and Kit release, keeping its files, optionally with Effect (guest_flavor effect). Without guest_flavor the current flavor stays where the release ships it. A side of a side-by-side project may also move to the other database (database): its schema stays as written, so rewrite it for that database after the move (get_problems lists what to fix). Use a release listed by get_project. Needs Edit mode.",
+      "Moves the open project (or one side) to another tested Drizzle ORM and Kit release, keeping its files, optionally with Effect (guest_flavor effect). Without guest_flavor the current flavor stays where the release ships it. A side of a side-by-side project may also move to the other database (database): its schema stays as written, so rewrite it for that database after the move (get_problems lists what to fix). Use a release listed by get_project.",
     inputSchema: toInputJsonSchema("switch_release"),
-    edits: true,
     scopes: PROJECT_ONLY,
   },
   {
     name: "create_project",
     description:
-      "Creates a new project in this browser, optionally with Effect (guest_flavor effect). The current project stays in front and the tools keep acting on it; the result has a link the user opens in a new tab, so pass every file at creation. Starts from the starter files unless files are given. Needs Edit mode.",
+      "Creates a new project in this browser, optionally with Effect (guest_flavor effect). The current project stays in front and the tools keep acting on it; the result has a link the user opens in a new tab, so pass every file at creation. Starts from the starter files unless files are given.",
     inputSchema: toInputJsonSchema("create_project"),
-    edits: true,
     scopes: PROJECT_ONLY,
   },
   {
@@ -324,7 +314,6 @@ export const CONNECT_TOOLS: readonly ConnectToolDefinition[] = [
     description:
       "Saves a copy of the open shared or someone else's project in this browser. The current view stays in front; the result has a link the user opens in a new tab. The copy stays read only for you until the user presses Allow AI edits there.",
     inputSchema: toInputJsonSchema("fork_project"),
-    edits: false,
     scopes: SOMEONE_ELSES,
   },
   {
@@ -332,7 +321,6 @@ export const CONNECT_TOOLS: readonly ConnectToolDefinition[] = [
     description:
       "Reads the Query plans setting of the open project: whether the next run plans its queries, the table size the plans assume, and whether real time is measured.",
     inputSchema: toInputJsonSchema("get_query_plans_settings"),
-    edits: false,
     scopes: PROJECT_ONLY,
   },
   {
@@ -340,7 +328,6 @@ export const CONNECT_TOOLS: readonly ConnectToolDefinition[] = [
     description:
       "Turns Query plans on or off for the next run, or changes the size the plans assume (seed, 10k, 100k, 1m rows) or Measure real time (Postgres only: EXPLAIN ANALYZE, writes rolled back). Takes effect on the next run.",
     inputSchema: toInputJsonSchema("set_query_plans_settings"),
-    edits: false,
     scopes: PROJECT_ONLY,
   },
   {
@@ -348,7 +335,6 @@ export const CONNECT_TOOLS: readonly ConnectToolDefinition[] = [
     description:
       "Reads the planned queries of the latest run (one side's, side by side). view reading gives Drizzle Run's reading (summary, verdict, indexes it confirmed); view raw gives the database's own output, untouched. query picks one planned query by its index.",
     inputSchema: toInputJsonSchema("get_query_plans"),
-    edits: false,
     scopes: PROJECT_ONLY,
   },
   {
@@ -356,7 +342,6 @@ export const CONNECT_TOOLS: readonly ConnectToolDefinition[] = [
     description:
       "Reads the guided tour the user is following: the guide's release pair (the docs must match it), the current step with its body, what it changes in the code and what changed in the last run, every step's title, and notes for you on what the guide teaches. Call it first in a guided chat.",
     inputSchema: toInputJsonSchema("get_guide"),
-    edits: false,
     scopes: GUIDE_ONLY,
   },
   {
@@ -364,7 +349,6 @@ export const CONNECT_TOOLS: readonly ConnectToolDefinition[] = [
     description:
       "Reads an official Drizzle docs page as text: https://orm.drizzle.team/docs/<page> (PostgreSQL), https://orm.drizzle.team/docs/sqlite/<page> (SQLite), the index https://orm.drizzle.team/llms.txt, or a source the guide lists. Without url it lists the guide's sources, which come first for a Legacy (0.x) guide since the site documents v1. Nothing else on the web.",
     inputSchema: toInputJsonSchema("read_docs"),
-    edits: false,
     scopes: GUIDE_ONLY,
   },
 ];

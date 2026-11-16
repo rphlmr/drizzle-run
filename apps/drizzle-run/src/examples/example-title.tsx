@@ -19,11 +19,15 @@ export function ExampleTitle({ title, badge, phoneStep }: ExampleTitleProps) {
         phoneStep && "max-phone:flex-col max-phone:items-start max-phone:gap-0",
       )}
     >
-      <Link to="/examples" className="whitespace-nowrap text-muted no-underline hover:text-text max-phone:hidden">
+      {/* Under 1280px the header's Examples & Guides link already says where the example lives. */}
+      <Link
+        to="/examples"
+        className="whitespace-nowrap text-muted no-underline hover:text-text max-[1280px]:hidden max-phone:hidden"
+      >
         Examples &amp; guides /
       </Link>
       <span className="truncate font-semibold">{title}</span>
-      <span className={cn("contents", phoneStep && "max-phone:hidden")}>{badge}</span>
+      <span className={cn("contents *:shrink-0", phoneStep && "max-phone:hidden")}>{badge}</span>
       {phoneStep && (
         <span className="hidden text-[12px] whitespace-nowrap text-muted max-phone:block">{phoneStep}</span>
       )}

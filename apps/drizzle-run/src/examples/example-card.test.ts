@@ -61,10 +61,6 @@ describe("example card", () => {
     expect(html).not.toContain(example.description);
   });
 
-  it("should name the database an example is limited to", () => {
-    expect(renderCard({ onlyOn: "PostgreSQL" })).toContain("PostgreSQL only");
-  });
-
   it.each([
     ["relational-queries", "Drizzle 0.45.4 vs Drizzle 1.0.0-rc.5"],
     ["select-vs-relational-queries", "SQL-like vs RQB"],

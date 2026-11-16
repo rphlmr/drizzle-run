@@ -1,4 +1,4 @@
-import { ChevronRightIcon, MoreHorizontalIcon } from "lucide-react";
+import { MoreHorizontalIcon } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { Link } from "react-router";
 
@@ -20,6 +20,7 @@ import { ShareVisibilityBadge } from "../my-shares/share-visibility";
 import type { ProjectRecord } from "../project/projects";
 import { isSideBySide } from "../project/projects";
 import { CopyLinkButton } from "../share/copy-link-button";
+import { DialectLogo } from "../ui/dialect-logo";
 import { ReleaseLines } from "../ui/release-lines";
 import { formatBytes } from "../ui/run-report";
 import { SideBySideTag } from "../ui/side-by-side-tag";
@@ -57,7 +58,7 @@ const tdClass = cn("border-b border-border px-3 py-3 text-[13px]");
 const mutedCellClass = cn(tdClass, "whitespace-nowrap text-muted");
 const checkClass = cn("w-10 pl-3.5");
 const actionsClass = cn("w-px text-right");
-const frameClass = cn("flex flex-col overflow-hidden rounded-lg border border-border bg-surface");
+const frameClass = cn("flex flex-col overflow-hidden rounded-lg border border-border bg-surface shadow-sticker-card");
 
 const phoneShareLabels: Record<ProjectShare["visibility"], string> = {
   link_only: "shared",
@@ -297,8 +298,9 @@ export function ProjectTable({
             <li key={project.id} className="flex items-center border-b border-surface-2">
               <Link
                 to={`/p/${project.id}`}
-                className="flex min-h-touch min-w-0 flex-1 items-center gap-2.5 px-3.5 py-3 text-text no-underline"
+                className="flex min-h-touch min-w-0 flex-1 items-center gap-3 py-3 pl-3.5 text-text no-underline"
               >
+                <ProjectDialectTile project={project} />
                 <span className="flex min-w-0 flex-1 flex-col gap-0.5">
                   <span className="flex min-w-0 items-center gap-2">
                     <span className="truncate font-semibold">{project.name}</span>
@@ -311,13 +313,11 @@ export function ProjectTable({
                     {shares[project.id] !== undefined && ` · ${phoneShareLabels[shares[project.id].visibility]}`}
                   </span>
                 </span>
-                {!syncing && <ChevronRightIcon className="size-4 shrink-0 text-muted" aria-hidden="true" />}
               </Link>
-              {syncing && (
-                <span className="flex min-h-touch shrink-0 items-center pr-3.5">
-                  <CloudLocation project={project} cloudSync={cloudSync} />
-                </span>
-              )}
+              <span className="flex min-h-touch shrink-0 items-center gap-1 pr-2 pl-2">
+                {syncing && <CloudLocation project={project} cloudSync={cloudSync} />}
+                <RowActions project={project} />
+              </span>
             </li>
           ))}
         </ul>
@@ -438,5 +438,19 @@ export function ProjectTable({
       </div>
       {footer}
     </div>
+  );
+}
+
+/** Phones: the project's database logo on a tile, leading its row; a side by side shows its first side's. */
+function ProjectDialectTile({ project }: { project: ProjectRecord }) {
+  const [first] = getProjectReleaseLines(project);
+
+  return (
+    <span
+      aria-hidden="true"
+      className="flex size-9 shrink-0 items-center justify-center rounded-md border border-border bg-surface-2"
+    >
+      {first && <DialectLogo dialect={first.dialect} className="size-4.5" />}
+    </span>
   );
 }

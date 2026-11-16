@@ -7,6 +7,8 @@ import {
   DropdownMenuRadioItem,
 } from "../components/ui/dropdown-menu";
 import { applyTheme, readCurrentPreference, type ThemePreference } from "../design/theme";
+import { cn } from "../lib/utils";
+import { menuSegmentClass, menuSegmentsClass } from "./menu-segments";
 
 const options: { value: ThemePreference; label: string }[] = [
   { value: "system", label: "System" },
@@ -14,14 +16,15 @@ const options: { value: ThemePreference; label: string }[] = [
   { value: "dark", label: "Dark" },
 ];
 
-/** The Light, Dark and System choices of a menu, saved and applied on pick. */
-export function ThemeMenuItems() {
+/** The Light, Dark and System choices of a menu, saved and applied on pick; `segmented` draws them as one row. */
+export function ThemeMenuItems({ segmented = false }: { segmented?: boolean }) {
   const [preference, setPreference] = useState(readCurrentPreference);
 
   return (
     <DropdownMenuGroup>
       <DropdownMenuLabel>Theme</DropdownMenuLabel>
       <DropdownMenuRadioGroup
+        className={cn(segmented && menuSegmentsClass)}
         value={preference}
         onValueChange={(value) => {
           const next = options.find((option) => option.value === value)?.value;
@@ -33,7 +36,12 @@ export function ThemeMenuItems() {
         }}
       >
         {options.map((option) => (
-          <DropdownMenuRadioItem key={option.value} value={option.value} closeOnClick>
+          <DropdownMenuRadioItem
+            key={option.value}
+            value={option.value}
+            closeOnClick={!segmented}
+            className={cn(segmented && menuSegmentClass)}
+          >
             {option.label}
           </DropdownMenuRadioItem>
         ))}

@@ -12,7 +12,8 @@ export const selectionIndicatorClass = cn(
  *
  * The box of the track's selected option (the child whose `data-option` is `selectedKey`), for one fill that slides
  * between options the way Base UI's Tabs.Indicator does. Measured before paint, so the fill never flashes away, and
- * again whenever the track resizes. `undefined` while no option matches.
+ * again whenever the track resizes; a resize moves it at once, so only a change of option slides. `undefined` while no
+ * option matches.
  *
  * @param selectedKey - The selected option's `data-option` value.
  */
@@ -28,7 +29,7 @@ export function useSelectionIndicator(selectedKey: string): {
       return undefined;
     }
 
-    const measure = () => {
+    const measure = (slide: boolean) => {
       const selected = track.querySelector<HTMLElement>(`[data-option="${CSS.escape(selectedKey)}"]`);
 
       if (!selected) {
@@ -44,11 +45,12 @@ export function useSelectionIndicator(selectedKey: string): {
         top: selectedBox.top - trackBox.top - track.clientTop,
         width: selectedBox.width,
         height: selectedBox.height,
+        ...(slide ? {} : { transitionDuration: "0s" }),
       });
     };
 
-    measure();
-    const observer = new ResizeObserver(measure);
+    measure(true);
+    const observer = new ResizeObserver(() => measure(false));
     observer.observe(track);
 
     return () => observer.disconnect();

@@ -10,9 +10,12 @@ export function getDialectName(dialect: CommunityPair["dialect"]) {
 
 /** The databases a share runs, in side order: "PostgreSQL", or "PostgreSQL vs SQLite" for sides on two. */
 export function formatShareDialects(share: CommunityShare) {
-  const dialects = new Set((share.sides ?? [share.releasePair]).map((pair) => pair.dialect));
+  return listShareDialects(share).map(getDialectName).join(" vs ");
+}
 
-  return [...dialects].map(getDialectName).join(" vs ");
+/** The share's databases, each once, in side order. */
+export function listShareDialects(share: CommunityShare) {
+  return [...new Set((share.sides ?? [share.releasePair]).map((pair) => pair.dialect))];
 }
 
 /** " + Effect" after a pair that runs on the Effect image, else nothing. */

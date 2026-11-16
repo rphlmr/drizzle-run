@@ -19,6 +19,7 @@ import { CreditsDialog } from "../ui/credits-dialog";
 import { EditorFontSizeMenuItems } from "../ui/editor-font-size-menu-items";
 import { Hint } from "../ui/hint";
 import { SidesIcon } from "../ui/icons";
+import { phoneSheetClass, phoneSheetProps } from "../ui/phone-sheet";
 import { AUTHOR_HREF, ISSUES_HREF, SOURCE_HREF } from "../ui/project-links";
 import { isApplePlatform } from "../ui/run-button";
 import { ThemeMenuItems } from "../ui/theme-menu-items";
@@ -35,6 +36,12 @@ export interface ProjectMenuActions {
   onPush?: () => void;
   /** Phones only: the desktop header has Duplicate in its project actions box. */
   onDuplicate?: () => void;
+  /** Renames the project; the project switcher only switches projects. */
+  onRename?: () => void;
+  /** Saves the project as a JSON file. */
+  onExport?: () => void;
+  /** Deletes the project, after its own confirmation. */
+  onDelete?: () => void;
   /** "Disable seed execution", or "Enable seed execution" while it is off; only when the project has a seed. */
   seed?: { on: boolean; onToggle: () => void };
   /** Offers "Fork as side by side…", for a one-version project. */
@@ -64,6 +71,25 @@ export interface WorkspaceMoreMenuProps {
   defaultFontSize: number;
 }
 
+/** The switch drawn at the end of a toggle item, in place of a check mark. */
+function MenuSwitch({ on }: { on: boolean }) {
+  return (
+    <span
+      className={cn("relative ml-auto inline-flex h-4.5 w-7.75 shrink-0 rounded-full bg-border", on && "bg-segment")}
+      aria-hidden="true"
+    >
+      <span
+        className={cn(
+          "absolute top-0.5 left-0.5 size-3.5 rounded-full bg-surface shadow-[0_0_0_1px_var(--border)] transition-transform duration-150",
+          on && "translate-x-3.25",
+        )}
+      />
+    </span>
+  );
+}
+
+const switchItemClass = "pl-2.5 [&>[data-slot=dropdown-menu-checkbox-item-indicator]]:hidden";
+
 /**
  * Keep the menu open when toggling Debug so other settings remain available.
  */
@@ -74,23 +100,10 @@ function DebugMenuItem({ runOptions }: { runOptions: RunOptionsControls }) {
       onCheckedChange={runOptions.setDebug}
       closeOnClick={false}
       title="A report about this playground's own run"
-      className="pl-2.5 [&>[data-slot=dropdown-menu-checkbox-item-indicator]]:hidden"
+      className={switchItemClass}
     >
       Debug
-      <span
-        className={cn(
-          "relative ml-auto inline-flex h-4.5 w-7.75 shrink-0 rounded-full bg-border",
-          runOptions.debug && "bg-segment",
-        )}
-        aria-hidden="true"
-      >
-        <span
-          className={cn(
-            "absolute top-0.5 left-0.5 size-3.5 rounded-full bg-surface shadow-[0_0_0_1px_var(--border)] transition-transform duration-150",
-            runOptions.debug && "translate-x-3.25",
-          )}
-        />
-      </span>
+      <MenuSwitch on={runOptions.debug} />
     </DropdownMenuCheckboxItem>
   );
 }
@@ -120,8 +133,10 @@ function FormatCodeMenuItems() {
         onCheckedChange={applyFormatOnRun}
         closeOnClick={false}
         title="Run formats every file with Prettier before it runs"
+        className={switchItemClass}
       >
         Format on run
+        <MenuSwitch on={formatOnRun} />
       </DropdownMenuCheckboxItem>
     </DropdownMenuGroup>
   );
@@ -138,8 +153,10 @@ function RunNotesMenuItem() {
         onCheckedChange={applyRunNotesShown}
         closeOnClick={false}
         title="How each transaction ended, after the line that opened it"
+        className={switchItemClass}
       >
         Run notes in code
+        <MenuSwitch on={shown} />
       </DropdownMenuCheckboxItem>
     </DropdownMenuGroup>
   );
@@ -190,9 +207,14 @@ export function WorkspaceMoreMenu({
     <>
       <DropdownMenu>
         {hint === undefined ? trigger : <Hint content={hint}>{trigger}</Hint>}
-        <DropdownMenuContent align="end" className={contentClassName}>
+        <DropdownMenuContent
+          align={phone ? "start" : "end"}
+          {...(phone && phoneSheetProps)}
+          className={cn(phone && phoneSheetClass, contentClassName)}
+        >
           {phone && (
             <>
+              <span aria-hidden="true" className="mx-auto mb-2 block h-1 w-9 rounded-pill bg-card-border" />
               {/* Base UI labels need a group around them. */}
               <DropdownMenuGroup>
                 <DropdownMenuLabel>
@@ -217,16 +239,16 @@ export function WorkspaceMoreMenu({
           )}
           <FormatCodeMenuItems />
           <DropdownMenuSeparator />
-          <ThemeMenuItems />
+          <ThemeMenuItems segmented={phone} />
           <DropdownMenuSeparator />
-          <EditorFontSizeMenuItems defaultFontSize={defaultFontSize} />
+          <EditorFontSizeMenuItems defaultFontSize={defaultFontSize} segmented={phone} />
           <DropdownMenuSeparator />
           <RunNotesMenuItem />
           {phone && (
             <>
               <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                <DropdownMenuLabel>About</DropdownMenuLabel>
+              <DropdownMenuGroup className="flex flex-wrap *:data-[slot=dropdown-menu-item]:text-muted">
+                <DropdownMenuLabel className="sr-only">About</DropdownMenuLabel>
                 <DropdownMenuItem onClick={() => setCreditsOpen(true)}>What we use</DropdownMenuItem>
                 <DropdownMenuItem
                   render={
@@ -272,7 +294,9 @@ function ProjectMenuGroup({ phone, actions, runOptions }: ProjectMenuGroupProps)
       <DropdownMenuGroup>
         {phone && actions && <DropdownMenuItem onClick={actions.onShare}>Share…</DropdownMenuItem>}
         {phone && actions?.onPush && <DropdownMenuItem onClick={actions.onPush}>Update share…</DropdownMenuItem>}
+        {actions?.onRename && <DropdownMenuItem onClick={actions.onRename}>Rename…</DropdownMenuItem>}
         {phone && actions?.onDuplicate && <DropdownMenuItem onClick={actions.onDuplicate}>Duplicate</DropdownMenuItem>}
+        {actions?.onExport && <DropdownMenuItem onClick={actions.onExport}>Export JSON</DropdownMenuItem>}
         {actions?.seed && (
           <DropdownMenuItem onClick={actions.seed.onToggle}>
             {actions.seed.on ? "Disable seed execution" : "Enable seed execution"}
@@ -288,6 +312,16 @@ function ProjectMenuGroup({ phone, actions, runOptions }: ProjectMenuGroupProps)
         <DebugMenuItem runOptions={runOptions} />
       </DropdownMenuGroup>
       <DropdownMenuSeparator />
+      {actions?.onDelete && (
+        <>
+          <DropdownMenuGroup>
+            <DropdownMenuItem className="text-err" onClick={actions.onDelete}>
+              Delete project…
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+          <DropdownMenuSeparator />
+        </>
+      )}
     </>
   );
 }

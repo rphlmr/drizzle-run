@@ -15,6 +15,7 @@ import type { KeyboardEvent, ReactNode } from "react";
 
 import { RadioGroup, RadioGroupItem } from "../components/ui/radio-group";
 import { cn } from "../lib/utils";
+import { DialectLogo } from "../ui/dialect-logo";
 import { describeBlockedRelease, formatPairText, getReleaseLabel, toReleaseChoiceKey } from "../ui/release-options";
 
 /** One radio row: its value, title, and optional body and tag. */
@@ -78,9 +79,9 @@ export function OptionRows<Value extends string>({
             <label
               key={option.value}
               className={cn(
-                "grid cursor-pointer grid-cols-[16px_minmax(0,1fr)_auto] gap-2.5 rounded-[9px] border border-border bg-surface px-2.5 text-text",
+                "grid cursor-pointer grid-cols-[16px_minmax(0,1fr)_auto] gap-2.5 rounded-md border border-border bg-surface px-2.5 text-text",
                 dense ? "min-h-10 items-center" : "items-start py-2.25",
-                checked && "border-[1.5px] border-run-border bg-mark",
+                checked && "border-text bg-mark ring-1 ring-text",
                 option.disabled && "cursor-default opacity-50",
               )}
             >
@@ -233,8 +234,9 @@ export function DatabaseSegment({ value, children }: { value: Dialect; children:
   return (
     <RadioPrimitive.Root
       value={value}
-      className="relative inline-flex min-w-0 items-center justify-center rounded-sm border-0 bg-transparent px-2 text-[13px] font-normal text-muted after:absolute after:inset-x-0 after:-inset-y-1.25 hover:text-text data-checked:bg-segment data-checked:font-semibold data-checked:text-segment-fg"
+      className="relative inline-flex min-w-0 items-center justify-center gap-1.5 rounded-sm border-0 bg-transparent px-2 text-[13px] font-normal text-muted after:absolute after:inset-x-0 after:-inset-y-1.25 hover:text-text data-checked:bg-surface data-checked:font-medium data-checked:text-text data-checked:shadow-sticker data-checked:ring-1 data-checked:ring-border"
     >
+      <DialectLogo dialect={value} />
       {children}
     </RadioPrimitive.Root>
   );

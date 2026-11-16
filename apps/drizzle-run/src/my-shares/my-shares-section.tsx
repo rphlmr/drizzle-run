@@ -104,7 +104,7 @@ const thClass = cn(
 );
 const tdClass = cn("border-b border-surface-2 p-2");
 const mutedCellClass = cn(tdClass, "whitespace-nowrap text-muted");
-const frameClass = cn("flex flex-col overflow-hidden rounded-lg border border-border bg-surface");
+const frameClass = cn("flex flex-col overflow-hidden rounded-lg border border-border bg-surface shadow-sticker-card");
 
 function getShareReleaseLines(share: MyShare): ReleaseLine[] {
   return share.pairs.map((pair) => ({
@@ -284,7 +284,7 @@ function SharesSearch({ search }: { search: string }) {
     <search className="ml-auto max-phone:ml-0 max-phone:w-full">
       <Form>
         <input
-          className="h-9 w-60 rounded-md border border-border bg-surface px-3 text-text focus-visible:border-accent-text focus-visible:outline-transparent max-phone:h-touch max-phone:w-full max-phone:rounded-[12px] max-phone:px-3.5"
+          className="h-9 w-60 rounded-md border border-border bg-surface px-3 text-text focus-visible:border-accent-text focus-visible:outline-transparent max-phone:h-touch max-phone:w-full max-phone:rounded-lg max-phone:px-3.5"
           type="search"
           name="q"
           placeholder="Search shares"

@@ -50,7 +50,7 @@ export function FlagControls({ flag, dialect, onChange, layout }: FlagControlsPr
         </span>
         <RadioGroup
           aria-labelledby={sizeLabel}
-          className={cn("grid grid-cols-4 rounded-md bg-surface-2 p-0.75", sheet && "rounded-[11px]")}
+          className={cn("grid grid-cols-4 rounded-md bg-surface-2 p-0.75", sheet && "rounded-md")}
           value={flag.size}
           onValueChange={(value) => {
             const size = QueryPlanSizeSchema.safeParse(value);
@@ -65,10 +65,10 @@ export function FlagControls({ flag, dialect, onChange, layout }: FlagControlsPr
               key={size}
               value={size}
               className={cn(
-                "relative inline-flex h-7.5 min-w-0 items-center justify-center rounded-[7px] border-0 bg-transparent px-1 text-[12.5px] font-medium whitespace-nowrap text-muted after:absolute after:inset-x-0 after:-inset-y-1.75 hover:text-text",
+                "relative inline-flex h-7.5 min-w-0 items-center justify-center rounded-md border-0 bg-transparent px-1 text-[12.5px] font-medium whitespace-nowrap text-muted after:absolute after:inset-x-0 after:-inset-y-1.75 hover:text-text",
                 sheet
-                  ? "h-9 rounded-[8px] after:-inset-y-1 data-checked:bg-surface data-checked:font-semibold data-checked:text-text data-checked:shadow-[0_0_0_1.5px_var(--card-border)]"
-                  : "data-checked:bg-segment data-checked:text-segment-fg",
+                  ? "h-9 rounded-md after:-inset-y-1 data-checked:bg-surface data-checked:font-semibold data-checked:text-text data-checked:shadow-[0_0_0_1.5px_var(--card-border)]"
+                  : "data-checked:bg-surface data-checked:text-text data-checked:shadow-sticker data-checked:ring-1 data-checked:ring-border",
               )}
             >
               {sizeLabels[size]}

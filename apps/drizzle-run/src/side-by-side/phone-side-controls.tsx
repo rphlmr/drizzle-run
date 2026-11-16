@@ -49,11 +49,7 @@ export function PhoneSideControls({
 
   return (
     <div className="grid shrink-0 gap-2 px-4 pt-3">
-      <div
-        className="flex rounded-md border-[1.5px] border-card-border bg-surface p-0.75"
-        role="tablist"
-        aria-label="Side"
-      >
+      <div className="flex rounded-md border border-border bg-surface p-0.75" role="tablist" aria-label="Side">
         {releases.map((item) => (
           <button
             key={item.side}

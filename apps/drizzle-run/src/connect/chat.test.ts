@@ -80,11 +80,9 @@ describe("chat history", () => {
   it("should read what it wrote, and read a history with a row it does not know as none", () => {
     const written = {
       version: 1,
-      mode: "edit",
-      answers: { c1: "allowed" },
       entries: [
         makeUserMessage("u1"),
-        makeTool("c1", { status: "refused", error: { code: "edit_mode_required", message: "Ask mode" } }),
+        makeTool("c1", { status: "refused", error: { code: "unavailable", message: "Read only" } }),
       ],
       tuning: { agent: "codex", model: "gpt-6-luna", effort: "high" },
     };
@@ -296,7 +294,7 @@ describe("chat view", () => {
     expect(getChatComposer({ kind: "terminal", companion }, false, undefined, "idle")).toBeUndefined();
   });
 
-  it("should draw rows: bubbles, tool rows with their chip, the Ask card until answered, and turn endings", () => {
+  it("should draw rows: bubbles, tool rows with their chip, a refused call, and turn endings", () => {
     const entries: ConnectActivity[] = [
       makeUserMessage("u1"),
       makeTool("c1", { summary: { label: "Read", target: "query.ts", meta: "15 lines" } }),
@@ -304,7 +302,7 @@ describe("chat view", () => {
       makeTool("c2", {
         name: "apply_edits",
         status: "refused",
-        error: { code: "edit_mode_required", message: "Ask mode" },
+        error: { code: "unavailable", message: "Read only" },
         summary: { label: "Edit", target: "query.ts" },
       }),
       makeTool("c3", {
@@ -316,9 +314,9 @@ describe("chat view", () => {
       makeTool("c5", { name: "run", status: "running" }),
       { kind: "turn", conversation: "p-1", turn: "t1", state: "failed", error: "Claude Code exited", at: 9 },
     ];
-    const items = listChatItems(entries, { pendingEdits: new Set(["e1"]), working: "t2", answers: {} });
+    const items = listChatItems(entries, { pendingEdits: new Set(["e1"]), working: "t2" });
 
-    expect(items.map((item) => item.kind)).toEqual(["user", "tool", "say", "ask", "tool", "tool", "tool", "notice"]);
+    expect(items.map((item) => item.kind)).toEqual(["user", "tool", "say", "tool", "tool", "tool", "tool", "notice"]);
     expect(items[1]).toMatchObject({
       label: "Read",
       target: "query.ts",
@@ -327,7 +325,7 @@ describe("chat view", () => {
       spinning: false,
     });
     expect(items[2]).toMatchObject({ text: "Ada starts with 100." });
-    expect(items[3]).toMatchObject({ kind: "ask", toolId: "c2", target: "query.ts" });
+    expect(items[3]).toMatchObject({ kind: "tool", label: "Edit", meta: "not available", tone: "faint" });
     expect(items[4]).toMatchObject({ chip: "pending" });
     expect(items[5]).toMatchObject({ label: "Edited", chip: "kept" });
     expect(items[6]).toMatchObject({ label: "Running the project", spinning: true });
@@ -336,17 +334,10 @@ describe("chat view", () => {
       listChatItems([makeTool("c6", { name: "run", summary: { label: "Ran the project", rolledBack: true } })], {
         pendingEdits: new Set(),
         working: undefined,
-        answers: {},
       })[0],
     ).toMatchObject({ label: "Ran the project", chip: "rolled back" });
 
-    expect(
-      listChatItems(entries, { pendingEdits: new Set(), working: undefined, answers: { c2: "allowed" } })[3],
-    ).toMatchObject({ kind: "allowed" });
-    expect(
-      listChatItems(entries, { pendingEdits: new Set(), working: undefined, answers: { c2: "dismissed" } })[3],
-    ).toMatchObject({ kind: "tool", label: "Edit", meta: "not available", tone: "faint" });
-    expect(listChatItems(entries, { pendingEdits: new Set(), working: undefined, answers: {} })[6]).toMatchObject({
+    expect(listChatItems(entries, { pendingEdits: new Set(), working: undefined })[6]).toMatchObject({
       spinning: false,
     });
   });
@@ -357,7 +348,7 @@ describe("chat view", () => {
       error: { code: "unavailable", message: "The companion that asked for this left before it got the result." },
     });
 
-    const [item] = listChatItems([unanswered], { pendingEdits: new Set(), working: undefined, answers: {} });
+    const [item] = listChatItems([unanswered], { pendingEdits: new Set(), working: undefined });
 
     expect(item).toMatchObject({
       kind: "tool",
@@ -368,7 +359,7 @@ describe("chat view", () => {
   });
 
   it("should end a working turn with a thinking row until a tool runs", () => {
-    const options = { pendingEdits: new Set<string>(), working: "t1", answers: {} };
+    const options = { pendingEdits: new Set<string>(), working: "t1" };
 
     expect(listChatItems([makeUserMessage("u1")], options).map((item) => item.kind)).toEqual(["user", "thinking"]);
     expect(listChatItems([makeUserMessage("u1"), makeSay("t1", "Reading")], options).map((item) => item.kind)).toEqual([
@@ -385,7 +376,7 @@ describe("chat view", () => {
   });
 
   it("should mark an answer streaming only while it is the last row of the working turn", () => {
-    const options = { pendingEdits: new Set<string>(), answers: {} };
+    const options = { pendingEdits: new Set<string>() };
     const answers = (entries: ConnectActivity[], working: string | undefined) =>
       listChatItems(entries, { ...options, working }).flatMap((item) => (item.kind === "say" ? [item.streaming] : []));
 
@@ -404,7 +395,7 @@ describe("chat view", () => {
           summary: { label: "Read docs", target: "orm.drizzle.team/docs/transactions" },
         }),
       ],
-      { pendingEdits: new Set(), working: undefined, answers: {}, guided: true },
+      { pendingEdits: new Set(), working: undefined, guided: true },
     );
 
     expect(items[0]).toMatchObject({
@@ -425,7 +416,7 @@ describe("chat view", () => {
         }),
         makeTool("c2", { summary: { label: "Read", target: "schema.ts" } }),
       ],
-      { pendingEdits: new Set(), working: undefined, answers: {} },
+      { pendingEdits: new Set(), working: undefined },
     );
 
     expect(items[0]).toMatchObject({ tone: "err", target: "missing.ts", error: "No file at missing.ts" });
@@ -437,7 +428,7 @@ describe("chat view", () => {
     const summary = { label: "Created a project", target: "Shop", createdProject: { id: "p/2", name: "Shop" } };
     const created = makeTool("c1", { name: "create_project", summary });
     const stored = readHistory({ ...EMPTY_HISTORY, entries: [created] });
-    const options = { pendingEdits: new Set<string>(), working: undefined, answers: {} };
+    const options = { pendingEdits: new Set<string>(), working: undefined };
 
     expect(listChatItems(stored?.entries ?? [], options)[0]).toMatchObject({
       label: "Created a project",

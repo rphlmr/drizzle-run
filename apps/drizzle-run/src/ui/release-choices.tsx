@@ -48,7 +48,7 @@ export function ReleaseChoices({ labelId, options, selected, onSelect, onKeyDown
       </div>
       {options.others.length > 0 && (
         <Collapsible
-          className="rounded-[12px] border border-border bg-surface"
+          className="rounded-lg border border-border bg-surface"
           defaultOpen={selected !== undefined && options.others.includes(selected)}
         >
           <CollapsibleTrigger className="px-3 py-2.5">

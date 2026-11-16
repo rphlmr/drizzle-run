@@ -236,14 +236,10 @@ export interface CompanionInfo {
   agent?: AgentId;
 }
 
-/** Ask reads and runs. Edit may also change files, each change waiting for Keep or Undo. */
-export type ChatMode = "ask" | "edit";
-
 /** Why a tool call failed. */
 export type ToolErrorCode =
   | "invalid_input"
   | "unknown_tool"
-  | "edit_mode_required"
   | "no_project"
   | "not_found"
   | "conflict"
@@ -320,7 +316,6 @@ export type ConnectMessage =
       type: "chat.send";
       conversation: string;
       text: string;
-      mode: ChatMode;
       project?: ChatProject;
       scope?: ConnectToolScope;
       agent?: AgentId;

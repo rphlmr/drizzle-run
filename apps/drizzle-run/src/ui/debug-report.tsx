@@ -178,7 +178,7 @@ export function DebugReport({ context, running }: DebugReportProps) {
           a playground bug report. Your queries and database are in Logs and Problems.
         </span>
       </div>
-      <dl className="m-0 grid grid-cols-2 overflow-hidden rounded-[12px] border border-border">
+      <dl className="m-0 grid grid-cols-2 overflow-hidden rounded-lg border border-border">
         {facts.map((fact, index) => (
           <div
             key={fact.label}
@@ -245,7 +245,7 @@ export function DebugReport({ context, running }: DebugReportProps) {
         <SectionLabel note={`${states.length} ${states.length === 1 ? "transition" : "transitions"} in Drizzle Run`}>
           Run machine states
         </SectionLabel>
-        <div className="overflow-hidden rounded-[12px] border border-border">
+        <div className="overflow-hidden rounded-lg border border-border">
           <table className="w-full table-fixed border-collapse font-mono text-[11.5px] leading-[1.4]">
             <colgroup>
               <col className="w-11.5" />
@@ -288,7 +288,7 @@ export function DebugReport({ context, running }: DebugReportProps) {
       </section>
       <section className="flex flex-col gap-2" aria-label="Report JSON">
         <SectionLabel>Report JSON</SectionLabel>
-        <details className="group rounded-[12px] border border-border">
+        <details className="group rounded-lg border border-border">
           <summary className="flex min-h-touch cursor-pointer list-none items-center gap-2 px-3 py-2.5 text-[12.5px] [&::-webkit-details-marker]:hidden">
             <ChevronRightIcon className="size-3.25 shrink-0 text-muted group-open:rotate-90" aria-hidden="true" />
             <span className="min-w-0 truncate font-mono text-[12px]">{Object.keys(raw).join(", ")}</span>

@@ -63,7 +63,7 @@ import { describeGuide, getGuideResultNote, readDocs, type ConnectGuide, type Fe
 
 /**
  * The Drizzle Run tools, executed in the tab against the open project. The connect
- * machine has already checked each input and the chat mode; this file does the work.
+ * machine has already checked each input and the chat's project; this file does the work.
  */
 
 export interface ProjectProblem {

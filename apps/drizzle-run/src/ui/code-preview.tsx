@@ -3,16 +3,26 @@ import type { CSSProperties } from "react";
 import { EDITOR_TEXT, resolveEditorText, type EditorFontSize } from "../design/editor-font-size";
 import { cn } from "../lib/utils";
 
-/**
- * The selected file as plain text, set like the editor (font, size and line height, 12/20 px on phones, top
- * padding), so code shows from the first frame and the editor takes its place unnoticed. `fontSize` is the size the
- * viewer picked, with each layout's line height kept in proportion.
- */
 /** The editor text sizes as custom properties, which React's `CSSProperties` does not list */
 type CodeTextProperties = CSSProperties &
   Record<"--code-font-size" | "--code-line-height" | "--code-line-height-phone", string>;
 
-export function CodePreview({ code, fontSize = null }: { code: string; fontSize?: EditorFontSize | null }) {
+/**
+ * The selected file as plain text, set like the editor (font, size and line height, 12/20 px on phones, top
+ * padding), so code shows from the first frame and the editor takes its place unnoticed. `fontSize` is the size the
+ * viewer picked, with each layout's line height kept in proportion. `coloredLines` holds each line as colored HTML, for
+ * a view that never opens an editor; a line it lacks shows as plain text.
+ */
+
+export function CodePreview({
+  code,
+  fontSize = null,
+  coloredLines,
+}: {
+  code: string;
+  fontSize?: EditorFontSize | null;
+  coloredLines?: readonly string[];
+}) {
   const lines = code.split("\n");
   const pickedText: CodeTextProperties | undefined =
     fontSize === null
@@ -45,7 +55,11 @@ export function CodePreview({ code, fontSize = null }: { code: string; fontSize?
             >
               {index + 1}
             </span>
-            <span data-line="">{line}</span>
+            {coloredLines?.[index] === undefined ? (
+              <span data-line="">{line}</span>
+            ) : (
+              <span data-line="" dangerouslySetInnerHTML={{ __html: coloredLines[index] }} />
+            )}
           </span>
         ))}
       </code>

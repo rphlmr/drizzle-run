@@ -43,7 +43,6 @@ import {
 } from "./examples/example-gallery";
 import { ExamplePage, loadExamplePage } from "./examples/example-page";
 import { describeProjectDeletion } from "./home/delete-description";
-import { DrizzleRain } from "./home/drizzle-rain";
 import { LoadingProjects, loadProjectShares, ProjectsLayout, ProjectsPage } from "./home/projects-page";
 import { WelcomePage } from "./home/welcome-page";
 import { getErrorText } from "./lib/error-text";
@@ -67,7 +66,7 @@ import {
 import { shareConsentClass } from "./share/share-dialog";
 import { loadSharePublication } from "./share/share-publication-loader";
 import { LoadingSnapshot, loadSharedSnapshot, SharedSnapshot } from "./share/shared-playground";
-import { SiteHeader } from "./shell/site-header";
+import { SiteHeader, SiteNav } from "./shell/site-header";
 import { LocalProjectStorage, type ShareLinkRecord } from "./store/storage";
 import { AppShell } from "./ui/app-shell";
 import { errorBannerClass, noticeBannerClass } from "./ui/banners";
@@ -76,6 +75,7 @@ import { leaveOnPurpose } from "./ui/leave-guard";
 import { download } from "./ui/results";
 import { RouteErrorPage } from "./ui/route-error-page";
 import { useAppUpdated } from "./ui/use-app-updated";
+import { PHONE_QUERY, useMediaQuery } from "./ui/use-media-query";
 import { useWorkspace, type WorkspaceContext } from "./workspace/context";
 import { toArrivalState, type ProjectArrival } from "./workspace/project-arrival";
 import { saveProjectIntro, shouldReloadProjectIntro } from "./workspace/project-arrival-notice";
@@ -210,29 +210,26 @@ function ConnectLayout() {
  * The site pages: home, My projects, the gallery, Community and not-found, under one site header
  *
  * The header stays mounted while a page's first load shows its loading screen and between site pages, so a menu
- * opened in it stays open. The home draws its dot grid and rain behind the header. A move to another site page
- * crossfades the page under the header; a search change or a fetcher update on the same page does not.
+ * opened in it stays open. Each page sits in a panel under the header. A move to another site page crossfades the page under the header; a search change or a fetcher update on the same page does not.
  */
 function SiteLayout() {
   const workspace = useWorkspace();
   const { pathname } = useLocation();
   const home = pathname === "/";
   const sitePage = pathname.split("/")[1];
+  const phone = useMediaQuery(PHONE_QUERY);
 
   return (
-    <div
-      className={cn(
-        "relative flex min-h-0 flex-1 flex-col",
-        home &&
-          "overflow-clip bg-[radial-gradient(var(--dot-grid)_1px,transparent_1.2px)] bg-size-[18px_18px] text-[15px]",
-      )}
-    >
-      {home && <DrizzleRain />}
+    <div className={cn("relative flex min-h-0 flex-1 flex-col bg-bg", home && "text-[15px]")}>
       <SiteHeader />
-      {/* Keyed by site page, so another page is an exit and an enter, and a tab or filter change never animates. */}
-      <ViewTransition key={sitePage} update="none">
-        <Outlet context={workspace} />
-      </ViewTransition>
+      <div className="flex min-h-0 flex-1 flex-col px-2 pb-2 max-phone:p-0">
+        {/* Keyed by site page, so another page is an exit and an enter, and a tab or filter change never animates. */}
+        <ViewTransition key={sitePage} update="none">
+          <Outlet context={workspace} />
+        </ViewTransition>
+      </div>
+      {/* Phones reach the site sections from a tab bar under the thumb. */}
+      {phone && <SiteNav phone />}
     </div>
   );
 }
@@ -599,10 +596,6 @@ function Workspace() {
           void navigate(`/p/${next.id}`);
         }}
         onCreate={() => context.openCreate()}
-        onRename={() => current && context.rename(current)}
-        onDuplicate={() => current && context.duplicate(current)}
-        onExport={() => current && exportProjects([current])}
-        onDelete={() => current && context.remove([current])}
       />
     ),
     add,

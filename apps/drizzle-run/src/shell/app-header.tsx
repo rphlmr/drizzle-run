@@ -70,7 +70,7 @@ export function AppHeader({
             </span>
           </span>
           <span className={cn(!phoneWordmark && "max-phone:hidden")}>
-            Drizzle <span className="rounded-[5px] bg-lime px-1.25 text-on-lime">Run</span>
+            Drizzle <span className="rounded-sm bg-lime px-1.25 text-on-lime">Run</span>
           </span>
         </Link>
       )}
@@ -88,7 +88,7 @@ export function AppHeader({
         className={cn(
           "ml-auto flex shrink-0 items-center gap-2",
           playground
-            ? "max-phone:gap-2.5 max-phone:**:data-size:relative max-phone:**:data-size:after:absolute max-phone:**:data-size:after:-inset-1.25 max-phone:**:data-[size=icon]:border-transparent max-phone:**:data-[size=icon]:bg-transparent max-phone:**:data-[size=run]:h-9 max-phone:**:data-[size=run]:gap-1.5 max-phone:**:data-[size=run]:rounded-[9px] max-phone:**:data-[size=run]:px-3 max-phone:**:data-[size=run]:text-[13px] max-phone:**:data-[size=run]:font-bold max-phone:**:data-[size=run]:after:inset-[-5.5px]"
+            ? "max-phone:gap-2.5 max-phone:**:data-size:relative max-phone:**:data-size:after:absolute max-phone:**:data-size:after:-inset-1.25 max-phone:**:data-[size=run]:h-9 max-phone:**:data-[size=run]:gap-1.5 max-phone:**:data-[size=run]:rounded-md max-phone:**:data-[size=run]:px-3 max-phone:**:data-[size=run]:text-[13px] max-phone:**:data-[size=run]:font-bold max-phone:**:data-[size=run]:after:inset-[-5.5px]"
             : "max-phone:gap-1.5 max-phone:**:data-size:min-h-touch max-phone:**:data-[size=icon]:size-touch",
         )}
       >

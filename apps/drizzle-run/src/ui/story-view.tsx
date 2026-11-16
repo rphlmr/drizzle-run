@@ -110,10 +110,7 @@ interface CardProps {
 function StoryCard({ title, source, chip, dataKind, outcome, error = false, children }: CardProps) {
   return (
     <li
-      className={cn(
-        "rounded-[12px] bg-surface px-3 py-2",
-        error ? "border-[1.5px] border-err" : "border border-border",
-      )}
+      className={cn("rounded-lg bg-surface px-3 py-2", error ? "border-[1.5px] border-err" : "border border-border")}
       data-kind={dataKind}
       data-outcome={outcome}
       role={error ? "alert" : undefined}
@@ -135,7 +132,7 @@ const dotClasses: Record<DotTone, string> = {
   kept: "bg-ok",
   undone: "border-[1.5px] border-err",
   read: "bg-text",
-  commit: "border-[1.5px] border-run-border bg-lime",
+  commit: "border border-run-border bg-lime",
   rollback: "bg-err",
   console: "bg-accent-text",
 };
@@ -535,7 +532,7 @@ function SavepointBox({ group, parent, entrypoints, onDiagnostic }: SavepointBox
   return (
     <div
       className={cn(
-        "my-1.5 ml-6.5 rounded-[10px] border-[1.5px] border-dashed py-1.5 pr-2.5 pl-1",
+        "my-1.5 ml-6.5 rounded-md border-[1.5px] border-dashed py-1.5 pr-2.5 pl-1",
         rolledBack ? "border-err bg-err-bg" : "border-border bg-surface-2",
       )}
       data-kind="transaction"
@@ -630,10 +627,10 @@ function SetupCard({
     .join(", ");
 
   return (
-    <li className="rounded-[12px] border border-border bg-surface" data-kind="setup">
+    <li className="rounded-lg border border-border bg-surface" data-kind="setup">
       <button
         type="button"
-        className="flex min-h-9 w-full items-center gap-2.5 rounded-[12px] border-0 bg-transparent px-3 py-2 text-left text-[12.5px] text-muted hover:text-text"
+        className="flex min-h-9 w-full items-center gap-2.5 rounded-lg border-0 bg-transparent px-3 py-2 text-left text-[12.5px] text-muted hover:text-text"
         aria-expanded={open}
         onClick={() => setOpen((current) => !current)}
       >

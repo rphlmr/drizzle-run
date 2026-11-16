@@ -40,6 +40,9 @@ const FAST = { iterations: 1_000 };
 const SECRET = "k7Pq-2xZm-9fLw";
 const OTHER = "k7Pq-2xZm-9fLx";
 
+/** The tools that change a project. */
+const EDIT_TOOLS = new Set<string>(["apply_edits", "switch_release", "create_project"]);
+
 describe("pairing secrets", () => {
   it("should create twelve characters in three groups, from the unambiguous alphabet", () => {
     for (let index = 0; index < 50; index += 1) {
@@ -157,7 +160,7 @@ describe("secure channel", () => {
   it("should carry messages both ways once each side said hello, without plaintext on the relay", async () => {
     const { tab, companion, toCompanion, toTab } = await createPairedChannels();
     const secretCode = "await db.select().from(accounts) // SECRET-MARKER";
-    const chatMessage = { type: "chat.send", conversation: "c", text: secretCode, mode: "ask" } as const;
+    const chatMessage = { type: "chat.send", conversation: "c", text: secretCode } as const;
     const sealed = await tab.seal(toCompanion, chatMessage);
     const frame = JSON.stringify({ t: "send", d: sealed });
 
@@ -167,7 +170,7 @@ describe("secure channel", () => {
     expect(await companion.open(toTab, sealed)).toEqual({
       ok: true,
       answerHello: false,
-      message: { type: "chat.send", conversation: "c", text: secretCode, mode: "ask" },
+      message: { type: "chat.send", conversation: "c", text: secretCode },
     });
 
     const reply = await companion.seal(toTab, { type: "agent.text", conversation: "c", turn: "t1", text: "Hi" });
@@ -208,7 +211,7 @@ describe("secure channel", () => {
     const tabHello = await tab.hello("c1", makeHello("tab"));
     await companion.open("t1", tabHello);
     await tab.open("c1", await companion.hello("t1", makeHello("companion")));
-    const chat = await tab.seal("c1", { type: "chat.send", conversation: "c", text: "Run it again", mode: "ask" });
+    const chat = await tab.seal("c1", { type: "chat.send", conversation: "c", text: "Run it again" });
     expect(await companion.open("t1", chat)).toMatchObject({ ok: true });
 
     expect(await companion.open("fake", tabHello)).toMatchObject({ ok: true, answerHello: true });
@@ -245,7 +248,7 @@ describe("secure channel", () => {
       companionAnswers = atCompanionNow?.ok === true && atCompanionNow.answerHello;
     }
 
-    const chat = await tab.seal("c1", { type: "chat.send", conversation: "c", text: "Hi", mode: "ask" });
+    const chat = await tab.seal("c1", { type: "chat.send", conversation: "c", text: "Hi" });
     const reply = await companion.seal("t1", { type: "agent.text", conversation: "c", turn: "t1", text: "Hello" });
 
     expect(await companion.open("t1", chat)).toMatchObject({ ok: true, message: { type: "chat.send" } });
@@ -328,7 +331,6 @@ describe("protocol readers", () => {
     expect(
       readConnectMessage({ type: "tool.result", id: "x1", ok: false, error: { code: "other", message: "m" } }),
     ).toEqual({ type: "tool.result", id: "x1", ok: false, error: { code: "failed", message: "m" } });
-    expect(readConnectMessage({ type: "chat.send", conversation: "c", text: "t", mode: "root" })).toBeUndefined();
     expect(readConnectMessage({ type: "nope" })).toBeUndefined();
     expect(readConnectMessage(companionHello)).toMatchObject({ companion: { agents: [{ id: "claude" }] } });
   });
@@ -417,7 +419,7 @@ describe("protocol readers", () => {
 });
 
 describe("tool inputs", () => {
-  it("should define every tool with an object schema, edit tools marked", () => {
+  it("should define every tool with an object schema", () => {
     expect(CONNECT_TOOLS.map((tool) => tool.name)).toEqual([
       "get_project",
       "read_file",
@@ -433,11 +435,6 @@ describe("tool inputs", () => {
       "get_query_plans",
       "get_guide",
       "read_docs",
-    ]);
-    expect(CONNECT_TOOLS.filter((tool) => tool.edits).map((tool) => tool.name)).toEqual([
-      "apply_edits",
-      "switch_release",
-      "create_project",
     ]);
     expect(CONNECT_TOOLS.every((tool) => tool.inputSchema.type === "object")).toBe(true);
   });
@@ -570,7 +567,7 @@ describe("tool scopes", () => {
       "get_guide",
       "read_docs",
     ]);
-    expect(connectToolsFor("guide").some((tool) => tool.edits)).toBe(false);
+    expect(connectToolsFor("guide").some((tool) => EDIT_TOOLS.has(tool.name))).toBe(false);
 
     for (const name of outOfScopeTools) {
       expect(isToolInScope(name, "guide")).toBe(false);
@@ -593,7 +590,7 @@ describe("tool scopes", () => {
 
   it("should offer an untrusted project the same read-only tools as a shared link", () => {
     expect(connectToolsFor("untrusted")).toEqual(connectToolsFor("snapshot"));
-    expect(connectToolsFor("untrusted").some((tool) => tool.edits)).toBe(false);
+    expect(connectToolsFor("untrusted").some((tool) => EDIT_TOOLS.has(tool.name))).toBe(false);
 
     for (const name of [
       "apply_edits",
@@ -635,7 +632,7 @@ describe("tool scopes", () => {
   });
 
   it("should carry the chat's scope in chat.send, and read an unknown one as read only", () => {
-    const chatSend = { type: "chat.send", conversation: "g-transactions", text: "Why?", mode: "ask" };
+    const chatSend = { type: "chat.send", conversation: "g-transactions", text: "Why?" };
 
     expect(readConnectMessage({ ...chatSend, scope: "guide" })).toMatchObject({ scope: "guide" });
     expect(readConnectMessage(chatSend)).not.toHaveProperty("scope");
@@ -648,7 +645,7 @@ describe("tool scopes", () => {
       { side: 0, name: "0.45", orm: "0.45.4" },
       { side: 1, name: "rc.5", orm: "1.0.0-rc.5" },
     ];
-    const chatSend = { type: "chat.send", conversation: "p-upgrade", text: "Why?", mode: "ask" };
+    const chatSend = { type: "chat.send", conversation: "p-upgrade", text: "Why?" };
 
     expect(readConnectMessage({ ...chatSend, project: { id: "p", name: "Upgrade", sides } })).toMatchObject({
       project: { id: "p", name: "Upgrade", sides },
@@ -662,7 +659,7 @@ describe("tool scopes", () => {
   });
 
   it("should carry a community project's origin in chat.send and drop any other origin", () => {
-    const chatSend = { type: "chat.send", conversation: "p-forked", text: "Why?", mode: "ask" };
+    const chatSend = { type: "chat.send", conversation: "p-forked", text: "Why?" };
 
     expect(
       readConnectMessage({ ...chatSend, project: { id: "p", name: "Forked", origin: "community" } }),
@@ -683,7 +680,7 @@ describe("agent tuning", () => {
     ],
     defaults: { model: "gpt-6-luna", effort: "medium" },
   };
-  const chatSend = { type: "chat.send", conversation: "p-chat", text: "Why?", mode: "ask" };
+  const chatSend = { type: "chat.send", conversation: "p-chat", text: "Why?" };
 
   it("should carry the chat's agent and its context in chat.send, and refuse an unknown agent or a longer context", () => {
     const context = [

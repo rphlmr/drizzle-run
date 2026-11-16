@@ -27,7 +27,7 @@ import { DuplicateButton, ProjectActionsGroup } from "../ui/project-actions";
 import { SeedBar } from "../ui/seed-bar";
 import { SideBySideTag } from "../ui/side-by-side-tag";
 import { StatusBar } from "../ui/status-bar";
-import { WorkspaceMoreMenu } from "../workspace/more-menu";
+import { WorkspaceMoreMenu, type ProjectMenuActions } from "../workspace/more-menu";
 import type { RunNotesMode } from "../workspace/run-marks";
 import { isStoreSaveState, saveStateLabels, type SaveState } from "../workspace/save-state";
 import { ShareButton } from "../workspace/share-button";
@@ -103,6 +103,8 @@ export interface SideBySideViewProps {
   onExportProjects?: () => void;
   /** Offers "Duplicate": in the header's project actions box, or the more menu on a phone. */
   onDuplicate?: () => void;
+  /** Rename, Export and Delete for the more menu; undefined where the project is not the user's. */
+  projectManagement?: Pick<ProjectMenuActions, "onRename" | "onExport" | "onDelete">;
   /**
    * Notes the shown run leaves in each side's editor: a workspace's ("playground"), a guide's, which also say
    * where each result comes from ("guided"), or none.
@@ -133,6 +135,7 @@ export function SideBySideView(props: SideBySideViewProps) {
     aside,
     onExportProjects,
     onDuplicate,
+    projectManagement,
     runNotes = "playground",
     runDisabled,
     highlightedDisplays,
@@ -226,6 +229,7 @@ export function SideBySideView(props: SideBySideViewProps) {
               onShare: workspace.openShare,
               onPush: workspace.shareStatus.status === "changed" ? workspace.openPush : undefined,
               onDuplicate,
+              ...projectManagement,
               trust: connect?.trust,
               seed: fileRoles.seedFileShown ? { on: fileRoles.seedOn, onToggle: workspace.toggleSeed } : undefined,
             }

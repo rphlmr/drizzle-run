@@ -16,7 +16,7 @@ export function SideBySideTag({ size = "card", className }: SideBySideTagProps) 
         className={cn(
           "inline-flex shrink-0 items-center font-bold whitespace-nowrap",
           size === "header"
-            ? "gap-1 rounded-pill border border-card-border px-1.75 py-px text-[10.5px] tracking-[0.02em] uppercase"
+            ? "gap-1 rounded-pill border border-border px-1.75 py-px text-[10.5px] tracking-[0.02em] uppercase"
             : "gap-1 rounded-[4px] bg-surface-2 px-1.75 py-px text-[11px] text-muted",
           className,
         )}

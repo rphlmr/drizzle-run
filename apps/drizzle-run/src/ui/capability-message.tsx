@@ -21,7 +21,7 @@ export interface CapabilityMessageProps {
 const leadClass = cn("leading-[1.6] text-muted");
 const actionsClass = cn("flex flex-wrap gap-2");
 const actionClass = cn("min-h-touch rounded-md px-[18px]");
-const phoneActionClass = cn("h-12 w-full rounded-[12px]");
+const phoneActionClass = cn("h-12 w-full rounded-lg");
 
 const badges: Record<CapabilityReport["status"], string> = {
   browser_unsupported: "Browser not supported",
@@ -51,9 +51,9 @@ export function CapabilityMessage({
     <div className="flex w-140 max-w-full flex-col gap-4">
       <section
         className={cn(
-          "flex flex-col gap-4.5 rounded-[18px] border-[1.5px] border-card-border bg-surface p-7 text-left text-text shadow-sticker-lg",
-          phone && "gap-3.5 rounded-[16px] p-5 shadow-sticker-card",
-          embed && "gap-3 rounded-[16px] p-4.5 shadow-sticker-card",
+          "flex flex-col gap-4.5 rounded-lg border border-border bg-surface p-7 text-left text-text shadow-sticker-lg",
+          phone && "gap-3.5 rounded-lg p-5 shadow-sticker-card",
+          embed && "gap-3 rounded-lg p-4.5 shadow-sticker-card",
         )}
         role="alert"
         aria-labelledby={titleId}
@@ -90,7 +90,7 @@ export function CapabilityMessage({
         {featureList ? (
           <ul className="flex flex-col gap-2">
             {copy.lines.map((line, index) => (
-              <li key={index} className="flex items-center gap-2.5 rounded-[10px] bg-surface-2 px-3 py-2.5">
+              <li key={index} className="flex items-center gap-2.5 rounded-md bg-surface-2 px-3 py-2.5">
                 <XIcon aria-hidden="true" className="size-3.75 shrink-0 stroke-3 text-err" />
                 {line}
               </li>

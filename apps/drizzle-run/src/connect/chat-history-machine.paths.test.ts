@@ -18,9 +18,9 @@ const secondConversation = "project:p2";
 const SAVE_DELAY_EVENT = { type: `xstate.after.${SAVE_DELAY_MS}.chatHistory.ready.scheduled` } as const;
 
 const message: ConnectActivity = { kind: "user", id: "m1", conversation: firstConversation, text: "Hi", at: 1 };
-const editHistory: ChatHistory = { ...EMPTY_HISTORY, mode: "edit" };
+const tunedHistory: ChatHistory = { ...EMPTY_HISTORY, tuning: { agent: "claude" } };
 const loadOutcome: ActorOutcome<ChatHistory> = {
-  outputs: [EMPTY_HISTORY, editHistory],
+  outputs: [EMPTY_HISTORY, tunedHistory],
   error: new Error("The store is unavailable"),
 };
 
@@ -32,36 +32,32 @@ const openFirst = { type: "conversation.open", conversation: firstConversation }
 const openSecond = { type: "conversation.open", conversation: secondConversation } as const;
 const clearEntries = { type: "entries.change", entries: [] } as const;
 const addMessage = { type: "entries.change", entries: [message] } as const;
-const switchToEdit = { type: "mode.set", mode: "edit" } as const;
-const switchToAsk = { type: "mode.set", mode: "ask" } as const;
-const answerTool = {
+const pickTuning = {
   type: "history.change",
-  update: makeHistoryUpdate("an answer", (current) => ({ ...current, answers: { ...current.answers, t1: "allowed" } })),
+  update: makeHistoryUpdate("a tuning", (current) => ({ ...current, tuning: { agent: "codex" } })),
 } as const;
 const eventLabels = new Map<unknown, string>([
   [openFirst, "conversation.open of the first chat"],
   [openSecond, "conversation.open of the second chat"],
   [clearEntries, "entries.change without rows"],
   [addMessage, "entries.change with a message"],
-  [switchToEdit, "mode.set to Edit"],
-  [switchToAsk, "mode.set to Ask"],
-  [answerTool, "history.change with an answer"],
+  [pickTuning, "history.change with a tuning"],
   [SAVE_DELAY_EVENT, `after ${SAVE_DELAY_MS} ms`],
 ]);
 
 function describeEvent(event: { type: string; output?: unknown }) {
   if (event.output === EMPTY_HISTORY) {
-    return "done(load) in Ask mode";
+    return "done(load) without a tuning";
   }
 
-  if (event.output === editHistory) {
-    return "done(load) in Edit mode";
+  if (event.output === tunedHistory) {
+    return "done(load) with a tuning";
   }
 
   return eventLabels.get(event);
 }
 
-const chatHistoryMachine = createChatHistoryMachine({ load: vi.fn(), save: vi.fn(), applyMode: vi.fn() });
+const chatHistoryMachine = createChatHistoryMachine({ load: vi.fn(), save: vi.fn() });
 
 function toModelState(snapshot: SnapshotFrom<typeof chatHistoryMachine>) {
   const { conversation, history, entries, stored } = snapshot.context;
@@ -69,7 +65,7 @@ function toModelState(snapshot: SnapshotFrom<typeof chatHistoryMachine>) {
   return {
     value: snapshot.value,
     conversation: conversation === firstConversation ? "first" : "second",
-    mode: history?.mode ?? "unloaded",
+    tuning: history === undefined ? "unloaded" : (history.tuning?.agent ?? "none"),
     entries: entries.length,
     stored,
   };
@@ -78,7 +74,7 @@ function toModelState(snapshot: SnapshotFrom<typeof chatHistoryMachine>) {
 function startChatHistory() {
   const settler = createActorSettler();
   const save = vi.fn();
-  const machine = createChatHistoryMachine({ load: vi.fn(), save, applyMode: vi.fn() }).provide({
+  const machine = createChatHistoryMachine({ load: vi.fn(), save }).provide({
     actors: { load: settler.fromOutcome(loadOutcome) },
   });
 
@@ -94,9 +90,7 @@ const paths = getMachinePaths(chatHistoryMachine, {
     openSecond,
     clearEntries,
     addMessage,
-    switchToEdit,
-    switchToAsk,
-    answerTool,
+    pickTuning,
     { type: "history.flush" },
     ...(snapshot.matches({ ready: "scheduled" }) ? [SAVE_DELAY_EVENT] : []),
     ...getSettleEvents(snapshot, { load: loadOutcome }),

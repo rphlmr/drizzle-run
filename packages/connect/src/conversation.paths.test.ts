@@ -32,7 +32,7 @@ function makeTurn(agent: AgentId): TurnRequest {
     usableAgent: { ok: true, agent: { id: agent, name: agent }, command: agent, lockdown: NO_LOCKDOWN },
     tuning: {},
     scope: "project",
-    message: { type: "chat.send", conversation: "project:p1", text: "Hi", mode: "ask" },
+    message: { type: "chat.send", conversation: "project:p1", text: "Hi" },
   };
 }
 

@@ -4,7 +4,6 @@ import { Link } from "react-router";
 
 import { Popover, PopoverContent, PopoverTitle, PopoverTrigger } from "../components/ui/popover";
 import { cn } from "../lib/utils";
-import { KindBadge } from "../ui/kind-badge";
 import { PHONE_QUERY, useMediaQuery } from "../ui/use-media-query";
 import { formatProjectDialects, type ProjectRecord } from "./projects";
 
@@ -18,9 +17,6 @@ const itemClass = cn(
 const itemNameClass = cn("min-w-0 flex-1 truncate font-medium");
 const itemMetaClass = cn("text-[12px] text-muted");
 const separatorClass = cn("mx-1 my-1.5 h-px bg-border");
-const actionClass = cn(
-  "min-h-[34px] flex-1 rounded-sm border-0 bg-transparent text-[13px] text-text hover:bg-surface-2",
-);
 
 export interface ProjectSwitcherProps {
   projects: readonly ProjectRecord[];
@@ -30,13 +26,10 @@ export interface ProjectSwitcherProps {
   saveLabel?: string;
   onSelect: (project: ProjectRecord) => void;
   onCreate: () => void;
-  onRename: () => void;
-  onDuplicate: () => void;
-  onExport: () => void;
-  onDelete: () => void;
 }
 
-/** The current project's name, opening a menu to switch, create, rename, duplicate, export or delete projects. */
+/** The current project's name, opening a menu to switch to another project or create one. Rename and the other
+ * actions on this project sit in its more menu. */
 export function ProjectSwitcher({
   projects,
   current,
@@ -44,10 +37,6 @@ export function ProjectSwitcher({
   saveLabel,
   onSelect,
   onCreate,
-  onRename,
-  onDuplicate,
-  onExport,
-  onDelete,
 }: ProjectSwitcherProps) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -130,35 +119,9 @@ export function ProjectSwitcher({
           <PlusIcon aria-hidden="true" /> New project
         </button>
         <Link to="/projects" className={itemClass} onClick={() => setOpen(false)}>
-          <span className={itemNameClass}>My projects</span>
+          <span className={itemNameClass}>All projects</span>
           <span className={itemMetaClass}>{projects.length}</span>
         </Link>
-        <Link to="/examples" className={itemClass} onClick={() => setOpen(false)}>
-          <span className={itemNameClass}>Browse examples</span>
-          <KindBadge tone="lime">Official</KindBadge>
-        </Link>
-        {current && (
-          <>
-            <div className={separatorClass} />
-            <fieldset className="flex min-w-auto gap-1 px-0.5" aria-label={`Actions for ${current.name}`}>
-              <button type="button" className={actionClass} onClick={run(onRename)}>
-                Rename
-              </button>
-              <button type="button" className={actionClass} onClick={run(onDuplicate)}>
-                Duplicate
-              </button>
-              <button type="button" className={actionClass} onClick={run(onExport)}>
-                Export
-              </button>
-              <button type="button" className={cn(actionClass, "text-err")} onClick={run(onDelete)}>
-                Delete
-              </button>
-            </fieldset>
-          </>
-        )}
-        <p className="mx-2.5 mt-2 mb-0.5 text-[12px] leading-normal text-muted">
-          Stored in this browser. Export JSON to keep a backup.
-        </p>
       </PopoverContent>
     </Popover>
   );

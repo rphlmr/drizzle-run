@@ -161,7 +161,7 @@ const failedNotes: Partial<Record<TimelineFilter, string>> = {
 /** Explain why a side's output is empty. */
 export function SideNote({ children }: { children: ReactNode }) {
   return (
-    <p className="m-0 rounded-[12px] border border-dashed border-faint bg-surface px-5 py-7 text-center text-[13px] leading-[1.55] text-muted">
+    <p className="m-0 rounded-lg border border-dashed border-faint bg-surface px-5 py-7 text-center text-[13px] leading-[1.55] text-muted">
       {children}
     </p>
   );

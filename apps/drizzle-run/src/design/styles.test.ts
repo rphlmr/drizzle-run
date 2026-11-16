@@ -110,8 +110,8 @@ describe("Tailwind theme", () => {
     const theme = read("theme.css");
 
     expect({ light: thumbs(light), dark: thumbs(dark) }).toEqual({
-      light: ["rest #9ca3af", "hover #4b5563"],
-      dark: ["rest #525252", "hover #a3a3a3"],
+      light: ["rest #d4d4d8", "hover #a1a1aa"],
+      dark: ["rest #3f3f46", "hover #71717a"],
     });
     expect(theme).toMatch(/::-webkit-scrollbar-thumb\s*\{[^}]*var\(--scroll-thumb\)/);
     expect(theme).toMatch(/::-webkit-scrollbar-thumb:hover\s*\{[^}]*var\(--scroll-thumb-hover\)/);

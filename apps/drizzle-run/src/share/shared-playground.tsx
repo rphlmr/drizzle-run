@@ -365,10 +365,10 @@ function SharedNotFound() {
       <main className="flex min-h-0 flex-1 overflow-y-auto bg-bg bg-[radial-gradient(var(--border)_1px,transparent_1.2px)] bg-size-[18px_18px] px-6 py-6 max-phone:px-4">
         <section
           aria-labelledby="shared-not-found"
-          className="m-auto flex w-140 max-w-full flex-col gap-4 rounded-[18px] border-[1.5px] border-card-border bg-surface p-7 shadow-sticker-card max-phone:p-5"
+          className="m-auto flex w-140 max-w-full flex-col gap-4 rounded-lg border border-border bg-surface p-7 shadow-sticker-card max-phone:p-5"
         >
           <span
-            className="grid size-11 place-items-center rounded-[12px] border-[1.5px] border-run-border bg-lime text-on-lime shadow-action"
+            className="grid size-11 place-items-center rounded-lg border border-run-border bg-lime text-on-lime shadow-action"
             aria-hidden="true"
           >
             <UnlinkIcon className="size-5" />
@@ -385,11 +385,11 @@ function SharedNotFound() {
             </p>
           </div>
           <ul className="m-0 flex list-none flex-col gap-2.5 p-0" role="list">
-            <li className="flex gap-3 rounded-[12px] bg-mark px-3.5 py-3 text-[14px]/normal max-phone:flex-col max-phone:gap-1">
+            <li className="flex gap-3 rounded-lg bg-mark px-3.5 py-3 text-[14px]/normal max-phone:flex-col max-phone:gap-1">
               <b className="shrink-0 font-semibold">Got it from someone?</b>
               <span>Ask them to check the link, or to send a working Share link.</span>
             </li>
-            <li className="flex gap-3 rounded-[12px] bg-surface-2 px-3.5 py-3 text-[14px]/normal max-phone:flex-col max-phone:gap-1">
+            <li className="flex gap-3 rounded-lg bg-surface-2 px-3.5 py-3 text-[14px]/normal max-phone:flex-col max-phone:gap-1">
               <b className="shrink-0 font-semibold">Typed or pasted it?</b>
               <span>Check that the whole address was copied.</span>
             </li>

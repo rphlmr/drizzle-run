@@ -80,7 +80,7 @@ function makeToolCall(name: "get_project" | "apply_edits" | "run") {
   } as const;
 }
 
-const request: ConnectToolRequest = { id: CALL_ID, call: { name: "get_project", input: {} }, mode: "ask" };
+const request: ConnectToolRequest = { id: CALL_ID, call: { name: "get_project", input: {} } };
 
 function makeToolSettled(peer: string, withEdit: boolean) {
   return {
@@ -115,9 +115,6 @@ const chooseCodex = { type: "chat.agent.choose", agent: "codex" } as const;
 const sendHi = makeChatSend("Hi");
 const sendBlank = makeChatSend("  ");
 const sendTooLong = makeChatSend("a".repeat(CONNECT_LIMITS.maxChatChars + 1));
-const allowEditsInChat = { type: "chat.mode.set", mode: "edit", conversation: CONVERSATION } as const;
-const allowEdits = { type: "chat.mode.set", mode: "edit" } as const;
-const askOnly = { type: "chat.mode.set", mode: "ask" } as const;
 const callGetProject = makeToolCall("get_project");
 const callApplyEdits = makeToolCall("apply_edits");
 const callRun = makeToolCall("run");
@@ -150,9 +147,6 @@ const eventLabels = new Map<unknown, string>([
   [sendHi, "chat.message.send"],
   [sendBlank, "chat.message.send blank"],
   [sendTooLong, "chat.message.send too long"],
-  [allowEditsInChat, "chat.mode.set edit in the chat"],
-  [allowEdits, "chat.mode.set edit"],
-  [askOnly, "chat.mode.set ask"],
   [callGetProject, "companion.message tool.call get_project"],
   [callApplyEdits, "companion.message tool.call apply_edits"],
   [callRun, "companion.message tool.call run"],
@@ -242,7 +236,7 @@ function toChatModel(snapshot: ConnectSnapshot) {
 }
 
 function toToolCallModel(snapshot: ConnectSnapshot) {
-  return { value: snapshot.value, linked: snapshot.context.peer !== undefined, mode: snapshot.context.mode };
+  return { value: snapshot.value, linked: snapshot.context.peer !== undefined };
 }
 
 function toEditModel(snapshot: ConnectSnapshot) {
@@ -312,7 +306,6 @@ const walks = [
       sendBlank,
       sendTooLong,
       { type: "chat.turn.stop", conversation: CONVERSATION },
-      allowEditsInChat,
       ...getSettleEvents(snapshot, pairedOutcomes),
     ],
   },
@@ -322,8 +315,6 @@ const walks = [
     events: (snapshot: ConnectSnapshot) => [
       { type: "link.opened" },
       greetedChat,
-      allowEdits,
-      askOnly,
       callGetProject,
       callApplyEdits,
       callUnknown,

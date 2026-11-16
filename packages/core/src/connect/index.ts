@@ -42,7 +42,6 @@ export type {
   AgentModel,
   AgentTuning,
   ChatContextEntry,
-  ChatMode,
   ChatProject,
   ChatProjectSide,
   ProjectOrigin,
