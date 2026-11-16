@@ -13,6 +13,7 @@ import { Hint } from "../ui/hint";
 import { LibrariesPopover } from "../ui/libraries-popover";
 import { OutputPanel } from "../ui/output-panel";
 import type { OutputSettingsProps } from "../ui/output-settings";
+import { PhoneOutputSlotOff } from "../ui/phone-output-slot";
 import { getReleaseCurrent } from "../ui/release-options";
 import { useEditorFontSize } from "../ui/use-editor-font-size";
 import { useTabAfterRun } from "../ui/use-tab-after-run";
@@ -243,21 +244,24 @@ export function SidePane({
     </div>
   );
 
-  const output = (!phone || phoneView === "output") && (
+  // Both sides keep their output mounted; on a phone only the shown side's ends the tab row with its status and tools.
+  const output = (
     <div className={cn("h-full min-h-0", phone && "flex flex-col px-4 py-3")}>
-      <OutputPanel
-        label={release.label}
-        revision={getSideRevision(run.submission, sideFiles)}
-        bar={!phone}
-        tab={phone ? getShownSideTab(tab, run) : tab}
-        onTabChange={onTabChange}
-        firstRun={firstRun}
-        queryPlans={queryPlans}
-        settings={settings}
-        runPicker={runPicker}
-        highlightedDisplays={highlightedDisplays}
-        onDiagnostic={onDiagnostic}
-      />
+      <SideOutputSlot off={hidden}>
+        <OutputPanel
+          label={release.label}
+          revision={getSideRevision(run.submission, sideFiles)}
+          tabs={!phone}
+          tab={phone ? getShownSideTab(tab, run) : tab}
+          onTabChange={onTabChange}
+          firstRun={firstRun}
+          queryPlans={queryPlans}
+          settings={settings}
+          runPicker={runPicker}
+          highlightedDisplays={highlightedDisplays}
+          onDiagnostic={onDiagnostic}
+        />
+      </SideOutputSlot>
     </div>
   );
 
@@ -285,4 +289,9 @@ export function SidePane({
       />
     </section>
   );
+}
+
+/** The hidden side's output stays out of the phone's tab row. */
+function SideOutputSlot({ off, children }: { off: boolean; children: ReactNode }) {
+  return off ? <PhoneOutputSlotOff>{children}</PhoneOutputSlotOff> : children;
 }

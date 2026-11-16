@@ -66,7 +66,7 @@ import {
 import { shareConsentClass } from "./share/share-dialog";
 import { loadSharePublication } from "./share/share-publication-loader";
 import { LoadingSnapshot, loadSharedSnapshot, SharedSnapshot } from "./share/shared-playground";
-import { SiteHeader, SiteNav } from "./shell/site-header";
+import { SiteHeader } from "./shell/site-header";
 import { LocalProjectStorage, type ShareLinkRecord } from "./store/storage";
 import { AppShell } from "./ui/app-shell";
 import { errorBannerClass, noticeBannerClass } from "./ui/banners";
@@ -75,7 +75,6 @@ import { leaveOnPurpose } from "./ui/leave-guard";
 import { download } from "./ui/results";
 import { RouteErrorPage } from "./ui/route-error-page";
 import { useAppUpdated } from "./ui/use-app-updated";
-import { PHONE_QUERY, useMediaQuery } from "./ui/use-media-query";
 import { useWorkspace, type WorkspaceContext } from "./workspace/context";
 import { toArrivalState, type ProjectArrival } from "./workspace/project-arrival";
 import { saveProjectIntro, shouldReloadProjectIntro } from "./workspace/project-arrival-notice";
@@ -217,7 +216,6 @@ function SiteLayout() {
   const { pathname } = useLocation();
   const home = pathname === "/";
   const sitePage = pathname.split("/")[1];
-  const phone = useMediaQuery(PHONE_QUERY);
 
   return (
     <div className={cn("relative flex min-h-0 flex-1 flex-col bg-bg", home && "text-[15px]")}>
@@ -228,8 +226,6 @@ function SiteLayout() {
           <Outlet context={workspace} />
         </ViewTransition>
       </div>
-      {/* Phones reach the site sections from a tab bar under the thumb. */}
-      {phone && <SiteNav phone />}
     </div>
   );
 }

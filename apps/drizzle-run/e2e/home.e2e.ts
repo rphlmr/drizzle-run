@@ -223,7 +223,9 @@ test("phone: my projects fits 375 px with a project list", async ({ page }) => {
 
   await expect(page.getByRole("list", { name: "Projects" }).getByRole("link")).toHaveCount(5);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
-  await page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "Examples" }).click();
+  // Phones reach the site sections from the header's menu.
+  await page.getByRole("button", { name: "Menu" }).click();
+  await page.getByRole("menuitem", { name: "Examples & Guides" }).click();
   await expect(page.getByRole("heading", { name: "Examples & guides", exact: true })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   await page.goto("/");

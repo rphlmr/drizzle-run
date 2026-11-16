@@ -72,13 +72,13 @@ test("should keep guide code above the sheet and support swiping its header", as
     .toBeGreaterThan(initialLine);
 
   const collapse = sheet.getByRole("button", { name: "Collapse guide" });
-  await expect(collapse).toContainText("Hide guide steps");
+  await expect(collapse).toContainText(/Step \d+ of \d+/);
   const header = await collapse.boundingBox();
   if (!header) throw new Error("Guide header is missing");
   await swipe(header.x + header.width / 2, header.y + header.height / 2, header.y + header.height / 2 + 100);
   const expand = sheet.getByRole("button", { name: "Expand guide" });
   await expect(expand).toBeVisible();
-  await expect(expand).toContainText("Show guide steps");
+  await expect(expand).toContainText(/Step \d+ of \d+/);
   const collapsedHeader = await expand.boundingBox();
   if (!collapsedHeader) throw new Error("Collapsed guide header is missing");
   await swipe(

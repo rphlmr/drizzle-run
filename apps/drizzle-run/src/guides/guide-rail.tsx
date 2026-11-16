@@ -541,7 +541,7 @@ export function GuideRail({ guide, controls, leave: leaveMode, done, collapsed, 
       >
         <button
           type="button"
-          className="-mx-4 -mt-2 flex min-h-11 touch-none items-center justify-between gap-3 rounded-t-[20px] border-0 border-b border-border bg-surface px-4 text-[12px] font-semibold text-muted select-none"
+          className="relative -mx-4 -mt-2 flex min-h-13 touch-none items-center gap-3 rounded-t-[20px] border-0 bg-surface px-4 pt-2 text-muted select-none"
           aria-label={collapsed ? "Expand guide" : "Collapse guide"}
           aria-expanded={!collapsed}
           onPointerDown={(event) => {
@@ -569,18 +569,17 @@ export function GuideRail({ guide, controls, leave: leaveMode, done, collapsed, 
             sheetGesture.current = null;
           }}
         >
-          <span>{collapsed ? "Show guide steps" : "Hide guide steps"}</span>
-          <span className="flex items-center gap-1.5 font-normal">
-            Swipe {collapsed ? "up" : "down"}
-            {collapsed ? <ChevronUpIcon aria-hidden="true" /> : <ChevronDownIcon aria-hidden="true" />}
-          </span>
-        </button>
-        <div className="flex items-center gap-2.5">
-          <span className="text-[11px] font-bold tracking-[0.06em] whitespace-nowrap text-muted uppercase">
+          <span
+            aria-hidden="true"
+            className="absolute top-1.5 left-1/2 h-1 w-9 -translate-x-1/2 rounded-pill bg-card-border"
+          />
+          <span className="flex w-16 shrink-0">{segmentBar}</span>
+          <span className="min-w-0 flex-1 truncate text-left text-[13px] font-medium text-text">
             {label}
+            {collapsed && !finished && stage !== "loading" && ` · ${step.title}`}
           </span>
-          {segmentBar}
-        </div>
+          {collapsed ? <ChevronUpIcon aria-hidden="true" /> : <ChevronDownIcon aria-hidden="true" />}
+        </button>
         {!collapsed && (
           <div className="-m-1 flex min-h-0 flex-col gap-3 overflow-y-auto p-1 *:shrink-0">
             {stage === "loading" ? (

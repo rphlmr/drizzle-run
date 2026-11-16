@@ -3,7 +3,9 @@ import { Link } from "react-router";
 
 import { cn } from "../lib/utils";
 import { LogoTile } from "../ui/logo-tile";
+import { PHONE_QUERY, useMediaQuery } from "../ui/use-media-query";
 import { AccountMenu } from "./account-menu";
+import { PhoneMenu } from "./phone-menu";
 
 export interface AppHeaderProps {
   leading?: ReactNode;
@@ -25,12 +27,14 @@ export interface AppHeaderProps {
   playground?: boolean;
   /** The account menu at the right end. Embeds leave it out: they have no AuthProvider. */
   account?: boolean;
+  /** Phones: the menu button to the site sections, first in the header. Embeds leave it out. */
+  menu?: boolean;
   className?: string;
 }
 
 /**
  * The header of every page: the logo, the leading content, the embed's file tabs, then the actions and the account on
- * the right.
+ * the right. Phones start it with the menu button.
  */
 export function AppHeader({
   leading,
@@ -43,8 +47,11 @@ export function AppHeader({
   phoneWordmark = false,
   playground = false,
   account = !compact,
+  menu = account,
   className,
 }: AppHeaderProps) {
+  const phone = useMediaQuery(PHONE_QUERY);
+  const phoneMenu = menu && phone;
   return (
     <header
       className={cn(
@@ -55,7 +62,9 @@ export function AppHeader({
       )}
       data-playground={playground || undefined}
     >
-      {logo && (
+      {phoneMenu && <PhoneMenu />}
+      {/* On phones the menu button stands in for a project's logo tile; site pages keep their wordmark beside it. */}
+      {logo && !(phoneMenu && !phoneWordmark) && (
         <Link
           className="inline-flex shrink-0 items-center gap-2.25 font-display text-[19px] font-extrabold tracking-[-0.03em] whitespace-nowrap text-text no-underline max-phone:gap-2 max-phone:text-[18px]"
           to={homeHref}

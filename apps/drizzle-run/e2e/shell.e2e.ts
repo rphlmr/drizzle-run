@@ -530,7 +530,8 @@ test("should turn the phone first-run card from preparing to ready in place, sto
     run: "[data-guide=run]",
     views: "nav[aria-label='Workspace views']",
     tabs: "[aria-label='Output views']",
-    pill: "section[aria-label='Execution output'] output",
+    // Phones draw the run status at the end of the views row.
+    pill: "[data-slot=output-tools] output",
     card: "[data-slot=first-run]",
     cardStatus: "[data-slot=first-run-status]",
   };

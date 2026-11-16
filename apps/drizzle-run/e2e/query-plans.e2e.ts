@@ -144,7 +144,10 @@ test("should put the plans notice in the rows' place on a phone, and keep planne
 
   const output = page.getByRole("region", { name: "Execution output" });
   await run.click();
-  await expect(output.getByRole("status")).toHaveText(/^Succeeded/, { timeout: 120_000 });
+  // Phones draw the run status at the end of the views row.
+  await expect(page.locator("[data-slot=output-tools]").getByRole("status")).toHaveText(/^Succeeded/, {
+    timeout: 120_000,
+  });
   await page
     .getByRole("navigation", { name: "Workspace views" })
     .getByRole("button", { name: /Output/ })

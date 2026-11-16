@@ -12,7 +12,6 @@ import {
 } from "../components/ui/dropdown-menu";
 import { ChatToggle, PendingEditBanner, PendingRunBanner } from "../connect/chat-panel";
 import type { ConnectViewOptions } from "../connect/connect-provider";
-import { cn } from "../lib/utils";
 import { resolveProjectDocs } from "../official/project-docs";
 import { ProjectDocsMenu } from "../official/project-docs-menu";
 import type { AsideControls } from "../project/project-view";
@@ -350,7 +349,6 @@ export function SideBySideView(props: SideBySideViewProps) {
                 workspace.setSideTab(view.side, tab);
                 view.send({ type: "output.show" });
               }}
-              selected={selected}
             />
             {projectActions && (
               <ChangeSideSheet
@@ -471,22 +469,6 @@ export function SideBySideView(props: SideBySideViewProps) {
             )
           }
         />
-      }
-      phoneFooter={
-        <footer className="flex shrink-0 items-center gap-2.5 border-t border-border bg-surface px-4 pt-2.5 pb-4.5 text-[11.5px] text-muted">
-          <span className="font-semibold text-text">{databaseLabel}</span>
-          <span className="inline-flex items-center gap-1.5">
-            <span
-              className={cn(
-                "size-1.75 rounded-full",
-                pairRunning || !bothReady ? "bg-warn" : unavailable ? "bg-err" : "bg-accent-text",
-              )}
-              aria-hidden="true"
-            />
-            {runtimeLabel}
-          </span>
-          <output className="ml-auto">{saveStateLabels[saveState]}</output>
-        </footer>
       }
       dialogs={
         <>
