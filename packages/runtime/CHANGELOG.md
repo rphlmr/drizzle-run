@@ -1,5 +1,16 @@
 # @drizzle-run/runtime
 
+## 0.3.0
+
+### Minor Changes
+
+- 7347326: Drop the chat's Ask and Edit modes. Each view offers the agent only the tools it allows: a guide, a shared link or an untrusted project reads only, and every edit waits for Keep or Undo. Codex starts on GPT-6.1 Sol when the account has it.
+
+### Patch Changes
+
+- Updated dependencies [7347326]
+  - @drizzle-run/core@0.3.0
+
 ## 0.2.0
 
 ### Minor Changes

@@ -1,5 +1,12 @@
 # @drizzle-run/orchestration
 
+## 0.2.1
+
+### Patch Changes
+
+- Updated dependencies [7347326]
+  - @drizzle-run/core@0.3.0
+
 ## 0.2.0
 
 ### Minor Changes
