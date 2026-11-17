@@ -1,5 +1,11 @@
 # @drizzle-run/connect
 
+## 0.2.1
+
+### Patch Changes
+
+- Republish the SDK and companion to validate the renewed npm trusted publishers.
+
 ## 0.2.0
 
 ### Minor Changes
