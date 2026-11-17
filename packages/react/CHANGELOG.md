@@ -1,5 +1,14 @@
 # @drizzle-run/react
 
+## 0.2.1
+
+### Patch Changes
+
+- Updated dependencies [7347326]
+  - @drizzle-run/core@0.3.0
+  - @drizzle-run/runtime@0.3.0
+  - @drizzle-run/orchestration@0.2.1
+
 ## 0.2.0
 
 ### Minor Changes
