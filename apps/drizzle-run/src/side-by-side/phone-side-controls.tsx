@@ -49,7 +49,7 @@ export function PhoneSideControls({
   ];
 
   return (
-    <div className="grid shrink-0 gap-1 bg-surface pt-2.5">
+    <div className="grid shrink-0 grid-cols-[minmax(0,1fr)] gap-1 bg-surface pt-2.5">
       <div className="mx-3 flex rounded-md bg-surface-2 p-0.75" role="tablist" aria-label="Side">
         {releases.map((item) => (
           <button
@@ -66,9 +66,9 @@ export function PhoneSideControls({
           </button>
         ))}
       </div>
-      <div className="flex min-h-13 items-center gap-2 border-b border-border px-3">
+      <div className="flex min-h-13 min-w-0 items-center gap-2 border-b border-border px-3">
         <div
-          className="flex min-w-0 flex-1 scrollbar-none gap-1 overflow-x-auto py-1 [&::-webkit-scrollbar]:hidden"
+          className="flex min-w-0 flex-1 scrollbar-none gap-0.5 overflow-x-auto mask-[linear-gradient(to_right,black_calc(100%-24px),transparent)] py-1 pr-6 [&::-webkit-scrollbar]:hidden"
           role="tablist"
           aria-label={`${release.label} view`}
         >
