@@ -1,5 +1,13 @@
 # @drizzle-run/runtime
 
+## 0.3.1
+
+### Patch Changes
+
+- Republish the SDK and companion to validate the renewed npm trusted publishers.
+- Updated dependencies
+  - @drizzle-run/core@0.3.1
+
 ## 0.3.0
 
 ### Minor Changes

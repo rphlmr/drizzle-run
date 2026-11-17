@@ -1,5 +1,12 @@
 # @drizzle-run/test-fixtures
 
+## 0.0.3
+
+### Patch Changes
+
+- Updated dependencies
+  - @drizzle-run/core@0.3.1
+
 ## 0.0.2
 
 ### Patch Changes
