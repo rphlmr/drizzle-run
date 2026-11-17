@@ -1,10 +1,12 @@
-import { useRef, useState, type KeyboardEvent, type ReactNode } from "react";
+import { useLayoutEffect, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
 
 import type { ChatTarget } from "../connect/chat-panel";
 import { ChatDock } from "../connect/chat-panel";
 import { cn } from "../lib/utils";
 import { AppHeader } from "../shell/app-header";
+import { SiteNav } from "../shell/site-header";
 import { EditorBar } from "../ui/editor-bar";
+import { PhoneOutputSlotProvider } from "../ui/phone-output-slot";
 import { PhoneViewSwitch, phonePaneMotionClass, type PhoneView } from "../ui/phone-view-switch";
 import { RailResizeHandle } from "../ui/rail-resize-handle";
 import { isRunShortcut } from "../ui/run-shortcut";
@@ -30,10 +32,12 @@ export interface WorkspaceAside {
   /** Names the panel and its phone view. */
   label: string;
   content: ReactNode;
-  /** A phone shows it as a bottom sheet below the code and output instead of a view of its own. */
+  /** A phone shows it as a bottom sheet over the code and output instead of a view of its own. */
   sheet?: boolean;
-  /** Drawn at its content's width, without a resize handle. */
+  /** Drawn at its content's width, without a resize handle; a phone's sheet shows only its header. */
   collapsed?: boolean;
+  /** Folds the open sheet, as a tap on the backdrop does. */
+  onCollapse?: () => void;
   /**
    * The width a person dragged the rail to, kept by the caller so it outlives this layout, such as a guide whose steps
    * switch between a project and its sides. The rail then keeps the split's drawn width on the sides too.
@@ -65,8 +69,6 @@ export interface WorkspaceLayoutProps {
   overlay?: ReactNode;
   /** The desktop's status bar. */
   statusBar?: ReactNode;
-  /** A phone's footer; phones have no status bar. */
-  phoneFooter?: ReactNode;
   dialogs?: ReactNode;
 }
 
@@ -125,7 +127,6 @@ export function WorkspaceLayout({
   chat,
   overlay,
   statusBar,
-  phoneFooter,
   dialogs,
 }: WorkspaceLayoutProps) {
   const phone = mode === "phone";
@@ -157,102 +158,115 @@ export function WorkspaceLayout({
   };
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col" onKeyDownCapture={runShortcut}>
-      <AppHeader
-        logo={!compact}
-        compact={compact}
-        playground={!compact && !isBlocked}
-        leading={compact ? undefined : header.leading}
-        tabs={placement.tabsInHeader ? fileTabs : undefined}
-        actions={
+    <PhoneOutputSlotProvider>
+      <div className="flex min-h-0 flex-1 flex-col" onKeyDownCapture={runShortcut}>
+        <AppHeader
+          className={!compact && !phone ? "border-b-0 bg-transparent" : undefined}
+          logo={!compact}
+          compact={compact}
+          playground={!compact && !isBlocked}
+          leading={
+            compact ? undefined : phone ? (
+              header.leading
+            ) : (
+              // The site sections stay one click away from any project, then the project itself.
+              <>
+                {/* The site header spaces its nav 8px further from the logo: keep the links where they are on every page. */}
+                <SiteNav iconsUnderWide className="ml-2" />
+                <span aria-hidden="true" className="mx-1 h-5 w-px shrink-0 bg-border" />
+                {header.leading}
+              </>
+            )
+          }
+          tabs={placement.tabsInHeader ? fileTabs : undefined}
+          actions={
+            <>
+              {header.actions}
+              {placement.runInActions && header.run}
+            </>
+          }
+        />
+        {banner}
+        {phone && !isBlocked && work.shape === "sides" && aside && !aside.sheet && (
+          <PhoneAsideSwitch label={aside.label} view={view} />
+        )}
+        {phone && !isBlocked && work.shape === "split" && (
           <>
-            {header.actions}
-            {placement.runInActions && header.run}
-          </>
-        }
-      />
-      {banner}
-      {phone && !isBlocked && work.shape === "sides" && aside && !aside.sheet && (
-        <PhoneAsideSwitch label={aside.label} view={view} />
-      )}
-      {phone && !isBlocked && work.shape === "split" && (
-        <>
-          <PhoneViewSwitch
-            aside={aside !== undefined && !aside.sheet ? aside.label : undefined}
-            view={view.phoneView}
-            hasNewOutput={view.unseenOutput}
-            badge={work.badge}
-            onChange={(next) => view.send({ type: PHONE_VIEW_EVENTS[next] })}
-          />
-          {view.phoneView === "code" && (
-            <div className="shrink-0 scrollbar-none overflow-x-auto border-b border-border bg-surface px-3 pt-1.25 pb-2.5">
-              {fileTabs}
-            </div>
-          )}
-        </>
-      )}
-      {isBlocked && (
-        <main className="flex min-h-0 flex-1 flex-col items-center overflow-y-auto px-4 py-6 *:my-auto max-phone:py-5 max-phone:*:my-0">
-          {blocked}
-        </main>
-      )}
-      <div
-        className={
-          work.shape === "sides"
-            ? cn("flex min-h-0 flex-1", phone && aside?.sheet && "flex-col")
-            : cn(
-                "flex min-h-0 flex-1 flex-col p-3",
-                compact && "p-0",
-                (aside || dockOpen) && "relative flex-row gap-3 max-phone:flex-col max-phone:gap-0",
-                phone && "p-0",
-              )
-        }
-        hidden={isBlocked}
-      >
-        {aside &&
-          (phone && aside.sheet ? (
-            <section
-              className={cn(
-                "relative z-10 order-last flex max-h-[70%] min-h-0 shrink-0 flex-col",
-                // Keep result updates from resizing the editor and its panel observers during a run.
-                !aside.collapsed && "h-[70%]",
-              )}
-              aria-label={aside.label}
-            >
-              {aside.content}
-            </section>
-          ) : (
-            <WorkspaceRail
-              aside={aside}
-              shape={work.shape}
-              phone={phone}
-              shown={!phone || view.asideShown}
-              resizable={railResizable}
-              widthPx={railWidthPx}
-              onWidthChange={setRailWidthPx}
+            <PhoneViewSwitch
+              aside={aside !== undefined && !aside.sheet ? aside.label : undefined}
+              view={view.phoneView}
+              hasNewOutput={view.unseenOutput}
+              badge={work.badge}
+              onChange={(next) => view.send({ type: PHONE_VIEW_EVENTS[next] })}
             />
-          ))}
-        {work.shape === "sides" ? (
-          <SidesWorkArea phone={phone} view={view} work={work} fileTabs={fileTabs} editorBar={editorBar} />
-        ) : (
-          <SplitWorkArea
-            mode={mode}
-            view={view}
-            work={work}
-            editorBar={editorBar}
-            besideColumns={aside !== undefined || chat.target !== undefined}
-            railAndDockOpen={railResizable && dockOpen}
-          />
+            {view.phoneView === "code" && (
+              <div className="shrink-0 scrollbar-none overflow-x-auto border-b border-border bg-surface px-3 pt-1.25 pb-2.5">
+                {fileTabs}
+              </div>
+            )}
+          </>
         )}
-        {chat.target && (
-          <ChatDock {...chat.target} open={chat.open} onClose={chat.onClose} className={DOCK_CLASS_NAMES[work.shape]} />
+        {isBlocked && (
+          <main className="flex min-h-0 flex-1 flex-col items-center overflow-y-auto px-4 py-6 *:my-auto max-phone:py-5 max-phone:*:my-0">
+            {blocked}
+          </main>
         )}
-        {overlay}
+        <div
+          className={
+            work.shape === "sides"
+              ? cn("relative flex min-h-0 flex-1", phone && aside?.sheet && "flex-col")
+              : cn(
+                  "flex min-h-0 flex-1 flex-col p-3",
+                  compact && "p-0",
+                  (aside || dockOpen) && "relative flex-row gap-3 max-phone:flex-col max-phone:gap-0",
+                  phone && "p-0",
+                  phone && aside?.sheet && "relative",
+                )
+          }
+          hidden={isBlocked}
+        >
+          {aside &&
+            (phone && aside.sheet ? (
+              <PhoneSheet label={aside.label} collapsed={aside.collapsed ?? false} onCollapse={aside.onCollapse}>
+                {aside.content}
+              </PhoneSheet>
+            ) : (
+              <WorkspaceRail
+                aside={aside}
+                shape={work.shape}
+                phone={phone}
+                shown={!phone || view.asideShown}
+                resizable={railResizable}
+                widthPx={railWidthPx}
+                onWidthChange={setRailWidthPx}
+              />
+            ))}
+          {work.shape === "sides" ? (
+            <SidesWorkArea phone={phone} view={view} work={work} fileTabs={fileTabs} editorBar={editorBar} />
+          ) : (
+            <SplitWorkArea
+              mode={mode}
+              view={view}
+              work={work}
+              editorBar={editorBar}
+              besideColumns={aside !== undefined || chat.target !== undefined}
+              railAndDockOpen={railResizable && dockOpen}
+            />
+          )}
+          {chat.target && (
+            <ChatDock
+              {...chat.target}
+              open={chat.open}
+              onClose={chat.onClose}
+              className={DOCK_CLASS_NAMES[work.shape]}
+            />
+          )}
+          {overlay}
+        </div>
+        {!isBlocked && mode === "desktop" && statusBar}
+        {dialogs}
       </div>
-      {!isBlocked && mode === "desktop" && statusBar}
-      {!isBlocked && phone && phoneFooter}
-      {dialogs}
-    </div>
+    </PhoneOutputSlotProvider>
   );
 }
 
@@ -303,7 +317,7 @@ function WorkspaceRail({ aside, shape, phone, shown, resizable, widthPx, onWidth
 function PhoneAsideSwitch({ label, view }: { label: string; view: WorkspaceView }) {
   return (
     <nav className="flex shrink-0 gap-1 bg-surface px-4 pt-3" aria-label="Workspace views">
-      <div className="flex flex-1 rounded-[11px] bg-surface-2 p-0.75">
+      <div className="flex flex-1 rounded-md bg-surface-2 p-0.75">
         {[label, "Sides"].map((item, index) => (
           <button
             key={item}
@@ -317,5 +331,63 @@ function PhoneAsideSwitch({ label, view }: { label: string; view: WorkspaceView 
         ))}
       </div>
     </nav>
+  );
+}
+
+/**
+ * Phones: a side panel as a bottom sheet floating over the work area, like a modal sheet
+ *
+ * The code and output run on under it. Folded, it leaves its height in `--sheet-inset` on the work area, so the
+ * output's lists end clear of it; open, a backdrop dims the work area and folds the sheet on a tap.
+ */
+function PhoneSheet({
+  label,
+  collapsed,
+  onCollapse,
+  children,
+}: {
+  label: string;
+  collapsed: boolean;
+  onCollapse?: () => void;
+  children: ReactNode;
+}) {
+  const sheet = useRef<HTMLElement>(null);
+
+  useLayoutEffect(() => {
+    const element = sheet.current;
+    const area = element?.parentElement;
+
+    if (!element || !area || !collapsed) {
+      return;
+    }
+
+    const observer = new ResizeObserver(() => area.style.setProperty("--sheet-inset", `${element.offsetHeight}px`));
+    observer.observe(element);
+
+    return () => observer.disconnect();
+  }, [collapsed]);
+
+  return (
+    <>
+      {!collapsed && (
+        <div
+          aria-hidden="true"
+          className="fixed inset-0 z-40 bg-black/30 transition-opacity duration-(--motion-fast) starting:opacity-0"
+          onClick={onCollapse}
+          data-slot="sheet-backdrop"
+        />
+      )}
+      <section
+        ref={sheet}
+        className={cn(
+          "absolute inset-x-0 bottom-0 z-50 flex max-h-[70%] min-h-0 flex-col",
+          // Keep result updates from resizing the sheet while it is open.
+          !collapsed && "h-[70%]",
+        )}
+        aria-label={label}
+      >
+        {children}
+      </section>
+    </>
   );
 }

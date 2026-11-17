@@ -60,7 +60,7 @@ export function FileTabs({
         <SegmentedList
           aria-label="Project files"
           className={cn("bg-transparent p-0", phone && "gap-1.5")}
-          indicatorClassName={phone ? "rounded-pill bg-segment shadow-none" : undefined}
+          indicatorClassName={phone ? "rounded-md bg-surface-2 shadow-none" : undefined}
         >
           {files.map((path) => {
             const described = describe?.(path);
@@ -78,7 +78,7 @@ export function FileTabs({
                     off && "text-faint",
                     described && "px-2.75 text-[12px]",
                     phone &&
-                      "relative h-9 rounded-pill border border-border px-3 py-0 text-[12px] after:absolute after:inset-x-0 after:-inset-y-1.25 data-active:border-segment data-active:text-segment-fg",
+                      "relative h-8 rounded-md px-3 py-0 text-[12px] text-muted after:absolute after:inset-x-0 after:-inset-y-1.5 data-active:text-text",
                   )}
                 >
                   {path}
@@ -115,7 +115,7 @@ export function FileTabs({
           type="button"
           className={cn(
             "grid size-7.5 place-items-center rounded-sm border-0 bg-transparent text-muted hover:bg-surface hover:text-text",
-            phone && "relative size-9 rounded-pill border border-border after:absolute after:-inset-1.25",
+            phone && "relative size-9 rounded-md border border-border after:absolute after:-inset-1.25",
           )}
           aria-label="Add helper file"
           onClick={onAdd}

@@ -51,7 +51,7 @@ function StripedBar({ percent, moving, label }: { percent: number | null; moving
 
   return (
     <div
-      className="h-2.5 overflow-hidden rounded-pill border-[1.5px] border-run-border bg-surface-2"
+      className="h-2.5 overflow-hidden rounded-pill border border-run-border bg-surface-2"
       {...(label === undefined
         ? { "aria-hidden": true }
         : {
@@ -124,9 +124,9 @@ function StatusRow({
           </div>
           {onRun && (
             <Button
-              variant="run"
+              variant="outline"
               size="run"
-              className="relative h-9 min-h-0 shrink-0 gap-1.5 rounded-[9px] px-3 text-[13px] after:absolute after:inset-[-5.5px] max-phone:h-9"
+              className="relative h-9 min-h-0 shrink-0 gap-1.5 rounded-md px-3 text-[13px] after:absolute after:inset-[-5.5px] max-phone:h-9"
               data-state="ready"
               data-slot="first-run-run"
               aria-label="Run this project"
@@ -154,8 +154,8 @@ function RunTile({ status, compact }: Pick<FirstRunCardProps, "status" | "compac
   return (
     <span
       className={cn(
-        "grid size-11 shrink-0 place-items-center overflow-hidden rounded-[12px] border-[1.5px] border-run-border bg-lime text-on-lime shadow-action",
-        compact && "size-8 rounded-[9px]",
+        "grid size-11 shrink-0 place-items-center overflow-hidden rounded-lg border border-border bg-surface-2 text-text",
+        compact && "size-8 rounded-md",
       )}
     >
       {status.state === "preparing" ? (
@@ -185,7 +185,7 @@ export function FirstRunCard({ status, dialect, compact = false, stacked = false
     return (
       <div className="grid min-h-full shrink-0 grid-cols-[minmax(0,1fr)] place-items-center p-3">
         <div
-          className="relative flex w-full max-w-140 min-w-0 flex-col gap-2 overflow-hidden rounded-[12px] border-[1.5px] border-dashed border-faint bg-surface px-4 pt-4 text-left"
+          className="relative flex w-full max-w-140 min-w-0 flex-col gap-2 overflow-hidden rounded-lg border-[1.5px] border-dashed border-faint bg-surface px-4 pt-4 text-left"
           data-slot="first-run"
         >
           <div className="flex items-center gap-2.5">

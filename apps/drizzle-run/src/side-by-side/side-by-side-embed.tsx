@@ -247,7 +247,7 @@ export function SideBySideEmbed({ project, playgroundHref, runtime, recorded, on
                 variant="run"
                 size="run"
                 data-state={pairRunning ? "running" : bothReady || unavailable ? "ready" : "preparing"}
-                className="relative h-9 min-w-28 justify-center gap-2 rounded-[9px] pr-3.5 pl-3 after:absolute after:inset-[-5.5px] max-phone:h-9 [&>svg]:size-3"
+                className="relative h-9 min-w-28 justify-center gap-2 rounded-md pr-3.5 pl-3 after:absolute after:inset-[-5.5px] max-phone:h-9 [&>svg]:size-3"
                 disabled={!pairRunning && !canRun}
                 aria-busy={(!pairRunning && !bothReady && !unavailable) || undefined}
                 onClick={pairRunning ? () => pairRun.cancel() : runBoth}
@@ -337,7 +337,7 @@ interface SideSwitchProps {
 function SideSwitch({ sides, releases, preparing, shown, onShow }: SideSwitchProps) {
   return (
     <div
-      className="flex shrink-0 gap-0.5 rounded-[9px] bg-surface-2 p-0.75 max-[479px]:w-full"
+      className="flex shrink-0 gap-0.5 rounded-md bg-surface-2 p-0.75 max-[479px]:w-full"
       role="tablist"
       aria-label="Side"
     >
@@ -372,7 +372,7 @@ function SideSwitchTab({ label, preparing, selected, onSelect }: SideSwitchTabPr
       type="button"
       role="tab"
       aria-selected={selected}
-      className="relative inline-flex h-7.5 items-center justify-center gap-1.5 rounded-[6px] border-0 bg-transparent px-2.5 text-text after:absolute after:inset-x-0 after:-inset-y-1.75 aria-selected:bg-surface aria-selected:shadow-[0_0_0_1px_var(--border)] max-[479px]:flex-1"
+      className="relative inline-flex h-7.5 items-center justify-center gap-1.5 rounded-md border-0 bg-transparent px-2.5 text-text after:absolute after:inset-x-0 after:-inset-y-1.75 aria-selected:bg-surface aria-selected:shadow-[0_0_0_1px_var(--border)] max-[479px]:flex-1"
       onClick={onSelect}
     >
       <b className="max-w-40 truncate text-[12.5px] font-semibold">{label}</b>
@@ -411,16 +411,12 @@ function EmbedFileTabs({
         }
       }}
     >
-      <SegmentedList
-        aria-label="Project files"
-        className="gap-0.5 bg-transparent p-0"
-        indicatorClassName="rounded-base bg-segment shadow-none"
-      >
+      <SegmentedList aria-label="Project files" className="gap-0.5 bg-transparent p-0">
         {files.map((path) => (
           <SegmentedItem
             key={path}
             value={path}
-            className="relative h-7 rounded-base px-2.5 py-0 font-mono text-[12px] text-muted after:absolute after:inset-x-0 after:-inset-y-2 data-active:font-semibold data-active:text-segment-fg"
+            className="relative h-7 rounded-base px-2.5 py-0 font-mono text-[12px] text-muted after:absolute after:inset-x-0 after:-inset-y-2 data-active:font-semibold data-active:text-text"
           >
             {path}
           </SegmentedItem>
@@ -433,7 +429,7 @@ function EmbedFileTabs({
 /** A side's database, release and versions, in the app's pane-head chip; the embed cannot change them. */
 function SideReleaseChip({ release }: { release: SideRelease }) {
   return (
-    <span className="inline-flex h-6 min-w-0 shrink-100 items-center gap-1.5 rounded-[6px] border border-border bg-surface-2 py-0 pr-1.75 pl-2 text-[12px] whitespace-nowrap text-text">
+    <span className="inline-flex h-6 min-w-0 shrink-100 items-center gap-1.5 rounded-md border border-border bg-surface-2 py-0 pr-1.75 pl-2 text-[12px] whitespace-nowrap text-text">
       <SideReleaseText release={release} />
     </span>
   );
@@ -531,16 +527,12 @@ function EmbedSidePane({
             className="flex shrink-0 items-center gap-2 border-b border-border bg-surface px-2.5 py-1.5 data-narrow:py-2"
             data-narrow={!wide || undefined}
           >
-            <SegmentedList
-              aria-label={`${release.label} output`}
-              className="gap-0.5 bg-transparent p-0"
-              indicatorClassName="rounded-base bg-segment shadow-none"
-            >
+            <SegmentedList aria-label={`${release.label} output`} className="gap-0.5 bg-transparent p-0">
               {EMBED_SIDE_VIEWS.map((item) => (
                 <SegmentedItem
                   key={item}
                   value={item}
-                  className="relative inline-flex h-7 items-center gap-1.5 rounded-base px-2.5 py-0 text-[12.5px] text-muted after:absolute after:inset-x-0 after:-inset-y-2 data-active:font-semibold data-active:text-segment-fg"
+                  className="relative inline-flex h-7 items-center gap-1.5 rounded-base px-2.5 py-0 text-[12.5px] text-muted after:absolute after:inset-x-0 after:-inset-y-2 data-active:font-semibold data-active:text-text"
                 >
                   {viewLabels[item]}
                   {run.ran && item !== "story" && run.counts[item] > 0 && (

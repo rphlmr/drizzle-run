@@ -69,7 +69,7 @@ import { ShareLinkField } from "./share-link-field";
 import type { loadSharePublication } from "./share-publication-loader";
 
 const shareDialogClass = cn(
-  "max-h-[calc(100dvh-32px)] w-[min(520px,calc(100vw-24px))] max-w-none overflow-y-auto rounded-[18px] max-phone:w-[min(520px,calc(100vw-24px))]",
+  "max-h-[calc(100dvh-32px)] w-[min(520px,calc(100vw-24px))] max-w-none overflow-y-auto rounded-lg max-phone:w-[min(520px,calc(100vw-24px))]",
 );
 const shareDescriptionClass = cn("mt-1.5 mb-0");
 const headerCodeClass = cn("font-mono text-[11px] whitespace-nowrap text-text");
@@ -548,7 +548,7 @@ export function ShareDialog({
               {listed ? "Shown on the Community card and in link previews." : "Shown in link previews."}
             </FieldNote>
           </div>
-          <div className="flex flex-col rounded-[10px] bg-err-bg">
+          <div className="flex flex-col rounded-md bg-err-bg">
             <p className="flex items-start gap-2.5 px-3 pt-3 pb-1 text-[13px]/[1.5]">
               <TriangleAlertIcon className="mt-px size-4.5 shrink-0 text-err" aria-hidden="true" />
               <span>Anyone who opens it can read {exposed}.</span>

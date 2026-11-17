@@ -139,7 +139,7 @@ test("should create a new project in Cloud by default, and duplicate it as Local
   await page.getByRole("button", { name: "New project", exact: true }).first().click();
   const signedOutDialog = page.getByRole("dialog", { name: "New project" });
   await expect(signedOutDialog.getByLabel("Name", { exact: true })).toBeVisible();
-  await expect(signedOutDialog.getByRole("radio", { name: "Cloud" })).toHaveCount(0);
+  await expect(signedOutDialog.getByRole("combobox", { name: "Keep in" })).toHaveCount(0);
   await signedOutDialog.getByRole("button", { name: "Cancel" }).click();
 
   await useGitHubAccount(page.context(), login);
@@ -148,8 +148,7 @@ test("should create a new project in Cloud by default, and duplicate it as Local
   await expect(getCloudStatus(page)).toHaveText("Up to date");
   await page.getByRole("button", { name: "New project", exact: true }).first().click();
   const dialog = page.getByRole("dialog", { name: "New project" });
-  await expect(dialog.getByRole("radio", { name: "Cloud" })).toBeChecked();
-  await expect(dialog.getByRole("radio", { name: "This browser only" })).not.toBeChecked();
+  await expect(dialog.getByRole("combobox", { name: "Keep in" })).toHaveValue("cloud");
   await dialog.getByLabel("Name", { exact: true }).fill(name);
   await dialog.getByRole("button", { name: "Create project", exact: true }).click();
 

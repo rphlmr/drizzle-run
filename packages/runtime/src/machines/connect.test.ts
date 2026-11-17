@@ -25,7 +25,7 @@ import type {
   LinkEvent,
   PendingEdit,
 } from "./connect-contract.ts";
-import { connectQuota, connectStatus, createConnectMachine, refusedEditSummary, workingTurn } from "./connect.ts";
+import { connectQuota, connectStatus, createConnectMachine, workingTurn } from "./connect.ts";
 import { declareType } from "./declare-type.ts";
 
 const SECRET = "k7Pq-2xZm-9fLw";
@@ -214,7 +214,6 @@ function start(
 
   const emittedTypes = [
     "activity.added",
-    "edit.requested",
     "edit.pending",
     "edit.kept",
     "edit.undone",
@@ -279,7 +278,6 @@ async function connectedWithBusyJobs(options: { undo?: ConnectServices["undoEdit
     ...(options.undo ? { undo: options.undo } : {}),
   });
 
-  started.actor.send({ type: "chat.mode.set", mode: "edit" });
   await started.room.say({
     type: "tool.call",
     id: "e1",
@@ -304,7 +302,7 @@ function findEditRow(actor: Awaited<ReturnType<typeof connected>>["actor"], tool
   return actor.getSnapshot().context.activity.find((entry) => entry.kind === "tool" && entry.id === toolId);
 }
 
-/** Chooses Claude Code and sends a chat message, so the chat's turns are bound to `project` in its mode. */
+/** Chooses Claude Code and sends a chat message, so the chat's turns are bound to `project`. */
 async function startChat(
   { actor, room }: Pick<Awaited<ReturnType<typeof connected>>, "actor" | "room">,
   conversation: string,
@@ -486,7 +484,7 @@ describe("connect machine", () => {
     actor.stop();
   });
 
-  it("should choose an agent, send chat in the current mode, and stream the answer into one message", async () => {
+  it("should choose an agent, send chat, and stream the answer into one message", async () => {
     const { actor, room, emitted } = await connected();
 
     actor.send({ type: "chat.agent.choose", agent: "codex" });
@@ -496,7 +494,6 @@ describe("connect machine", () => {
     expect(await room.next("agent.choose")).toEqual({ type: "agent.choose", agent: "claude" });
     expect(connectStatus(actor.getSnapshot())).toMatchObject({ kind: "ready", agent: "claude" });
 
-    actor.send({ type: "chat.mode.set", mode: "edit" });
     actor.send({
       type: "chat.message.send",
       conversation: "p1",
@@ -507,7 +504,6 @@ describe("connect machine", () => {
       type: "chat.send",
       conversation: "p1",
       text: "Move 130 instead",
-      mode: "edit",
       project: { id: "p1", name: "Bank transfers" },
       agent: "claude",
     });
@@ -568,7 +564,6 @@ describe("connect machine", () => {
         id: "call1",
         call: { name: "read_file", input: { path: "query.ts" } },
         conversation: "p1",
-        mode: "ask",
       },
       expect.any(AbortSignal),
     );
@@ -649,37 +644,10 @@ describe("connect machine", () => {
     actor.stop();
   });
 
-  it("should refuse edit tools in Ask mode and say the chat needs Edit", async () => {
-    const { actor, room, execute, emitted } = await connected();
-
-    await startChat({ actor, room }, "p1");
-    await room.say({
-      type: "tool.call",
-      id: "e1",
-      name: "apply_edits",
-      input: { edits: [{ path: "query.ts", new_text: "x" }] },
-      conversation: "p1",
-    });
-    expect(await room.next("tool.result")).toMatchObject({
-      id: "e1",
-      ok: false,
-      error: { code: "edit_mode_required" },
-    });
-    expect(execute).not.toHaveBeenCalled();
-    expect(emitted).toContainEqual({ type: "edit.requested", tool: "apply_edits", conversation: "p1" });
-    expect(actor.getSnapshot().context.activity.at(-1)).toMatchObject({
-      kind: "tool",
-      status: "refused",
-      summary: { label: "Edit", target: "query.ts" },
-    });
-    actor.stop();
-  });
-
-  it("should refuse tools the open view does not offer before anything else, in Edit mode too, without asking for edits", async () => {
+  it("should refuse tools the open view does not offer before anything else", async () => {
     let scope: ConnectToolScope = "guide";
-    const { actor, room, execute, emitted } = await connected({ pairing: paired, scope: () => scope });
+    const { actor, room, execute } = await connected({ pairing: paired, scope: () => scope });
 
-    actor.send({ type: "chat.mode.set", mode: "edit" });
     await startChat({ actor, room }, "g-transactions", { scope: "guide" });
 
     for (const [id, name] of [
@@ -710,7 +678,6 @@ describe("connect machine", () => {
     await room.say({ type: "tool.call", id: "g5", name: "get_guide", input: {}, conversation: "g-transactions" });
     expect(await room.next("tool.result")).toMatchObject({ id: "g5", ok: true });
     expect(execute).toHaveBeenCalledTimes(1);
-    expect(emitted.some((event) => event.type === "edit.requested")).toBe(false);
 
     scope = "project";
     await room.say({
@@ -724,23 +691,21 @@ describe("connect machine", () => {
     actor.stop();
   });
 
-  it("should send a guided chat with its scope, always in Ask mode", async () => {
+  it("should send a guided chat with its scope", async () => {
     const { actor, room } = await connected();
 
     actor.send({ type: "chat.agent.choose", agent: "claude" });
     await room.next("agent.choose");
-    actor.send({ type: "chat.mode.set", mode: "edit" });
     actor.send({ type: "chat.message.send", conversation: "g-transactions", text: "Why?", scope: "guide" });
     expect(await room.next("chat.send")).toEqual({
       type: "chat.send",
       conversation: "g-transactions",
       text: "Why?",
-      mode: "ask",
       scope: "guide",
       agent: "claude",
     });
     actor.send({ type: "chat.message.send", conversation: "p1", text: "Change it", scope: "project" });
-    expect(await room.next("chat.send")).toMatchObject({ mode: "edit", scope: "project" });
+    expect(await room.next("chat.send")).toMatchObject({ scope: "project" });
     actor.stop();
   });
 
@@ -757,7 +722,7 @@ describe("connect machine", () => {
     actor.stop();
   });
 
-  it("should keep an injected turn on its own project in its own mode after the user opens another project in Edit mode", async () => {
+  it("should keep an injected turn on its own project after the user opens another project", async () => {
     let open: ConnectOpenProject = { id: "community", name: "Free tips", origin: "community" };
     const { actor, room, execute } = await connected({ pairing: paired, project: () => open });
 
@@ -768,7 +733,6 @@ describe("connect machine", () => {
     await vi.waitFor(() => expect(workingTurn(actor.getSnapshot().context.activity, "p-community")).toBe("t1"));
 
     open = { id: "mine", name: "My shop" };
-    actor.send({ type: "chat.mode.set", mode: "edit", conversation: "p-mine" });
     actor.send({ type: "view.changed" });
     expect(await room.next("chat.stop")).toEqual({ type: "chat.stop", conversation: "p-community" });
 
@@ -780,19 +744,8 @@ describe("connect machine", () => {
       ok: false,
       error: { code: "unavailable", message: expect.stringContaining("left this chat's project") },
     });
-
-    open = { id: "community", name: "Free tips", origin: "community" };
-    await room.say({ type: "tool.call", id: "x2", name: "apply_edits", input: edit, conversation: "p-community" });
-    expect(await room.next("tool.result")).toMatchObject({
-      id: "x2",
-      ok: false,
-      error: { code: "edit_mode_required" },
-    });
     expect(execute).not.toHaveBeenCalled();
-    expect(actor.getSnapshot().context.chats).toEqual({
-      "p-community": { projectId: "community", mode: "ask" },
-      "p-mine": { projectId: undefined, mode: "edit" },
-    });
+    expect(actor.getSnapshot().context.chats).toEqual({ "p-community": { projectId: "community" } });
     actor.stop();
   });
 
@@ -819,7 +772,6 @@ describe("connect machine", () => {
       }),
     });
 
-    actor.send({ type: "chat.mode.set", mode: "edit" });
     await startChat({ actor, room }, "p-1", { project: { id: "p1", name: "Bank" } });
     await room.say({ type: "agent.turn", conversation: "p-1", turn: "t1", state: "started" });
     await room.say({
@@ -830,7 +782,7 @@ describe("connect machine", () => {
       conversation: "p-1",
     });
     expect(await room.next("tool.result")).toMatchObject({ id: "c1", ok: true });
-    expect(actor.getSnapshot().context.chats["p-1"]).toEqual({ projectId: "p1", mode: "edit" });
+    expect(actor.getSnapshot().context.chats["p-1"]).toEqual({ projectId: "p1" });
     expect(actor.getSnapshot().context.activity.at(-1)).toMatchObject({
       kind: "tool",
       id: "c1",
@@ -904,8 +856,6 @@ describe("connect machine", () => {
       project: () => ({ id: "fork", name: "Fork", origin: "community" }),
     });
 
-    actor.send({ type: "chat.mode.set", mode: "edit" });
-
     for (const [id, name, input] of [
       ["u1", "apply_edits", { edits: [{ path: "query.ts", new_text: "x" }] }],
       ["u2", "run", {}],
@@ -944,21 +894,6 @@ describe("connect machine", () => {
     actor.stop();
   });
 
-  it("should name what a refused edit would change, from its unchecked input", () => {
-    expect(
-      refusedEditSummary("apply_edits", {
-        edits: [{ path: "query.ts" }, { path: "query.ts" }, { path: "schema.ts" }, { nope: 1 }],
-      }),
-    ).toEqual({ label: "Edit", target: "query.ts, schema.ts" });
-    expect(refusedEditSummary("apply_edits", { edits: "all" })).toEqual({ label: "Edit" });
-    expect(refusedEditSummary("switch_release", { orm_version: "1.0.0-rc.5" })).toEqual({
-      label: "Switch release",
-      target: "1.0.0-rc.5",
-    });
-    expect(refusedEditSummary("create_project", null)).toEqual({ label: "Create a project" });
-    expect(refusedEditSummary("read_file", { path: "query.ts" })).toBeUndefined();
-  });
-
   it("should keep an edit pending until Keep, and let Undo put the files back or report why it cannot", async () => {
     let undoFails = false;
     const files = [{ path: "query.ts", before: "a", after: "b", added: 1, removed: 1 }];
@@ -975,8 +910,6 @@ describe("connect machine", () => {
         }
       },
     });
-
-    actor.send({ type: "chat.mode.set", mode: "edit" });
 
     for (const id of ["e1", "e2"]) {
       await room.say({
@@ -1044,7 +977,6 @@ describe("connect machine", () => {
       undo: () => undoing.promise,
     });
 
-    actor.send({ type: "chat.mode.set", mode: "edit" });
     await room.say({
       type: "tool.call",
       id: "e1",

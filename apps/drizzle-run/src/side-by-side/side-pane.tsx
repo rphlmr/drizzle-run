@@ -13,6 +13,7 @@ import { Hint } from "../ui/hint";
 import { LibrariesPopover } from "../ui/libraries-popover";
 import { OutputPanel } from "../ui/output-panel";
 import type { OutputSettingsProps } from "../ui/output-settings";
+import { PhoneOutputSlotOff } from "../ui/phone-output-slot";
 import { getReleaseCurrent } from "../ui/release-options";
 import { useEditorFontSize } from "../ui/use-editor-font-size";
 import { useTabAfterRun } from "../ui/use-tab-after-run";
@@ -171,7 +172,7 @@ export function SidePane({
         <button
           type="button"
           className={cn(
-            "relative inline-flex h-6 min-w-0 shrink-100 items-center gap-1.5 rounded-[6px] border border-border bg-surface-2 py-0 pr-1.75 pl-2 text-[12px] whitespace-nowrap text-text after:absolute after:inset-x-0 after:-inset-y-2.5 aria-disabled:cursor-default @max-[36rem]:min-w-auto",
+            "relative inline-flex h-6 min-w-0 shrink-100 items-center gap-1.5 rounded-md border border-border bg-surface-2 py-0 pr-1.75 pl-2 text-[12px] whitespace-nowrap text-text after:absolute after:inset-x-0 after:-inset-y-2.5 aria-disabled:cursor-default @max-[36rem]:min-w-auto",
             changing && "shadow-[0_0_0_2px_var(--lime)]",
           )}
           // Not `disabled`: a disabled button gets no hover, and its hint says why it is locked.
@@ -190,7 +191,7 @@ export function SidePane({
   );
 
   const code = (
-    <div className="flex h-full min-h-0 min-w-0 flex-col overflow-hidden rounded-lg border border-border bg-code max-phone:gap-2.5 max-phone:rounded-none max-phone:border-0 max-phone:bg-bg max-phone:px-4 max-phone:pt-2.5">
+    <div className="flex h-full min-h-0 min-w-0 flex-col overflow-hidden rounded-lg border border-border bg-code shadow-sticker max-phone:gap-2.5 max-phone:rounded-none max-phone:border-0 max-phone:bg-bg max-phone:px-4 max-phone:pt-2.5 max-phone:shadow-none">
       {!phone && (
         <div className="@container flex h-10 shrink-0 items-center gap-2 border-b border-border bg-surface pr-2.5 pl-3">
           <SideName release={release} onRename={onRename} />
@@ -228,7 +229,7 @@ export function SidePane({
         </div>
       )}
       {phone && <div className="-mx-4 shrink-0 scrollbar-none overflow-x-auto px-4 pt-1.25">{fileTabs}</div>}
-      <div className="relative min-h-0 flex-1 max-phone:overflow-hidden max-phone:rounded-[12px] max-phone:border max-phone:border-border max-phone:bg-code">
+      <div className="relative min-h-0 flex-1 max-phone:overflow-hidden max-phone:rounded-lg max-phone:border max-phone:border-border max-phone:bg-code">
         <div
           ref={attachHost}
           className="size-full min-h-0 pt-1.5"
@@ -243,21 +244,29 @@ export function SidePane({
     </div>
   );
 
-  const output = (!phone || phoneView === "output") && (
-    <div className={cn("h-full min-h-0", phone && "flex flex-col px-4 py-3")}>
-      <OutputPanel
-        label={release.label}
-        revision={getSideRevision(run.submission, sideFiles)}
-        bar={!phone}
-        tab={phone ? getShownSideTab(tab, run) : tab}
-        onTabChange={onTabChange}
-        firstRun={firstRun}
-        queryPlans={queryPlans}
-        settings={settings}
-        runPicker={runPicker}
-        highlightedDisplays={highlightedDisplays}
-        onDiagnostic={onDiagnostic}
-      />
+  // Both sides keep their output mounted; on a phone only the shown side's ends the tab row with its status and tools.
+  const output = (
+    <div
+      className={cn(
+        "h-full min-h-0",
+        phone && "flex flex-col px-4 py-3 [&>section]:rounded-lg [&>section]:border [&>section]:border-border",
+      )}
+    >
+      <SideOutputSlot off={hidden}>
+        <OutputPanel
+          label={release.label}
+          revision={getSideRevision(run.submission, sideFiles)}
+          tabs={!phone}
+          tab={phone ? getShownSideTab(tab, run) : tab}
+          onTabChange={onTabChange}
+          firstRun={firstRun}
+          queryPlans={queryPlans}
+          settings={settings}
+          runPicker={runPicker}
+          highlightedDisplays={highlightedDisplays}
+          onDiagnostic={onDiagnostic}
+        />
+      </SideOutputSlot>
     </div>
   );
 
@@ -285,4 +294,9 @@ export function SidePane({
       />
     </section>
   );
+}
+
+/** The hidden side's output stays out of the phone's tab row. */
+function SideOutputSlot({ off, children }: { off: boolean; children: ReactNode }) {
+  return off ? <PhoneOutputSlotOff>{children}</PhoneOutputSlotOff> : children;
 }

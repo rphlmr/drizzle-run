@@ -286,10 +286,7 @@ for (const [dialect, database] of [
     const dialog = page.getByRole("dialog", { name: "New project" });
     await dialog.getByLabel("Name", { exact: true }).fill(`Effect starter ${dialect}`);
     await dialog.getByRole("radiogroup", { name: "Database" }).getByRole("radio", { name: database }).click();
-    await dialog
-      .getByRole("radio", { name: /, with Effect 4/ })
-      .first()
-      .click();
+    await dialog.getByRole("switch", { name: "Effect 4" }).click();
     await dialog.getByRole("button", { name: "Create project", exact: true }).click();
 
     await expect(page.locator(".monaco-editor .view-lines")).toContainText("Effect.gen", { timeout: 60_000 });
@@ -310,10 +307,7 @@ test("should disable the releases whose guest cannot run an Effect project's imp
   const dialog = page.getByRole("dialog", { name: "New project" });
   await dialog.getByLabel("Name", { exact: true }).fill("Effect imports");
   await dialog.getByRole("radiogroup", { name: "Database" }).getByRole("radio", { name: "SQLite" }).click();
-  await dialog
-    .getByRole("radio", { name: /, with Effect 4/ })
-    .first()
-    .click();
+  await dialog.getByRole("switch", { name: "Effect 4" }).click();
   await dialog.getByRole("button", { name: "Create project", exact: true }).click();
   await expect(page.locator(".monaco-editor .view-lines")).toContainText("Effect.gen", { timeout: 60_000 });
 

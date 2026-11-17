@@ -77,7 +77,7 @@ test("should leave a finished first-run guide after an edit without asking, sinc
   await page.getByRole("button", { name: "Switch project" }).click();
   await page
     .getByRole("dialog", { name: "Your projects" })
-    .getByRole("link", { name: /^My projects/ })
+    .getByRole("link", { name: /^All projects/ })
     .click();
 
   await expect(page).toHaveURL(/\/projects$/);

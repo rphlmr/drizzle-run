@@ -6,7 +6,6 @@ import {
   type AgentEffort,
   type AgentId,
   type ChatContextEntry,
-  type ChatMode,
   type ConnectToolName,
   type ToolErrorCode,
 } from "@drizzle-run/core/connect";
@@ -15,8 +14,8 @@ import * as z from "zod/mini";
 
 /**
  * A chat's history, kept in this browser per conversation (`chat:<conversation>` in the
- * settings store, never synced): its messages and tool rows, its mode, its agent, model and
- * effort, and how the user answered each "This needs an edit" card. The connect machine holds
+ * settings store, never synced): its messages and tool rows, and its agent, model and
+ * effort. The connect machine holds
  * only this tab's activity, so a page shows the stored history merged with what arrived since.
  */
 
@@ -30,21 +29,15 @@ export interface ChatTuning {
 export interface ChatHistory {
   version: 1;
   entries: readonly ConnectActivity[];
-  mode: ChatMode;
-  /** "Allow edits in this chat" or "Not now", by the refused tool call's id. */
-  answers: Readonly<Record<string, ChatAnswer>>;
   /** What the chat runs on, set by its first message or the user's pick. Without it, the last pick anywhere. */
   tuning?: ChatTuning;
 }
 
-/** How the user answered an Ask card. */
-export type ChatAnswer = z.output<typeof ChatAnswerSchema>;
-
 /** Rows a chat keeps; older ones fall off. */
 export const HISTORY_LIMIT = 300;
 
-/** A chat with no rows, in Ask mode. */
-export const EMPTY_HISTORY: ChatHistory = { version: 1, entries: [], mode: "ask", answers: {} };
+/** A chat with no rows. */
+export const EMPTY_HISTORY: ChatHistory = { version: 1, entries: [] };
 
 /** The setting key a chat's history is stored under. */
 export function getHistorySetting(conversation: string) {
@@ -105,8 +98,6 @@ const ToolEntrySchema = z.object({
 
 const EntrySchema = z.union([UserEntrySchema, TextEntrySchema, TurnEntrySchema, ToolEntrySchema]);
 
-const ChatAnswerSchema = z.enum(["allowed", "dismissed"]);
-
 const ChatTuningSchema = z.object({
   agent: z.enum(AGENT_IDS),
   model: z.optional(z.string()),
@@ -116,8 +107,6 @@ const ChatTuningSchema = z.object({
 const ChatHistorySchema = z.object({
   version: z.literal(1),
   entries: z.array(EntrySchema),
-  mode: z.enum(["ask", "edit"]),
-  answers: z.record(z.string(), ChatAnswerSchema),
   tuning: z.optional(ChatTuningSchema),
 });
 
@@ -184,8 +173,8 @@ export function mergeHistory(
 /**
  * Merge a tab's chat history into the stored one
  *
- * Keeps the stored rows another tab saved, takes this tab's rows over the stored ones they share a key with, adds
- * this tab's answers to the stored ones, and takes this tab's mode and tuning.
+ * Keeps the stored rows another tab saved, takes this tab's rows over the stored ones they share a key with, and
+ * takes this tab's tuning.
  */
 export function mergeStoredHistory(stored: unknown, history: ChatHistory, conversation: string): ChatHistory {
   const current = readHistory(stored) ?? EMPTY_HISTORY;
@@ -193,7 +182,6 @@ export function mergeStoredHistory(stored: unknown, history: ChatHistory, conver
   return {
     ...history,
     entries: mergeHistory(current.entries, history.entries, conversation),
-    answers: { ...current.answers, ...history.answers },
   };
 }
 

@@ -1,0 +1,5 @@
+---
+"@drizzle-run/app": minor
+---
+
+Restyle the app as white panels on a gray frame, with lime kept for Run. Every page starts its content at the same distance from the top, the site nav stays in place between pages and turns into icons when the editor header is narrow, and the read-only editor bar no longer blends into the frame. On phones a menu button opens the site sections and the About links from every header, a project's included, the workspace switches Code and Output with tabs drawn like the desktop's and keeps the run status beside them, the output keeps its desktop bar with its views, history and settings, a side by side switches sides on a quiet segmented track, the guide sheet floats over the code and output like a modal sheet and folds into one step row, sheets rise from the bottom edge, the gallery scrolls only its cards and picks the database from a menu, Community moves its database and sort into a filter sheet, and My projects lists each project with its database logo and its actions. The recorded embed colors its code again and puts the code beside the output when it is wide.

@@ -240,10 +240,13 @@ function ExampleWorkspace({ example }: { example: OfficialExample }) {
         {workspace.banners}
         <SnapshotNote>
           <LightbulbIcon aria-hidden="true" />
-          <span className="text-text">{example.description}</span>
-          <span className="text-muted max-phone:hidden">
-            Edit anything and press {isSideBySide(project) ? "Run both" : "Run"}. Fork to my projects keeps your
-            version.
+          {/* What the example shows, then how to use it, stacked beside the links. */}
+          <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+            <span className="text-text">{example.description}</span>
+            <span className="text-[12.5px] text-muted max-phone:hidden">
+              Edit anything and press {isSideBySide(project) ? "Run both" : "Run"}. Fork to my projects keeps your
+              version.
+            </span>
           </span>
           {example.links.length > 0 && <LinkList links={example.links} />}
         </SnapshotNote>

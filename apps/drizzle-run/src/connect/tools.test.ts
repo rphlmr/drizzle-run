@@ -168,7 +168,7 @@ function createHost(initial: ProjectRecord, options: SetupOptions = {}) {
       throw new Error(parsed.message);
     }
 
-    return tools.execute({ id: "c1", call: parsed.call, mode: "edit", ...checked }, new AbortController().signal);
+    return tools.execute({ id: "c1", call: parsed.call, ...checked }, new AbortController().signal);
   };
 
   return { state, host, call, tools, pending: toPendingEdit };

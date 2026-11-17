@@ -200,7 +200,7 @@ function SqlDetails({ sql, plan, compact }: { sql: SqlEvent; plan?: ReactNode; c
 
   return (
     <div className={cn(openBlockClass, compact && "px-2.5")} data-slot="log-sql-details">
-      <pre className="m-0 rounded-[10px] border border-border bg-surface px-3 py-2.5 font-mono text-[12px]/5 wrap-break-word whitespace-pre-wrap text-text">
+      <pre className="m-0 rounded-md border border-border bg-surface px-3 py-2.5 font-mono text-[12px]/5 wrap-break-word whitespace-pre-wrap text-text">
         <code>
           <SqlTokens sql={formatted} />
         </code>
@@ -423,7 +423,7 @@ function ConsoleRow({ entry, entrypoints, compact, open, onToggle, onDiagnostic 
               <div
                 key={index}
                 className={cn(
-                  "rounded-[10px] border border-border bg-surface px-3 py-2.5 font-mono text-[12.5px]/5 wrap-anywhere whitespace-pre-wrap",
+                  "rounded-md border border-border bg-surface px-3 py-2.5 font-mono text-[12.5px]/5 wrap-anywhere whitespace-pre-wrap",
                   loud && "text-err",
                 )}
               >
@@ -563,7 +563,7 @@ export function LogsView({
       className={cn(
         "flex min-h-full flex-col bg-surface max-phone:min-h-0 max-phone:gap-2.5 max-phone:bg-transparent max-phone:px-3 max-phone:py-3.5",
         compact &&
-          "min-h-0 overflow-hidden rounded-[10px] border border-border max-phone:bg-surface max-phone:p-0 [&_li:last-child>*:last-child]:border-b-0",
+          "min-h-0 overflow-hidden rounded-md border border-border max-phone:bg-surface max-phone:p-0 [&_li:last-child>*:last-child]:border-b-0",
       )}
     >
       <div
@@ -574,7 +574,7 @@ export function LogsView({
       >
         <fieldset
           aria-label="Show in Logs"
-          className="m-0 inline-flex min-w-0 gap-0.5 rounded-[8px] border-0 bg-surface-2 p-0.5 max-phone:rounded-[10px] max-phone:p-0.75"
+          className="m-0 inline-flex min-w-0 gap-0.5 rounded-md border-0 bg-surface-2 p-0.5 max-phone:rounded-md max-phone:p-0.75"
         >
           {LOG_FILTERS.map((filter) => {
             const pressed = filter === state.filter;
@@ -585,7 +585,7 @@ export function LogsView({
                 type="button"
                 aria-pressed={pressed}
                 className={cn(
-                  "relative inline-flex h-6.5 items-center gap-1.5 rounded-[6px] border-0 bg-transparent px-2.5 text-[12px] font-medium text-muted after:absolute after:inset-x-0 after:-inset-y-2.25 max-phone:h-8 max-phone:rounded-[7px] max-phone:text-[12.5px] max-phone:after:-inset-y-1.5",
+                  "relative inline-flex h-6.5 items-center gap-1.5 rounded-md border-0 bg-transparent px-2.5 text-[12px] font-medium text-muted after:absolute after:inset-x-0 after:-inset-y-2.25 max-phone:h-8 max-phone:rounded-md max-phone:text-[12.5px] max-phone:after:-inset-y-1.5",
                   pressed && "bg-surface font-semibold text-text shadow-[0_0_0_1px_var(--border)]",
                 )}
                 onClick={() => onStateChange({ ...state, filter })}
@@ -599,13 +599,13 @@ export function LogsView({
         <LogsHint plans={plans} />
       </div>
       {shown.length === 0 ? (
-        <p className="m-0 px-4 py-3 text-[12.5px] text-muted max-phone:rounded-[12px] max-phone:border max-phone:border-border max-phone:bg-surface max-phone:px-3.5">
+        <p className="m-0 px-4 py-3 text-[12.5px] text-muted max-phone:rounded-lg max-phone:border max-phone:border-border max-phone:bg-surface max-phone:px-3.5">
           {(failed && failedNotes[state.filter]) || emptyNotes[state.filter]}
         </p>
       ) : (
         <ol
           ref={listRef}
-          className="m-0 list-none p-0 max-phone:overflow-hidden max-phone:rounded-[12px] max-phone:border max-phone:border-border max-phone:bg-surface max-phone:[&>li:last-child>*:last-child]:border-b-0"
+          className="m-0 list-none p-0 max-phone:overflow-hidden max-phone:rounded-lg max-phone:border max-phone:border-border max-phone:bg-surface max-phone:[&>li:last-child>*:last-child]:border-b-0"
           aria-label="Logs"
         >
           {shown.map((row) => {

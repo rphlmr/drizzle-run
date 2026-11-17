@@ -3,6 +3,7 @@ import type { RunResultDiff } from "@drizzle-run/core/guide";
 import type { RunManifest } from "@drizzle-run/core/manifest";
 import { useRunActions, useRunSelector } from "@drizzle-run/react";
 import { useState, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 
 import { Segmented, SegmentedItem, SegmentedList, SegmentedPanel } from "../components/ui/segmented";
 import { cn } from "../lib/utils";
@@ -20,6 +21,7 @@ import {
   type OutputTab,
 } from "./output-tab";
 import { OutputTimeline } from "./output-timeline";
+import { usePhoneOutputSlot } from "./phone-output-slot";
 import { needsPlannedRun } from "./query-plans";
 import { PlansNotice, PlansTabMark } from "./query-plans-view";
 import { OutputEmpty, ResultCard, ResultsEmpty } from "./results";
@@ -37,7 +39,7 @@ import { useTabAfterRun } from "./use-tab-after-run";
 
 const timelineFilters = ["results", "story", "logs", "problems"] as const satisfies readonly TimelineFilter[];
 
-const tabLabels: Record<OutputTab, string> = {
+export const tabLabels: Record<OutputTab, string> = {
   results: "Results",
   story: "Story",
   logs: "Logs",
@@ -65,7 +67,10 @@ const pillTones: Record<RunResult["outcome"], string> = {
   cancelled: "bg-surface-2 text-muted",
 };
 
-const scrollClass = cn("flex min-h-0 flex-1 flex-col overflow-auto pt-1 pb-3 text-[13px]");
+// The bottom padding clears a phone's guide sheet, which floats over the output and sets `--sheet-inset`.
+const scrollClass = cn(
+  "flex min-h-0 flex-1 flex-col overflow-auto pt-1 pb-[calc(var(--spacing)*3+var(--sheet-inset,0px))] text-[13px]",
+);
 
 const viewMotionClass = cn(
   "transition-[opacity,translate] duration-(--motion-fast) ease-out starting:translate-y-1 starting:opacity-0",
@@ -123,7 +128,7 @@ function CountChip({ tab, held = false, children }: { tab: TimelineFilter; held?
 /** A filter with nothing to show after a run, as a dashed note. */
 function EmptyNote({ children }: { children: ReactNode }) {
   return (
-    <p className="m-4.5 rounded-[12px] border border-dashed border-faint bg-surface px-5 py-7 text-center text-[13px] leading-[1.55] text-muted max-phone:mx-3 max-phone:my-3.5 max-phone:px-4.5 max-phone:py-6.5">
+    <p className="m-4.5 rounded-lg border border-dashed border-faint bg-surface px-5 py-7 text-center text-[13px] leading-[1.55] text-muted max-phone:mx-3 max-phone:my-3.5 max-phone:px-4.5 max-phone:py-6.5">
       {children}
     </p>
   );
@@ -231,6 +236,8 @@ export interface OutputPanelProps {
    * history and gear buttons stay.
    */
   bar?: boolean;
+  /** False leaves out only the tabs, for a host that draws them in its own row: a phone's workspace switch. */
+  tabs?: boolean;
 }
 
 /** The status pill before the first run: its short text in the bar, and the full label it stands for. */
@@ -253,6 +260,8 @@ interface RunPillProps {
   startedAt?: number;
   /** The short text is a run's name, such as "Step 3 run": a narrow bar drops the duration first, the title keeps it. */
   named?: boolean;
+  /** Draws the short mark on every screen, for a phone's tab row. */
+  compact?: boolean;
 }
 
 /**
@@ -270,6 +279,7 @@ function RunPill({
   running = false,
   startedAt,
   named = false,
+  compact = false,
 }: RunPillProps) {
   const duration = durationMs === undefined ? undefined : formatRunDuration(durationMs);
   const label = duration === undefined ? full : `${full} · ${duration}`;
@@ -281,13 +291,16 @@ function RunPill({
         tone && pillTones[tone],
         running && "bg-mark text-text",
         steady && "max-phone:min-w-32 phone:min-w-20",
+        compact &&
+          "h-7 max-w-36 px-2 text-[11.5px] before:min-w-0 before:truncate before:content-[attr(data-short)] max-phone:h-7 max-phone:min-w-0",
+        compact && steady && "min-w-18 max-phone:min-w-18",
       )}
       title={label}
       data-short={short}
       data-slot="run-pill"
     >
       {running && <RunningDot className="order-first" />}
-      <span className="phone:sr-only">
+      <span className={cn("phone:sr-only", compact && "sr-only")}>
         {full}
         {duration !== undefined && " · "}
       </span>
@@ -318,6 +331,7 @@ export function OutputPanel({
   highlightedDisplays,
   runPicker = true,
   views = timelineFilters,
+  tabs = true,
   queryPlans,
   tab: controlledTab,
   onTabChange,
@@ -401,10 +415,24 @@ export function OutputPanel({
 
   useTabAfterRun({ tab, views, onTabChange: setTab });
 
+  // Phones: the run status ends the workspace's switch row, so it shows from every view. Without its own tabs, the
+  // output's tools go there too instead of drawing a bar for them alone.
+  const slot = usePhoneOutputSlot();
+  const pillInSlot = bar && slot !== null;
+  const inSlot = !tabs && slot !== null;
+  const tools = (runPicker || settings) && (
+    <div className="ml-auto flex shrink-0 items-center gap-1">
+      {runPicker && (
+        <RunHistoryMenu runs={runs} shown={shown} disabled={running} onView={(run) => actor.selectHistoryEntry(run)} />
+      )}
+      {settings && <OutputSettings {...settings} />}
+    </div>
+  );
+
   return (
     <section
       className={cn(
-        "@container relative flex h-full min-h-0 flex-col overflow-clip rounded-lg border border-border bg-panel max-phone:rounded-none max-phone:border-0",
+        "@container relative flex h-full min-h-0 flex-col overflow-clip rounded-lg border border-border bg-surface shadow-sticker max-phone:rounded-none max-phone:border-0 max-phone:shadow-none",
         !framed && "rounded-none border-0",
       )}
       aria-label={label === undefined ? "Execution output" : `${label} output`}
@@ -423,19 +451,19 @@ export function OutputPanel({
       >
         <div
           className={cn(
-            "flex min-h-12 min-w-0 shrink-0 flex-nowrap items-center gap-2 border-b border-border bg-surface px-2.5 max-phone:min-h-0 max-phone:flex-wrap max-phone:gap-0 max-phone:p-0",
+            "flex min-h-12 min-w-0 shrink-0 flex-nowrap items-center gap-2 border-b border-border bg-surface px-2.5 max-phone:min-h-13 max-phone:gap-1 max-phone:px-2",
             stacked.row,
-            !bar && !(runPicker || settings) && "hidden",
+            (inSlot || (!(bar && tabs) && !(runPicker || settings))) && "hidden",
           )}
           data-slot="output-bar"
         >
           <SegmentedList
             aria-label={label === undefined ? "Output views" : `${label} output`}
-            indicatorClassName="rounded-base bg-surface-2 shadow-none max-phone:rounded-pill max-phone:bg-segment"
+            indicatorClassName="rounded-base bg-surface-2 shadow-none"
             className={cn(
-              "max-w-full min-w-0 shrink scrollbar-none gap-0.5 overflow-x-auto rounded-[10px] bg-transparent p-0.75 max-phone:max-w-none max-phone:shrink-0 max-phone:basis-full max-phone:gap-1.5 max-phone:rounded-none max-phone:px-3 max-phone:pt-1.25 max-phone:pb-2.5 [&::-webkit-scrollbar]:hidden",
+              "max-w-full min-w-0 shrink scrollbar-none gap-0.5 overflow-x-auto rounded-md bg-transparent p-0.75 [&::-webkit-scrollbar]:hidden",
               stacked.tabs,
-              !bar && "hidden",
+              (!bar || !tabs) && "hidden",
             )}
           >
             {[...views, ...(debug ? ["debug" as const] : [])].map((item) => (
@@ -443,7 +471,7 @@ export function OutputPanel({
                 key={item}
                 value={item}
                 className={cn(
-                  "inline-flex h-7.5 items-center rounded-base px-2.75 py-0 text-[13px] font-medium text-muted data-active:text-text max-phone:relative max-phone:h-9 max-phone:min-w-11 max-phone:shrink-0 max-phone:rounded-pill max-phone:border max-phone:border-border max-phone:px-3 max-phone:py-0 max-phone:after:absolute max-phone:after:inset-x-0 max-phone:after:-inset-y-1.25 max-phone:data-active:border-segment max-phone:data-active:text-segment-fg",
+                  "inline-flex h-7.5 items-center rounded-base px-2.75 py-0 text-[13px] font-medium text-muted data-active:text-text max-phone:relative max-phone:h-9 max-phone:shrink-0 max-phone:px-2 max-phone:after:absolute max-phone:after:inset-x-0 max-phone:after:-inset-y-1",
                   stacked.tab,
                 )}
               >
@@ -459,32 +487,23 @@ export function OutputPanel({
               </SegmentedItem>
             ))}
           </SegmentedList>
-          <div
-            className={cn(
-              "ml-auto flex min-w-0 shrink-100 items-center gap-2 max-phone:ml-0 max-phone:basis-full max-phone:border-t max-phone:border-border max-phone:px-3 max-phone:py-1.5",
-              stacked.cluster,
-              !bar && "max-phone:border-t-0",
-            )}
-          >
-            {bar && <RunPill {...pill} steady={beforeFirstRun} />}
+          <div className={cn("ml-auto flex min-w-0 shrink-100 items-center gap-2 max-phone:shrink-0", stacked.cluster)}>
+            {bar && !pillInSlot && <RunPill {...pill} steady={beforeFirstRun} />}
             {bar && startedByLabel && (
               <span className="min-w-0 truncate text-[12px] text-muted max-phone:hidden">{startedByLabel}</span>
             )}
-            {(runPicker || settings) && (
-              <div className="ml-auto flex shrink-0 items-center gap-1">
-                {runPicker && (
-                  <RunHistoryMenu
-                    runs={runs}
-                    shown={shown}
-                    disabled={running}
-                    onView={(run) => actor.selectHistoryEntry(run)}
-                  />
-                )}
-                {settings && <OutputSettings {...settings} />}
-              </div>
-            )}
+            {!inSlot && tools}
           </div>
         </div>
+        {slot !== null &&
+          (pillInSlot || inSlot) &&
+          createPortal(
+            <>
+              {pillInSlot && <RunPill {...pill} steady={beforeFirstRun} compact />}
+              {inSlot && tools}
+            </>,
+            slot,
+          )}
         {runPicker && (
           <OlderRunNote
             key={shown}

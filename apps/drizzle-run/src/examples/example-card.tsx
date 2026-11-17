@@ -21,8 +21,6 @@ export interface ExampleCardProps {
   href?: string;
   /** Shown instead of the description, such as the step a search matched. */
   detail?: ReactNode;
-  /** The database the reader picked, when the example does not run on it. */
-  onlyOn?: string;
   onQuickLook: () => void;
 }
 
@@ -59,7 +57,6 @@ export function ExampleCard({
   progress,
   href = `/examples/${version.slug}`,
   detail,
-  onlyOn,
   onQuickLook,
 }: ExampleCardProps) {
   const steps = version.guide?.steps.length;
@@ -68,7 +65,7 @@ export function ExampleCard({
 
   return (
     <article
-      className="group/card relative flex min-w-0 flex-col gap-1.5 rounded-lg border border-border bg-surface p-3.5 text-text transition-[border-color,box-shadow] hover:border-card-border hover:shadow-sticker-card has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-offset-2 has-[a:focus-visible]:outline-accent-text"
+      className="group/card relative flex min-w-0 flex-col gap-1.5 rounded-lg border border-border bg-surface p-3.5 text-text shadow-sticker-card transition-[border-color,box-shadow] hover:border-card-border hover:shadow-sticker-lg has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-offset-2 has-[a:focus-visible]:outline-accent-text"
       data-example-slug={version.slug}
     >
       <span className="pr-8 text-[11px] font-medium tracking-[0.02em] text-muted uppercase">
@@ -97,11 +94,6 @@ export function ExampleCard({
       )}
       <span className="mt-auto flex min-h-5 flex-wrap items-center gap-1.5 pt-1">
         {comparison && <SideBySideTag className="relative z-1" />}
-        {onlyOn && (
-          <span className="rounded-[4px] bg-err-bg px-1.75 py-px text-[11px] font-semibold whitespace-nowrap text-err">
-            {onlyOn} only
-          </span>
-        )}
         <span className="ml-auto">
           <StatusTag status={status} done={done} steps={steps} />
         </span>

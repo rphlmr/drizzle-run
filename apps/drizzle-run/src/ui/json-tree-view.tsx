@@ -45,7 +45,7 @@ function listChildren(value: Container, depth: number) {
 /** A nested container's size inside a folded line. */
 function Size({ value }: { value: Container }) {
   return (
-    <span className="rounded-[5px] border border-border px-1.25 text-[11.5px] text-muted">{getSizeLabel(value)}</span>
+    <span className="rounded-sm border border-border px-1.25 text-[11.5px] text-muted">{getSizeLabel(value)}</span>
   );
 }
 

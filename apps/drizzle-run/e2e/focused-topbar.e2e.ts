@@ -14,7 +14,8 @@ for (const theme of ["light", "dark"] as const) {
     await expect(run).not.toHaveCSS("box-shadow", "none");
     await expect(page.getByRole("tablist", { name: "Project files" })).toBeVisible();
     if (theme === "light") {
-      await expect(page.locator(".monaco-editor").first()).not.toHaveCSS("background-color", "rgb(255, 255, 255)");
+      // The editor is a white panel on the gray frame, like every other panel.
+      await expect(page.locator(".monaco-editor").first()).toHaveCSS("background-color", "rgb(255, 255, 255)");
     }
     await page.screenshot({ path: testInfo.outputPath(`editor-${theme}.png`) });
 
@@ -70,7 +71,7 @@ for (const theme of ["light", "dark"] as const) {
       }
       await page.screenshot({ path: testInfo.outputPath(`${route}-${theme}.png`) });
       await page.setViewportSize({ width: 390, height: 844 });
-      await expect(page.getByRole("navigation", { name: "Main" })).toBeVisible();
+      await expect(page.getByRole("button", { name: "Menu" })).toBeVisible();
       await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       await page.screenshot({ path: testInfo.outputPath(`${route}-${theme}-phone.png`) });
       await page.setViewportSize({ width: 1280, height: 900 });

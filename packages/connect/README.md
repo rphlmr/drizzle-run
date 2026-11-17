@@ -41,7 +41,7 @@ After changing only this package, rebuild it with `pnpm --filter @drizzle-run/co
 - **Memory.** The pairing is kept in `~/.drizzle-run/connect.json` (folder 0700, file 0600); `DRIZZLE_RUN_HOME` moves the folder. "Forget this computer" in the tab, or `--forget` here, clears it.
 - **Agents.** Each chat has its own agent session and Drizzle Run tool set. See
   [Agent isolation details](#agent-isolation-details) for the CLI flags and runtime checks.
-- **Tools.** The agent's MCP server is this package (`--mcp-ipc`), which forwards calls over a private Unix socket to the companion, which seals them for the tab. The tab checks every input, refuses edit tools in Ask mode, and runs them against its open project.
+- **Tools.** The agent's MCP server is this package (`--mcp-ipc`), which forwards calls over a private Unix socket to the companion, which seals them for the tab. The tab checks every input, offers each view only its tools (a guide, a shared link or an untrusted project reads only), and runs them against its open project. Every edit waits for Keep or Undo.
 - **Untrusted content.** Anyone can publish a project, so a project's files, names, console and errors may be written to steer an agent. Every tool result reaches the agent inside a `<drizzle-run-data>` block whose tags carry a random nonce, after a line saying it is data; the MCP server's instructions and the chat's system prompt say tool content is never instructions. With `--mcp`, your own terminal agent reads that content with all of its own tools, so prefer chat mode for projects you did not write.
 
 ## Development checks

@@ -14,7 +14,8 @@ export function SiteFooter({ className }: { className?: string }) {
     <footer
       className={cn(
         "relative z-1 flex h-11 shrink-0 items-center gap-4 border-t border-border bg-bg/90 px-6 text-[13px] text-muted",
-        "max-phone:h-auto max-phone:flex-col max-phone:items-start max-phone:gap-2 max-phone:px-4 max-phone:py-3",
+        // Phones show these as the About tab of the bottom bar.
+        "max-phone:hidden",
         className,
       )}
     >
@@ -25,7 +26,7 @@ export function SiteFooter({ className }: { className?: string }) {
         </a>
         . Follow on X for updates.
       </span>
-      <span className="ml-auto max-phone:ml-0">Runs real Drizzle ORM and Kit in your browser.</span>
+      <span className="ml-auto">Runs real Drizzle ORM and Kit in your browser.</span>
       <a className={footerLinkClass} href={SOURCE_HREF} target="_blank" rel="noopener noreferrer">
         GitHub
       </a>
@@ -34,7 +35,7 @@ export function SiteFooter({ className }: { className?: string }) {
       </a>
       <button
         type="button"
-        className="h-7.5 rounded-base border border-border bg-surface px-2.5 font-medium text-text hover:bg-surface-2 max-phone:relative max-phone:h-9 max-phone:px-3 max-phone:after:absolute max-phone:after:inset-x-0 max-phone:after:-inset-y-1"
+        className="h-7.5 rounded-base border border-border bg-surface px-2.5 font-medium text-text hover:bg-surface-2"
         aria-haspopup="dialog"
         onClick={() => setCreditsOpen(true)}
       >

@@ -44,7 +44,7 @@ export interface CreditsDialogProps {
 export function CreditsDialog({ open, onOpenChange }: CreditsDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="flex max-w-130 flex-col gap-3.5 rounded-[18px] p-6 text-[14px]">
+      <DialogContent className="flex max-w-130 flex-col gap-3.5 rounded-lg p-6 text-[14px]">
         <DialogHeader className="gap-1.5 pr-10">
           <DialogTitle>What we use</DialogTitle>
           <DialogDescription className="m-0 leading-normal">

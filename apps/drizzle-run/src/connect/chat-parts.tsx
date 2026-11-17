@@ -32,10 +32,8 @@ const titleClass = cn("m-0 font-display text-[22px]/[1.15] font-[750] tracking-[
 const copyClass = cn("m-0 text-[13px] leading-[1.55] text-muted");
 const smallCopyClass = cn("m-0 text-[12px] leading-[1.5] text-muted");
 const smallButtonClass = cn("h-7 min-h-7 px-2.5 text-[12px]");
-const cardClass = cn("rounded-[12px] border border-border bg-surface p-3");
-const stickerCardClass = cn(
-  "flex flex-col gap-2 rounded-[12px] border-[1.5px] border-card-border bg-surface p-3 shadow-sticker-card",
-);
+const cardClass = cn("rounded-lg border border-border bg-surface p-3");
+const stickerCardClass = cn("flex flex-col gap-2 rounded-lg border border-border bg-surface p-3 shadow-sticker-card");
 
 /** The companion's npm page, where the setup steps link. */
 export const AGENT_LINK = "https://www.npmjs.com/package/@drizzle-run/connect";
@@ -576,36 +574,6 @@ function useTruncated(): [(element: HTMLElement | null) => void, boolean] {
   return [setElement, truncated];
 }
 
-/** Asks before an agent edits in Ask mode: Allow or Dismiss. */
-export function AskCard({
-  target,
-  agent,
-  onAllow,
-  onDismiss,
-}: {
-  target: string | undefined;
-  agent: string;
-  onAllow: () => void;
-  onDismiss: () => void;
-}) {
-  return (
-    <fieldset className={cn(stickerCardClass, "min-w-auto")} aria-label="Edit request">
-      <b className="text-[13px] font-[650]">{target ? `This needs an edit to ${target}` : "This needs an edit"}</b>
-      <span className="text-[12.5px] leading-normal text-muted">
-        You're in Ask mode: {agent} can read and run this project, not change it.
-      </span>
-      <div className="flex flex-wrap gap-2">
-        <Button variant="sticker" className="h-7.5 min-h-7.5 px-2.5 text-[12.5px]" onClick={onAllow}>
-          Allow edits in this chat
-        </Button>
-        <Button variant="outline" className="h-7.5 min-h-7.5 px-2.5 text-[12.5px]" onClick={onDismiss}>
-          Not now
-        </Button>
-      </div>
-    </fieldset>
-  );
-}
-
 /** Under the last row while the agent works without a running tool: a pulsing dot and "Thinking". */
 function Thinking({ agent }: { agent: string }) {
   return (
@@ -651,14 +619,10 @@ export function ChatMessages({
   items,
   agent,
   guided = false,
-  onAllow,
-  onDismiss,
 }: {
   items: readonly ChatItem[];
   agent: string;
   guided?: boolean;
-  onAllow?: (toolId: string) => void;
-  onDismiss?: (toolId: string) => void;
 }) {
   const text = guided ? "text-[14px]" : "text-[13px]";
   const [openedKeys] = useState(() => new Set(items.map((item) => item.key)));
@@ -672,7 +636,7 @@ export function ChatMessages({
               <div
                 key={item.key}
                 className={cn(
-                  "max-w-[88%] self-end rounded-[12px_12px_4px_12px] bg-surface-2 px-3 py-2.25 leading-normal wrap-anywhere whitespace-pre-wrap",
+                  "my-1 max-w-[85%] self-end rounded-[14px_14px_4px_14px] bg-segment px-3 py-2 leading-normal wrap-anywhere whitespace-pre-wrap text-segment-fg",
                   text,
                 )}
                 data-slot="user-message"
@@ -692,25 +656,6 @@ export function ChatMessages({
             );
           case "tool":
             return <ToolRow key={item.key} item={item} />;
-          case "ask":
-            return onAllow && onDismiss ? (
-              <AskCard
-                key={item.key}
-                target={item.target}
-                agent={agent}
-                onAllow={() => onAllow(item.toolId)}
-                onDismiss={() => onDismiss(item.toolId)}
-              />
-            ) : null;
-          case "allowed":
-            return (
-              <output key={item.key} className="flex items-center gap-2 px-0.5 text-[12px] text-muted">
-                <span className="font-bold text-ok" aria-hidden="true">
-                  ✓
-                </span>
-                Edits allowed in this chat. Each one still waits for Keep or Undo.
-              </output>
-            );
           case "thinking":
             return <Thinking key={item.key} agent={agent} />;
           case "notice":
@@ -732,7 +677,7 @@ export function ChatMessages({
 /** Says the companion stopped, with the command that starts it again. */
 export function StoppedBanner({ command }: { command: string }) {
   return (
-    <div className="flex flex-col gap-2 rounded-[12px] border-[1.5px] border-dashed border-err bg-err-bg p-3">
+    <div className="flex flex-col gap-2 rounded-lg border-[1.5px] border-dashed border-err bg-err-bg p-3">
       <output className="flex flex-col gap-2">
         <b className="text-[13px] font-[650] text-err">The companion stopped</b>
         <span className="text-[12.5px] leading-normal">
@@ -934,7 +879,7 @@ export function PendingBar({
         return (
           <div
             key={edit.id}
-            className="mx-3 mb-2.5 flex shrink-0 flex-col gap-1.5 rounded-[12px] border-[1.5px] border-card-border bg-surface py-2 pr-2 pl-3 text-[12.5px] shadow-sticker-card"
+            className="mx-3 mb-2.5 flex shrink-0 flex-col gap-1.5 rounded-lg border border-border bg-surface py-2 pr-2 pl-3 text-[12.5px] shadow-sticker-card"
             data-slot="pending-bar"
           >
             <div className="flex items-center gap-2">
@@ -1024,7 +969,7 @@ export function Composer({
   return (
     <div
       className={cn(
-        "overflow-hidden rounded-[12px] border-[1.5px] border-card-border bg-surface has-[textarea:focus-visible]:border-accent-text",
+        "overflow-hidden rounded-lg border border-border bg-surface has-[textarea:focus-visible]:border-accent-text",
         disabled && "opacity-55",
       )}
     >
@@ -1055,7 +1000,7 @@ export function Composer({
  */
 export function ReadOnlyModeLine() {
   return (
-    <div className="mb-1.5 flex items-center gap-1.5 px-0.5 text-[11.5px] text-muted" data-slot="read-only-mode">
+    <div className="mb-2 flex items-center gap-1.5 px-1 text-[11.5px] text-muted" data-slot="read-only-mode">
       <LockIcon className="size-3 shrink-0 stroke-[2.2]" aria-hidden="true" />
       <span>Read-only mode</span>
       <Popover>

@@ -42,7 +42,7 @@ export type {
   ReleaseSwitchRequest,
   ReleaseSwitchServices,
 } from "./release-switch.ts";
-export { connectQuota, connectStatus, createConnectMachine, refusedEditSummary, workingTurn } from "./connect.ts";
+export { connectQuota, connectStatus, createConnectMachine, workingTurn } from "./connect.ts";
 export type { ConnectMachine, ConnectQuota, ConnectSnapshot, ConnectStatus } from "./connect.ts";
 export type {
   ConnectActivity,

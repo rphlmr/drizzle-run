@@ -10,7 +10,6 @@ import {
   type AgentModel,
   type AgentTuning,
   type ChatContextEntry,
-  type ChatMode,
   type ChatProject,
   type ChatProjectSide,
   type CompanionAgent,
@@ -32,14 +31,11 @@ import { CONNECT_TOOL_SCOPES, isConnectToolName, type ConnectToolName, type Conn
 
 const ID_PATTERN = /^[A-Za-z0-9_-]{1,64}$/;
 
-const MODES: readonly ChatMode[] = ["ask", "edit"];
-
 const TURN_STATES: readonly TurnState[] = ["started", "done", "failed", "stopped"];
 
 const TOOL_ERROR_CODES: readonly ToolErrorCode[] = [
   "invalid_input",
   "unknown_tool",
-  "edit_mode_required",
   "no_project",
   "not_found",
   "conflict",
@@ -198,7 +194,6 @@ const ConnectMessageSchema = z.pipe(
         type: z.literal("chat.send"),
         conversation: IdSchema,
         text: boundedText(100_000),
-        mode: z.enum(MODES),
         project: keepIfValid(ChatProjectSchema),
         // A scope from a newer tab gets the read-only tools of an untrusted project, never the full project tools.
         scope: z.union([z.optional(z.enum(CONNECT_TOOL_SCOPES)), z.transform((): ConnectToolScope => "untrusted")]),
@@ -207,11 +202,10 @@ const ConnectMessageSchema = z.pipe(
         effort: z.optional(EffortSchema),
         context: z.optional(ChatContextSchema),
       }),
-      z.transform(({ conversation, text, mode, project, scope, agent, model, effort, context }) => ({
+      z.transform(({ conversation, text, project, scope, agent, model, effort, context }) => ({
         type: "chat.send" as const,
         conversation,
         text,
-        mode,
         ...(project === undefined ? {} : { project }),
         ...(scope === undefined ? {} : { scope }),
         ...(agent === undefined ? {} : { agent }),

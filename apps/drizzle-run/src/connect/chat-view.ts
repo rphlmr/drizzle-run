@@ -1,8 +1,6 @@
 import { AGENT_NAMES, type ConnectToolName } from "@drizzle-run/core/connect";
 import type { ConnectActivity, ConnectQuota, ConnectStatus } from "@drizzle-run/runtime/machines";
 
-import type { ChatAnswer } from "./chat-history";
-
 /**
  * Derive the chat panel from the connection status and conversation rows.
  * Shared by project and guide chats so both render the same states.
@@ -201,9 +199,6 @@ export type ChatItem =
       spinning: boolean;
       chip?: ChatChip;
     }
-  /** An edit refused in Ask mode: "This needs an edit to query.ts", until the user answers. */
-  | { kind: "ask"; key: string; toolId: string; target?: string }
-  | { kind: "allowed"; key: string }
   | { kind: "notice"; key: string; tone: "err" | "faint"; text: string }
   /** The agent is on a turn and no tool row spins: it thinks, or writes text still to come. */
   | { kind: "thinking"; key: string };
@@ -242,13 +237,12 @@ const DONE_LABELS: Readonly<Record<ConnectToolName, string>> = {
   read_docs: "Read docs",
 };
 
-/** What turns stored rows into drawn rows: pending edits, the current turn, and Ask answers. */
+/** What turns stored rows into drawn rows: pending edits and the current turn. */
 export interface ChatItemOptions {
   /** The edits still waiting for Keep or Undo. A stored "pending" edit this page does not hold was kept. */
   pendingEdits: ReadonlySet<string>;
   /** The turn the agent is on in this chat, if any. */
   working: string | undefined;
-  answers: Readonly<Record<string, ChatAnswer>>;
   /** Guided rows include the tool name. */
   guided?: boolean;
   /** Terminal rows have no turn; they run until they settle. */
@@ -353,28 +347,8 @@ function listEntryItems(entries: readonly ConnectActivity[], options: ChatItemOp
           ? [{ kind: "notice", key: `n:${entry.turn}:stopped`, tone: "faint", text: "Stopped." }]
           : [];
 
-      case "tool": {
-        if (entry.status === "refused" && entry.error?.code === "edit_mode_required") {
-          const answer = options.answers[entry.id];
-
-          if (answer === undefined) {
-            return [
-              {
-                kind: "ask",
-                key: `a:${entry.id}`,
-                toolId: entry.id,
-                ...(entry.summary?.target ? { target: entry.summary.target } : {}),
-              },
-            ];
-          }
-
-          if (answer === "allowed") {
-            return [{ kind: "allowed", key: `a:${entry.id}` }];
-          }
-        }
-
+      case "tool":
         return [toToolItem(entry, options)];
-      }
     }
   });
 }

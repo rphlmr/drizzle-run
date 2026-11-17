@@ -99,7 +99,7 @@ function ProjectSyncPopover({
       <PopoverContent
         side="top"
         align="end"
-        className="flex w-[min(300px,calc(100vw-24px))] flex-col gap-2 rounded-[12px] border-[1.5px] border-card-border p-3 text-[13px] shadow-[var(--shadow-sticker-card),var(--shadow-pop)]"
+        className="flex w-[min(300px,calc(100vw-24px))] flex-col gap-2 rounded-lg border border-border p-3 text-[13px] shadow-pop"
       >
         <PopoverTitle id={titleId} className="flex items-center gap-1.5 text-[13.5px] font-[650]">
           <LocationIcon location={location} />

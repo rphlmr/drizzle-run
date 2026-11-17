@@ -53,7 +53,7 @@ export function CommunityOpen({ share, open, onOpenCopy, onCancel }: CommunityOp
     <Dialog open={open} onOpenChange={(next) => !next && onCancel()}>
       <DialogContent
         showCloseButton={false}
-        className="flex max-h-[calc(100dvh-32px)] w-[min(480px,calc(100vw-24px))] max-w-none flex-col gap-4 overflow-y-auto rounded-[18px] p-6 max-phone:w-[min(480px,calc(100vw-24px))]"
+        className="flex max-h-[calc(100dvh-32px)] w-[min(480px,calc(100vw-24px))] max-w-none flex-col gap-4 overflow-y-auto rounded-lg p-6 max-phone:w-[min(480px,calc(100vw-24px))]"
       >
         <div className="flex flex-col items-start gap-2">
           <span className="flex gap-1.5">
@@ -95,13 +95,13 @@ export function CommunityOpen({ share, open, onOpenCopy, onCancel }: CommunityOp
           )}
           <ul className="flex flex-wrap gap-1.5" aria-label="Files">
             {sortFilesForTabs(share.files).map((file) => (
-              <li key={file} className="rounded-[6px] bg-surface-2 px-2 py-0.75 font-mono text-[12px]">
+              <li key={file} className="rounded-md bg-surface-2 px-2 py-0.75 font-mono text-[12px]">
                 {file}
               </li>
             ))}
           </ul>
         </div>
-        <div role="note" className="flex gap-3 rounded-[12px] border border-border bg-surface p-3.5 leading-[1.55]">
+        <div role="note" className="flex gap-3 rounded-lg border border-border bg-surface p-3.5 leading-[1.55]">
           <InfoIcon className="mt-px size-4.5 shrink-0" aria-hidden="true" />
           <DialogDescription
             render={<div />}

@@ -223,7 +223,7 @@ function EmbedWorkspace({ source }: { source: EmbedSource }) {
   );
 }
 
-const embedShellClass = cn("flex h-dvh flex-col overflow-hidden rounded-[16px] border border-border bg-bg");
+const embedShellClass = cn("flex h-dvh flex-col overflow-hidden rounded-lg border border-border bg-bg");
 const embedContentClass = cn("flex min-h-0 flex-1 flex-col overflow-y-auto");
 const embedLoadingClass = cn(
   "flex min-h-[280px] flex-col items-center justify-center gap-4 p-6 text-center text-muted",

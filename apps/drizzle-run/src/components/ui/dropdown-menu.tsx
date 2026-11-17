@@ -24,17 +24,34 @@ function DropdownMenuContent({
   alignOffset = 0,
   side = "bottom",
   sideOffset = 4,
+  anchor,
+  positionMethod,
+  collisionPadding,
+  backdrop = false,
   className,
   ...props
-}: MenuPrimitive.Popup.Props & Pick<MenuPrimitive.Positioner.Props, "align" | "alignOffset" | "side" | "sideOffset">) {
+}: MenuPrimitive.Popup.Props &
+  Pick<
+    MenuPrimitive.Positioner.Props,
+    "align" | "alignOffset" | "side" | "sideOffset" | "anchor" | "positionMethod" | "collisionPadding"
+  > & {
+    /** Dims the page behind the menu, for a menu shown as a sheet. */
+    backdrop?: boolean;
+  }) {
   return (
     <MenuPrimitive.Portal>
+      {backdrop && (
+        <MenuPrimitive.Backdrop className="fixed inset-0 isolate z-50 bg-overlay transition-opacity duration-(--motion-base) ease-out data-ending-style:opacity-0 data-ending-style:duration-(--motion-fast) data-starting-style:opacity-0" />
+      )}
       <MenuPrimitive.Positioner
         className="isolate z-50"
         align={align}
         alignOffset={alignOffset}
         side={side}
         sideOffset={sideOffset}
+        anchor={anchor}
+        positionMethod={positionMethod}
+        collisionPadding={collisionPadding}
       >
         <MenuPrimitive.Popup
           data-slot="dropdown-menu-content"
@@ -86,7 +103,7 @@ function DropdownMenuItem({
       data-inset={inset}
       data-variant={variant}
       className={cn(
-        "group/dropdown-menu-item relative flex cursor-pointer items-center gap-2 rounded-[6px] px-2.5 py-2 text-[13px] select-none data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:bg-surface-2 data-highlighted:outline-none data-[variant=destructive]:text-err [&_svg]:pointer-events-none [&_svg]:shrink-0",
+        "group/dropdown-menu-item relative flex cursor-pointer items-center gap-2 rounded-md px-2.5 py-2 text-[13px] select-none data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:bg-surface-2 data-highlighted:outline-none data-[variant=destructive]:text-err [&_svg]:pointer-events-none [&_svg]:shrink-0",
         className,
       )}
       {...props}
@@ -160,7 +177,7 @@ function DropdownMenuCheckboxItem({
       data-slot="dropdown-menu-checkbox-item"
       data-inset={inset}
       className={cn(
-        "relative flex cursor-pointer items-center gap-2 rounded-[6px] px-2.5 py-2 pl-7.5 text-[13px] select-none data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:bg-surface-2 data-highlighted:outline-none [&_svg]:pointer-events-none [&_svg]:shrink-0",
+        "relative flex cursor-pointer items-center gap-2 rounded-md px-2.5 py-2 pl-7.5 text-[13px] select-none data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:bg-surface-2 data-highlighted:outline-none [&_svg]:pointer-events-none [&_svg]:shrink-0",
         className,
       )}
       checked={checked}
@@ -196,7 +213,7 @@ function DropdownMenuRadioItem({
       data-slot="dropdown-menu-radio-item"
       data-inset={inset}
       className={cn(
-        "relative flex cursor-pointer items-center gap-2 rounded-[6px] px-2.5 py-2 pl-7.5 text-[13px] select-none data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:bg-surface-2 data-highlighted:outline-none [&_svg]:pointer-events-none [&_svg]:shrink-0",
+        "relative flex cursor-pointer items-center gap-2 rounded-md px-2.5 py-2 pl-7.5 text-[13px] select-none data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:bg-surface-2 data-highlighted:outline-none [&_svg]:pointer-events-none [&_svg]:shrink-0",
         className,
       )}
       {...props}

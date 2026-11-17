@@ -1,6 +1,5 @@
 import {
   CONNECT_LIMITS,
-  connectTool,
   createPairingSecret,
   isToolInScope,
   parseToolInput,
@@ -9,14 +8,12 @@ import {
   scopeRefusal,
   type AgentId,
   type AgentTuning,
-  type ChatMode,
   type CompanionInfo,
-  type ConnectToolName,
   type RelayBusyFrame,
   type RelayQuotaFrame,
   type ToolError,
 } from "@drizzle-run/core/connect";
-import { omit, uniq } from "es-toolkit";
+import { omit } from "es-toolkit";
 import { assign, emit, enqueueActions, fromPromise, raise, sendTo, setup, type SnapshotFrom } from "xstate";
 
 import { createEditStoreLogic, createJobsMachine, createLinkMachine, LINK_ID } from "./connect-actors.ts";
@@ -32,7 +29,6 @@ import type {
   ConnectServices,
   ConnectToolOutcome,
   ConnectToolRequest,
-  ConnectToolSummary,
   EditDecision,
   EditStoreCommand,
   InternalEvent,
@@ -51,7 +47,7 @@ import { getErrorText } from "./error-text.ts";
  * project), pending edits that wait for Keep or Undo, and agent runs of a community project
  * that wait for the user.
  *
- * Each chat keeps its own mode and the project its turns act on: a call from a chat whose
+ * Each chat keeps the project its turns act on: a call from a chat whose
  * project is not open is refused, and leaving that project stops the chat's turn.
  *
  * Every side effect is injected: storage, the socket, tool execution, and undo.
@@ -119,7 +115,7 @@ function withEditDecision(activity: readonly ConnectActivity[], editId: string, 
  */
 function keepAfterForget(context: ConnectContext): ConnectContext {
   return {
-    ...createInitialContext(context.mode),
+    ...createInitialContext(),
     chats: context.chats,
     activity: context.activity,
     pendingEdits: context.pendingEdits,
@@ -213,14 +209,13 @@ function getBackoffMs(attempt: number) {
   return Math.min(MAX_BACKOFF_MS, 1_000 * 2 ** Math.min(attempt, 5));
 }
 
-function createInitialContext(mode: ChatMode = "ask"): ConnectContext {
+function createInitialContext(): ConnectContext {
   return {
     pairing: undefined,
     companion: undefined,
     peer: undefined,
     companionSeen: false,
     dock: "closed",
-    mode,
     chats: {},
     busy: undefined,
     quota: undefined,
@@ -344,7 +339,7 @@ export function createConnectMachine(services: ConnectServices) {
         const { peer } = event;
         const { id, name, input, conversation } = event.message;
         const at = now();
-        const refuse = (error: ToolError, status: "failed" | "refused", summary?: ConnectToolSummary) => {
+        const refuse = (error: ToolError, status: "failed" | "refused") => {
           const entry: ConnectActivity = {
             kind: "tool",
             id,
@@ -352,7 +347,6 @@ export function createConnectMachine(services: ConnectServices) {
             ...(conversation ? { conversation } : {}),
             status,
             error,
-            ...(summary ? { summary } : {}),
             at,
           };
 
@@ -373,7 +367,7 @@ export function createConnectMachine(services: ConnectServices) {
           return;
         }
 
-        // A chat's call acts on the chat's project in the chat's mode, never on whatever is open now.
+        // A chat's call acts on the chat's project, never on whatever is open now.
         const open = services.openProject?.();
         const chat = conversation === undefined ? undefined : context.chats[conversation];
 
@@ -401,24 +395,6 @@ export function createConnectMachine(services: ConnectServices) {
           return;
         }
 
-        const mode = chat?.mode ?? context.mode;
-
-        if (connectTool(name).edits && mode !== "edit") {
-          refuse(
-            {
-              code: "edit_mode_required",
-              message:
-                "The chat is in Ask mode, so it reads and runs without changing files. " +
-                "Ask the user to allow edits in this chat, then try again.",
-            },
-            "refused",
-            refusedEditSummary(name, input),
-          );
-          enqueue.emit({ type: "edit.requested", tool: name, ...(conversation ? { conversation } : {}) });
-
-          return;
-        }
-
         const parsed = parseToolInput(name, input);
 
         if (!parsed.ok) {
@@ -430,7 +406,6 @@ export function createConnectMachine(services: ConnectServices) {
         const request: ConnectToolRequest = {
           id,
           call: parsed.call,
-          mode,
           ...(conversation ? { conversation } : {}),
           ...(open ? { projectId: open.id } : {}),
         };
@@ -847,21 +822,6 @@ export function createConnectMachine(services: ConnectServices) {
       },
     ],
     on: {
-      "chat.mode.set": {
-        actions: assign({
-          mode: ({ event }) => event.mode,
-          chats: ({ context, event }) =>
-            event.conversation === undefined
-              ? context.chats
-              : {
-                  ...context.chats,
-                  [event.conversation]: {
-                    projectId: context.chats[event.conversation]?.projectId,
-                    mode: event.mode,
-                  },
-                },
-        }),
-      },
       "dock.open": { actions: assign({ dock: "open" }) },
       "dock.close": { actions: assign({ dock: "closed" }) },
       "edit.keep": { actions: "keepEdit" },
@@ -1042,13 +1002,7 @@ export function createConnectMachine(services: ConnectServices) {
                   assign({
                     chats: ({ context, event }) => ({
                       ...context.chats,
-                      [event.conversation]: {
-                        projectId: event.project?.id,
-                        mode:
-                          event.scope === undefined || event.scope === "project"
-                            ? (context.chats[event.conversation]?.mode ?? context.mode)
-                            : "ask",
-                      },
+                      [event.conversation]: { projectId: event.project?.id },
                     }),
                   }),
                   {
@@ -1067,7 +1021,6 @@ export function createConnectMachine(services: ConnectServices) {
                       type: "chat.send",
                       conversation: event.conversation,
                       text: event.text,
-                      mode: context.chats[event.conversation]?.mode ?? "ask",
                       ...(event.project ? { project: event.project } : {}),
                       ...(event.scope ? { scope: event.scope } : {}),
                       ...getTurnAgent(context.companion, event),
@@ -1176,60 +1129,6 @@ export function createConnectMachine(services: ConnectServices) {
       },
     },
   });
-}
-
-function readField(value: unknown, field: string): unknown {
-  return value !== null && typeof value === "object" && !Array.isArray(value) ? Reflect.get(value, field) : undefined;
-}
-
-function resolveShortText(value: unknown) {
-  return typeof value === "string" && value.length <= 200 ? value : undefined;
-}
-
-/**
- * What a refused edit would have changed, read from its unchecked input only for the chat's
- * "This needs an edit to query.ts" card. Never executed.
- */
-export function refusedEditSummary(name: ConnectToolName, input: unknown): ConnectToolSummary | undefined {
-  switch (name) {
-    case "apply_edits": {
-      const edits = readField(input, "edits");
-      const paths = Array.isArray(edits)
-        ? uniq(
-            edits
-              .map((edit: unknown) => resolveShortText(readField(edit, "path")))
-              .filter((path): path is string => path !== undefined),
-          )
-        : [];
-
-      return { label: "Edit", ...(paths.length > 0 ? { target: paths.slice(0, 3).join(", ") } : {}) };
-    }
-
-    case "switch_release": {
-      const version = resolveShortText(readField(input, "orm_version"));
-
-      return { label: "Switch release", ...(version ? { target: version } : {}) };
-    }
-
-    case "create_project": {
-      const project = resolveShortText(readField(input, "name"));
-
-      return { label: "Create a project", ...(project ? { target: project } : {}) };
-    }
-
-    case "fork_project":
-    case "get_project":
-    case "get_guide":
-    case "get_latest_run":
-    case "get_problems":
-    case "get_query_plans":
-    case "get_query_plans_settings":
-    case "set_query_plans_settings":
-    case "read_file":
-    case "read_docs":
-    case "run":
-      return undefined;
-  }
 }
 
 function toRecord(value: unknown): Record<string, unknown> {

@@ -668,10 +668,12 @@ export async function prepareEditor(
        * transaction's line, in place of the ones before.
        */
       setRunNotes: (next: readonly RunNote[]) => runNotes?.set(next),
-      /** Apply phone text sizing and horizontal scrolling for long lines. */
+      /** Apply phone text sizing, horizontal scrolling for long lines, and scrolling past the last line. */
       setPhoneLayout: (phone: boolean) => {
         layoutText = phone ? EDITOR_TEXT.phone : EDITOR_TEXT.desktop;
         applyText();
+        // A phone's guide sheet floats over the code: the last lines can scroll up past it.
+        editor?.updateOptions({ scrollBeyondLastLine: phone });
         runNotes?.setPhone(phone);
       },
       /** Sets code at another size, such as a side-by-side pane's 12.5/22 px. */

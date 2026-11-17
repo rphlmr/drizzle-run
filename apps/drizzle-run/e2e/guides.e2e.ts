@@ -441,6 +441,8 @@ test("should show one side at a time on a phone during the relations step", asyn
 
   await sheet.getByRole("button", { name: /^Run/ }).click();
   await expect(sheet).toContainText("Step 4 of 7 done", { timeout: 120_000 });
+  // The open sheet is modal: fold it to reach the sides.
+  await sheet.getByRole("button", { name: "Collapse guide" }).click();
   await sides.getByRole("tab", { name: /^RQB/ }).click();
   await expect(rqb).toBeVisible();
   await expect(sqlLike).toBeHidden();

@@ -164,7 +164,7 @@ export function ProjectDocsMenu({ docs }: ProjectDocsMenuProps) {
       <PopoverContent
         align="end"
         sideOffset={8}
-        className="flex w-[min(360px,calc(100vw-24px))] flex-col gap-0.5 rounded-[12px] border-[1.5px] border-card-border p-1.5 text-[13px] shadow-[var(--shadow-sticker-card),var(--shadow-pop)]"
+        className="flex w-[min(360px,calc(100vw-24px))] flex-col gap-0.5 rounded-lg border border-border p-1.5 text-[13px] shadow-pop"
       >
         <DocsList docs={docs} title={<PopoverTitle className={titleClass}>Docs</PopoverTitle>} onNavigate={close} />
       </PopoverContent>

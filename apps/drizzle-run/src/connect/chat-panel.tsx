@@ -1,10 +1,4 @@
-import {
-  AGENT_NAMES,
-  CONNECT_LIMITS,
-  type ChatMode,
-  type ChatProject,
-  type ConnectToolScope,
-} from "@drizzle-run/core/connect";
+import { AGENT_NAMES, CONNECT_LIMITS, type ChatProject, type ConnectToolScope } from "@drizzle-run/core/connect";
 import type { ConnectActivity, ConnectStatus } from "@drizzle-run/runtime/machines";
 import { LockIcon, MessageCircleIcon, ShieldAlertIcon, TerminalIcon, XIcon } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -181,7 +175,7 @@ function listTerminalItems(activity: readonly ConnectActivity[], pending: Readon
       entry.kind === "tool" && entry.conversation === undefined,
   );
 
-  return listChatItems(rows, { pendingEdits: pending, working: undefined, answers: {}, terminal: true }).map((item) => {
+  return listChatItems(rows, { pendingEdits: pending, working: undefined, terminal: true }).map((item) => {
     const entry = rows.find((row) => `x:${row.id}` === item.key);
 
     return item.kind === "tool" && entry !== undefined
@@ -213,7 +207,6 @@ function ConnectedDock({ open, onClose, className, ...target }: ChatDockProps) {
     settings: useConnectSettings(),
     conversation: target.conversation,
     live: connect.activity,
-    applyMode: (conversation, mode) => connect.setMode(mode, conversation),
   });
   const dock = useRef<HTMLDivElement>(null);
   const [dockWidthPx, setDockWidthPx] = useState<number | null>(null);
@@ -268,7 +261,6 @@ function ChatPanel({
     : listChatItems(history.entries, {
         pendingEdits: pendingIds,
         working,
-        answers: history.answers,
         guided: guided !== undefined,
       });
   const body = getChatBody(status, items.length > 0);
@@ -294,9 +286,6 @@ function ChatPanel({
     return () => actor.send({ type: "dock.close" });
   }, [actor]);
 
-  const setMode = (mode: ChatMode) => {
-    history.setMode(mode);
-  };
   const community = target.project.origin === "community";
   const note =
     target.scope === "snapshot" ? (
@@ -337,11 +326,11 @@ function ChatPanel({
 
   return (
     <section
-      className="flex min-w-0 flex-1 flex-col overflow-hidden rounded-lg border border-border bg-surface"
+      className="flex min-w-0 flex-1 flex-col overflow-hidden rounded-lg border border-border bg-surface shadow-sticker"
       aria-label="AI chat"
     >
       <div className="flex min-h-13 shrink-0 items-center gap-2.5 border-b border-border py-0 pr-2 pl-3">
-        <span className="grid size-7.5 shrink-0 place-items-center rounded-base border-[1.5px] border-card-border bg-surface-2">
+        <span className="grid size-7.5 shrink-0 place-items-center rounded-base border border-border bg-surface-2">
           <TerminalIcon className="size-4 stroke-[2.2]" aria-hidden="true" />
         </span>
         <div className="flex min-w-0 flex-1 flex-col gap-px">
@@ -367,7 +356,7 @@ function ChatPanel({
           <XIcon className="size-3.5 stroke-[2.2]" aria-hidden="true" />
         </Button>
       </div>
-      <div className="min-h-0 flex-1 overflow-auto bg-panel" ref={attachScroller} onScroll={onScroll}>
+      <div className="min-h-0 flex-1 overflow-auto bg-surface" ref={attachScroller} onScroll={onScroll}>
         {body === "loading" && (
           <div className="flex flex-col gap-3 px-4 py-5">
             <Skeleton className="h-7 w-48" />
@@ -421,15 +410,7 @@ function ChatPanel({
           <div className="flex flex-col gap-2.5 px-3 py-3.5" data-slot="chat-messages">
             {terminal && <TerminalNote community={community} />}
             {(readOnly || !terminal) && note}
-            <ChatMessages
-              items={items}
-              agent={agent ?? "The agent"}
-              onAllow={(toolId) => {
-                history.answer(toolId, "allowed");
-                setMode("edit");
-              }}
-              onDismiss={(toolId) => history.answer(toolId, "dismissed")}
-            />
+            <ChatMessages items={items} agent={agent ?? "The agent"} />
             {status.kind === "disconnected" && <StoppedBanner command={command ?? connect.commands.rejoin} />}
             {status.kind === "off" && <OffBanner onReconnect={connect.retry} />}
             {status.kind === "busy" && <BusyCard time={retryTime(status.retryAt)} />}
@@ -447,7 +428,7 @@ function ChatPanel({
         />
       )}
       {composer && (body === "messages" || body === "empty") && (
-        <div className="shrink-0 px-3 pb-3">
+        <div className="shrink-0 bg-surface px-3 pt-1 pb-3" data-slot="chat-composer">
           {guided && <ReadOnlyModeLine />}
           <Composer
             inputRef={input}
@@ -471,22 +452,7 @@ function ChatPanel({
                     <LockIcon className="size-2.75 stroke-[2.2]" aria-hidden="true" />
                     Read only
                   </span>
-                ) : (
-                  <fieldset aria-label="Mode" className="flex min-w-auto rounded-base bg-surface-2 p-0.5">
-                    {(["ask", "edit"] as const).map((mode) => (
-                      <button
-                        key={mode}
-                        type="button"
-                        aria-pressed={history.mode === mode}
-                        disabled={composer.disabled}
-                        className="h-6.5 cursor-pointer rounded-base border-0 bg-transparent px-2.5 text-[12px] font-semibold text-muted disabled:cursor-not-allowed aria-pressed:bg-segment aria-pressed:text-segment-fg"
-                        onClick={() => setMode(mode)}
-                      >
-                        {mode === "ask" ? "Ask" : "Edit"}
-                      </button>
-                    ))}
-                  </fieldset>
-                )}
+                ) : null}
                 <div className="flex-1" />
                 {readyCompanion && tuning && (
                   <AgentTuningMenu
@@ -507,11 +473,7 @@ function ChatPanel({
           />
           {!guided && (
             <p className="mt-1.5 mb-0 px-0.5 text-[11.5px] text-muted">
-              {readOnly
-                ? "AI reads and explains only."
-                : history.mode === "ask"
-                  ? "Ask reads and runs. It never edits."
-                  : "Edit changes files. Each change waits for Keep or Undo."}
+              {readOnly ? "AI reads and explains only." : "Each change the AI makes waits for Keep or Undo."}
             </p>
           )}
           {quotaLine && (

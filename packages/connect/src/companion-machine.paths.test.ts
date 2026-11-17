@@ -72,7 +72,6 @@ function makeChatSend(tab: string, agent?: "claude" | "codex") {
       type: "chat.send",
       conversation: "project:p1",
       text: "Hi",
-      mode: "ask",
       ...(agent === undefined ? {} : { agent }),
     },
   } as const;

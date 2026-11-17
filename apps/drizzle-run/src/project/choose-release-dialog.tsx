@@ -33,7 +33,7 @@ export interface ChooseReleaseDialogProps {
 
 /** The release dialogs: New project and Choose a Drizzle release. */
 export const releaseDialogClass = cn(
-  "max-h-[calc(100dvh-32px)] w-[min(460px,calc(100vw-24px))] overflow-y-auto rounded-[18px] bg-surface p-6 max-phone:w-[min(460px,calc(100vw-24px))]",
+  "max-h-[calc(100dvh-32px)] w-[min(460px,calc(100vw-24px))] overflow-y-auto rounded-lg bg-surface p-6 max-phone:w-[min(460px,calc(100vw-24px))]",
 );
 export const releaseFormClass = cn("flex flex-col gap-[18px] text-[14px]");
 export const releaseTitleClass = cn("text-[24px] font-extrabold tracking-[-0.02em]");
@@ -116,7 +116,7 @@ export function ChooseReleasePanel({ name, manifest, releases, secondary, onChoo
 
   return (
     <section
-      className="w-[min(460px,100%)] rounded-[18px] border border-border bg-surface p-6 text-left shadow-pop"
+      className="w-[min(460px,100%)] rounded-lg border border-border bg-surface p-6 text-left shadow-pop"
       aria-labelledby={titleId}
     >
       <ChooseReleaseForm

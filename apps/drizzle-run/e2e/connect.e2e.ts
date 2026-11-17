@@ -443,7 +443,6 @@ test.describe("AI chat link", () => {
       relay: appOrigin,
     });
 
-    await tab.send({ type: "chat.mode.set", mode: "edit" });
     await tab.send({
       type: "chat.message.send",
       conversation: PROJECT_ID,
@@ -529,7 +528,7 @@ test.describe("AI chat link", () => {
     ).toHaveCount(0);
   });
 
-  test("should walk the chat dock: setup, ready, Ask then Edit, a pending edit with a refused Undo and Keep, Stop, Disconnect and Reconnect, the history after a reload, and a stopped companion", async ({
+  test("should walk the chat dock: setup, ready, a pending edit with a refused Undo and Keep, Stop, Disconnect and Reconnect, the history after a reload, and a stopped companion", async ({
     page,
     context,
   }) => {
@@ -568,10 +567,9 @@ test.describe("AI chat link", () => {
     await expect(panel.getByText("Claude Code sees schema.ts, query.ts, and your latest run.")).toBeVisible();
 
     const message = panel.getByRole("textbox", { name: "Message to the agent" });
-    const mode = panel.getByRole("group", { name: "Mode" });
 
-    await expect(mode.getByRole("button", { name: "Ask" })).toHaveAttribute("aria-pressed", "true");
-    await expect(panel.getByText("Ask reads and runs. It never edits.")).toBeVisible();
+    await expect(panel.getByRole("group", { name: "Mode" })).toHaveCount(0);
+    await expect(panel.getByText("Each change the AI makes waits for Keep or Undo.")).toBeVisible();
 
     const quota = panel.locator("[data-slot=chat-quota]");
 
@@ -598,24 +596,6 @@ test.describe("AI chat link", () => {
     await message.press("Enter");
     await expect(panel.locator("[data-slot=user-message]")).toHaveText("Move 130 instead");
     await expect(panel.locator("[data-slot=tool-row]").first()).toContainText("Read the project");
-    await expect(panel.getByText("This needs an edit to query.ts")).toBeVisible({ timeout: 30_000 });
-
-    const firstTurn = (await agentLog(1))[0]?.argv ?? [];
-
-    expect(firstTurn[firstTurn.indexOf("--model") + 1]).toBe("sonnet");
-    expect(firstTurn[firstTurn.indexOf("--effort") + 1]).toBe("high");
-    await expect(
-      panel.getByText("You're in Ask mode: Claude Code can read and run this project, not change it."),
-    ).toBeVisible();
-    await panel.getByRole("button", { name: "Allow edits in this chat" }).click();
-    await expect(panel.getByText("Edits allowed in this chat. Each one still waits for Keep or Undo.")).toBeVisible();
-    await expect(mode.getByRole("button", { name: "Edit" })).toHaveAttribute("aria-pressed", "true");
-    await expect(message).toHaveAttribute("placeholder", "Ask about this project, or ask for a change", {
-      timeout: 30_000,
-    });
-
-    await message.fill("Move 130 now");
-    await message.press("Enter");
 
     const bar = panel.locator("[data-slot=pending-bar]");
     const banner = page.locator("[data-slot=pending-edit-banner]");
@@ -625,6 +605,11 @@ test.describe("AI chat link", () => {
     await expect(page.getByRole("tab", { name: /query\.ts/ }).getByText("Pending edit")).toBeVisible();
     await expect(page.locator(".monaco-editor .view-lines")).toContainText("const amount = 130;");
     await expect(panel.locator("[data-slot=tool-row]").filter({ hasText: "Edited" }).last()).toContainText("pending");
+
+    const firstTurn = (await agentLog(1))[0]?.argv ?? [];
+
+    expect(firstTurn[firstTurn.indexOf("--model") + 1]).toBe("sonnet");
+    expect(firstTurn[firstTurn.indexOf("--effort") + 1]).toBe("high");
 
     await page.locator(".monaco-editor .view-lines").click();
     await page.keyboard.press("ControlOrMeta+End");
@@ -656,14 +641,12 @@ test.describe("AI chat link", () => {
     await expect(message).toBeEnabled();
 
     await expect(page.getByText("Saved in this browser")).toBeVisible();
-    await expect.poll(() => countStoredMessages(page, `p-${PROJECT_ID}`)).toBe(3);
+    await expect.poll(() => countStoredMessages(page, `p-${PROJECT_ID}`)).toBe(2);
     await page.reload();
-    await expect(panel.locator("[data-slot=user-message]")).toHaveText(
-      ["Move 130 instead", "Move 130 now", "Take your time"],
-      { timeout: 60_000 },
-    );
+    await expect(panel.locator("[data-slot=user-message]")).toHaveText(["Move 130 instead", "Take your time"], {
+      timeout: 60_000,
+    });
     await expect(panel.getByText("Connected · this project only")).toBeVisible({ timeout: 30_000 });
-    await expect(mode.getByRole("button", { name: "Edit" })).toHaveAttribute("aria-pressed", "true");
 
     companion?.kill("SIGINT");
     await expect(panel.getByText("Companion stopped", { exact: true })).toBeVisible({ timeout: 30_000 });
@@ -730,7 +713,6 @@ test.describe("AI chat link", () => {
 
     const conversation = `p-${PROJECT_ID}`;
 
-    await tab.send({ type: "chat.mode.set", mode: "edit", conversation });
     await tab.send({
       type: "chat.message.send",
       conversation,
@@ -1029,7 +1011,6 @@ test.describe("AI chat link", () => {
 
     expect(shared).toMatchObject({ name: "Shared transfers", origin: "community" });
 
-    await tab.send({ type: "chat.mode.set", mode: "edit" });
     await tab.send({
       type: "chat.message.send",
       conversation: "shared",
@@ -1163,7 +1144,6 @@ test.describe("AI chat link", () => {
     await expect(note).toHaveCount(0);
     await expect(panel.locator("[data-slot=community-note]")).toBeVisible();
 
-    await panel.getByRole("group", { name: "Mode" }).getByRole("button", { name: "Edit" }).click();
     await say("Make it 130");
 
     const bar = panel.locator("[data-slot=pending-bar]");
@@ -1247,7 +1227,6 @@ test.describe("AI chat link", () => {
     await expect(rows.nth(1)).toContainText(/Read query\.ts\s*read_file/);
     await expect(rows.nth(2)).toContainText(/Read docs orm\.drizzle\.team\/docs\/transactions\s*read_docs/);
     await expect(rows).toHaveCount(3);
-    await expect(panel.getByText("This needs an edit")).toHaveCount(0);
 
     await rows.nth(2).getByRole("button").click();
     await expect(rows.nth(2).getByRole("link", { name: "https://orm.drizzle.team/docs/transactions" })).toHaveAttribute(
@@ -1309,7 +1288,6 @@ test.describe("AI chat link", () => {
       .toBe("pairing");
     await startCompanion((await getConnectHook(page).status())?.secret ?? "", CREATE_SCRIPT);
     await expect(panel.getByText("Connected · this project only")).toBeVisible({ timeout: 30_000 });
-    await panel.getByRole("group", { name: "Mode" }).getByRole("button", { name: "Edit" }).click();
 
     const message = panel.getByRole("textbox", { name: "Message to the agent" });
 
@@ -1403,10 +1381,6 @@ test.describe("AI chat link", () => {
 
     await expect(shopPanel.getByText("Connected · this project only")).toBeVisible({ timeout: 30_000 });
     await expect.poll(() => output.match(/Linked to a Drizzle Run tab/g)?.length ?? 0).toBe(2);
-
-    for (const panel of [bankPanel, shopPanel]) {
-      await panel.getByRole("group", { name: "Mode" }).getByRole("button", { name: "Edit" }).click();
-    }
 
     // Firefox drops a fill into a background tab.
     await page.bringToFront();

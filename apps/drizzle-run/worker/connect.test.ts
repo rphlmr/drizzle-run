@@ -189,7 +189,6 @@ describe("AI chat room", () => {
           type: "chat.send",
           conversation: "c1",
           text: "Move 130 from Ada to Grace",
-          mode: "edit",
         }),
       ),
     );

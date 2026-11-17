@@ -1,10 +1,11 @@
 import { CheckIcon, FlagIcon } from "lucide-react";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { useFetcher } from "react-router";
 
 import { Button } from "../components/ui/button";
 import { Popover, PopoverContent, PopoverTitle, PopoverTrigger } from "../components/ui/popover";
 import { CopyLinkButton } from "../share/copy-link-button";
+import { DialectLogo } from "../ui/dialect-logo";
 import { Hint } from "../ui/hint";
 import { SideBySideTag } from "../ui/side-by-side-tag";
 import type { communityAction } from "./community-page";
@@ -14,6 +15,7 @@ import {
   formatFileCount,
   formatSharedDate,
   formatShareDialects,
+  listShareDialects,
   getCommunitySharePath,
   getEffectSuffix,
   getSharePairLabel,
@@ -39,9 +41,9 @@ export function CommunityOwner({ owner }: { owner: CommunityShare["owner"] }) {
 }
 
 /** The bordered tag that marks community content: "Community" on cards, "Community share" in the notice. */
-export function CommunityTag({ children }: { children: string }) {
+export function CommunityTag({ children }: { children: ReactNode }) {
   return (
-    <span className="shrink-0 rounded-sm border border-border px-1.75 py-px text-[11px] font-medium whitespace-nowrap">
+    <span className="inline-flex shrink-0 items-center gap-1 rounded-sm border border-border px-1.75 py-px text-[11px] font-medium whitespace-nowrap">
       {children}
     </span>
   );
@@ -59,9 +61,14 @@ export interface CommunityCardProps {
  */
 export function CommunityCard({ share, onOpen }: CommunityCardProps) {
   return (
-    <article className="relative flex min-w-0 flex-1 flex-col gap-2.5 rounded-lg border border-border bg-surface p-5 text-text transition-colors has-[[data-open]:hover]:bg-panel max-phone:p-4">
+    <article className="relative flex min-w-0 flex-1 flex-col gap-2.5 rounded-lg border border-border bg-surface p-5 text-text shadow-sticker-card transition-colors has-[[data-open]:hover]:bg-panel max-phone:p-4">
       <span className="flex items-center gap-2 text-[12px] text-muted">
-        <CommunityTag>{formatShareDialects(share)}</CommunityTag>
+        <CommunityTag>
+          {listShareDialects(share).map((dialect) => (
+            <DialectLogo key={dialect} dialect={dialect} className="size-3.5" />
+          ))}
+          {formatShareDialects(share)}
+        </CommunityTag>
         {share.sides && <SideBySideTag />}
         <span>{share.topic === "bug-repros" ? "Bug repro" : "Community share"}</span>
         {!share.sides && (
@@ -76,7 +83,7 @@ export function CommunityCard({ share, onOpen }: CommunityCardProps) {
         <Hint content={getSharePairTitle(share)}>
           <ul className="relative z-1 flex w-fit flex-wrap gap-1.5" aria-label="Versions">
             {share.sides.map((side, index) => (
-              <li key={index} className="rounded-[6px] bg-surface-2 px-1.75 py-0.5 font-mono text-[11.5px]">
+              <li key={index} className="rounded-md bg-surface-2 px-1.75 py-0.5 font-mono text-[11.5px]">
                 {side.name !== undefined && `${side.name} · `}
                 orm {side.orm}
                 {getEffectSuffix(side)}
@@ -175,7 +182,7 @@ function ReportAction({ share }: { share: CommunityShare }) {
       </PopoverTrigger>
       <PopoverContent
         align="end"
-        className="flex w-[min(300px,calc(100vw-24px))] flex-col gap-2.5 rounded-[12px] border-[1.5px] border-card-border p-3.5 text-[13px] shadow-[var(--shadow-sticker-card),var(--shadow-pop)]"
+        className="flex w-[min(300px,calc(100vw-24px))] flex-col gap-2.5 rounded-lg border border-border p-3.5 text-[13px] shadow-pop"
       >
         <PopoverTitle className="text-[14px] font-semibold">Report this share?</PopoverTitle>
         <p className="leading-normal text-muted">

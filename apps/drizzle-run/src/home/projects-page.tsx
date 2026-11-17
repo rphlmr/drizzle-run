@@ -32,7 +32,7 @@ const DIALECTS: readonly { value: DialectFilter; label: string }[] = [
 
 const tabLinkClass = ({ isActive, isPending }: { isActive: boolean; isPending: boolean }) =>
   cn(
-    "relative inline-flex items-center py-2.25 text-[14px] font-medium whitespace-nowrap no-underline max-phone:min-h-touch",
+    "relative inline-flex items-center pb-2.25 text-[14px] leading-7.5 font-medium whitespace-nowrap no-underline max-phone:min-h-touch",
     "after:absolute after:inset-x-0 after:-bottom-px after:h-0.5 after:bg-text after:opacity-0",
     isActive ? "text-text after:opacity-100" : "text-muted hover:text-text",
     isPending && "opacity-60",
@@ -126,7 +126,7 @@ export function ProjectsPage() {
     <section className="flex min-w-0 flex-col gap-4.5 max-phone:gap-3.5" aria-labelledby="projects-title">
       <div className="flex flex-col items-start gap-4.5 max-phone:gap-3.5">
         <div>
-          <h1 id="projects-title" className="font-display text-[24px] font-semibold tracking-[-0.03em]">
+          <h1 id="projects-title" className="font-display text-[20px] font-semibold tracking-[-0.02em]">
             My projects{" "}
             <span className="ml-1 font-sans text-[15px] font-medium tracking-normal text-muted">{total}</span>
           </h1>

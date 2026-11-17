@@ -21,7 +21,7 @@ function focusNameField(input: HTMLInputElement | null) {
 const nameShrinkClass = cn("shrink-0 @max-[36rem]:shrink");
 
 const nameButtonClass = cn(
-  "relative -ml-1.5 inline-flex h-6 max-w-45 min-w-0 items-center gap-1.5 rounded-[6px] border-0 bg-transparent px-1.5 text-[13px] font-[650] whitespace-nowrap text-text after:absolute after:inset-x-0 after:-inset-y-2.5 hover:bg-surface-2",
+  "relative -ml-1.5 inline-flex h-6 max-w-45 min-w-0 items-center gap-1.5 rounded-md border-0 bg-transparent px-1.5 text-[13px] font-[650] whitespace-nowrap text-text after:absolute after:inset-x-0 after:-inset-y-2.5 hover:bg-surface-2",
 );
 
 /**
@@ -70,7 +70,7 @@ export function SideName({ release, onRename }: SideNameProps) {
             <input
               aria-label="Name of this side"
               aria-describedby={noteId}
-              className="h-6.5 w-37.5 shrink-0 rounded-[6px] border-[1.5px] border-run-border bg-surface px-2 text-[13px] font-semibold text-text shadow-[0_0_0_2px_var(--lime)] placeholder:font-normal placeholder:text-muted focus-visible:outline-transparent"
+              className="h-6.5 w-37.5 shrink-0 rounded-md border border-run-border bg-surface px-2 text-[13px] font-semibold text-text shadow-[0_0_0_2px_var(--lime)] placeholder:font-normal placeholder:text-muted focus-visible:outline-transparent"
               defaultValue={release.name}
               placeholder={release.short}
               maxLength={PAIR_SIDE_NAME_MAX_LENGTH}
@@ -84,7 +84,7 @@ export function SideName({ release, onRename }: SideNameProps) {
         <TooltipContent
           side="bottom"
           sideOffset={8}
-          className="grid w-65 max-w-65 gap-1 rounded-[12px] border-[1.5px] border-card-border bg-surface px-3 py-2.5 text-[12px] leading-[1.45] text-muted shadow-sticker"
+          className="grid w-65 max-w-65 gap-1 rounded-lg border border-border bg-surface px-3 py-2.5 text-[12px] leading-[1.45] text-muted shadow-sticker"
         >
           <span className="font-semibold text-text">Name this side</span>
           <span id={noteId}>

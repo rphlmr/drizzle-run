@@ -31,7 +31,7 @@ export function LibrariesPopover({ target, current, size = "status_bar" }: Libra
         <PopoverTrigger
           render={<button type="button" aria-label="Libraries" />}
           className={cn(
-            "relative inline-flex shrink-0 items-center justify-center rounded-[6px] border border-border bg-surface-2 text-muted after:absolute after:-inset-x-1 after:-inset-y-2.5 hover:border-faint hover:text-text data-popup-open:text-text data-popup-open:shadow-[0_0_0_2px_var(--lime)] max-phone:min-h-touch max-phone:min-w-touch [&>svg]:stroke-[2.2]",
+            "relative inline-flex shrink-0 items-center justify-center rounded-md border border-border bg-surface-2 text-muted after:absolute after:-inset-x-1 after:-inset-y-2.5 hover:border-faint hover:text-text data-popup-open:text-text data-popup-open:shadow-[0_0_0_2px_var(--lime)] max-phone:min-h-touch max-phone:min-w-touch [&>svg]:stroke-[2.2]",
             size === "status_bar" ? "size-5.5 [&>svg]:size-3" : "size-6 [&>svg]:size-3.25",
           )}
           data-slot="libraries"
@@ -41,7 +41,7 @@ export function LibrariesPopover({ target, current, size = "status_bar" }: Libra
       </Hint>
       <PopoverContent
         side="top"
-        className="flex w-[min(320px,calc(100vw-24px))] flex-col gap-1 rounded-[12px] border-[1.5px] border-card-border p-1.5 text-[13px] shadow-[var(--shadow-sticker-card),var(--shadow-pop)]"
+        className="flex w-[min(320px,calc(100vw-24px))] flex-col gap-1 rounded-lg border border-border p-1.5 text-[13px] shadow-pop"
       >
         <div className="flex items-baseline gap-2 px-2.5 pt-2">
           <PopoverTitle className="text-[13.5px] font-[650]">Libraries</PopoverTitle>

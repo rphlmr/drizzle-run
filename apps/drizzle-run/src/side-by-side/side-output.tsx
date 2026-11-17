@@ -15,11 +15,11 @@ import { RunningDot, RunningDuration, RunningNote } from "../ui/run-loader";
 import { buildRunTimeline, countTimeline, filterTimeline, type TimelineFilter } from "../ui/run-timeline";
 
 /**
- * An output view for one side. Problems and Debug depend on the run's contents. Embeds also offer Story.
+ * An output view for one side. Problems and Debug depend on the run's contents.
  */
 export type SideTab = TimelineFilter | "debug";
 
-const sideViews = ["results", "logs"] as const satisfies readonly TimelineFilter[];
+const sideViews = ["results", "story", "logs"] as const satisfies readonly TimelineFilter[];
 
 export const sideTabLabels: Record<SideTab, string> = {
   results: "Results",
@@ -134,7 +134,7 @@ export function SidePillChip({ pill, className }: { pill: SidePill; className?: 
   );
 }
 
-/** The tabs a side offers: Results and Logs, Problems when the shown run has some, and Debug with traces. */
+/** The tabs a side offers: Results, Story and Logs, Problems when the shown run has some, and Debug with traces. */
 export function listSideTabs(run: SideRun): readonly SideTab[] {
   return [
     ...sideViews,
@@ -161,7 +161,7 @@ const failedNotes: Partial<Record<TimelineFilter, string>> = {
 /** Explain why a side's output is empty. */
 export function SideNote({ children }: { children: ReactNode }) {
   return (
-    <p className="m-0 rounded-[12px] border border-dashed border-faint bg-surface px-5 py-7 text-center text-[13px] leading-[1.55] text-muted">
+    <p className="m-0 rounded-lg border border-dashed border-faint bg-surface px-5 py-7 text-center text-[13px] leading-[1.55] text-muted">
       {children}
     </p>
   );

@@ -109,7 +109,7 @@ export function PlansTabMark({ report, className }: { report: QueryPlansReport; 
 }
 
 const lineClass = cn(
-  "relative flex h-8 w-full min-w-0 items-center gap-2 rounded-[9px] border border-dashed border-border bg-transparent pr-1.5 pl-2.5 text-left text-[12px] text-muted",
+  "relative flex h-8 w-full min-w-0 items-center gap-2 rounded-md border border-dashed border-border bg-transparent pr-1.5 pl-2.5 text-left text-[12px] text-muted",
   "after:absolute after:inset-x-0 after:-inset-y-1.5",
   "max-phone:h-auto max-phone:min-h-9 max-phone:flex-wrap max-phone:gap-x-1.5 max-phone:gap-y-0.75 max-phone:py-1.75 max-phone:pr-2 max-phone:pl-2.5",
   "[&>svg]:size-3.25 [&>svg]:shrink-0",
@@ -294,7 +294,7 @@ export function PlanSteps({ query, report, schemaFile }: PlanStepsProps) {
             key={point.size}
             className={cn(
               "inline-flex items-baseline gap-1.25 rounded-full border border-border px-2 py-0.75",
-              point.chosen && "border-[1.5px] border-card-border bg-mark",
+              point.chosen && "border border-border bg-mark",
             )}
             aria-current={point.chosen ? "true" : undefined}
           >
@@ -387,7 +387,7 @@ export function IndexTry({
 
   return (
     <section
-      className="mx-3 mt-2.5 overflow-hidden rounded-[10px] border border-border max-phone:mx-2.5"
+      className="mx-3 mt-2.5 overflow-hidden rounded-md border border-border max-phone:mx-2.5"
       aria-label={`Drizzle Run tried an index on ${describeIndexTarget(index)}`}
       data-slot="index-try"
     >
@@ -429,7 +429,7 @@ export function IndexTry({
             {formatMeasure(index.measure.after, index.measure.unit)}
           </span>
         </div>
-        <code className="block overflow-x-auto rounded-[8px] border border-border bg-code px-2.5 py-1.25 font-mono text-[12px]/5 whitespace-pre text-text max-phone:px-1.5 max-phone:text-[11px]">
+        <code className="block overflow-x-auto rounded-md border border-border bg-code px-2.5 py-1.25 font-mono text-[12px]/5 whitespace-pre text-text max-phone:px-1.5 max-phone:text-[11px]">
           <DrizzleLine line={index.drizzle} />
         </code>
       </div>
@@ -454,7 +454,7 @@ export function PlansNotice({ flag, planned, onRun, canRun = false }: PlansNotic
   return (
     <div
       className={cn(
-        "mx-4 mt-3.5 mb-1 flex items-center gap-3 rounded-lg border-[1.5px] border-card-border bg-surface px-3.5 py-3 text-[13px] shadow-sticker-card [&>svg]:size-4 [&>svg]:shrink-0",
+        "mx-4 mt-3.5 mb-1 flex items-center gap-3 rounded-lg border border-border bg-surface px-3.5 py-3 text-[13px] shadow-sticker-card [&>svg]:size-4 [&>svg]:shrink-0",
         "max-phone:mx-3 max-phone:mb-0 max-phone:flex-col max-phone:gap-3 max-phone:border-0 max-phone:bg-transparent max-phone:px-5 max-phone:py-7 max-phone:text-center max-phone:shadow-none max-phone:[&>svg]:hidden",
       )}
       data-slot="plans-notice"
@@ -473,7 +473,7 @@ export function PlansNotice({ flag, planned, onRun, canRun = false }: PlansNotic
       {onRun && (
         <button
           type="button"
-          className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-md border-[1.5px] border-run-border bg-lime px-3.5 text-[13px] font-semibold text-on-lime shadow-action enabled:hover:brightness-97 enabled:active:translate-0.5 enabled:active:shadow-none disabled:opacity-55 disabled:shadow-none max-phone:h-touch [&_svg]:size-3.25 [&_svg]:fill-current"
+          className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-md border border-run-border bg-lime px-3.5 text-[13px] font-semibold text-on-lime shadow-action enabled:hover:brightness-97 enabled:active:translate-0.5 enabled:active:shadow-none disabled:opacity-55 disabled:shadow-none max-phone:h-touch [&_svg]:size-3.25 [&_svg]:fill-current"
           disabled={!canRun}
           onClick={onRun}
         >

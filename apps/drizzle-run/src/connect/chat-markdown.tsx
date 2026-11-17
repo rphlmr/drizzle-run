@@ -211,7 +211,7 @@ function ChatImageView({ src, alt }: { src: string | undefined; alt: string | un
   }
 
   if (image.kind === "inline") {
-    return <img src={image.src} alt={alt ?? ""} className="max-h-120 max-w-full rounded-[10px] border border-border" />;
+    return <img src={image.src} alt={alt ?? ""} className="max-h-120 max-w-full rounded-md border border-border" />;
   }
 
   return (
@@ -270,7 +270,7 @@ function DiagramBlock({ source }: { source: string }) {
 
   return (
     <div
-      className="my-1 overflow-x-auto rounded-[10px] border border-border bg-code p-3 first:mt-0 last:mb-0"
+      className="my-1 overflow-x-auto rounded-md border border-border bg-code p-3 first:mt-0 last:mb-0"
       data-slot="chat-diagram"
       data-state="drawn"
     >
@@ -337,7 +337,7 @@ function CodeBlock({ code, fence }: { code: string; fence: string | undefined })
 
   return (
     <div
-      className="my-1 overflow-hidden rounded-[10px] border border-border bg-code first:mt-0 last:mb-0"
+      className="my-1 overflow-hidden rounded-md border border-border bg-code first:mt-0 last:mb-0"
       data-slot="chat-code"
     >
       <div className="flex h-7 items-center justify-between border-b border-border pr-1 pl-3 text-[11px] text-muted">

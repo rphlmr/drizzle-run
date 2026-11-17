@@ -1,4 +1,3 @@
-import type { ChatMode } from "@drizzle-run/core/connect";
 import type { ConnectActivity } from "@drizzle-run/runtime/machines";
 import { assign, fromPromise, setup } from "xstate";
 
@@ -13,12 +12,11 @@ export type ChatHistoryEvent =
   | { type: "conversation.open"; conversation: string }
   | { type: "entries.change"; entries: readonly ConnectActivity[] }
   | { type: "history.change"; update: (current: ChatHistory) => ChatHistory }
-  | { type: "mode.set"; mode: ChatMode }
   | { type: "history.flush" };
 
 interface ChatHistoryContext {
   conversation: string;
-  /** The stored history with this tab's mode, answers and tuning; undefined until it loads. */
+  /** The stored history with this tab's tuning; undefined until it loads. */
   history: ChatHistory | undefined;
   /** The stored rows merged with this tab's live ones. */
   entries: readonly ConnectActivity[];
@@ -26,22 +24,15 @@ interface ChatHistoryContext {
   stored: boolean;
 }
 
-/** Where a chat's history is read and saved, and who hears the mode of the chat open now. */
+/** Where a chat's history is read and saved. */
 export interface ChatHistoryDependencies {
   load: (conversation: string) => Promise<ChatHistory>;
   /** Merges the history into the stored one, keeping what another tab saved. */
   save: (conversation: string, history: ChatHistory) => void;
-  /** Hears the chat's mode once its history loads, and each time it is set. */
-  applyMode: (conversation: string, mode: ChatMode) => void;
 }
 
 function hasContent(history: ChatHistory) {
-  return (
-    history.entries.length > 0 ||
-    history.mode !== "ask" ||
-    Object.keys(history.answers).length > 0 ||
-    history.tuning !== undefined
-  );
+  return history.entries.length > 0 || history.tuning !== undefined;
 }
 
 function isWorthSaving({ history, entries, stored }: ChatHistoryContext) {
@@ -57,11 +48,10 @@ function isWorthSaving({ history, entries, stored }: ChatHistoryContext) {
  * ```
  *
  * Changes wait at most `SAVE_DELAY_MS`, even while rows keep streaming, then save as a merge, so another tab's rows
- * stay. A chat with nothing said, in Ask mode, with no answer or tuning, is never written, unless it is already stored.
- * Changes before the history loaded are refused: they would write over it. The chat's mode is applied when its
- * history loads and when `mode.set` changes it, so the chat keeps the mode it was left in.
+ * stay. A chat with nothing said and no tuning is never written, unless it is already stored.
+ * Changes before the history loaded are refused: they would write over it.
  */
-export function createChatHistoryMachine({ load, save, applyMode }: ChatHistoryDependencies) {
+export function createChatHistoryMachine({ load, save }: ChatHistoryDependencies) {
   return setup({
     types: {
       context: declareType<ChatHistoryContext>(),
@@ -82,8 +72,6 @@ export function createChatHistoryMachine({ load, save, applyMode }: ChatHistoryD
         }
       },
       markStored: assign({ stored: ({ context }) => isWorthSaving(context) }),
-      setMode: assign({ history: ({ context }, mode: ChatMode) => ({ ...getHistory(context), mode }) }),
-      applyMode: ({ context }) => applyMode(context.conversation, getHistory(context).mode),
     },
   }).createMachine({
     id: "chatHistory",
@@ -108,12 +96,9 @@ export function createChatHistoryMachine({ load, save, applyMode }: ChatHistoryD
           input: ({ context }) => context.conversation,
           onDone: {
             target: "ready",
-            actions: [
-              assign({ history: ({ event }) => event.output, stored: ({ event }) => hasContent(event.output) }),
-              "applyMode",
-            ],
+            actions: assign({ history: ({ event }) => event.output, stored: ({ event }) => hasContent(event.output) }),
           },
-          onError: { target: "ready", actions: [assign({ history: EMPTY_HISTORY }), "applyMode"] },
+          onError: { target: "ready", actions: assign({ history: EMPTY_HISTORY }) },
         },
       },
       ready: {
@@ -133,10 +118,6 @@ export function createChatHistoryMachine({ load, save, applyMode }: ChatHistoryD
                 target: "scheduled",
                 actions: assign({ history: ({ context, event }) => event.update(getHistory(context)) }),
               },
-              "mode.set": {
-                target: "scheduled",
-                actions: [{ type: "setMode", params: ({ event }) => event.mode }, "applyMode"],
-              },
             },
           },
           scheduled: {
@@ -146,7 +127,6 @@ export function createChatHistoryMachine({ load, save, applyMode }: ChatHistoryD
               "history.change": {
                 actions: assign({ history: ({ context, event }) => event.update(getHistory(context)) }),
               },
-              "mode.set": { actions: [{ type: "setMode", params: ({ event }) => event.mode }, "applyMode"] },
               "history.flush": { target: "idle", actions: ["save", "markStored"] },
               "conversation.open": {
                 guard: { type: "isOtherConversation", params: ({ event }) => event.conversation },

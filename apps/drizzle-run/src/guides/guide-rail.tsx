@@ -31,7 +31,7 @@ import { Button } from "../components/ui/button";
 import { Skeleton } from "../components/ui/skeleton";
 import { cn } from "../lib/utils";
 import type { AsideControls } from "../project/project-view";
-import { RunButtonIcon, RunShortcut } from "../ui/run-button";
+import { RunButtonIcon } from "../ui/run-button";
 import { readGuideMark, readStepMeta } from "./catalog";
 import { RichLine, RichText } from "./rich-text";
 import { getStepEdits } from "./step-edits";
@@ -79,7 +79,7 @@ const segmentTones: Record<Segment, string> = {
 };
 
 const numberTones = {
-  done: "border-[1.5px] border-run-border bg-lime text-on-lime",
+  done: "border border-run-border bg-lime text-on-lime",
   now: "bg-segment text-segment-fg",
   next: "border-[1.5px] border-faint text-muted",
   failed: "bg-err-bg text-err",
@@ -200,8 +200,9 @@ function RunStepButton({
   const preparing = controls.runState === "preparing";
 
   return (
+    // Desktop already shows a lime Run above the code, so the step's own Run stays quiet there: one lime Run per view.
     <Button
-      variant="run"
+      variant={phone ? "run" : "outline"}
       size="run"
       data-state={controls.runState}
       className={cn("w-full justify-center", phone ? "h-12 text-[15px]" : "h-10")}
@@ -211,7 +212,6 @@ function RunStepButton({
     >
       <RunButtonIcon state={controls.runState} />
       {running ? "Cancel" : pair ? "Run both" : "Run"}
-      {!running && !phone && <RunShortcut />}
     </Button>
   );
 }
@@ -317,7 +317,7 @@ function FlatStep({
         type="button"
         className={cn(
           rowClass,
-          "group -my-1.5 w-full cursor-pointer grid-cols-[24px_minmax(0,1fr)_auto] rounded-[10px] border-0 bg-transparent py-1.5 text-left text-text",
+          "group -my-1.5 w-full cursor-pointer grid-cols-[24px_minmax(0,1fr)_auto] rounded-md border-0 bg-transparent py-1.5 text-left text-text",
           "hover:bg-surface-2 focus-visible:bg-surface-2 focus-visible:outline-2 focus-visible:outline-accent-text",
         )}
         aria-label={`Go back to step ${number}: ${title}`}
@@ -365,7 +365,7 @@ function StepCardSkeleton() {
         <Skeleton className="h-3.5 w-11/12" />
         <Skeleton className="h-3.5 w-3/5" />
       </div>
-      <Skeleton className="h-10 w-full max-w-none rounded-[10px]" />
+      <Skeleton className="h-10 w-full max-w-none rounded-md" />
     </>
   );
 }
@@ -395,7 +395,7 @@ function StepListSkeleton({ index, count }: { index: number; count: number }) {
     ),
   );
 }
-const nowCardClass = cn(cardClass, "border border-card-border shadow-sticker");
+const nowCardClass = cn(cardClass, "border border-border shadow-sticker");
 const pastCardClass = cn(cardClass, "border border-border");
 const cardTitleClass = cn("text-[14.5px] font-bold");
 const bodyTextClass = cn("text-[14px] leading-[1.5]");
@@ -437,7 +437,7 @@ export function GuideRail({ guide, controls, leave: leaveMode, done, collapsed, 
 
   if (collapsed && !phone) {
     return (
-      <div className="flex h-full flex-col items-center gap-2 rounded-[14px] border border-border bg-surface px-1.5 py-3">
+      <div className="flex h-full flex-col items-center gap-2 rounded-lg border border-border bg-surface px-1.5 py-3">
         <Button variant="ghost" size="icon-sm" aria-label="Expand guide" onClick={() => onCollapsedChange(false)}>
           <ChevronRightIcon aria-hidden="true" />
         </Button>
@@ -523,7 +523,7 @@ export function GuideRail({ guide, controls, leave: leaveMode, done, collapsed, 
   const nextGuide = done.next && (
     <Link
       to={done.next.href}
-      className="flex items-center gap-2.5 rounded-[12px] border border-border px-3.5 py-3 text-text no-underline hover:border-muted [&>svg]:size-4"
+      className="flex items-center gap-2.5 rounded-lg border border-border px-3.5 py-3 text-text no-underline hover:border-muted [&>svg]:size-4"
     >
       <span className="flex-1">
         <span className="block text-[11px] text-muted">Next guide</span>
@@ -541,7 +541,7 @@ export function GuideRail({ guide, controls, leave: leaveMode, done, collapsed, 
       >
         <button
           type="button"
-          className="-mx-4 -mt-2 flex min-h-11 touch-none items-center justify-between gap-3 rounded-t-[20px] border-0 border-b border-border bg-surface px-4 text-[12px] font-semibold text-muted select-none"
+          className="relative -mx-4 -mt-2 flex min-h-13 touch-none items-center gap-3 rounded-t-[20px] border-0 bg-surface px-4 pt-2 text-muted select-none"
           aria-label={collapsed ? "Expand guide" : "Collapse guide"}
           aria-expanded={!collapsed}
           onPointerDown={(event) => {
@@ -569,18 +569,17 @@ export function GuideRail({ guide, controls, leave: leaveMode, done, collapsed, 
             sheetGesture.current = null;
           }}
         >
-          <span>{collapsed ? "Show guide steps" : "Hide guide steps"}</span>
-          <span className="flex items-center gap-1.5 font-normal">
-            Swipe {collapsed ? "up" : "down"}
-            {collapsed ? <ChevronUpIcon aria-hidden="true" /> : <ChevronDownIcon aria-hidden="true" />}
-          </span>
-        </button>
-        <div className="flex items-center gap-2.5">
-          <span className="text-[11px] font-bold tracking-[0.06em] whitespace-nowrap text-muted uppercase">
+          <span
+            aria-hidden="true"
+            className="absolute top-1.5 left-1/2 h-1 w-9 -translate-x-1/2 rounded-pill bg-card-border"
+          />
+          <span className="flex w-16 shrink-0">{segmentBar}</span>
+          <span className="min-w-0 flex-1 truncate text-left text-[13px] font-medium text-text">
             {label}
+            {collapsed && !finished && stage !== "loading" && ` · ${step.title}`}
           </span>
-          {segmentBar}
-        </div>
+          {collapsed ? <ChevronUpIcon aria-hidden="true" /> : <ChevronDownIcon aria-hidden="true" />}
+        </button>
         {!collapsed && (
           <div className="-m-1 flex min-h-0 flex-col gap-3 overflow-y-auto p-1 *:shrink-0">
             {stage === "loading" ? (
@@ -670,7 +669,7 @@ export function GuideRail({ guide, controls, leave: leaveMode, done, collapsed, 
 
   return (
     <div
-      className="flex h-full min-h-0 flex-col overflow-hidden rounded-[14px] border border-border bg-surface"
+      className="flex h-full min-h-0 flex-col overflow-hidden rounded-lg border border-border bg-surface shadow-sticker"
       aria-labelledby="guide-title"
     >
       <div className="flex flex-col gap-2.5 border-b border-border pt-3.5 pr-3 pb-3 pl-4">
@@ -690,7 +689,7 @@ export function GuideRail({ guide, controls, leave: leaveMode, done, collapsed, 
         {heading}
       </div>
       <ol
-        className="m-0 flex min-h-0 flex-1 list-none flex-col gap-3.5 overflow-y-auto bg-panel px-4 py-3.5 *:shrink-0"
+        className="m-0 flex min-h-0 flex-1 list-none flex-col gap-3.5 overflow-y-auto bg-surface px-4 py-3.5 *:shrink-0"
         aria-label="Guide steps"
         aria-busy={stage === "loading"}
       >

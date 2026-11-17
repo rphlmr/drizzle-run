@@ -1,4 +1,4 @@
-import { ChevronDownIcon, SearchIcon } from "lucide-react";
+import { ChevronDownIcon, SearchIcon, SlidersHorizontalIcon } from "lucide-react";
 import { useEffect, useRef } from "react";
 import {
   useFetcher,
@@ -18,8 +18,11 @@ import { Button } from "../components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuLabel,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu";
 import { Skeleton } from "../components/ui/skeleton";
@@ -27,9 +30,10 @@ import { getErrorText } from "../lib/error-text";
 import { useAppendedPages } from "../lib/use-appended-pages";
 import { cn } from "../lib/utils";
 import { SiteMain } from "../shell/site-header";
-import { Chip } from "../ui/chip";
 import { FieldError } from "../ui/field";
+import { phoneSheetClass, phoneSheetProps } from "../ui/phone-sheet";
 import { ToggleGroup } from "../ui/toggle-group";
+import { PHONE_QUERY, useMediaQuery } from "../ui/use-media-query";
 import { useWorkspace } from "../workspace/context";
 import { CommunityCard } from "./community-card";
 import { COMMUNITY_NOTICE_SETTING } from "./community-open";
@@ -54,7 +58,7 @@ const DATABASES: readonly { value: "all" | CommunityDialect; label: string }[] =
 ];
 
 const TOPIC_FILTERS: readonly { value: CommunityTopic; label: string }[] = [
-  { value: "playground", label: "All" },
+  { value: "playground", label: "Playgrounds" },
   { value: "bug-repros", label: "Bug repros" },
 ];
 
@@ -202,6 +206,100 @@ function LoadingShares() {
 }
 
 /** The Community page while its first load runs. */
+/** Phones: the topic as a row of chips under the search. */
+function TopicChips({ value, onChange }: { value: CommunityTopic; onChange: (topic: CommunityTopic) => void }) {
+  return (
+    <div role="group" aria-label="Topic" className="flex basis-full gap-1.5">
+      {TOPIC_FILTERS.map((topic) => (
+        <button
+          key={topic.value}
+          type="button"
+          aria-pressed={topic.value === value}
+          onClick={() => onChange(topic.value)}
+          className={cn(
+            "min-h-9 rounded-full border border-border bg-surface px-3.5 text-[13px] text-muted transition-colors",
+            "aria-pressed:border-segment aria-pressed:bg-segment aria-pressed:text-segment-fg",
+          )}
+        >
+          {topic.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+/** Phones: the database and the sort behind one button beside the search, in a bottom sheet. */
+function FilterSheet({ query, change }: { query: CommunityQuery; change: (next: Partial<CommunityQuery>) => void }) {
+  const active = (query.dialect === undefined ? 0 : 1) + (query.sort === SORTS[0].value ? 0 : 1);
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        render={
+          <Button
+            variant="outline"
+            size="icon"
+            className="relative size-touch shrink-0 rounded-md"
+            aria-label={active > 0 ? `Filters, ${active} on` : "Filters"}
+          />
+        }
+      >
+        <SlidersHorizontalIcon aria-hidden="true" />
+        {active > 0 && (
+          <span
+            aria-hidden="true"
+            className="absolute -top-1.5 -right-1.5 grid size-4.5 place-items-center rounded-full bg-segment text-[10.5px] font-semibold text-segment-fg"
+          >
+            {active}
+          </span>
+        )}
+      </DropdownMenuTrigger>
+      <DropdownMenuContent {...phoneSheetProps} className={phoneSheetClass}>
+        <span aria-hidden="true" className="mx-auto mb-2 block h-1 w-9 rounded-pill bg-card-border" />
+        <DropdownMenuGroup>
+          <DropdownMenuLabel>Database</DropdownMenuLabel>
+          <DropdownMenuRadioGroup
+            value={query.dialect ?? "all"}
+            onValueChange={(value) => {
+              const dialect = DATABASES.find((item) => item.value === value)?.value;
+
+              if (dialect !== undefined) {
+                change({ dialect: dialect === "all" ? undefined : dialect });
+              }
+            }}
+          >
+            {DATABASES.map((database) => (
+              <DropdownMenuRadioItem key={database.value} value={database.value} className="min-h-11">
+                {database.label}
+              </DropdownMenuRadioItem>
+            ))}
+          </DropdownMenuRadioGroup>
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          <DropdownMenuLabel>Sort</DropdownMenuLabel>
+          <DropdownMenuRadioGroup
+            value={query.sort}
+            onValueChange={(value) => {
+              const sort = SORTS.find((item) => item.value === value)?.value;
+
+              if (sort !== undefined) {
+                change({ sort });
+              }
+            }}
+          >
+            {SORTS.map((sort) => (
+              <DropdownMenuRadioItem key={sort.value} value={sort.value} className="min-h-11">
+                {sort.label}
+              </DropdownMenuRadioItem>
+            ))}
+          </DropdownMenuRadioGroup>
+        </DropdownMenuGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
 export function LoadingCommunityPage() {
   return (
     <SiteMain className="gap-4.5 pt-7">
@@ -213,6 +311,7 @@ export function LoadingCommunityPage() {
 /** Community shares: playgrounds their owners chose to list, filtered and paged by the Worker. */
 export function CommunityPage() {
   const signedIn = useAuth().status === "signedIn";
+  const phone = useMediaQuery(PHONE_QUERY);
   const workspace = useWorkspace();
   const loaded = useLoaderData<typeof loadCommunityPage>();
   const location = useLocation();
@@ -238,7 +337,11 @@ export function CommunityPage() {
   const retrying = revalidator.state === "loading";
   const searchInput = useRef<HTMLInputElement>(null);
   const searchPause = useRef<ReturnType<typeof setTimeout>>(undefined);
-  const filtered = query.search.trim() !== "" || query.topic !== DEFAULT_COMMUNITY_TOPIC || query.dialect !== undefined;
+  // From the list on screen, not the one loading, so its empty message never changes before the new list lands.
+  const filtered =
+    loaded.query.search.trim() !== "" ||
+    loaded.query.topic !== DEFAULT_COMMUNITY_TOPIC ||
+    loaded.query.dialect !== undefined;
 
   useEffect(() => () => clearTimeout(searchPause.current), []);
 
@@ -302,17 +405,17 @@ export function CommunityPage() {
       <SiteMain className="gap-4.5 pt-7">
         <div className="flex items-end gap-6 max-phone:flex-col max-phone:items-start max-phone:gap-2">
           <div className="flex flex-1 flex-col gap-2">
-            <h1 className="font-display text-[24px] font-semibold tracking-[-0.03em]">Community shares</h1>
+            <h1 className="font-display text-[20px] font-semibold tracking-[-0.02em]">Community shares</h1>
             <p className="text-[13px] text-muted">Explore what others are building with Drizzle.</p>
           </div>
-          <p className="max-w-60 text-right text-[12px]/[1.5] text-muted max-phone:text-left">
-            {signedIn ? "Add yours: share a project" : "Add yours: sign in with GitHub, share a project"}
-            <br className="max-phone:hidden" /> and pick <b className="font-semibold text-text">Community</b>.
+          <p className="max-w-72 text-right text-[12px]/[1.5] text-balance text-muted max-phone:hidden">
+            {signedIn ? "Add yours: share a project" : "Add yours: sign in with GitHub, share a project"} and pick{" "}
+            <b className="font-semibold text-text">Community</b>.
           </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          <div className="relative min-w-40 flex-1 max-phone:basis-full sm:max-w-90">
+          <div className="relative min-w-40 flex-1 max-phone:min-w-0 sm:max-w-90">
             <SearchIcon
               className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted"
               aria-hidden="true"
@@ -328,106 +431,113 @@ export function CommunityPage() {
               onChange={searchAfterPause}
             />
           </div>
-          <fieldset
-            className="flex min-w-auto flex-wrap gap-1.5 max-phone:w-full max-phone:scrollbar-none max-phone:flex-nowrap max-phone:overflow-x-auto"
-            aria-label="Topic"
-          >
-            {TOPIC_FILTERS.map((topic) => (
-              <Chip
-                key={topic.value}
-                pressed={query.topic === topic.value}
-                onClick={() => change({ topic: topic.value })}
-              >
-                {topic.label}
-              </Chip>
-            ))}
-          </fieldset>
-          <ToggleGroup
-            label="Database"
-            options={DATABASES}
-            value={query.dialect ?? "all"}
-            onChange={(value) => {
-              change({ dialect: value === "all" ? undefined : value });
-            }}
-            className="ml-auto max-phone:ml-0 max-phone:flex-1"
-          />
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              render={<Button variant="outline" className="h-9 rounded-md px-3 font-normal max-phone:h-touch" />}
-              aria-label={`Sort: ${SORTS.find((sort) => sort.value === query.sort)?.label ?? ""}`}
-            >
-              {SORTS.find((sort) => sort.value === query.sort)?.label}
-              <ChevronDownIcon className="size-3.5" aria-hidden="true" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-auto">
-              <DropdownMenuRadioGroup
-                value={query.sort}
-                onValueChange={(value) => {
-                  const sort = SORTS.find((item) => item.value === value)?.value;
-
-                  if (sort !== undefined) {
-                    change({ sort });
-                  }
+          {phone ? (
+            <>
+              <FilterSheet query={query} change={change} />
+              <TopicChips value={query.topic} onChange={(topic) => change({ topic })} />
+            </>
+          ) : (
+            <>
+              <ToggleGroup
+                label="Topic"
+                options={TOPIC_FILTERS}
+                value={query.topic}
+                onChange={(topic) => change({ topic })}
+              />
+              <ToggleGroup
+                label="Database"
+                options={DATABASES}
+                value={query.dialect ?? "all"}
+                onChange={(value) => {
+                  change({ dialect: value === "all" ? undefined : value });
                 }}
-              >
-                {SORTS.map((sort) => (
-                  <DropdownMenuRadioItem key={sort.value} value={sort.value}>
-                    {sort.label}
-                  </DropdownMenuRadioItem>
-                ))}
-              </DropdownMenuRadioGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
+                className="ml-auto max-phone:ml-0 max-phone:flex-1"
+              />
+              <DropdownMenu>
+                <DropdownMenuTrigger
+                  render={<Button variant="outline" className="h-9 rounded-md px-3 font-normal max-phone:h-touch" />}
+                  aria-label={`Sort: ${SORTS.find((sort) => sort.value === query.sort)?.label ?? ""}`}
+                >
+                  {SORTS.find((sort) => sort.value === query.sort)?.label}
+                  <ChevronDownIcon className="size-3.5" aria-hidden="true" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-auto">
+                  <DropdownMenuRadioGroup
+                    value={query.sort}
+                    onValueChange={(value) => {
+                      const sort = SORTS.find((item) => item.value === value)?.value;
+
+                      if (sort !== undefined) {
+                        change({ sort });
+                      }
+                    }}
+                  >
+                    {SORTS.map((sort) => (
+                      <DropdownMenuRadioItem key={sort.value} value={sort.value}>
+                        {sort.label}
+                      </DropdownMenuRadioItem>
+                    ))}
+                  </DropdownMenuRadioGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </>
+          )}
         </div>
 
-        {loaded.status === "failed" && !retrying && !pendingList ? (
-          <div className="my-6 flex flex-col items-start gap-3">
-            <FieldError>{loaded.error}</FieldError>
-            <Button variant="outline" onClick={() => void revalidator.revalidate()}>
-              Try again
-            </Button>
-          </div>
-        ) : (pendingList || retrying) && shares.length === 0 ? (
-          <LoadingShares />
-        ) : shares.length === 0 ? (
-          <div className="my-6 flex flex-col items-start gap-3 text-muted">
-            {filtered ? (
-              <>
-                <p>No share matches these filters.</p>
-                <Button variant="outline" onClick={clearFilters}>
-                  Clear filters
-                </Button>
-              </>
-            ) : (
-              <p>
-                {signedIn
-                  ? "No shares yet. Share a project and pick Community to add the first one."
-                  : "No shares yet. Sign in with GitHub, share a project and pick Community to add the first one."}
-              </p>
-            )}
-          </div>
-        ) : (
-          <>
-            {/* role="list" because Safari drops list semantics from a list without bullets. */}
-            <ul className={shareGridClass} role="list" aria-label="Community shares" aria-busy={pendingList}>
-              {shares.map((share) => (
-                <li key={share.id} className="flex min-w-0">
-                  <CommunityCard share={share} onOpen={openShare} />
-                </li>
-              ))}
-            </ul>
-            {(nextCursor !== undefined || moreError !== "") && (
-              <div className="flex flex-col items-center gap-2">
-                {moreError && <FieldError>{moreError}</FieldError>}
-                {nextCursor !== undefined && (
-                  <Button variant="outline" disabled={loadingMore} onClick={showMore}>
-                    {loadingMore ? "Loading…" : "Show more shares"}
+        {/* A filter change keeps what is shown, dimmed after a beat, until its list lands: no skeleton flashes in. */}
+        <div
+          className={cn("flex flex-col gap-4.5 transition-opacity", pendingList && "opacity-60 delay-150")}
+          aria-busy={pendingList}
+        >
+          {loaded.status === "failed" && !retrying && !pendingList ? (
+            <div className="my-6 flex flex-col items-start gap-3">
+              <FieldError>{loaded.error}</FieldError>
+              <Button variant="outline" onClick={() => void revalidator.revalidate()}>
+                Try again
+              </Button>
+            </div>
+          ) : retrying && shares.length === 0 ? (
+            <LoadingShares />
+          ) : shares.length === 0 ? (
+            <div className="my-6 flex flex-col items-start gap-3 text-muted">
+              {filtered ? (
+                <>
+                  <p>No share matches these filters.</p>
+                  <Button variant="outline" onClick={clearFilters}>
+                    Clear filters
                   </Button>
-                )}
-              </div>
-            )}
-          </>
-        )}
+                </>
+              ) : (
+                <p>
+                  {signedIn
+                    ? "No shares yet. Share a project and pick Community to add the first one."
+                    : "No shares yet. Sign in with GitHub, share a project and pick Community to add the first one."}
+                </p>
+              )}
+            </div>
+          ) : (
+            <>
+              {/* role="list" because Safari drops list semantics from a list without bullets. */}
+              <ul className={shareGridClass} role="list" aria-label="Community shares">
+                {shares.map((share) => (
+                  <li key={share.id} className="flex min-w-0">
+                    <CommunityCard share={share} onOpen={openShare} />
+                  </li>
+                ))}
+              </ul>
+              {(nextCursor !== undefined || moreError !== "") && (
+                <div className="flex flex-col items-center gap-2">
+                  {moreError && <FieldError>{moreError}</FieldError>}
+                  {nextCursor !== undefined && (
+                    <Button variant="outline" disabled={loadingMore} onClick={showMore}>
+                      {loadingMore ? "Loading…" : "Show more shares"}
+                    </Button>
+                  )}
+                </div>
+              )}
+            </>
+          )}
+        </div>
       </SiteMain>
     </>
   );

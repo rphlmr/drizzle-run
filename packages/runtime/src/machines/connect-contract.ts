@@ -2,7 +2,6 @@ import type {
   AgentId,
   AgentTuning,
   ChatContextEntry,
-  ChatMode,
   ChatProject,
   CompanionInfo,
   ConnectMessage,
@@ -40,12 +39,11 @@ export interface ConnectSocketHandlers {
   close(code: number, reason: string): void;
 }
 
-/** A tool call the host executes, already checked against its schema and the chat mode. */
+/** A tool call the host executes, already checked against its schema and the chat's project. */
 export interface ConnectToolRequest {
   id: string;
   call: ConnectToolCall;
   conversation?: string;
-  mode: ChatMode;
   /**
    * The project the call was checked against: the chat's, or the open one for a terminal call. The host refuses the
    * call when another project is open by the time it runs. Absent when no project was open.
@@ -60,11 +58,10 @@ export interface ConnectOpenProject {
   origin?: ProjectOrigin;
 }
 
-/** What the tab keeps about a chat: the project its turns act on and its mode. */
+/** What the tab keeps about a chat: the project its turns act on. */
 export interface ConnectChat {
   /** The project its last message was about; undefined when it named none. */
   projectId: string | undefined;
-  mode: ChatMode;
 }
 
 /** An agent's `run` of a community project, waiting for the user to run it or not. */
@@ -181,8 +178,6 @@ export interface ConnectContext {
   companionSeen: boolean;
   /** Whether the chat dock is open: an open dock makes a link code on its own, once. */
   dock: "open" | "closed";
-  /** The mode of the chat in front, and of terminal calls. Each chat keeps its own in `chats`. */
-  mode: ChatMode;
   chats: Readonly<Record<string, ConnectChat>>;
   busy: RelayBusyFrame | undefined;
   /** This tab's share of today's AI chat, as the relay last told it. */
@@ -221,7 +216,7 @@ export type ConnectEvent =
   | { type: "tab.activate" }
   | { type: "chat.agent.choose"; agent: AgentId }
   /**
-   * `scope` is the chat's view: a guide or a shared link always sends in Ask mode. `agent` is the chat's agent; one
+   * `scope` is the chat's view: a guide or a shared link offers only the read tools. `agent` is the chat's agent; one
    * the companion does not offer falls back to the companion's choice. `tuning` picks that agent's model and effort;
    * a stale effort is dropped, and a model it no longer offers too. `context` is the chat so far, which the companion
    * gives only to a new agent session.
@@ -237,8 +232,6 @@ export type ConnectEvent =
       context?: readonly ChatContextEntry[];
     }
   | { type: "chat.turn.stop"; conversation: string }
-  /** `conversation` sets that chat's mode too; without it, only terminal calls and the next new chat follow it. */
-  | { type: "chat.mode.set"; mode: ChatMode; conversation?: string }
   | { type: "edit.keep"; id: string }
   | { type: "edit.undo"; id: string }
   /** The open view or its project changed: chats about another project stop, and their runs are declined. */
@@ -296,8 +289,6 @@ export type EditStoreCommand = { type: "edits.save"; edits: readonly PendingEdit
 /** Emitted for the host: activity for the chat, edit decisions, and the end of a pairing */
 export type ConnectEmitted =
   | { type: "activity.added"; activity: ConnectActivity }
-  /** An edit tool was refused in Ask mode: the chat offers "Allow edits in this chat". */
-  | { type: "edit.requested"; tool: ConnectToolName; conversation?: string }
   | { type: "edit.pending"; edit: PendingEdit }
   | { type: "edit.kept"; edit: PendingEdit }
   | { type: "edit.undone"; edit: PendingEdit }

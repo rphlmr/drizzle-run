@@ -9,27 +9,30 @@
 :root {
   color-scheme: light;
 
-  --bg: #fafafa;
-  --panel: #f5f5f5;
+  --bg: #f4f4f5;
+  --panel: #f4f4f5;
   --surface: #ffffff;
-  --surface-2: #f5f5f5;
-  --border: #e5e5e5;
-  --text: #171717;
-  --text-soft: #404040;
-  --text-muted: #666666;
-  --text-faint: #666666;
+  --surface-2: #f4f4f5;
+  --border: #e4e4e7;
+  --text: #09090b;
+  --text-soft: #3f3f46;
+  --text-muted: #66666e;
+  --text-faint: #66666e;
   --accent-text: #4a7a0c;
   --lime: #c5f74f;
   /* The darker stripe of the striped lime progress bar, the same in both themes. */
   --lime-stripe: #b2e53a;
-  --on-lime: #0a0a0a;
-  --ink: #0a0a0a;
+  --on-lime: #09090b;
+  --ink: #09090b;
   --ok: #3d660a;
   --ok-bg: #e6f4c8;
+  /* Database brand marks: the PostgreSQL elephant blue, the SQLite feather blue. */
+  --postgresql: #336791;
+  --sqlite: #0f80cc;
   --err: #a34a08;
   --err-bg: #fbe5d4;
   --warn-dot: #ffb224;
-  --mark-bg: #eef6d9;
+  --mark-bg: #f4f4f5;
   /*
    * Line bands in the editor: Monaco paints them over its selection, so they are see-through
    * and land on --err-bg and --mark-bg over --code-bg.
@@ -38,48 +41,48 @@
   --mark-wash: #aad24133;
   --notes-bg: #ddd3fb;
   /* Dots of the output's results grid. */
-  --dot: #d4d4d4;
+  --dot: #e4e4e7;
 
   --logo-bg: #c5f74f;
-  --logo-fg: #0a0a0a;
-  --progress-fill: #0a0a0a;
-  --segment-active-bg: #0a0a0a;
-  --segment-active-fg: #ffffff;
-  --run-border: #0a0a0a;
-  --action-edge: #0a0a0a;
+  --logo-fg: #09090b;
+  --progress-fill: #18181b;
+  --segment-active-bg: #18181b;
+  --segment-active-fg: #fafafa;
+  --run-border: #c5f74f;
+  --action-edge: #0000001a;
   /* Cards, dialogs, popovers, inputs and selected choices; run-border stays on lime controls. */
-  --card-border: #d4d4d4;
+  --card-border: #d4d4d8;
   --kbd-bg: #0a0a0a20;
   --overlay: #11111166;
-  --scroll-thumb: #9ca3af;
-  --scroll-thumb-hover: #4b5563;
-  --dot-grid: #d4d4d4;
+  --scroll-thumb: #d4d4d8;
+  --scroll-thumb-hover: #a1a1aa;
+  --dot-grid: #e4e4e7;
   /* The terminal look: the companion command and the terminal mirror in the AI chat. */
-  --term-bg: #0a0a0a;
+  --term-bg: #09090b;
   --term-fg: #e5e7eb;
   --term-dim: #a3a3a3;
 
-  --code-bg: #fafafa;
-  --code-line: #f0f0f0;
+  --code-bg: #ffffff;
+  --code-line: #f4f4f5;
   --c-key: #7c3aed;
   --c-str: #0f6b4a;
   --c-fn: #1d4ed8;
   --c-com: #4b5563;
 
-  --shadow-action: 2px 2px 0 var(--action-edge);
-  --shadow-sticker: 0 1px 2px #19202c14;
-  --shadow-sticker-card: 0 1px 3px #19202c0a, 0 4px 12px #19202c05;
-  --shadow-sticker-lg: 0 2px 4px #19202c08, 0 8px 24px #19202c08;
-  --shadow-pop: 0 4px 12px #19202c0a, 0 16px 40px #19202c14;
+  --shadow-action: 0 1px 2px #0000000d;
+  --shadow-sticker: 0 1px 2px #0000000d;
+  --shadow-sticker-card: 0 1px 2px #0000000d;
+  --shadow-sticker-lg: 0 1px 3px #0000001a, 0 1px 2px -1px #0000001a;
+  --shadow-pop: 0 4px 6px -1px #0000001a, 0 2px 4px -2px #0000001a;
 
   --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Geist", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
   --radius-sm: 4px;
-  --radius: 6px;
-  --radius-md: 6px;
-  --radius-lg: 8px;
+  --radius: 8px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
   --radius-pill: 999px;
 
   --space-1: 4px;
@@ -102,50 +105,52 @@
 :root[data-theme="dark"] {
   color-scheme: dark;
 
-  --bg: #0a0a0a;
-  --panel: #171717;
-  --surface: #171717;
-  --surface-2: #262626;
-  --border: #404040;
+  --bg: #09090b;
+  --panel: #18181b;
+  --surface: #121214;
+  --surface-2: #27272a;
+  --border: #27272a;
   --text: #fafafa;
-  --text-soft: #e5e5e5;
-  --text-muted: #a3a3a3;
-  --text-faint: #a3a3a3;
+  --text-soft: #d4d4d8;
+  --text-muted: #a1a1aa;
+  --text-faint: #a1a1aa;
   --accent-text: #c5f74f;
   --ok: #c5f74f;
   --ok-bg: #1e2a10;
+  --postgresql: #7aa7dc;
+  --sqlite: #5eb2ec;
   --err: #ffb224;
   --err-bg: #2e1d0e;
-  --mark-bg: #262f17;
+  --mark-bg: #27272a;
   --err-wash: #9a3d0233;
   --mark-wash: #c5f74f1c;
   --notes-bg: #2b2540;
-  --dot: #242424;
+  --dot: #27272a;
 
   --logo-bg: #c5f74f;
   --logo-fg: #0a0a0a;
   --progress-fill: #c5f74f;
-  --segment-active-bg: #f3f4f6;
-  --segment-active-fg: #0a0a0a;
-  --run-border: #e5e5e5;
-  --action-edge: #e5e5e5;
-  --card-border: #525252;
+  --segment-active-bg: #fafafa;
+  --segment-active-fg: #09090b;
+  --run-border: #c5f74f;
+  --action-edge: #00000000;
+  --card-border: #3f3f46;
   --overlay: #000000a6;
-  --scroll-thumb: #525252;
-  --scroll-thumb-hover: #a3a3a3;
-  --dot-grid: #242424;
-  --term-bg: #0a0a0a;
+  --scroll-thumb: #3f3f46;
+  --scroll-thumb-hover: #71717a;
+  --dot-grid: #27272a;
+  --term-bg: #09090b;
 
-  --code-bg: #171717;
-  --code-line: #262626;
+  --code-bg: #121214;
+  --code-line: #1c1c1f;
   --c-key: #c4a7ff;
   --c-str: #8fdcb4;
   --c-fn: #8ab4ff;
   --c-com: #a3a3a3;
 
-  --shadow-action: 2px 2px 0 var(--action-edge);
-  --shadow-sticker: 0 1px 2px #00000033;
-  --shadow-sticker-card: 0 1px 3px #00000026, 0 4px 12px #0000001a;
-  --shadow-sticker-lg: 0 2px 4px #00000026, 0 8px 24px #00000033;
-  --shadow-pop: 0 4px 12px #00000033, 0 16px 40px #00000066;
+  --shadow-action: 0 1px 2px #0000004d;
+  --shadow-sticker: 0 1px 2px #0000004d;
+  --shadow-sticker-card: 0 1px 2px #0000004d;
+  --shadow-sticker-lg: 0 1px 3px #00000066, 0 1px 2px -1px #00000066;
+  --shadow-pop: 0 4px 6px -1px #00000080, 0 2px 4px -2px #00000080;
 }

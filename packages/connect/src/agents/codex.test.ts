@@ -143,8 +143,12 @@ describe("Codex plugin", () => {
     await expect(access(dirname(catalogFile))).rejects.toThrow("ENOENT");
   });
 
-  it("should offer Codex's documented models, starting on GPT-6 Sol when the account has it, else GPT-6 Luna", async () => {
+  it("should prefer GPT-6.1 Sol, falling back to GPT-6 Sol then GPT-6 Luna based on account access", async () => {
     const flags = [...CODEX_REQUIRED_FLAGS, "--model"];
+    const withSol61 = await codexPlugin.check(
+      "/bin/codex",
+      makeFakeCli({ flags, accountModels: ["gpt-6-luna", "gpt-6-sol", "gpt-6.1-sol"] }),
+    );
     const withSol = await codexPlugin.check(
       "/bin/codex",
       makeFakeCli({ flags, accountModels: ["gpt-6-luna", "gpt-6-sol"] }),
@@ -153,6 +157,10 @@ describe("Codex plugin", () => {
     const unreadable = await codexPlugin.check("/bin/codex", makeFakeCli({ flags }));
     const withoutModel = await codexPlugin.check("/bin/codex", makeFakeCli({ flags: CODEX_REQUIRED_FLAGS }));
 
+    expect(withSol61).toMatchObject({
+      ok: true,
+      agent: { models: CODEX_CHOICES.models, defaults: { model: "gpt-6.1-sol", effort: "medium" } },
+    });
     expect(withSol).toMatchObject({
       ok: true,
       agent: { models: CODEX_CHOICES.models, defaults: { model: "gpt-6-sol", effort: "medium" } },
