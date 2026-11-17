@@ -246,7 +246,12 @@ export function SidePane({
 
   // Both sides keep their output mounted; on a phone only the shown side's ends the tab row with its status and tools.
   const output = (
-    <div className={cn("h-full min-h-0", phone && "flex flex-col px-4 py-3")}>
+    <div
+      className={cn(
+        "h-full min-h-0",
+        phone && "flex flex-col px-4 py-3 [&>section]:rounded-lg [&>section]:border [&>section]:border-border",
+      )}
+    >
       <SideOutputSlot off={hidden}>
         <OutputPanel
           label={release.label}

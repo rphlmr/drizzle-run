@@ -1,4 +1,4 @@
-import { useRef, useState, type KeyboardEvent, type ReactNode } from "react";
+import { useLayoutEffect, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
 
 import type { ChatTarget } from "../connect/chat-panel";
 import { ChatDock } from "../connect/chat-panel";
@@ -32,10 +32,12 @@ export interface WorkspaceAside {
   /** Names the panel and its phone view. */
   label: string;
   content: ReactNode;
-  /** A phone shows it as a bottom sheet below the code and output instead of a view of its own. */
+  /** A phone shows it as a bottom sheet over the code and output instead of a view of its own. */
   sheet?: boolean;
-  /** Drawn at its content's width, without a resize handle. */
+  /** Drawn at its content's width, without a resize handle; a phone's sheet shows only its header. */
   collapsed?: boolean;
+  /** Folds the open sheet, as a tap on the backdrop does. */
+  onCollapse?: () => void;
   /**
    * The width a person dragged the rail to, kept by the caller so it outlives this layout, such as a guide whose steps
    * switch between a project and its sides. The rail then keeps the split's drawn width on the sides too.
@@ -212,28 +214,22 @@ export function WorkspaceLayout({
         <div
           className={
             work.shape === "sides"
-              ? cn("flex min-h-0 flex-1", phone && aside?.sheet && "flex-col")
+              ? cn("relative flex min-h-0 flex-1", phone && aside?.sheet && "flex-col")
               : cn(
                   "flex min-h-0 flex-1 flex-col p-3",
                   compact && "p-0",
                   (aside || dockOpen) && "relative flex-row gap-3 max-phone:flex-col max-phone:gap-0",
                   phone && "p-0",
+                  phone && aside?.sheet && "relative",
                 )
           }
           hidden={isBlocked}
         >
           {aside &&
             (phone && aside.sheet ? (
-              <section
-                className={cn(
-                  "relative z-10 order-last flex max-h-[70%] min-h-0 shrink-0 flex-col",
-                  // Keep result updates from resizing the editor and its panel observers during a run.
-                  !aside.collapsed && "h-[70%]",
-                )}
-                aria-label={aside.label}
-              >
+              <PhoneSheet label={aside.label} collapsed={aside.collapsed ?? false} onCollapse={aside.onCollapse}>
                 {aside.content}
-              </section>
+              </PhoneSheet>
             ) : (
               <WorkspaceRail
                 aside={aside}
@@ -335,5 +331,63 @@ function PhoneAsideSwitch({ label, view }: { label: string; view: WorkspaceView 
         ))}
       </div>
     </nav>
+  );
+}
+
+/**
+ * Phones: a side panel as a bottom sheet floating over the work area, like a modal sheet
+ *
+ * The code and output run on under it. Folded, it leaves its height in `--sheet-inset` on the work area, so the
+ * output's lists end clear of it; open, a backdrop dims the work area and folds the sheet on a tap.
+ */
+function PhoneSheet({
+  label,
+  collapsed,
+  onCollapse,
+  children,
+}: {
+  label: string;
+  collapsed: boolean;
+  onCollapse?: () => void;
+  children: ReactNode;
+}) {
+  const sheet = useRef<HTMLElement>(null);
+
+  useLayoutEffect(() => {
+    const element = sheet.current;
+    const area = element?.parentElement;
+
+    if (!element || !area || !collapsed) {
+      return;
+    }
+
+    const observer = new ResizeObserver(() => area.style.setProperty("--sheet-inset", `${element.offsetHeight}px`));
+    observer.observe(element);
+
+    return () => observer.disconnect();
+  }, [collapsed]);
+
+  return (
+    <>
+      {!collapsed && (
+        <div
+          aria-hidden="true"
+          className="fixed inset-0 z-40 bg-black/30 transition-opacity duration-(--motion-fast) starting:opacity-0"
+          onClick={onCollapse}
+          data-slot="sheet-backdrop"
+        />
+      )}
+      <section
+        ref={sheet}
+        className={cn(
+          "absolute inset-x-0 bottom-0 z-50 flex max-h-[70%] min-h-0 flex-col",
+          // Keep result updates from resizing the sheet while it is open.
+          !collapsed && "h-[70%]",
+        )}
+        aria-label={label}
+      >
+        {children}
+      </section>
+    </>
   );
 }

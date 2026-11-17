@@ -67,7 +67,10 @@ const pillTones: Record<RunResult["outcome"], string> = {
   cancelled: "bg-surface-2 text-muted",
 };
 
-const scrollClass = cn("flex min-h-0 flex-1 flex-col overflow-auto pt-1 pb-3 text-[13px]");
+// The bottom padding clears a phone's guide sheet, which floats over the output and sets `--sheet-inset`.
+const scrollClass = cn(
+  "flex min-h-0 flex-1 flex-col overflow-auto pt-1 pb-[calc(var(--spacing)*3+var(--sheet-inset,0px))] text-[13px]",
+);
 
 const viewMotionClass = cn(
   "transition-[opacity,translate] duration-(--motion-fast) ease-out starting:translate-y-1 starting:opacity-0",

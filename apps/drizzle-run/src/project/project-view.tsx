@@ -143,6 +143,8 @@ export interface ProjectViewProps {
     renderContent: (controls: AsideControls) => ReactNode;
     sheet?: boolean;
     collapsed?: boolean;
+    /** Folds the open sheet, as a tap on the backdrop does. */
+    onCollapse?: () => void;
     railWidth?: RailWidth;
   };
   /** Offers "Duplicate": in the header's project actions box, or the more menu on a phone. */
@@ -345,6 +347,7 @@ export function ProjectView(props: ProjectViewProps) {
           content: workspace.asideContent,
           sheet: aside.sheet,
           collapsed: aside.collapsed,
+          onCollapse: aside.onCollapse,
           railWidth: aside.railWidth,
         }
       }

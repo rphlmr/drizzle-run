@@ -329,6 +329,7 @@ function GuidedSession({
     label: "Guide",
     sheet: true,
     collapsed,
+    onCollapse: () => setCollapsed(true),
     railWidth: { px: railWidthPx, onChange: setRailWidthPx },
     renderContent: (controls: AsideControls) => (
       <GuideRail

@@ -83,6 +83,8 @@ export interface SideBySideViewProps {
     renderContent: (controls: AsideControls) => ReactNode;
     sheet?: boolean;
     collapsed?: boolean;
+    /** Folds the open sheet, as a tap on the backdrop does. */
+    onCollapse?: () => void;
     railWidth?: RailWidth;
   };
   /**
@@ -330,6 +332,7 @@ export function SideBySideView(props: SideBySideViewProps) {
           content: workspace.asideContent,
           sheet: aside.sheet,
           collapsed: aside.collapsed,
+          onCollapse: aside.onCollapse,
           railWidth: aside.railWidth,
         }
       }

@@ -43,16 +43,22 @@ test("should scroll the editor with a finger on mobile", async ({ page, context 
   await expect.poll(async () => Number(await editor.locator(".line-numbers").first().textContent())).toBeGreaterThan(1);
 });
 
-test("should keep guide code above the sheet and support swiping its header", async ({ page, context }) => {
+test("should float the guide sheet over the code like a modal and support swiping its header", async ({
+  page,
+  context,
+}) => {
   await page.goto("/examples/drizzle-in-five-minutes?step=2");
   const sheet = page.getByRole("region", { name: "Guide", exact: true });
+  const backdrop = page.locator("[data-slot=sheet-backdrop]");
   const editor = page.locator(".monaco-editor").first();
   await expect(sheet.getByRole("heading", { name: "Publish Ada's next post" })).toBeVisible();
   await expect(editor.locator(".view-lines")).toBeVisible();
+  await expect(backdrop).toBeVisible();
   const editorBox = await editor.boundingBox();
   const sheetBox = await sheet.boundingBox();
   if (!editorBox || !sheetBox) throw new Error("Guide layout is missing");
-  expect(editorBox.y + editorBox.height).toBeLessThanOrEqual(sheetBox.y + 1);
+  // The code runs on under the sheet.
+  expect(editorBox.y + editorBox.height).toBeGreaterThan(sheetBox.y + 1);
 
   const session = await context.newCDPSession(page);
   const swipe = async (x: number, from: number, to: number) => {
@@ -65,11 +71,6 @@ test("should keep guide code above the sheet and support swiping its header", as
     }
     await session.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
   };
-  const initialLine = Number(await editor.locator(".line-numbers").first().textContent());
-  await swipe(editorBox.x + editorBox.width / 2, editorBox.y + editorBox.height - 15, editorBox.y + 15);
-  await expect
-    .poll(async () => Number(await editor.locator(".line-numbers").first().textContent()))
-    .toBeGreaterThan(initialLine);
 
   const collapse = sheet.getByRole("button", { name: "Collapse guide" });
   await expect(collapse).toContainText(/Step \d+ of \d+/);
@@ -79,8 +80,16 @@ test("should keep guide code above the sheet and support swiping its header", as
   const expand = sheet.getByRole("button", { name: "Expand guide" });
   await expect(expand).toBeVisible();
   await expect(expand).toContainText(/Step \d+ of \d+/);
+  await expect(backdrop).toBeHidden();
   const collapsedHeader = await expand.boundingBox();
   if (!collapsedHeader) throw new Error("Collapsed guide header is missing");
+
+  const initialLine = Number(await editor.locator(".line-numbers").first().textContent());
+  await swipe(editorBox.x + editorBox.width / 2, collapsedHeader.y - 15, editorBox.y + 15);
+  await expect
+    .poll(async () => Number(await editor.locator(".line-numbers").first().textContent()))
+    .toBeGreaterThan(initialLine);
+
   await swipe(
     collapsedHeader.x + collapsedHeader.width / 2,
     collapsedHeader.y + collapsedHeader.height / 2,
@@ -88,4 +97,8 @@ test("should keep guide code above the sheet and support swiping its header", as
   );
   await expect(collapse).toBeVisible();
   await expect(sheet.getByRole("heading", { name: "Publish Ada's next post" })).toBeVisible();
+
+  // A tap on the backdrop folds the sheet.
+  await page.mouse.click(editorBox.x + editorBox.width / 2, editorBox.y + 20);
+  await expect(expand).toBeVisible();
 });
