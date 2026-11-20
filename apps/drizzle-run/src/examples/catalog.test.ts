@@ -104,6 +104,7 @@ describe("official examples in the repository", () => {
         .map(({ slug }) => slug)
         .toSorted(),
     ).toEqual([
+      "bulk-insert-and-update",
       "drizzle-in-five-minutes",
       "drizzle-with-effect",
       "helper-apis-postgresql",

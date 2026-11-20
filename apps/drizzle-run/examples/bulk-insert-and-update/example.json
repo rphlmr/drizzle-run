@@ -1,0 +1,12 @@
+{
+  "id": "48704f21-06ce-4cdd-b261-89c5e3194513",
+  "slug": "bulk-insert-and-update",
+  "status": "published",
+  "title": "Bulk insert and update",
+  "description": "Import inventory rows, update stock by warehouse and SKU, and see what commits when a chunk fails.",
+  "topics": ["Queries", "Transactions"],
+  "section": "querying",
+  "order": 37,
+  "dialect": "postgresql",
+  "releasePair": "orm-1.0.0-rc.6__kit-1.0.0-rc.6"
+}

@@ -1,0 +1,437 @@
+{
+  "steps": {
+    "01-insert": {
+      "Rows inserted": [
+        {
+          "type": "primitive",
+          "value": 2
+        }
+      ],
+      "Inventory": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "warehouse": {
+                  "type": "primitive",
+                  "value": "north"
+                },
+                "sku": {
+                  "type": "primitive",
+                  "value": "cable"
+                },
+                "quantity": {
+                  "type": "primitive",
+                  "value": 24
+                },
+                "source": {
+                  "type": "primitive",
+                  "value": "supplier"
+                },
+                "status": {
+                  "type": "primitive",
+                  "value": "received"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "warehouse": {
+                  "type": "primitive",
+                  "value": "north"
+                },
+                "sku": {
+                  "type": "primitive",
+                  "value": "keyboard"
+                },
+                "quantity": {
+                  "type": "primitive",
+                  "value": 12
+                },
+                "source": {
+                  "type": "primitive",
+                  "value": "supplier"
+                },
+                "status": {
+                  "type": "primitive",
+                  "value": "received"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "warehouse": {
+                  "type": "primitive",
+                  "value": "north"
+                },
+                "sku": {
+                  "type": "primitive",
+                  "value": "mouse"
+                },
+                "quantity": {
+                  "type": "primitive",
+                  "value": 9
+                },
+                "source": {
+                  "type": "primitive",
+                  "value": "supplier"
+                },
+                "status": {
+                  "type": "primitive",
+                  "value": "received"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "warehouse": {
+                  "type": "primitive",
+                  "value": "south"
+                },
+                "sku": {
+                  "type": "primitive",
+                  "value": "adapter"
+                },
+                "quantity": {
+                  "type": "primitive",
+                  "value": 18
+                },
+                "source": {
+                  "type": "primitive",
+                  "value": "manual"
+                },
+                "status": {
+                  "type": "primitive",
+                  "value": "received"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "warehouse": {
+                  "type": "primitive",
+                  "value": "south"
+                },
+                "sku": {
+                  "type": "primitive",
+                  "value": "keyboard"
+                },
+                "quantity": {
+                  "type": "primitive",
+                  "value": 7
+                },
+                "source": {
+                  "type": "primitive",
+                  "value": "supplier"
+                },
+                "status": {
+                  "type": "primitive",
+                  "value": "received"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "02-update": {
+      "Rows updated": [
+        {
+          "type": "primitive",
+          "value": 2
+        }
+      ],
+      "Inventory": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "warehouse": {
+                  "type": "primitive",
+                  "value": "north"
+                },
+                "sku": {
+                  "type": "primitive",
+                  "value": "keyboard"
+                },
+                "quantity": {
+                  "type": "primitive",
+                  "value": 15
+                },
+                "source": {
+                  "type": "primitive",
+                  "value": "supplier"
+                },
+                "status": {
+                  "type": "primitive",
+                  "value": "recounted"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "warehouse": {
+                  "type": "primitive",
+                  "value": "north"
+                },
+                "sku": {
+                  "type": "primitive",
+                  "value": "mouse"
+                },
+                "quantity": {
+                  "type": "primitive",
+                  "value": 4
+                },
+                "source": {
+                  "type": "primitive",
+                  "value": "supplier"
+                },
+                "status": {
+                  "type": "primitive",
+                  "value": "recounted"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "warehouse": {
+                  "type": "primitive",
+                  "value": "south"
+                },
+                "sku": {
+                  "type": "primitive",
+                  "value": "keyboard"
+                },
+                "quantity": {
+                  "type": "primitive",
+                  "value": 7
+                },
+                "source": {
+                  "type": "primitive",
+                  "value": "supplier"
+                },
+                "status": {
+                  "type": "primitive",
+                  "value": "received"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "03-chunk-failure": {
+      "Atomic import rejected": [
+        {
+          "type": "primitive",
+          "value": "North already stocks this keyboard"
+        }
+      ],
+      "Inventory after rollback": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "warehouse": {
+                  "type": "primitive",
+                  "value": "north"
+                },
+                "sku": {
+                  "type": "primitive",
+                  "value": "keyboard"
+                },
+                "quantity": {
+                  "type": "primitive",
+                  "value": 12
+                },
+                "source": {
+                  "type": "primitive",
+                  "value": "supplier"
+                },
+                "status": {
+                  "type": "primitive",
+                  "value": "received"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "warehouse": {
+                  "type": "primitive",
+                  "value": "north"
+                },
+                "sku": {
+                  "type": "primitive",
+                  "value": "mouse"
+                },
+                "quantity": {
+                  "type": "primitive",
+                  "value": 9
+                },
+                "source": {
+                  "type": "primitive",
+                  "value": "supplier"
+                },
+                "status": {
+                  "type": "primitive",
+                  "value": "received"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "warehouse": {
+                  "type": "primitive",
+                  "value": "south"
+                },
+                "sku": {
+                  "type": "primitive",
+                  "value": "keyboard"
+                },
+                "quantity": {
+                  "type": "primitive",
+                  "value": 7
+                },
+                "source": {
+                  "type": "primitive",
+                  "value": "supplier"
+                },
+                "status": {
+                  "type": "primitive",
+                  "value": "received"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "Chunk rejected": [
+        {
+          "type": "primitive",
+          "value": "North already stocks this keyboard"
+        }
+      ],
+      "Inventory after partial commit": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "warehouse": {
+                  "type": "primitive",
+                  "value": "north"
+                },
+                "sku": {
+                  "type": "primitive",
+                  "value": "cable"
+                },
+                "quantity": {
+                  "type": "primitive",
+                  "value": 24
+                },
+                "source": {
+                  "type": "primitive",
+                  "value": "supplier"
+                },
+                "status": {
+                  "type": "primitive",
+                  "value": "received"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "warehouse": {
+                  "type": "primitive",
+                  "value": "north"
+                },
+                "sku": {
+                  "type": "primitive",
+                  "value": "keyboard"
+                },
+                "quantity": {
+                  "type": "primitive",
+                  "value": 12
+                },
+                "source": {
+                  "type": "primitive",
+                  "value": "supplier"
+                },
+                "status": {
+                  "type": "primitive",
+                  "value": "received"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "warehouse": {
+                  "type": "primitive",
+                  "value": "north"
+                },
+                "sku": {
+                  "type": "primitive",
+                  "value": "mouse"
+                },
+                "quantity": {
+                  "type": "primitive",
+                  "value": 9
+                },
+                "source": {
+                  "type": "primitive",
+                  "value": "supplier"
+                },
+                "status": {
+                  "type": "primitive",
+                  "value": "received"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "warehouse": {
+                  "type": "primitive",
+                  "value": "south"
+                },
+                "sku": {
+                  "type": "primitive",
+                  "value": "keyboard"
+                },
+                "quantity": {
+                  "type": "primitive",
+                  "value": 7
+                },
+                "source": {
+                  "type": "primitive",
+                  "value": "supplier"
+                },
+                "status": {
+                  "type": "primitive",
+                  "value": "received"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

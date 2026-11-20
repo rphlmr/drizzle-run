@@ -31,6 +31,18 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     ]
   },
   {
+    "slug": "bulk-insert-and-update",
+    "title": "Bulk insert and update",
+    "description": "Import inventory rows, update stock by warehouse and SKU, and see what commits when a chunk fails.",
+    "sides": [
+      {
+        "dialect": "postgresql",
+        "ormVersion": "1.0.0-rc.6",
+        "guestFlavor": "slim"
+      }
+    ]
+  },
+  {
     "slug": "check-constraints-postgresql",
     "title": "Enforce product rules with CHECK (PostgreSQL)",
     "description": "Reject invalid inserts and updates in the database, compare two columns, and see why CHECK does not replace NOT NULL.",

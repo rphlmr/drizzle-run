@@ -35,6 +35,7 @@ function withFirstStepMeta(manifest: GuideManifest, meta: Record<string, unknown
 describe("guide catalog", () => {
   it("should parse every guide version, one per folder, sorted by slug", () => {
     expect(listGuideVersions().map(({ slug, status }) => `${slug} ${status}`)).toEqual([
+      "bulk-insert-and-update published",
       "drizzle-in-five-minutes published",
       "drizzle-with-effect published",
       "first-run published",
