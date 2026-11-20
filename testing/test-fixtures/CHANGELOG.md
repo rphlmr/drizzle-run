@@ -1,5 +1,12 @@
 # @drizzle-run/test-fixtures
 
+## 0.0.4
+
+### Patch Changes
+
+- Updated dependencies [cefe614]
+  - @drizzle-run/core@0.4.0
+
 ## 0.0.3
 
 ### Patch Changes

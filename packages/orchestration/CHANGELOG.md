@@ -1,5 +1,12 @@
 # @drizzle-run/orchestration
 
+## 0.2.3
+
+### Patch Changes
+
+- Updated dependencies [cefe614]
+  - @drizzle-run/core@0.4.0
+
 ## 0.2.2
 
 ### Patch Changes
