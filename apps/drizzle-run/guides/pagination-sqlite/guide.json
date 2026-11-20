@@ -11,8 +11,8 @@
       "dialect": "sqlite"
     },
     "dependencies": {
-      "drizzle-orm": "1.0.0-rc.5",
-      "drizzle-kit": "1.0.0-rc.5"
+      "drizzle-orm": "1.0.0-rc.6",
+      "drizzle-kit": "1.0.0-rc.6"
     },
     "files": {
       "schema.ts": "import { index, integer, sqliteTable, text } from \"drizzle-orm/sqlite-core\";\n\nexport const posts = sqliteTable(\"posts\", {\n  id: integer(\"id\").primaryKey(),\n  title: text(\"title\").notNull(),\n  createdAt: text(\"created_at\").notNull(),\n}, (post) => [index(\"posts_created_at_id_idx\").on(post.createdAt, post.id)]);\n",
@@ -32,7 +32,7 @@
       "id": "01-offset",
       "label": "Numbered pages",
       "title": "Give each row a stable position",
-      "body": "This guide uses SQLite and Drizzle ORM **1.0.0-rc.5**. Six posts include several tied timestamps. Sort by both `createdAt` and the unique `id`, then use `limit` and `offset`. Page numbers start at one, so the offset is `(page - 1) * pageSize`.\n\nPress **Run**. Pages contain IDs 1–2, 3–4 and 5–6. Ordering only by the timestamp would leave tied rows without a defined relative order. The schema includes a matching composite index.\n\nSQLite stores `createdAt` as text. This example writes fixed-width UTC ISO strings only, so text ordering follows time. Mixing offsets or formats would break that assumption.",
+      "body": "This guide uses SQLite and Drizzle ORM **1.0.0-rc.6**. Six posts include several tied timestamps. Sort by both `createdAt` and the unique `id`, then use `limit` and `offset`. Page numbers start at one, so the offset is `(page - 1) * pageSize`.\n\nPress **Run**. Pages contain IDs 1–2, 3–4 and 5–6. Ordering only by the timestamp would leave tied rows without a defined relative order. The schema includes a matching composite index.\n\nSQLite stores `createdAt` as text. This example writes fixed-width UTC ISO strings only, so text ordering follows time. Mixing offsets or formats would break that assumption.",
       "focus": {
         "file": "query.ts",
         "lines": [

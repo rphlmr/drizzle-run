@@ -54,7 +54,7 @@ export function createPaginationApiGuide({
   const base = createPaginationGuide({ id, exampleId, dialect });
   const run = {
     target: { dialect },
-    dependencies: { "drizzle-orm": "1.0.0-rc.5", "drizzle-kit": "1.0.0-rc.5" },
+    dependencies: { "drizzle-orm": "1.0.0-rc.6", "drizzle-kit": "1.0.0-rc.6" },
   } as const;
   function readSideFiles(side: 1 | 2) {
     return Object.fromEntries(

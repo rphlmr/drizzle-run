@@ -11,8 +11,8 @@
       "dialect": "postgresql"
     },
     "dependencies": {
-      "drizzle-orm": "1.0.0-rc.5",
-      "drizzle-kit": "1.0.0-rc.5"
+      "drizzle-orm": "1.0.0-rc.6",
+      "drizzle-kit": "1.0.0-rc.6"
     },
     "files": {
       "schema.ts": "import { defineRelations } from \"drizzle-orm\";\nimport { integer, pgTable, primaryKey, text } from \"drizzle-orm/pg-core\";\n\nexport const users = pgTable(\"users\", {\n  id: integer(\"id\").primaryKey(),\n  name: text(\"name\").notNull(),\n});\n\nexport const files = pgTable(\"files\", {\n  id: integer(\"id\").primaryKey(),\n  name: text(\"name\").notNull(),\n});\n\nexport const comments = pgTable(\"comments\", {\n  id: integer(\"id\").primaryKey(),\n  fileId: integer(\"file_id\").notNull().references(() => files.id),\n  authorId: integer(\"author_id\").notNull().references(() => users.id),\n  text: text(\"text\"),\n});\n\nexport const tags = pgTable(\"tags\", {\n  id: integer(\"id\").primaryKey(),\n  name: text(\"name\").notNull(),\n});\n\nexport const fileTags = pgTable(\"file_tags\", {\n  fileId: integer(\"file_id\").notNull().references(() => files.id),\n  tagId: integer(\"tag_id\").notNull().references(() => tags.id),\n}, (table) => [primaryKey({ columns: [table.fileId, table.tagId] })]);\n\nexport const relations = defineRelations({ users, files, comments, tags, fileTags }, (r) => ({\n  files: {\n    comments: r.many.comments(),\n    tags: r.many.tags({\n      from: r.files.id.through(r.fileTags.fileId),\n      to: r.tags.id.through(r.fileTags.tagId),\n    }),\n  },\n  comments: {\n    file: r.one.files({ from: r.comments.fileId, to: r.files.id }),\n    author: r.one.users({ from: r.comments.authorId, to: r.users.id }),\n  },\n}));\n",
@@ -31,7 +31,7 @@
       "id": "01-multiplication",
       "label": "Multiplied rows",
       "title": "Two comments and three tags make six rows",
-      "body": "You need a file with its comments, each comment's author, and its tags. This guide uses PostgreSQL with Drizzle ORM **1.0.0-rc.5**. The tables already contain Launch notes, Empty draft and Design sketch.\n\nA **join** pairs rows that satisfy its condition. Launch notes has two comments and three tags. Joining both collections gives each comment all three tags: **six rows for one file**.\n\nPress **Run**. The query is valid, but grouping these rows directly into arrays would repeat comments and tags. Empty draft also remains, with null child fields.",
+      "body": "You need a file with its comments, each comment's author, and its tags. This guide uses PostgreSQL with Drizzle ORM **1.0.0-rc.6**. The tables already contain Launch notes, Empty draft and Design sketch.\n\nA **join** pairs rows that satisfy its condition. Launch notes has two comments and three tags. Joining both collections gives each comment all three tags: **six rows for one file**.\n\nPress **Run**. The query is valid, but grouping these rows directly into arrays would repeat comments and tags. Empty draft also remains, with null child fields.",
       "focus": {
         "file": "query.ts",
         "lines": [

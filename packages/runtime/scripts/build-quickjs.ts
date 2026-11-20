@@ -124,6 +124,7 @@ async function buildGuest({ image, dialect }: { image: GuestImage; dialect: "pos
     }),
   );
   const specifiers = [...new Set(Object.values(approved).flat())];
+  const usesDrizzlePostgres = specifiers.includes("drizzle-orm/postgres");
   const resolvedSpecifiers = new Map<string, string>();
 
   // Resolve import conditions with the same bundler used for the guest, without loading dependency code.
@@ -187,7 +188,7 @@ async function buildGuest({ image, dialect }: { image: GuestImage; dialect: "pos
   export { configureProjectFiles } from ${JSON.stringify(resolve(runtimeDirectory, "scripts/quickjs/filesystem.ts"))};
   ${image.releaseLine === "legacy" ? 'import * as singleStoreCore from "drizzle-orm/singlestore-core"; export const kitInternalModules = { singleStoreCore };' : ""}
   import { ${dialect === "sqlite" && image.releaseLine === "legacy" ? "generateSQLiteDrizzleJson as generateDrizzleJson, generateSQLiteMigration as generateMigration" : "generateDrizzleJson, generateMigration"} } from ${JSON.stringify(getResolvedSpecifier(kitSpecifier))};
-  import { drizzle } from ${JSON.stringify(dialect === "postgresql" ? "drizzle-orm/node-postgres" : "drizzle-orm/libsql/web")};
+  import { drizzle } from ${JSON.stringify(usesDrizzlePostgres ? "drizzle-orm/postgres" : dialect === "postgresql" ? "drizzle-orm/node-postgres" : "drizzle-orm/libsql/web")};
   import { createPostgresClient } from ${JSON.stringify(resolve(runtimeDirectory, "../../guests/quickjs-client.ts"))};
   ${dialect === "postgresql" ? `import { createPostgresGuestSession } from ${JSON.stringify(resolve(runtimeDirectory, "../../guests/quickjs-postgres.ts"))};` : ""}
   ${dialect === "sqlite" ? `import { createSqliteGuestClient } from ${JSON.stringify(resolve(runtimeDirectory, "../../guests/quickjs-sqlite.ts"))}; import { ResultSetImpl } from "@libsql/core/util";` : ""}
@@ -198,8 +199,21 @@ async function buildGuest({ image, dialect }: { image: GuestImage; dialect: "pos
   export async function initializeRun(schema, env, observation) {
     ${dialect === "postgresql" ? "const session = createPostgresGuestSession(observation);" : ""}
     const client = observation.observeClient(${dialect === "postgresql" ? "await createPostgresClient(session.main)" : "createSqliteGuestClient(ResultSetImpl)"}, ${JSON.stringify(dialect)});
-    const db = ${image.releaseLine === "legacy" ? "drizzle(client, { schema })" : "drizzle({ client, relations: schema.relations ?? {}, paramsInErrors: true })"};
-    return { client, db: observation.observeDatabase(db), schema, env, target: { dialect: ${JSON.stringify(dialect)} }, ${dialect === "postgresql" ? 'postgresConnection: Object.freeze({ username: "postgres", database: "postgres", stream: session.connection }), close: session.close' : "close: async () => {}"} };
+    ${dialect === "postgresql" ? 'const postgresConnection = Object.freeze({ username: "postgres", database: "postgres", stream: session.connection });' : ""}
+    const db = ${
+      usesDrizzlePostgres
+        ? "drizzle({ connection: { user: postgresConnection.username, database: postgresConnection.database, socket: postgresConnection.stream, max: 2, reconnect: false }, relations: schema.relations ?? {}, paramsInErrors: true })"
+        : image.releaseLine === "legacy"
+          ? "drizzle(client, { schema })"
+          : "drizzle({ client, relations: schema.relations ?? {}, paramsInErrors: true })"
+    };
+    return { client, db: observation.observeDatabase(db), schema, env, target: { dialect: ${JSON.stringify(dialect)} }, ${
+      usesDrizzlePostgres
+        ? "postgresConnection, close: async () => { try { await db.$client.end(); } finally { await session.close(); } }"
+        : dialect === "postgresql"
+          ? "postgresConnection, close: session.close"
+          : "close: async () => {}"
+    } };
   }
   export async function generateSql(schema) {
     const previous = await generateDrizzleJson({});
@@ -214,7 +228,10 @@ async function buildGuest({ image, dialect }: { image: GuestImage; dialect: "pos
     globalName: "kitProbe",
     platform: "browser",
     target: "es2022",
-    inject: [resolve(runtimeDirectory, "scripts/quickjs/globals.ts")],
+    inject: [
+      resolve(runtimeDirectory, "scripts/quickjs/globals.ts"),
+      ...(usesDrizzlePostgres ? [resolve(runtimeDirectory, "scripts/quickjs/postgres-globals.ts")] : []),
+    ],
     define: { "import.meta.url": '"file:///dependencies.js"', global: "globalThis" },
     minify: true,
     write: false,
@@ -227,6 +244,12 @@ async function buildGuest({ image, dialect }: { image: GuestImage; dialect: "pos
           builder.onResolve({ filter: /^(node:)?[^./]/ }, async (args) => {
             if (args.pluginData === resolvedPluginData) {
               return undefined;
+            }
+
+            // Package imports such as Drizzle's #postgres use the Node condition in the guest.
+            // Resolve them in the importing package and bundle the resulting file with the usual shims.
+            if (args.path.startsWith("#")) {
+              return { path: createRequire(args.importer).resolve(args.path) };
             }
 
             const name = args.path.replace(/^node:/, "");

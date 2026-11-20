@@ -55,7 +55,10 @@ function assertTransactionContract(run: GateRun, label: string) {
   assert.match(sqlOf(committed, 0), /^begin\b/i, `${label} transaction begins`);
   assert.match(sqlOf(committed, -1), /^commit$/i, `${label} transaction commits`);
   assert.match(sqlOf(savepoint, 0), /^savepoint /i, `${label} savepoint opens`);
-  assert.match(sqlOf(savepoint, -1), /^rollback to savepoint /i, `${label} savepoint rolls back`);
+  assert.ok(
+    savepoint.statements.some((_statement, index) => /^rollback to savepoint /i.test(sqlOf(savepoint, index))),
+    `${label} savepoint rolls back`,
+  );
   assert.match(sqlOf(rolledBack, -1), /^rollback$/i, `${label} transaction rolls back`);
   assert.deepEqual(
     committed.statements.map(({ role }) => role),

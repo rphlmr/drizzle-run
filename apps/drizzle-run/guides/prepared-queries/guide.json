@@ -11,8 +11,8 @@
       "dialect": "postgresql"
     },
     "dependencies": {
-      "drizzle-orm": "1.0.0-rc.5",
-      "drizzle-kit": "1.0.0-rc.5"
+      "drizzle-orm": "1.0.0-rc.6",
+      "drizzle-kit": "1.0.0-rc.6"
     },
     "files": {
       "schema.ts": "import { integer, pgTable, text } from \"drizzle-orm/pg-core\";\n\nexport const products = pgTable(\"products\", {\n  id: integer(\"id\").primaryKey(),\n  name: text(\"name\").notNull(),\n  category: text(\"category\").notNull(),\n  priceCents: integer(\"price_cents\").notNull(),\n});\n",
@@ -31,7 +31,7 @@
       "id": "01-bound-values",
       "label": "Bound values",
       "title": "Pass a value to an ordinary query",
-      "body": "This guide uses PostgreSQL and Drizzle ORM **1.0.0-rc.5** to search a small product catalogue. Prices are stored as integer cents.\n\nStart with an ordinary query. `eq(products.category, category)` binds the category as a parameter. It does not paste the text into SQL. You do not need `.prepare()` to bind values safely.\n\nPress **Run**, then look at the SQL panel: the statement and its parameter values are separate. The result contains three books, ordered by price and then ID.",
+      "body": "This guide uses PostgreSQL and Drizzle ORM **1.0.0-rc.6** to search a small product catalogue. Prices are stored as integer cents.\n\nStart with an ordinary query. `eq(products.category, category)` binds the category as a parameter. It does not paste the text into SQL. You do not need `.prepare()` to bind values safely.\n\nPress **Run**, then look at the SQL panel: the statement and its parameter values are separate. The result contains three books, ordered by price and then ID.",
       "focus": {
         "file": "query.ts",
         "lines": [

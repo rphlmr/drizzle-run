@@ -8,7 +8,7 @@
   "section": "pagination",
   "order": 124,
   "dialect": "postgresql",
-  "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+  "releasePair": "orm-1.0.0-rc.6__kit-1.0.0-rc.6",
   "sides": [
     {
       "name": "SQL-like"

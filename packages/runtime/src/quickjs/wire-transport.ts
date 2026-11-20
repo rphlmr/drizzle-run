@@ -180,8 +180,10 @@ export class WireTransport extends EventEmitter {
     return true;
   }
 
-  end(bytes?: Uint8Array) {
-    if (bytes) {
+  end(bytes?: Uint8Array | (() => void)) {
+    if (typeof bytes === "function") {
+      this.once("close", bytes);
+    } else if (bytes) {
       this.write(bytes);
     }
 

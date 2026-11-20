@@ -11,8 +11,8 @@
       "dialect": "postgresql"
     },
     "dependencies": {
-      "drizzle-orm": "1.0.0-rc.5",
-      "drizzle-kit": "1.0.0-rc.5"
+      "drizzle-orm": "1.0.0-rc.6",
+      "drizzle-kit": "1.0.0-rc.6"
     },
     "files": {
       "schema.ts": "import { integer, pgTable, serial, text } from \"drizzle-orm/pg-core\";\n\nexport const users = pgTable(\"users\", {\n  id: integer(\"id\").primaryKey(),\n  name: text(\"name\").notNull(),\n});\n\nexport const posts = pgTable(\"posts\", {\n  id: serial(\"id\").primaryKey(),\n  title: text(\"title\").notNull(),\n  authorId: integer(\"author_id\")\n    .notNull()\n    .references(() => users.id),\n});\n",
@@ -32,7 +32,7 @@
       "id": "01-tables",
       "label": "Tables",
       "title": "Meet your tables",
-      "body": "You manage a small blog with Drizzle ORM **1.0.0-rc.5** on PostgreSQL. Drizzle Run provides the connection so you can focus on the API.\n\n`schema.ts` declares `users` and `posts` with `pgTable`. A **primary key** identifies each row. The post's `authorId` references `users.id`, so each post must point to an existing user.\n\nEvery **Run** starts fresh: create tables, run `seed.ts`, then run `query.ts`. Press **Run** to meet Ada, Grace and Linus.",
+      "body": "You manage a small blog with Drizzle ORM **1.0.0-rc.6** on PostgreSQL. Drizzle Run provides the connection so you can focus on the API.\n\n`schema.ts` declares `users` and `posts` with `pgTable`. A **primary key** identifies each row. The post's `authorId` references `users.id`, so each post must point to an existing user.\n\nEvery **Run** starts fresh: create tables, run `seed.ts`, then run `query.ts`. Press **Run** to meet Ada, Grace and Linus.",
       "focus": {
         "file": "schema.ts",
         "lines": [

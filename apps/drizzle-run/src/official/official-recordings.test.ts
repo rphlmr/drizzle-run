@@ -378,6 +378,10 @@ describe("official recordings", () => {
         return [`${embed.recordingPath} is missing.`];
       }
 
+      if (/https?:\/\/(?:localhost|127\.0\.0\.1|\[::1\])(?::\d+)?\/runtime-assets\//.test(JSON.stringify(recording))) {
+        return [`${embed.recordingPath} contains a runtime asset URL from the local recording server.`];
+      }
+
       return describeProblem(embed, checkOfficialRecording(embed, recording)) ?? [];
     });
 

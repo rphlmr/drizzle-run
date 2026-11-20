@@ -1,6 +1,7 @@
 import { readdir, readFile } from "node:fs/promises";
 import { join, sep } from "node:path";
 
+import { compareVersions } from "../../packages/core/src/registry/selectors.ts";
 import type { GuestPackageLocator } from "./guest-installs.ts";
 
 type ExportEntry = string | { import?: ExportEntry; default?: string; types?: string } | null;
@@ -169,6 +170,7 @@ export function toOrmExportInventory({
   }
 
   const exportPaths = listExportPaths({ exports, packageFiles });
+  const supportsDrizzlePostgres = compareVersions(packageMetadata.version, "1.0.0-rc.6") >= 0;
   const common = exportPaths.filter(
     (exportPath) =>
       ORM_COMMON_EXPORTS.has(exportPath) ||
@@ -178,7 +180,8 @@ export function toOrmExportInventory({
   // Aurora DSQL needs AWS's connector, which no guest ships.
   const postgresql = exportPaths.filter(
     (exportPath) =>
-      isInExportFamilyList(exportPath, ["./pg-core", "./node-postgres", "./up-migrations/pg"]) &&
+      ((supportsDrizzlePostgres && exportPath === "./postgres") ||
+        isInExportFamilyList(exportPath, ["./pg-core", "./node-postgres", "./up-migrations/pg"])) &&
       !isInExportFamilyList(exportPath, ["./node-postgres/dsql", "./pg-core/async/dsql"]),
   );
   const sqlite = exportPaths.filter((exportPath) =>
@@ -193,7 +196,12 @@ export function toOrmExportInventory({
     hasEffectFlavor ? exportPaths.filter((exportPath) => isInExportFamilyList(exportPath, families)) : [];
   const effect = {
     common: effectExports(["./effect-schema"]),
-    postgresql: effectExports(["./effect-postgres"]),
+    postgresql: [
+      ...effectExports(["./effect-postgres"]),
+      ...(hasEffectFlavor && supportsDrizzlePostgres && exportPaths.includes("./postgres/effect")
+        ? ["./postgres/effect"]
+        : []),
+    ],
     sqlite: effectExports(["./effect-libsql"]),
   };
   const selected = new Set([

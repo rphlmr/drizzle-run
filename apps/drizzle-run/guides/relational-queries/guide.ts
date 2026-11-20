@@ -15,7 +15,7 @@ const next = defineRunManifest({
   kind: "drizzle-run",
   manifestVersion: 1,
   target,
-  dependencies: { "drizzle-orm": "1.0.0-rc.5", "drizzle-kit": "1.0.0-rc.5" },
+  dependencies: { "drizzle-orm": "1.0.0-rc.6", "drizzle-kit": "1.0.0-rc.6" },
   files: example,
   entrypoints: { schema: "schema.ts", seed: "seed.ts", run: "query.ts" },
 });
@@ -84,7 +84,7 @@ const pair = createPairManifest(
   next,
   [
     resolveSupportedTuple({ target, ormVersion: "0.45.4", kitVersion: "0.31.11" }),
-    resolveSupportedTuple({ target, ormVersion: "1.0.0-rc.5", kitVersion: "1.0.0-rc.5" }),
+    resolveSupportedTuple({ target, ormVersion: "1.0.0-rc.6", kitVersion: "1.0.0-rc.6" }),
   ],
   "separate",
 );
@@ -121,7 +121,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
   manifestVersion: 1,
   id: "58b9a8cb-aa44-44a5-ace3-0824b87f2b71",
   title: "Migrate relational queries to v1",
-  description: "Compare relational queries on Drizzle ORM 0.45.4 and 1.0.0-rc.5, side by side.",
+  description: "Compare relational queries on Drizzle ORM 0.45.4 and 1.0.0-rc.6, side by side.",
   project,
   steps: [
     {
@@ -129,7 +129,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
       id: "01-relations",
       label: "Relations",
       title: "Relations in one place",
-      body: "This guide compares Drizzle ORM **0.45.4** with **1.0.0-rc.5**. In 0.45.4, each table gets its own `relations()` call. In 1.0.0-rc.5, `defineRelations` groups the relations in one declaration.\n\nThe query on each side loads the same authors, posts and comments. Press **Run** to compare them. If you are learning relations for the first time, start with [Drizzle in five minutes](/examples/drizzle-in-five-minutes).",
+      body: "This guide compares Drizzle ORM **0.45.4** with **1.0.0-rc.6**. In 0.45.4, each table gets its own `relations()` call. In 1.0.0-rc.6, `defineRelations` groups the relations in one declaration.\n\nThe query on each side loads the same authors, posts and comments. Press **Run** to compare them. If you are learning relations for the first time, start with [Drizzle in five minutes](/examples/drizzle-in-five-minutes).",
       focus: { file: "schema.ts", side: 1, lines: [22, 36] },
       run: "required",
       highlight: { displays: ["Authors with posts and comments"] },

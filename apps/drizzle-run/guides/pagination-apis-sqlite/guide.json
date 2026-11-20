@@ -23,8 +23,8 @@
           "dialect": "sqlite"
         },
         "dependencies": {
-          "drizzle-orm": "1.0.0-rc.5",
-          "drizzle-kit": "1.0.0-rc.5"
+          "drizzle-orm": "1.0.0-rc.6",
+          "drizzle-kit": "1.0.0-rc.6"
         },
         "files": {
           "query.ts": "import { db } from \"@drizzle-run/runtime/context\";\nimport { asc } from \"drizzle-orm\";\n\nimport { posts } from \"./schema\";\n\n/** Fetch a numbered page; callers supply a positive page number and page size. */\nasync function getPage({ page, pageSize }: { page: number; pageSize: number }) {\n  return db.select().from(posts)\n    .orderBy(asc(posts.createdAt), asc(posts.id))\n    .limit(pageSize).offset((page - 1) * pageSize);\n}\n\n$.display(\"Offset page 1\", await getPage({ page: 1, pageSize: 2 }));\n$.display(\"Offset page 2\", await getPage({ page: 2, pageSize: 2 }));\n$.display(\"Jump to page 3\", await getPage({ page: 3, pageSize: 2 }));\n",
@@ -37,8 +37,8 @@
           "dialect": "sqlite"
         },
         "dependencies": {
-          "drizzle-orm": "1.0.0-rc.5",
-          "drizzle-kit": "1.0.0-rc.5"
+          "drizzle-orm": "1.0.0-rc.6",
+          "drizzle-kit": "1.0.0-rc.6"
         },
         "files": {
           "query.ts": "import { db } from \"@drizzle-run/runtime/context\";\n\n/** Fetch a numbered page; callers supply a positive page number and page size. */\nasync function getPage({ page, pageSize }: { page: number; pageSize: number }) {\n  return db.query.posts.findMany({\n    orderBy: { createdAt: \"asc\", id: \"asc\" },\n    limit: pageSize,\n    offset: (page - 1) * pageSize,\n  });\n}\n\n$.display(\"Offset page 1\", await getPage({ page: 1, pageSize: 2 }));\n$.display(\"Offset page 2\", await getPage({ page: 2, pageSize: 2 }));\n$.display(\"Jump to page 3\", await getPage({ page: 3, pageSize: 2 }));\n",
@@ -53,7 +53,7 @@
       "id": "01-offset",
       "label": "Numbered pages",
       "title": "Give each row a stable position",
-      "body": "This guide uses SQLite and Drizzle ORM **1.0.0-rc.5**. Six posts include several tied timestamps. Sort by both `createdAt` and the unique `id`, then use `limit` and `offset`. Page numbers start at one, so the offset is `(page - 1) * pageSize`.\n\nPress **Run**. Pages contain IDs 1–2, 3–4 and 5–6. Ordering only by the timestamp would leave tied rows without a defined relative order. The schema includes a matching composite index.\n\nSQLite stores `createdAt` as text. This example writes fixed-width UTC ISO strings only, so text ordering follows time. Mixing offsets or formats would break that assumption.\n\nCompare both sides. SQL-like uses `orderBy`, `limit` and `offset` methods. RQB passes the same choices to `findMany`. Both databases start with the same seed in separate runs. The `relations` export registers `posts` for RQB even though this query loads no related tables.",
+      "body": "This guide uses SQLite and Drizzle ORM **1.0.0-rc.6**. Six posts include several tied timestamps. Sort by both `createdAt` and the unique `id`, then use `limit` and `offset`. Page numbers start at one, so the offset is `(page - 1) * pageSize`.\n\nPress **Run**. Pages contain IDs 1–2, 3–4 and 5–6. Ordering only by the timestamp would leave tied rows without a defined relative order. The schema includes a matching composite index.\n\nSQLite stores `createdAt` as text. This example writes fixed-width UTC ISO strings only, so text ordering follows time. Mixing offsets or formats would break that assumption.\n\nCompare both sides. SQL-like uses `orderBy`, `limit` and `offset` methods. RQB passes the same choices to `findMany`. Both databases start with the same seed in separate runs. The `relations` export registers `posts` for RQB even though this query loads no related tables.",
       "focus": {
         "file": "query.ts",
         "lines": [

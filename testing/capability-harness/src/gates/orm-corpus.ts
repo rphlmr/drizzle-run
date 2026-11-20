@@ -33,12 +33,15 @@ const OrmCaseResultsSchema: z.ZodType<OrmCaseResult[]> = z.array(
   ]),
 );
 
-const runSource = `import { db } from "@drizzle-run/runtime/context";
+function runSource(fixture: string | undefined) {
+  return `import { db } from "@drizzle-run/runtime/context";
 import { cases } from "./cases.ts";
 import { runOrmCases } from "./run-cases.ts";
+${fixture ? 'import { extraCases } from "./extra.ts";' : ""}
 
-export default await runOrmCases(db, cases);
+export default await runOrmCases(db, ${fixture ? "[...cases, ...extraCases]" : "cases"});
 `;
+}
 
 /**
  * The entrypoints whose function exports the corpus must call
@@ -195,8 +198,63 @@ const uncoveredExports: Record<HarnessPair["ormApi"], Record<string, Readonly<Re
   },
 };
 
+const rc6RemovedOrmExports = new Set([
+  "collectChunksUsedTables",
+  "collectSubqueryAndUsedTables",
+  "getCacheKey",
+  "relationalQueryCacheConfig",
+  "relationalQueryCacheMetadata",
+  "relationalQueryUsedTablesInit",
+]);
+
+const rc6InternalExports: Record<string, Record<string, string>> = {
+  "drizzle-orm": {
+    collectSubquery: relationsInternal,
+    decodeUtf8: codecInternal,
+    encodeUtf8: codecInternal,
+    encodeUtf8Into: codecInternal,
+  },
+  "drizzle-orm/pg-core": {
+    castToEpochMs: codecInternal,
+    castToJsonText: codecInternal,
+    epochMsToDate: codecInternal,
+    getTransactionConfigChunks: undeclared,
+    getTransactionConfigSQL: undeclared,
+    getTransactionConfigStatements: undeclared,
+    mapBatchResults: undeclared,
+    mapSettledResults: undeclared,
+    parseJsonArrayAndNormalize: codecInternal,
+    parsePgArrayOfStrings: codecInternal,
+    pgDateTextFromUtcDate: codecInternal,
+    pgRawTextTypeParser: codecInternal,
+    pgTimestampTextFromUtcDate: codecInternal,
+    procedureWithSchema: undeclared,
+    setTransactionSnapshotSQL: undeclared,
+    shortestFloat32: codecInternal,
+    shortestFloat32Array: codecInternal,
+    textToDateArray: codecInternal,
+    textToDatePgArray: codecInternal,
+    textToDateWithTzArray: codecInternal,
+    textToDateWithTzPgArray: codecInternal,
+  },
+  "drizzle-orm/sqlite-core": {
+    bigintFromBlob: codecInternal,
+    jsonFromBlob: codecInternal,
+    numericBigintFromValue: codecInternal,
+    numericTextFromValue: codecInternal,
+  },
+};
+
 function readCorpusFile(name: string) {
   return readFileSync(new URL(name, corpusDirectory), "utf8");
+}
+
+function releaseFixture(pair: HarnessPair, dialect: Dialect) {
+  if (pair.ormVersion === "1.0.0-rc.5") {
+    return `next-${dialect}.rc5.ts`;
+  }
+
+  return pair.ormVersion === "1.0.0-rc.6" && dialect === "postgresql" ? "next-postgresql.rc6.ts" : undefined;
 }
 
 /**
@@ -210,6 +268,7 @@ export function createOrmCorpusManifest(pair: HarnessPair, dialect: Dialect) {
   const corpus = corpora[pair.ormApi];
   const files = corpus[dialect];
   const cases = readCorpusFile(files.cases).replaceAll(`"./${files.schema}"`, '"./schema.ts"');
+  const fixture = releaseFixture(pair, dialect);
 
   return parseRunManifest({
     kind: "drizzle-run",
@@ -223,8 +282,9 @@ export function createOrmCorpusManifest(pair: HarnessPair, dialect: Dialect) {
     files: {
       "schema.ts": readCorpusFile(files.schema),
       "cases.ts": cases,
+      ...(fixture ? { "extra.ts": readCorpusFile(fixture).replaceAll(`"./${files.schema}"`, '"./schema.ts"') } : {}),
       ...Object.fromEntries(sharedFiles.map((name) => [name, readCorpusFile(name)])),
-      "run.ts": runSource,
+      "run.ts": runSource(fixture),
     },
     entrypoints: { schema: "schema.ts", run: "run.ts" },
   });
@@ -240,7 +300,14 @@ export function getExpectedOrmCaseIds(pair: HarnessPair, dialect: Dialect) {
   const caseIds = expectedCaseIds[corpusName];
   assert.ok(Array.isArray(caseIds), `orm-corpus/case-ids.json has no scenario ids for ${corpusName}`);
 
-  return caseIds;
+  const fixture = releaseFixture(pair, dialect);
+  if (!fixture) {
+    return caseIds;
+  }
+
+  const fixtureIds = expectedCaseIds[fixture.replace(/\.ts$/, "")];
+  assert.ok(Array.isArray(fixtureIds), `orm-corpus/case-ids.json has no scenario ids for ${fixture}`);
+  return [...caseIds, ...fixtureIds];
 }
 
 /** Read the per-scenario outcomes an ORM corpus run reported as JSON text. */
@@ -257,7 +324,8 @@ export function readOrmCaseResults(run: GateRun): OrmCaseResult[] {
 function readCorpusSource(pair: HarnessPair, dialect: Dialect) {
   const files = corpora[pair.ormApi][dialect];
 
-  return [files.schema, files.cases].map((name) => readFileSync(new URL(name, corpusDirectory), "utf8")).join("\n");
+  const fixture = releaseFixture(pair, dialect);
+  return [files.schema, files.cases, ...(fixture ? [fixture] : [])].map(readCorpusFile).join("\n");
 }
 
 /**
@@ -283,7 +351,16 @@ export function assertOrmExportCoverage({
 
   for (const [specifier, namespace] of Object.entries(coveredEntrypoints[dialect])) {
     const exports = z.record(z.string(), z.unknown()).parse(guestRequire(specifier));
-    const reasons = uncoveredExports[pair.ormApi][specifier];
+    const reasons = { ...uncoveredExports[pair.ormApi][specifier] };
+    if (pair.ormVersion === "1.0.0-rc.6") {
+      if (specifier === "drizzle-orm") {
+        for (const name of rc6RemovedOrmExports) {
+          delete reasons[name];
+        }
+      }
+
+      Object.assign(reasons, rc6InternalExports[specifier]);
+    }
     const used = new Set(
       [...source.matchAll(new RegExp(`\\b${namespace}\\s*\\.\\s*([A-Za-z_$][\\w$]*)`, "g"))].map((match) => match[1]),
     );
@@ -544,6 +621,25 @@ export function assertOrmMethodCoverage({
   const source = readCorpusSource(pair, dialect);
   const guestRequire = createRequire(join(guestDir, "package.json"));
   const reasons = { ...uncoveredMethods[pair.ormApi].shared, ...uncoveredMethods[pair.ormApi][dialect] };
+  if (pair.ormVersion === "1.0.0-rc.6") {
+    delete reasons.getUsedTables;
+    Object.assign(reasons, {
+      buildDelete: "private factory used by delete()",
+      buildInsert: "private factory used by insert()",
+      buildSelect: "private factory used by select()",
+      buildUpdate: "private factory used by update()",
+    });
+
+    if (dialect === "postgresql") {
+      delete reasons.getTransactionConfigChunks;
+      delete reasons.getTransactionConfigSQL;
+      delete reasons.setTransactionSnapshotSQL;
+    } else {
+      reasons.rawQuery = "private factory used by SQLite raw queries";
+      reasons.wrapRaw = "protected factory used by SQLite raw queries";
+    }
+  }
+
   const owners = new Map<string, string[]>();
 
   for (const [builder, target] of Object.entries(createUserBuilders({ pair, dialect, guestRequire }))) {

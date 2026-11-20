@@ -1,0 +1,313 @@
+{
+  "steps": {
+    "01-pipeline": {
+      "Authors": [
+        {
+          "type": "object",
+          "value": {
+            "status": {
+              "type": "primitive",
+              "value": "fulfilled"
+            },
+            "value": {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 1
+                    },
+                    "name": {
+                      "type": "primitive",
+                      "value": "Ada"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "Drafts": [
+        {
+          "type": "object",
+          "value": {
+            "status": {
+              "type": "primitive",
+              "value": "fulfilled"
+            },
+            "value": {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 1
+                    },
+                    "authorId": {
+                      "type": "primitive",
+                      "value": 1
+                    },
+                    "title": {
+                      "type": "primitive",
+                      "value": "The first draft"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "02-batch": {
+      "Saved together": [
+        {
+          "type": "object",
+          "value": {
+            "author": {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 2
+                    },
+                    "name": {
+                      "type": "primitive",
+                      "value": "Grace"
+                    }
+                  }
+                }
+              ]
+            },
+            "draft": {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 2
+                    },
+                    "authorId": {
+                      "type": "primitive",
+                      "value": 2
+                    },
+                    "title": {
+                      "type": "primitive",
+                      "value": "A second draft"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "03-rollback": {
+      "Batch rejected": [
+        {
+          "type": "primitive",
+          "value": "The draft ID already exists"
+        }
+      ],
+      "Authors after rollback": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "id": {
+                  "type": "primitive",
+                  "value": 1
+                },
+                "name": {
+                  "type": "primitive",
+                  "value": "Ada"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "04-parallel": {
+      "Authors": [
+        {
+          "type": "object",
+          "value": {
+            "status": {
+              "type": "primitive",
+              "value": "fulfilled"
+            },
+            "value": {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 1
+                    },
+                    "name": {
+                      "type": "primitive",
+                      "value": "Ada"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "Drafts": [
+        {
+          "type": "object",
+          "value": {
+            "status": {
+              "type": "primitive",
+              "value": "fulfilled"
+            },
+            "value": {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "id": {
+                      "type": "primitive",
+                      "value": 1
+                    },
+                    "authorId": {
+                      "type": "primitive",
+                      "value": 1
+                    },
+                    "title": {
+                      "type": "primitive",
+                      "value": "The first draft"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "05-partial-failure": {
+      "Pipeline results": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "status": {
+                  "type": "primitive",
+                  "value": "rejected"
+                },
+                "reason": {
+                  "type": "primitive",
+                  "value": "DrizzleQueryError: Failed query: insert into \"posts\" (\"id\", \"authorId\", \"title\") values ($1, $2, $3)\nparams: 1,1,A second draft"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "status": {
+                  "type": "primitive",
+                  "value": "fulfilled"
+                },
+                "value": {
+                  "type": "array",
+                  "value": [
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 1
+                        },
+                        "authorId": {
+                          "type": "primitive",
+                          "value": 1
+                        },
+                        "title": {
+                          "type": "primitive",
+                          "value": "The first draft"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "Parallel results": [
+        {
+          "type": "array",
+          "value": [
+            {
+              "type": "object",
+              "value": {
+                "status": {
+                  "type": "primitive",
+                  "value": "rejected"
+                },
+                "reason": {
+                  "type": "primitive",
+                  "value": "DrizzleQueryError: Failed query: insert into \"posts\" (\"id\", \"authorId\", \"title\") values ($1, $2, $3)\nparams: 1,1,A second draft"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "value": {
+                "status": {
+                  "type": "primitive",
+                  "value": "fulfilled"
+                },
+                "value": {
+                  "type": "array",
+                  "value": [
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 1
+                        },
+                        "authorId": {
+                          "type": "primitive",
+                          "value": 1
+                        },
+                        "title": {
+                          "type": "primitive",
+                          "value": "The first draft"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

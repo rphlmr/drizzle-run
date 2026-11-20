@@ -1,22 +1,22 @@
 {
   "recordingVersion": 1,
-  "snapshotDigest": "a19e67d9896627cc9c297080e9daa68fba822a4e79f77339e45449140edf1acc",
-  "recordedAt": "2026-11-04T13:47:26.923Z",
+  "snapshotDigest": "ac80fa484ccea1ef5d12b6204ebe77db45b8cd1b9efc288f376dac1b51c7e1f9",
+  "recordedAt": "2026-11-20T20:09:54.535Z",
   "result": {
     "version": 1,
     "target": {
       "dialect": "postgresql"
     },
     "tuple": {
-      "id": "postgresql-pglite__orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+      "id": "postgresql-pglite__orm-1.0.0-rc.6__kit-1.0.0-rc.6",
       "target": {
         "dialect": "postgresql"
       },
-      "ormVersion": "1.0.0-rc.5",
-      "kitVersion": "1.0.0-rc.5"
+      "ormVersion": "1.0.0-rc.6",
+      "kitVersion": "1.0.0-rc.6"
     },
     "random": {
-      "effectiveSeed": 993962450,
+      "effectiveSeed": 4207599950,
       "source": "generated",
       "derivation": "crypto-u32-v1",
       "generator": "mulberry32-v1"
@@ -25,74 +25,74 @@
       {
         "phase": "validate",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:47:25.141Z",
-        "durationMs": 0.08000004291534424
+        "startedAt": "2026-11-20T20:09:53.159Z",
+        "durationMs": 0.07000000029802322
       },
       {
         "phase": "resolve",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:47:25.141Z",
-        "durationMs": 0.004999995231628418
+        "startedAt": "2026-11-20T20:09:53.159Z",
+        "durationMs": 0.009999997913837433
       },
       {
         "phase": "load_artifacts",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:47:25.401Z",
-        "durationMs": 551.1050000190735
+        "startedAt": "2026-11-20T20:09:53.370Z",
+        "durationMs": 394.4950000010431
       },
       {
         "phase": "compile",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:47:25.231Z",
-        "durationMs": 169
+        "startedAt": "2026-11-20T20:09:53.210Z",
+        "durationMs": 159.82000000029802
       },
       {
         "phase": "evaluate_schema",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:47:25.952Z",
-        "durationMs": 60.69000005722046
+        "startedAt": "2026-11-20T20:09:53.765Z",
+        "durationMs": 65.67499999701977
       },
       {
         "phase": "generate_bootstrap",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:47:26.013Z",
-        "durationMs": 25.774999976158142
+        "startedAt": "2026-11-20T20:09:53.831Z",
+        "durationMs": 21.37999999895692
       },
       {
         "phase": "apply_bootstrap",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:47:26.040Z",
-        "durationMs": 597.6349999904633
+        "startedAt": "2026-11-20T20:09:53.853Z",
+        "durationMs": 390.41999999806285
       },
       {
         "phase": "seed",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:47:26.637Z",
-        "durationMs": 10.865000009536743
+        "startedAt": "2026-11-20T20:09:54.243Z",
+        "durationMs": 6.814999997615814
       },
       {
         "phase": "run",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:47:26.649Z",
-        "durationMs": 56.74000000953674
+        "startedAt": "2026-11-20T20:09:54.250Z",
+        "durationMs": 33.42500000074506
       },
       {
         "phase": "inspect",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:47:26.704Z",
-        "durationMs": 70.28999996185303
+        "startedAt": "2026-11-20T20:09:54.283Z",
+        "durationMs": 54.94500000029802
       },
       {
         "phase": "plan",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:47:26.775Z",
-        "durationMs": 0.06500005722045898
+        "startedAt": "2026-11-20T20:09:54.338Z",
+        "durationMs": 0.04000000283122063
       },
       {
         "phase": "cleanup",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:47:26.776Z",
-        "durationMs": 3.3700000047683716
+        "startedAt": "2026-11-20T20:09:54.339Z",
+        "durationMs": 2.0399999991059303
       }
     ],
     "diagnostics": [],
@@ -114,7 +114,7 @@
         "sql": "BEGIN",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 2
+        "durationMs": 1
       },
       {
         "sequence": 3,
@@ -124,7 +124,7 @@
         "sql": "CREATE TABLE \"products\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"category\" text NOT NULL,\n\t\"price_cents\" integer NOT NULL\n);\n",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 10.999755859375
+        "durationMs": 8
       },
       {
         "sequence": 4,
@@ -134,7 +134,7 @@
         "sql": "COMMIT",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 2.000244140625
+        "durationMs": 0.999755859375
       },
       {
         "sequence": 5,
@@ -145,7 +145,7 @@
         "parameters": [
           {
             "type": "primitive",
-            "value": 1
+            "value": "1"
           },
           {
             "type": "primitive",
@@ -157,11 +157,11 @@
           },
           {
             "type": "primitive",
-            "value": 2500
+            "value": "2500"
           },
           {
             "type": "primitive",
-            "value": 2
+            "value": "2"
           },
           {
             "type": "primitive",
@@ -173,11 +173,11 @@
           },
           {
             "type": "primitive",
-            "value": 800
+            "value": "800"
           },
           {
             "type": "primitive",
-            "value": 3
+            "value": "3"
           },
           {
             "type": "primitive",
@@ -189,11 +189,11 @@
           },
           {
             "type": "primitive",
-            "value": 1200
+            "value": "1200"
           },
           {
             "type": "primitive",
-            "value": 4
+            "value": "4"
           },
           {
             "type": "primitive",
@@ -205,13 +205,11 @@
           },
           {
             "type": "primitive",
-            "value": 4500
+            "value": "4500"
           }
         ],
         "outcome": "succeeded",
-        "source": "seed.ts",
-        "line": 5,
-        "durationMs": 9.000244140625,
+        "durationMs": 1.999755859375,
         "rowCount": 4
       },
       {
@@ -227,17 +225,15 @@
           },
           {
             "type": "primitive",
-            "value": 1000
+            "value": "1000"
           },
           {
             "type": "primitive",
-            "value": 1
+            "value": "1"
           }
         ],
         "outcome": "succeeded",
-        "source": "query.ts",
-        "line": 7,
-        "durationMs": 10,
+        "durationMs": 3.000244140625,
         "rowCount": 1
       },
       {
@@ -252,18 +248,18 @@
             "value": "books"
           },
           {
-            "type": "primitive",
-            "value": 1000
+            "type": "unsupported",
+            "valueType": "binary",
+            "description": "Binary PostgreSQL parameter of type OID 0"
           },
           {
-            "type": "primitive",
-            "value": 2
+            "type": "unsupported",
+            "valueType": "binary",
+            "description": "Binary PostgreSQL parameter of type OID 0"
           }
         ],
         "outcome": "succeeded",
-        "source": "query.ts",
-        "line": 7,
-        "durationMs": 5,
+        "durationMs": 0.999755859375,
         "rowCount": 2
       },
       {
@@ -278,18 +274,18 @@
             "value": "tools"
           },
           {
-            "type": "primitive",
-            "value": 1000
+            "type": "unsupported",
+            "valueType": "binary",
+            "description": "Binary PostgreSQL parameter of type OID 0"
           },
           {
-            "type": "primitive",
-            "value": 2
+            "type": "unsupported",
+            "valueType": "binary",
+            "description": "Binary PostgreSQL parameter of type OID 0"
           }
         ],
         "outcome": "succeeded",
-        "source": "query.ts",
-        "line": 7,
-        "durationMs": 6,
+        "durationMs": 1,
         "rowCount": 1
       }
     ],
@@ -444,7 +440,7 @@
           "sql": "BEGIN",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 2
+          "durationMs": 1
         }
       },
       {
@@ -458,7 +454,7 @@
           "sql": "CREATE TABLE \"products\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"category\" text NOT NULL,\n\t\"price_cents\" integer NOT NULL\n);\n",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 10.999755859375
+          "durationMs": 8
         }
       },
       {
@@ -472,7 +468,7 @@
           "sql": "COMMIT",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 2.000244140625
+          "durationMs": 0.999755859375
         }
       },
       {
@@ -487,7 +483,7 @@
           "parameters": [
             {
               "type": "primitive",
-              "value": 1
+              "value": "1"
             },
             {
               "type": "primitive",
@@ -499,11 +495,11 @@
             },
             {
               "type": "primitive",
-              "value": 2500
+              "value": "2500"
             },
             {
               "type": "primitive",
-              "value": 2
+              "value": "2"
             },
             {
               "type": "primitive",
@@ -515,11 +511,11 @@
             },
             {
               "type": "primitive",
-              "value": 800
+              "value": "800"
             },
             {
               "type": "primitive",
-              "value": 3
+              "value": "3"
             },
             {
               "type": "primitive",
@@ -531,11 +527,11 @@
             },
             {
               "type": "primitive",
-              "value": 1200
+              "value": "1200"
             },
             {
               "type": "primitive",
-              "value": 4
+              "value": "4"
             },
             {
               "type": "primitive",
@@ -547,13 +543,11 @@
             },
             {
               "type": "primitive",
-              "value": 4500
+              "value": "4500"
             }
           ],
           "outcome": "succeeded",
-          "source": "seed.ts",
-          "line": 5,
-          "durationMs": 9.000244140625,
+          "durationMs": 1.999755859375,
           "rowCount": 4
         }
       },
@@ -573,17 +567,15 @@
             },
             {
               "type": "primitive",
-              "value": 1000
+              "value": "1000"
             },
             {
               "type": "primitive",
-              "value": 1
+              "value": "1"
             }
           ],
           "outcome": "succeeded",
-          "source": "query.ts",
-          "line": 7,
-          "durationMs": 10,
+          "durationMs": 3.000244140625,
           "rowCount": 1
         }
       },
@@ -639,18 +631,18 @@
               "value": "books"
             },
             {
-              "type": "primitive",
-              "value": 1000
+              "type": "unsupported",
+              "valueType": "binary",
+              "description": "Binary PostgreSQL parameter of type OID 0"
             },
             {
-              "type": "primitive",
-              "value": 2
+              "type": "unsupported",
+              "valueType": "binary",
+              "description": "Binary PostgreSQL parameter of type OID 0"
             }
           ],
           "outcome": "succeeded",
-          "source": "query.ts",
-          "line": 7,
-          "durationMs": 5,
+          "durationMs": 0.999755859375,
           "rowCount": 2
         }
       },
@@ -727,18 +719,18 @@
               "value": "tools"
             },
             {
-              "type": "primitive",
-              "value": 1000
+              "type": "unsupported",
+              "valueType": "binary",
+              "description": "Binary PostgreSQL parameter of type OID 0"
             },
             {
-              "type": "primitive",
-              "value": 2
+              "type": "unsupported",
+              "valueType": "binary",
+              "description": "Binary PostgreSQL parameter of type OID 0"
             }
           ],
           "outcome": "succeeded",
-          "source": "query.ts",
-          "line": 7,
-          "durationMs": 6,
+          "durationMs": 1,
           "rowCount": 1
         }
       },
@@ -790,27 +782,27 @@
       }
     },
     "timings": {
-      "total": 1642,
-      "validate": 0.08000004291534424,
-      "resolve": 0.004999995231628418,
-      "load_artifacts": 551.1050000190735,
-      "compile": 169,
-      "evaluate_schema": 60.69000005722046,
-      "generate_bootstrap": 25.774999976158142,
-      "apply_bootstrap": 597.6349999904633,
-      "seed": 10.865000009536743,
-      "run": 56.74000000953674,
-      "inspect": 70.28999996185303,
-      "plan": 0.06500005722045898,
-      "cleanup": 3.3700000047683716
+      "total": 1185,
+      "validate": 0.07000000029802322,
+      "resolve": 0.009999997913837433,
+      "load_artifacts": 394.4950000010431,
+      "compile": 159.82000000029802,
+      "evaluate_schema": 65.67499999701977,
+      "generate_bootstrap": 21.37999999895692,
+      "apply_bootstrap": 390.41999999806285,
+      "seed": 6.814999997615814,
+      "run": 33.42500000074506,
+      "inspect": 54.94500000029802,
+      "plan": 0.04000000283122063,
+      "cleanup": 2.0399999991059303
     },
     "ok": true,
     "outcome": "succeeded"
   },
   "guests": [
     {
-      "imageId": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
-      "lockDigest": "sha256-dabcc2a116ec5e228673a8c074b17ef00b455fc65afad67b9e392fd1ff4d2ad6"
+      "imageId": "orm-1.0.0-rc.6__kit-1.0.0-rc.6",
+      "lockDigest": "sha256-99db00a50a41f930b3da5212c21e22923dcad3047c6048a580ab8dae33439ed5"
     }
   ]
 }

@@ -259,6 +259,7 @@ const SqlEventSchema = objectOf({
   line: z.optional(IntegerSchema),
   durationMs: z.optional(FiniteNumberSchema),
   rowCount: z.optional(IntegerSchema),
+  commandTags: z.optional(listOf(TextSchema)),
   error: z.optional(SerializedErrorSchema),
 }) satisfies z.ZodMiniType<SqlEvent>;
 

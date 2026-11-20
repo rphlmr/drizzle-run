@@ -1,0 +1,12 @@
+{
+  "id": "3b9c3abc-1127-449a-b2f4-b61799ff1164",
+  "slug": "pipeline-batch-parallel",
+  "status": "published",
+  "title": "Pipeline, batch, and parallel",
+  "description": "Load authors and drafts with independent reads, then save an author and draft in one transaction.",
+  "topics": ["Queries", "Transactions"],
+  "section": "querying",
+  "order": 36,
+  "dialect": "postgresql",
+  "releasePair": "orm-1.0.0-rc.6__kit-1.0.0-rc.6"
+}

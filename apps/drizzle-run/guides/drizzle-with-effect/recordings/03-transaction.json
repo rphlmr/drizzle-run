@@ -1,22 +1,22 @@
 {
   "recordingVersion": 1,
-  "snapshotDigest": "4d20c0f5eb7507c88849072bcb07cd8baeef70bef920526dba007af23e9f8dc6",
-  "recordedAt": "2026-11-04T13:47:53.141Z",
+  "snapshotDigest": "e273bcfba280c7cf7c5b7de2ff1724ed087c24d48391413416f0c1fc65a5e09a",
+  "recordedAt": "2026-11-20T20:10:51.146Z",
   "result": {
     "version": 1,
     "target": {
       "dialect": "postgresql"
     },
     "tuple": {
-      "id": "postgresql-pglite__orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+      "id": "postgresql-pglite__orm-1.0.0-rc.6__kit-1.0.0-rc.6",
       "target": {
         "dialect": "postgresql"
       },
-      "ormVersion": "1.0.0-rc.5",
-      "kitVersion": "1.0.0-rc.5"
+      "ormVersion": "1.0.0-rc.6",
+      "kitVersion": "1.0.0-rc.6"
     },
     "random": {
-      "effectiveSeed": 3771382816,
+      "effectiveSeed": 305613980,
       "source": "generated",
       "derivation": "crypto-u32-v1",
       "generator": "mulberry32-v1"
@@ -25,74 +25,74 @@
       {
         "phase": "validate",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:47:50.273Z",
-        "durationMs": 0.08500003814697266
+        "startedAt": "2026-11-20T20:10:49.776Z",
+        "durationMs": 0.06499999761581421
       },
       {
         "phase": "resolve",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:47:50.273Z",
-        "durationMs": 0.009999990463256836
+        "startedAt": "2026-11-20T20:10:49.776Z",
+        "durationMs": 0.005000002682209015
       },
       {
         "phase": "load_artifacts",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:47:50.555Z",
-        "durationMs": 689.2800000905991
+        "startedAt": "2026-11-20T20:10:50.006Z",
+        "durationMs": 441.60500000044703
       },
       {
         "phase": "compile",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:47:50.337Z",
-        "durationMs": 217.9800000190735
+        "startedAt": "2026-11-20T20:10:49.827Z",
+        "durationMs": 177.964999999851
       },
       {
         "phase": "evaluate_schema",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:47:51.245Z",
-        "durationMs": 60.75999999046326
+        "startedAt": "2026-11-20T20:10:50.447Z",
+        "durationMs": 63.684999998658895
       },
       {
         "phase": "generate_bootstrap",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:47:51.306Z",
-        "durationMs": 22.575000047683716
+        "startedAt": "2026-11-20T20:10:50.511Z",
+        "durationMs": 19.779999997466803
       },
       {
         "phase": "apply_bootstrap",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:47:51.329Z",
-        "durationMs": 1491.5349999666214
+        "startedAt": "2026-11-20T20:10:50.532Z",
+        "durationMs": 372.19999999925494
       },
       {
         "phase": "seed",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:47:52.821Z",
-        "durationMs": 18.639999985694885
+        "startedAt": "2026-11-20T20:10:50.903Z",
+        "durationMs": 7.405000001192093
       },
       {
         "phase": "run",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:47:52.841Z",
-        "durationMs": 92.11000001430511
+        "startedAt": "2026-11-20T20:10:50.911Z",
+        "durationMs": 64.3449999988079
       },
       {
         "phase": "inspect",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:47:52.931Z",
-        "durationMs": 73.06500005722046
+        "startedAt": "2026-11-20T20:10:50.976Z",
+        "durationMs": 52.60999999940395
       },
       {
         "phase": "plan",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:47:53.005Z",
-        "durationMs": 0.039999961853027344
+        "startedAt": "2026-11-20T20:10:51.028Z",
+        "durationMs": 0.04500000178813934
       },
       {
         "phase": "cleanup",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:47:53.005Z",
-        "durationMs": 3.024999976158142
+        "startedAt": "2026-11-20T20:10:51.028Z",
+        "durationMs": 1.949999999254942
       }
     ],
     "diagnostics": [],
@@ -124,7 +124,7 @@
         "sql": "CREATE TABLE \"users\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"email\" text NOT NULL UNIQUE,\n\t\"credits\" integer NOT NULL\n);\n",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 22
+        "durationMs": 12
       },
       {
         "sequence": 4,
@@ -134,7 +134,7 @@
         "sql": "COMMIT",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 2
+        "durationMs": 0.999755859375
       },
       {
         "sequence": 5,
@@ -153,7 +153,7 @@
           },
           {
             "type": "primitive",
-            "value": 10
+            "value": "10"
           },
           {
             "type": "primitive",
@@ -165,13 +165,11 @@
           },
           {
             "type": "primitive",
-            "value": 5
+            "value": "5"
           }
         ],
         "outcome": "succeeded",
-        "source": "seed.ts",
-        "line": 5,
-        "durationMs": 17,
+        "durationMs": 4.00048828125,
         "rowCount": 2
       },
       {
@@ -191,15 +189,15 @@
           },
           {
             "type": "primitive",
-            "value": 0
+            "value": "0"
           }
         ],
         "outcome": "failed",
-        "durationMs": 3,
+        "durationMs": 2,
         "error": {
           "name": "DatabaseError",
           "message": "duplicate key value violates unique constraint \"users_email_key\"",
-          "stack": "    at Sua (dependencies.js:4893:26275)\n    at <anonymous> (dependencies.js:4893:27304)\n    at <anonymous> (dependencies.js:4893:26652)\n    at exchange (dependencies.js:4893:16492)\n"
+          "stack": "    at UMn (dependencies.js:1484:26335)\n    at <anonymous> (dependencies.js:1484:27352)\n    at <anonymous> (dependencies.js:1484:26700)\n    at exchange (dependencies.js:1484:16538)\n"
         }
       },
       {
@@ -207,10 +205,10 @@
         "phase": "run",
         "origin": "drizzle",
         "kind": "executed",
-        "sql": "BEGIN",
+        "sql": "begin read write",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 0.999755859375
+        "durationMs": 1
       },
       {
         "sequence": 8,
@@ -221,7 +219,7 @@
         "parameters": [
           {
             "type": "primitive",
-            "value": 3
+            "value": "3"
           },
           {
             "type": "primitive",
@@ -229,7 +227,7 @@
           }
         ],
         "outcome": "succeeded",
-        "durationMs": 4,
+        "durationMs": 2,
         "rowCount": 1
       },
       {
@@ -237,17 +235,17 @@
         "phase": "run",
         "origin": "drizzle",
         "kind": "executed",
-        "sql": "COMMIT",
+        "sql": "commit",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 2
+        "durationMs": 1
       },
       {
         "sequence": 10,
         "phase": "run",
         "origin": "drizzle",
         "kind": "executed",
-        "sql": "BEGIN",
+        "sql": "begin read write",
         "parameters": [],
         "outcome": "succeeded",
         "durationMs": 1
@@ -261,7 +259,7 @@
         "parameters": [
           {
             "type": "primitive",
-            "value": 50
+            "value": "50"
           },
           {
             "type": "primitive",
@@ -269,7 +267,7 @@
           }
         ],
         "outcome": "succeeded",
-        "durationMs": 1.000244140625,
+        "durationMs": 0.999755859375,
         "rowCount": 1
       },
       {
@@ -277,10 +275,10 @@
         "phase": "run",
         "origin": "drizzle",
         "kind": "executed",
-        "sql": "ROLLBACK",
+        "sql": "rollback",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 1
+        "durationMs": 0
       },
       {
         "sequence": 13,
@@ -290,7 +288,7 @@
         "sql": "select \"id\", \"name\", \"email\", \"credits\" from \"users\" order by \"users\".\"id\" asc",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 1.999755859375,
+        "durationMs": 1,
         "rowCount": 2
       }
     ],
@@ -460,7 +458,7 @@
           }
         ],
         "source": "query.ts",
-        "line": 50
+        "line": 62
       }
     ],
     "events": [
@@ -502,7 +500,7 @@
           "sql": "CREATE TABLE \"users\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"email\" text NOT NULL UNIQUE,\n\t\"credits\" integer NOT NULL\n);\n",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 22
+          "durationMs": 12
         }
       },
       {
@@ -516,7 +514,7 @@
           "sql": "COMMIT",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 2
+          "durationMs": 0.999755859375
         }
       },
       {
@@ -539,7 +537,7 @@
             },
             {
               "type": "primitive",
-              "value": 10
+              "value": "10"
             },
             {
               "type": "primitive",
@@ -551,13 +549,11 @@
             },
             {
               "type": "primitive",
-              "value": 5
+              "value": "5"
             }
           ],
           "outcome": "succeeded",
-          "source": "seed.ts",
-          "line": 5,
-          "durationMs": 17,
+          "durationMs": 4.00048828125,
           "rowCount": 2
         }
       },
@@ -581,15 +577,15 @@
             },
             {
               "type": "primitive",
-              "value": 0
+              "value": "0"
             }
           ],
           "outcome": "failed",
-          "durationMs": 3,
+          "durationMs": 2,
           "error": {
             "name": "DatabaseError",
             "message": "duplicate key value violates unique constraint \"users_email_key\"",
-            "stack": "    at Sua (dependencies.js:4893:26275)\n    at <anonymous> (dependencies.js:4893:27304)\n    at <anonymous> (dependencies.js:4893:26652)\n    at exchange (dependencies.js:4893:16492)\n"
+            "stack": "    at UMn (dependencies.js:1484:26335)\n    at <anonymous> (dependencies.js:1484:27352)\n    at <anonymous> (dependencies.js:1484:26700)\n    at exchange (dependencies.js:1484:16538)\n"
           }
         }
       },
@@ -702,10 +698,10 @@
           "phase": "run",
           "origin": "drizzle",
           "kind": "executed",
-          "sql": "BEGIN",
+          "sql": "begin read write",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 0.999755859375
+          "durationMs": 1
         }
       },
       {
@@ -720,7 +716,7 @@
           "parameters": [
             {
               "type": "primitive",
-              "value": 3
+              "value": "3"
             },
             {
               "type": "primitive",
@@ -728,7 +724,7 @@
             }
           ],
           "outcome": "succeeded",
-          "durationMs": 4,
+          "durationMs": 2,
           "rowCount": 1
         }
       },
@@ -740,10 +736,10 @@
           "phase": "run",
           "origin": "drizzle",
           "kind": "executed",
-          "sql": "COMMIT",
+          "sql": "commit",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 2
+          "durationMs": 1
         }
       },
       {
@@ -754,7 +750,7 @@
           "phase": "run",
           "origin": "drizzle",
           "kind": "executed",
-          "sql": "BEGIN",
+          "sql": "begin read write",
           "parameters": [],
           "outcome": "succeeded",
           "durationMs": 1
@@ -772,7 +768,7 @@
           "parameters": [
             {
               "type": "primitive",
-              "value": 50
+              "value": "50"
             },
             {
               "type": "primitive",
@@ -780,7 +776,7 @@
             }
           ],
           "outcome": "succeeded",
-          "durationMs": 1.000244140625,
+          "durationMs": 0.999755859375,
           "rowCount": 1
         }
       },
@@ -792,10 +788,10 @@
           "phase": "run",
           "origin": "drizzle",
           "kind": "executed",
-          "sql": "ROLLBACK",
+          "sql": "rollback",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 1
+          "durationMs": 0
         }
       },
       {
@@ -824,7 +820,7 @@
           "sql": "select \"id\", \"name\", \"email\", \"credits\" from \"users\" order by \"users\".\"id\" asc",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 1.999755859375,
+          "durationMs": 1,
           "rowCount": 2
         }
       },
@@ -883,7 +879,7 @@
             }
           ],
           "source": "query.ts",
-          "line": 50
+          "line": 62
         }
       }
     ],
@@ -897,27 +893,27 @@
       }
     },
     "timings": {
-      "total": 2738,
-      "validate": 0.08500003814697266,
-      "resolve": 0.009999990463256836,
-      "load_artifacts": 689.2800000905991,
-      "compile": 217.9800000190735,
-      "evaluate_schema": 60.75999999046326,
-      "generate_bootstrap": 22.575000047683716,
-      "apply_bootstrap": 1491.5349999666214,
-      "seed": 18.639999985694885,
-      "run": 92.11000001430511,
-      "inspect": 73.06500005722046,
-      "plan": 0.039999961853027344,
-      "cleanup": 3.024999976158142
+      "total": 1258,
+      "validate": 0.06499999761581421,
+      "resolve": 0.005000002682209015,
+      "load_artifacts": 441.60500000044703,
+      "compile": 177.964999999851,
+      "evaluate_schema": 63.684999998658895,
+      "generate_bootstrap": 19.779999997466803,
+      "apply_bootstrap": 372.19999999925494,
+      "seed": 7.405000001192093,
+      "run": 64.3449999988079,
+      "inspect": 52.60999999940395,
+      "plan": 0.04500000178813934,
+      "cleanup": 1.949999999254942
     },
     "ok": true,
     "outcome": "succeeded"
   },
   "guests": [
     {
-      "imageId": "orm-1.0.0-rc.5__kit-1.0.0-rc.5+effect",
-      "lockDigest": "sha256-20b443c6d9ff4ed1406e665759b2a05278eaba35ee3d50adfba116745693e005"
+      "imageId": "orm-1.0.0-rc.6__kit-1.0.0-rc.6+effect",
+      "lockDigest": "sha256-dd1aec6297ad32c0d7726b32cb8a572d4315c10eb77de6ca12bb625f147bdb84"
     }
   ]
 }

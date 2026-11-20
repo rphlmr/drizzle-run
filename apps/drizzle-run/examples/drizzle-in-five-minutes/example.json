@@ -8,7 +8,7 @@
   "section": "start",
   "order": 5,
   "dialect": "postgresql",
-  "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+  "releasePair": "orm-1.0.0-rc.6__kit-1.0.0-rc.6",
   "randomSeed": 42,
   "links": [
     { "kind": "docs", "label": "Schema declaration", "url": "https://orm.drizzle.team/docs/sql-schema-declaration" }

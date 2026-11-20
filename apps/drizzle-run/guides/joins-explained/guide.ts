@@ -14,7 +14,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
     kind: "drizzle-run",
     manifestVersion: 1,
     target: { dialect: "postgresql" },
-    dependencies: { "drizzle-orm": "1.0.0-rc.5", "drizzle-kit": "1.0.0-rc.5" },
+    dependencies: { "drizzle-orm": "1.0.0-rc.6", "drizzle-kit": "1.0.0-rc.6" },
     files: readExampleFiles("joins-explained", ["schema.ts", "seed.ts", "query.ts"]),
     entrypoints: { schema: "schema.ts", seed: "seed.ts", run: "query.ts" },
   }),
@@ -24,7 +24,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
       id: "01-inner",
       label: "Inner join",
       title: "Keep rows that match",
-      body: "A **join** combines rows from two sources. Its `ON` condition decides which pairs match. Here, a book matches an author when `books.authorId` equals `authors.id`.\n\nThis guide runs on PostgreSQL with Drizzle ORM **1.0.0-rc.5**. Ada has two books, Grace has one, Linus has none, and Anonymous tale has no author. You can inspect them in `seed.ts`.\n\nPress **Run**. An `innerJoin` returns only matching pairs. Ada appears twice because she has two books. Linus and Anonymous tale do not appear.",
+      body: "A **join** combines rows from two sources. Its `ON` condition decides which pairs match. Here, a book matches an author when `books.authorId` equals `authors.id`.\n\nThis guide runs on PostgreSQL with Drizzle ORM **1.0.0-rc.6**. Ada has two books, Grace has one, Linus has none, and Anonymous tale has no author. You can inspect them in `seed.ts`.\n\nPress **Run**. An `innerJoin` returns only matching pairs. Ada appears twice because she has two books. Linus and Anonymous tale do not appear.",
       focus: { file: "query.ts", lines: [6, 10] },
       run: "required",
       highlight: {

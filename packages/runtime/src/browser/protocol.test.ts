@@ -85,9 +85,11 @@ const sqlEventWithRowCount = (rowCount: unknown) => {
 
 describe("runtime worker protocol", () => {
   it("should accept Postgres command tags on a SQL event and reject anything else", () => {
-    expect(() => parseRuntimeWorkerMessage(sqlEvent(["SELECT", "DELETE"]))).not.toThrow();
+    expect(parseRuntimeWorkerMessage(sqlEvent(["SELECT 1", "CREATE TABLE", "INSERT 0 1"]))).toMatchObject({
+      payload: { commandTags: ["SELECT 1", "CREATE TABLE", "INSERT 0 1"] },
+    });
     expect(() => parseRuntimeWorkerMessage(sqlEvent("SELECT"))).toThrow(/Invalid SQL event command tags/);
-    expect(() => parseRuntimeWorkerMessage(sqlEvent(["CREATE TABLE"]))).toThrow(/Invalid SQL event command tags/);
+    expect(() => parseRuntimeWorkerMessage(sqlEvent(["SELECT\n1"]))).toThrow(/Invalid SQL event command tags/);
     expect(() => parseRuntimeWorkerMessage(sqlEvent([1]))).toThrow(/Invalid SQL event command tags/);
   });
 

@@ -14,7 +14,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
     kind: "drizzle-run",
     manifestVersion: 1,
     target: { dialect: "postgresql" },
-    dependencies: { "drizzle-orm": "1.0.0-rc.5", "drizzle-kit": "1.0.0-rc.5" },
+    dependencies: { "drizzle-orm": "1.0.0-rc.6", "drizzle-kit": "1.0.0-rc.6" },
     files: readExampleFiles("subqueries", ["schema.ts", "seed.ts", "query.ts"]),
     entrypoints: { schema: "schema.ts", seed: "seed.ts", run: "query.ts" },
   }),
@@ -25,7 +25,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
       focus: { file: "query.ts", lines: [7, 15] },
       label: "IN",
       title: "Use a query as the list of matching IDs",
-      body: "A **subquery** is a query inside another SQL query. This guide uses PostgreSQL and Drizzle ORM **1.0.0-rc.5**, with authors and their published or draft posts.\n\n`publishedAuthorIds` selects one column: author IDs from published posts. Pass that query directly to `inArray`. **Do not await the inner query**: awaiting would fetch an array into JavaScript instead of composing one SQL statement.\n\nPress **Run**. Ada and Grace appear once each, even though Ada's ID occurs twice in the inner query. `IN` checks membership; it does not join each matching post into another row.",
+      body: "A **subquery** is a query inside another SQL query. This guide uses PostgreSQL and Drizzle ORM **1.0.0-rc.6**, with authors and their published or draft posts.\n\n`publishedAuthorIds` selects one column: author IDs from published posts. Pass that query directly to `inArray`. **Do not await the inner query**: awaiting would fetch an array into JavaScript instead of composing one SQL statement.\n\nPress **Run**. Ada and Grace appear once each, even though Ada's ID occurs twice in the inner query. `IN` checks membership; it does not join each matching post into another row.",
       run: "required",
       highlight: {
         displays: ["Authors with published posts"],

@@ -68,6 +68,8 @@ export interface SqlEvent {
    * `rows.length` for reads and `rowsAffected` for writes. Absent for DDL, transaction control and SQLite batches.
    */
   rowCount?: number;
+  /** PostgreSQL command tags in response order, when the adapter provides them. */
+  commandTags?: readonly string[];
   outcome: "succeeded" | "failed";
   error?: SerializedError;
 }

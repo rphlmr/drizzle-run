@@ -1,0 +1,178 @@
+{
+  "kind": "drizzle-run-guide",
+  "manifestVersion": 1,
+  "id": "64b5aa75-5854-4398-b2d6-1262ff68c5e2",
+  "title": "Pipeline, batch, and parallel",
+  "description": "Load authors and drafts with independent reads, then save an author and draft in one transaction.",
+  "project": {
+    "kind": "drizzle-run",
+    "manifestVersion": 1,
+    "target": {
+      "dialect": "postgresql"
+    },
+    "dependencies": {
+      "drizzle-orm": "1.0.0-rc.6",
+      "drizzle-kit": "1.0.0-rc.6"
+    },
+    "files": {
+      "schema.ts": "import { integer, pgTable, text } from \"drizzle-orm/pg-core\";\n\nexport const users = pgTable(\"users\", {\n  id: integer().primaryKey(),\n  name: text().notNull(),\n});\n\nexport const posts = pgTable(\"posts\", {\n  id: integer().primaryKey(),\n  authorId: integer().notNull().references(() => users.id),\n  title: text().notNull(),\n});\n",
+      "seed.ts": "import { db } from \"@drizzle-run/runtime/context\";\nimport { posts, users } from \"./schema\";\n\nawait db.insert(users).values({ id: 1, name: \"Ada\" });\nawait db.insert(posts).values({ id: 1, authorId: 1, title: \"The first draft\" });\n",
+      "query.ts": "import { db } from \"@drizzle-run/runtime/context\";\nimport { posts, users } from \"./schema\";\n\nconst [authors, drafts] = await db.pipeline([\n  db.select().from(users).orderBy(users.id),\n  db.select().from(posts).orderBy(posts.id),\n]);\n\n$.display(\"Authors\", authors);\n$.display(\"Drafts\", drafts);\n"
+    },
+    "entrypoints": {
+      "schema": "schema.ts",
+      "seed": "seed.ts",
+      "run": "query.ts"
+    }
+  },
+  "steps": [
+    {
+      "type": "walkthrough",
+      "id": "01-pipeline",
+      "label": "Pipeline",
+      "title": "Send both reads on one connection",
+      "body": "A drafts screen needs two lists, its authors and their drafts. With Drizzle ORM **1.0.0-rc.6**, `db.pipeline()` sends both selects back-to-back on one connection without waiting for the first result. Each query runs in its own transaction.\n\nPress **Run**. Each result has a `status` and either a `value` or a `reason`. The results follow the input order.",
+      "focus": {
+        "file": "query.ts",
+        "lines": [
+          4,
+          7
+        ]
+      },
+      "run": "required",
+      "highlight": {
+        "displays": [
+          "Authors",
+          "Drafts"
+        ]
+      },
+      "meta": {
+        "summary": "Two result sets from queries sent on the same connection."
+      }
+    },
+    {
+      "type": "walkthrough",
+      "id": "02-batch",
+      "label": "Batch",
+      "title": "Save the author and draft together",
+      "body": "Grace is a new author. We already know her ID, so we can build both inserts before sending them. `db.batch()` sends them in order inside one transaction. The post can reference the author inserted by the first statement.\n\nPress **Run** to see both rows from `.returning()`. If you need to read a generated ID in JavaScript before building the second query, use an interactive `db.transaction()` for that flow.",
+      "edits": [
+        {
+          "file": "query.ts",
+          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { posts, users } from \"./schema\";\n\nconst [author, draft] = await db.batch([\n  db.insert(users).values({ id: 2, name: \"Grace\" }).returning(),\n  db.insert(posts).values({ id: 2, authorId: 2, title: \"A second draft\" }).returning(),\n]);\n\n$.display(\"Saved together\", { author, draft });\n"
+        }
+      ],
+      "focus": {
+        "file": "query.ts",
+        "lines": [
+          4,
+          7
+        ]
+      },
+      "run": "required",
+      "highlight": {
+        "displays": [
+          "Saved together"
+        ]
+      },
+      "meta": {
+        "summary": "One transaction inserts both rows and returns both results."
+      }
+    },
+    {
+      "type": "walkthrough",
+      "id": "03-rollback",
+      "label": "Rollback",
+      "title": "Check what happens when the second insert fails",
+      "body": "This time the new draft tries to reuse ID 1. PostgreSQL rejects it. The batch throws, and the transaction rolls back Grace's insert too.\n\nPress **Run**. The follow-up select shows only Ada, even though Grace's insert was first in the batch.",
+      "edits": [
+        {
+          "file": "query.ts",
+          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { posts, users } from \"./schema\";\n\ntry {\n  await db.batch([\n    db.insert(users).values({ id: 2, name: \"Grace\" }).returning(),\n    db.insert(posts).values({ id: 1, authorId: 2, title: \"A second draft\" }).returning(),\n  ]);\n} catch (error) {\n  const cause = error instanceof Error ? error.cause : undefined;\n  if (!cause || typeof cause !== \"object\" || !(\"code\" in cause) || cause.code !== \"23505\") throw error;\n  $.display(\"Batch rejected\", \"The draft ID already exists\");\n}\n\n$.display(\"Authors after rollback\", await db.select().from(users).orderBy(users.id));\n"
+        }
+      ],
+      "focus": {
+        "file": "query.ts",
+        "lines": [
+          5,
+          8
+        ]
+      },
+      "run": "required",
+      "highlight": {
+        "displays": [
+          "Batch rejected",
+          "Authors after rollback"
+        ]
+      },
+      "meta": {
+        "summary": "A duplicate draft ID rolls back both inserts."
+      }
+    },
+    {
+      "type": "walkthrough",
+      "id": "04-parallel",
+      "label": "Parallel",
+      "title": "Let the pool run independent reads concurrently",
+      "body": "The same two reads can also use `db.parallel()`. It uses available pooled connections, and returns one settled result per query in input order. Use it when the queries can run independently.\n\nPress **Run** to see the same two lists. Drizzle Run uses local PGlite, which serializes engine work. On a PostgreSQL server, how much can run at once depends on the connections available to the pool.",
+      "edits": [
+        {
+          "file": "query.ts",
+          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { posts, users } from \"./schema\";\n\nconst [authors, drafts] = await db.parallel([\n  db.select().from(users).orderBy(users.id),\n  db.select().from(posts).orderBy(posts.id),\n]);\n\n$.display(\"Authors\", authors);\n$.display(\"Drafts\", drafts);\n"
+        }
+      ],
+      "focus": {
+        "file": "query.ts",
+        "lines": [
+          4,
+          7
+        ]
+      },
+      "run": "required",
+      "highlight": {
+        "displays": [
+          "Authors",
+          "Drafts"
+        ]
+      },
+      "meta": {
+        "summary": "The pool dispatches each independent query and reports its outcome."
+      }
+    },
+    {
+      "type": "walkthrough",
+      "id": "05-partial-failure",
+      "label": "Partial failure",
+      "title": "Keep the result of the query that succeeds",
+      "body": "Run the same two statements through `db.pipeline()` and `db.parallel()`. The first tries to insert a draft with ID 1 again. The second loads the drafts.\n\nIn both groups, the insert returns `{ status: 'rejected', reason }` and the select returns `{ status: 'fulfilled', value }`. The call resolves with both outcomes in input order. Check each `status` before reading its `value` or `reason`.\n\nEach statement runs independently, so a successful write can still commit when another statement fails. Use `db.batch()` when all the writes need to succeed together.",
+      "edits": [
+        {
+          "file": "query.ts",
+          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { posts } from \"./schema\";\n\nconst duplicateDraft = () => db.insert(posts).values({ id: 1, authorId: 1, title: \"A second draft\" });\nconst loadDrafts = () => db.select().from(posts).orderBy(posts.id);\n\nconst pipeline = await db.pipeline([duplicateDraft(), loadDrafts()]);\nconst parallel = await db.parallel([duplicateDraft(), loadDrafts()]);\n\nfunction showResults(label: string, results: readonly PromiseSettledResult<unknown>[]) {\n  $.display(label, results.map((result) =>\n    result.status === \"fulfilled\" ? result : { status: result.status, reason: String(result.reason) }\n  ));\n}\n\nshowResults(\"Pipeline results\", pipeline);\nshowResults(\"Parallel results\", parallel);\n"
+        }
+      ],
+      "focus": {
+        "file": "query.ts",
+        "lines": [
+          4,
+          8
+        ]
+      },
+      "run": "required",
+      "highlight": {
+        "displays": [
+          "Pipeline results",
+          "Parallel results"
+        ]
+      },
+      "meta": {
+        "summary": "Both methods report the failed insert and still return the drafts."
+      }
+    }
+  ],
+  "meta": {
+    "slug": "pipeline-batch-parallel",
+    "status": "published",
+    "example": "3b9c3abc-1127-449a-b2f4-b61799ff1164"
+  }
+}

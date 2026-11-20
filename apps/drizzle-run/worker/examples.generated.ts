@@ -25,7 +25,7 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "postgresql",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]
@@ -37,7 +37,7 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "postgresql",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]
@@ -49,7 +49,7 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "sqlite",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]
@@ -61,7 +61,7 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "postgresql",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]
@@ -73,7 +73,7 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "sqlite",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]
@@ -85,7 +85,7 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "postgresql",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]
@@ -97,7 +97,7 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "postgresql",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "effect"
       }
     ]
@@ -109,7 +109,7 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "postgresql",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]
@@ -121,7 +121,7 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "sqlite",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]
@@ -133,12 +133,12 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "postgresql",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       },
       {
         "dialect": "postgresql",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]
@@ -150,12 +150,12 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "sqlite",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       },
       {
         "dialect": "sqlite",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]
@@ -167,7 +167,7 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "postgresql",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]
@@ -179,7 +179,7 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "postgresql",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]
@@ -191,7 +191,7 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "postgresql",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]
@@ -203,7 +203,7 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "postgresql",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]
@@ -215,7 +215,7 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "postgresql",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]
@@ -227,7 +227,7 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "postgresql",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]
@@ -239,7 +239,7 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "sqlite",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]
@@ -251,12 +251,12 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "postgresql",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       },
       {
         "dialect": "postgresql",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]
@@ -268,12 +268,12 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "sqlite",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       },
       {
         "dialect": "sqlite",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]
@@ -285,7 +285,7 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "postgresql",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]
@@ -297,7 +297,19 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "sqlite",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
+        "guestFlavor": "slim"
+      }
+    ]
+  },
+  {
+    "slug": "pipeline-batch-parallel",
+    "title": "Pipeline, batch, and parallel",
+    "description": "Load authors and drafts with independent reads, then save an author and draft in one transaction.",
+    "sides": [
+      {
+        "dialect": "postgresql",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]
@@ -309,12 +321,12 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "postgresql",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       },
       {
         "dialect": "sqlite",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]
@@ -326,7 +338,7 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "postgresql",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]
@@ -338,7 +350,7 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "postgresql",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]
@@ -350,7 +362,7 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "postgresql",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]
@@ -362,7 +374,7 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "sqlite",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]
@@ -374,7 +386,7 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "postgresql",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]
@@ -386,7 +398,7 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "postgresql",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]
@@ -398,7 +410,7 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "sqlite",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]
@@ -410,12 +422,12 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "postgresql",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       },
       {
         "dialect": "postgresql",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]
@@ -427,7 +439,7 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "postgresql",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]
@@ -439,7 +451,7 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "postgresql",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]
@@ -451,7 +463,7 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "sqlite",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]
@@ -463,7 +475,7 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "postgresql",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]
@@ -475,7 +487,7 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "sqlite",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]
@@ -487,7 +499,7 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "postgresql",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]
@@ -499,7 +511,7 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "postgresql",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]
@@ -511,7 +523,7 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "sqlite",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]
@@ -523,7 +535,7 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "postgresql",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]
@@ -535,7 +547,7 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "sqlite",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]
@@ -547,7 +559,7 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "postgresql",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]
@@ -559,7 +571,7 @@ export const exampleSummaries: readonly ExampleSummary[] = [
     "sides": [
       {
         "dialect": "sqlite",
-        "ormVersion": "1.0.0-rc.5",
+        "ormVersion": "1.0.0-rc.6",
         "guestFlavor": "slim"
       }
     ]

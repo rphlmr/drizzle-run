@@ -46,11 +46,15 @@ describe("buildReleaseOptions", () => {
     const options = buildReleaseOptions(target, { ormVersion: "0.45.4", kitVersion: "0.31.11" }, pairs);
     const all = [...options.lines, ...options.others];
 
-    expect(options.lines.map((option) => [option.line, option.ormVersion])).toEqual([
+    expect(
+      options.lines.filter((option) => option.guestFlavor === "slim").map((option) => [option.line, option.ormVersion]),
+    ).toEqual([
       ["next", "1.0.0-rc.6"],
       ["legacy", "0.45.4"],
     ]);
-    expect(all.filter((option) => option.newest && option.line === "next")).toHaveLength(1);
+    expect(
+      all.filter((option) => option.newest && option.line === "next" && option.guestFlavor === "slim"),
+    ).toHaveLength(1);
     expect(all.filter((option) => option.newest && option.line === "legacy")).toHaveLength(1);
     expect(options.others.map((option) => [option.ormVersion, option.guestFlavor])).toEqual([
       ["1.0.0-rc.5", "slim"],
@@ -111,8 +115,8 @@ describe("buildReleaseOptions", () => {
     const [plain, effect, legacy] = options.lines;
 
     expect(options.lines.map((option) => [option.ormVersion, option.guestFlavor])).toEqual([
-      ["1.0.0-rc.5", "slim"],
-      ["1.0.0-rc.5", "effect"],
+      ["1.0.0-rc.6", "slim"],
+      ["1.0.0-rc.6", "effect"],
       ["0.45.4", "slim"],
     ]);
     expect([plain?.badge, effect?.badge, legacy?.badge]).toEqual([true, false, false]);

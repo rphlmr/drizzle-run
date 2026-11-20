@@ -18,7 +18,7 @@ const corpusPrefixByOrmApi: Readonly<Record<string, string>> = { v0: "legacy", v
 const corpusPrefixes = Object.values(corpusPrefixByOrmApi);
 
 /** List the corpus files one ORM API typechecks: its own files and the shared ones. */
-async function listCorpusFiles(ormApi: string) {
+async function listCorpusFiles({ ormApi, ormVersion }: GuestPackage) {
   const prefix = corpusPrefixByOrmApi[ormApi];
 
   if (prefix === undefined) {
@@ -34,7 +34,12 @@ async function listCorpusFiles(ormApi: string) {
       const isOwnFile = name.startsWith(`${prefix}-`) || name.startsWith(`${prefix}.`);
       const isShared = !corpusPrefixes.some((other) => name.startsWith(`${other}-`) || name.startsWith(`${other}.`));
 
-      if (name.endsWith(".ts") && (isOwnFile || isShared)) {
+      const release = /\.rc(\d+)\.ts$/.exec(name)?.[1];
+      if (
+        name.endsWith(".ts") &&
+        (isOwnFile || isShared) &&
+        (release === undefined || ormVersion === `1.0.0-rc.${release}`)
+      ) {
         files.push(join(corpusDir, name));
       }
     }
@@ -59,7 +64,7 @@ async function writeCorpusTsconfig(guest: GuestPackage, install: Awaited<ReturnT
         "drizzle-orm/*": [`${ormDirectory}/*`],
       },
     },
-    files: await listCorpusFiles(guest.ormApi),
+    files: await listCorpusFiles(guest),
   };
 
   await mkdir(configDir, { recursive: true });

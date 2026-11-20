@@ -4,7 +4,6 @@ import { defineRunManifest } from "@drizzle-run/core/manifest";
 import { readExampleFiles } from "../example-files.ts";
 import type { DrizzleRunGuideMeta, DrizzleRunStepMeta } from "../meta.ts";
 
-const docs = { label: "Drizzle with Effect Postgres", href: "https://orm.drizzle.team/docs/connect-effect-postgres" };
 const effectDocs = { label: "Effect docs", href: "https://effect.website/docs" };
 
 export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta>()({
@@ -18,7 +17,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
     kind: "drizzle-run",
     manifestVersion: 1,
     target: { dialect: "postgresql" },
-    dependencies: { "drizzle-orm": "1.0.0-rc.5", "drizzle-kit": "1.0.0-rc.5" },
+    dependencies: { "drizzle-orm": "1.0.0-rc.6", "drizzle-kit": "1.0.0-rc.6" },
     guestFlavor: "effect",
     files: readExampleFiles("drizzle-with-effect", ["schema.ts", "seed.ts", "query.ts"]),
     entrypoints: { schema: "schema.ts", seed: "seed.ts", run: "query.ts" },
@@ -29,11 +28,11 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
       id: "01-plan",
       label: "A plan",
       title: "Write the query as a plan",
-      body: "This is the Drizzle query you know, written with **Effect**. `Effect.gen` and `yield*` read like `async` and `await`, but `program` is only a plan: nothing touches the database until `Effect.runPromise`.\n\nHover `program`. Its type says what it returns, how it can fail, and what it needs to run (`PgClient`), which `Effect.provide` hands it.\n\nPress **Run** to see the users.",
+      body: "This guide uses Drizzle ORM **1.0.0-rc.6** and the native Effect driver from `drizzle-orm/postgres/effect`. `Effect.gen` and `yield*` let you describe the query. `Effect.runPromise` starts it.\n\nHover `program` to see what it returns, how it can fail, and which service it needs. The layer gives that service a Drizzle Postgres pool and closes the pool when the program ends.\n\nPress **Run** to see Ada and Grace.",
       focus: { file: "query.ts", lines: [10, 20] },
       run: "required",
       highlight: { displays: ["Users"] },
-      links: [docs, effectDocs],
+      links: [effectDocs],
       meta: {
         summary: "Select the users inside an Effect program.",
         changed: "The plan ran once `Effect.runPromise` started it, and returned Ada and Grace.",
@@ -64,7 +63,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
       focus: { file: "query.ts", lines: [14, 18] },
       run: "required",
       highlight: { displays: ["Users"] },
-      links: [docs, effectDocs],
+      links: [effectDocs],
       meta: {
         summary: "Insert a taken email, and handle the failure by its tag.",
         changed: "The insert failed, `catchTag` logged it, and the program went on: still two users.",
@@ -109,7 +108,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
       focus: { file: "query.ts", lines: [23, 42] },
       run: "required",
       highlight: { displays: ["Users"] },
-      links: [docs, effectDocs],
+      links: [effectDocs],
       meta: {
         summary: "Spend credits in a transaction that fails with your own error.",
         changed:

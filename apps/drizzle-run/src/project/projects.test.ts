@@ -148,7 +148,10 @@ describe("manifest-backed projects", () => {
       new RegExp(`^.+ not available with orm ${next.ormVersion} · kit ${next.kitVersion}\\. Pick another release\\.$`),
     );
     expect(() => changeVersion(effectProject, legacy.ormVersion, legacy.kitVersion)).toThrow(/Pick another release/);
-    expect(listMovablePairs(effectProject.manifest, target).map((tuple) => tuple.id)).toEqual([next.id]);
+    expect(listMovablePairs(effectProject.manifest, target).map((tuple) => tuple.id)).toEqual([
+      next.id,
+      "sqlite-wasm__orm-1.0.0-rc.6__kit-1.0.0-rc.6",
+    ]);
   });
 
   it("should create a project on the chosen tested pair", () => {

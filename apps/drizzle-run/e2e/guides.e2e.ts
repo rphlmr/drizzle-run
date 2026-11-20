@@ -56,6 +56,21 @@ async function openGuide(page: Page, slug: string, query = "") {
   await expect(page.getByRole("button", { name: /^Run/ }).first()).toBeEnabled({ timeout: 120_000 });
 }
 
+test("should show the PostgreSQL rollback response beneath Batch rejected", async ({ page }) => {
+  await openGuide(page, "pipeline-batch-parallel", "?step=03-rollback");
+  await getGuideRail(page).getByRole("button", { name: "Run", exact: true }).click();
+
+  const output = getOutputRegion(page);
+  const rejected = output.getByRole("region", { name: /^Batch rejected/ });
+  await expect(rejected).toContainText("The draft ID already exists", { timeout: 120_000 });
+  await expect(rejected).toContainText("→ ROLLBACK");
+  await expect(rejected.locator('[data-slot="result-sql"]')).toContainText(/commit/i);
+  await rejected.getByRole("button", { name: "Expand SQL" }).click();
+  await expect(rejected.getByRole("button", { name: "Collapse SQL" })).toBeVisible();
+  await expect(rejected).toContainText("→ ROLLBACK");
+  await expect(output.getByRole("region", { name: /^Authors after rollback/ })).toContainText("Ada");
+});
+
 async function typeAtStart(page: Page, text: string) {
   const editor = page.locator(".monaco-editor").first();
   const editorBox = await editor.boundingBox();

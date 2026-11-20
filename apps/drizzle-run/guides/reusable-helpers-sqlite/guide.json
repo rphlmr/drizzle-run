@@ -11,8 +11,8 @@
       "dialect": "sqlite"
     },
     "dependencies": {
-      "drizzle-orm": "1.0.0-rc.5",
-      "drizzle-kit": "1.0.0-rc.5"
+      "drizzle-orm": "1.0.0-rc.6",
+      "drizzle-kit": "1.0.0-rc.6"
     },
     "files": {
       "schema.ts": "import { integer, sqliteTable, text } from \"drizzle-orm/sqlite-core\";\n\nexport const users = sqliteTable(\"users\", {\n  id: integer(\"id\").primaryKey(),\n  name: text(\"name\").notNull(),\n  bio: text(\"bio\"),\n  active: integer(\"active\", { mode: \"boolean\" }).notNull(),\n});\n\nexport const posts = sqliteTable(\"posts\", {\n  id: integer(\"id\").primaryKey(),\n  authorId: integer(\"author_id\").notNull().references(() => users.id),\n  title: text(\"title\").notNull(),\n});\n",
@@ -32,7 +32,7 @@
       "id": "01-inline",
       "label": "Start with SQL",
       "title": "Build an object and decode the JSON text",
-      "body": "You want a profile with an ID, display name, nullable bio and active flag. This guide uses SQLite and Drizzle ORM **1.0.0-rc.5**. `json_object` builds the object as JSON text, and `.mapWith()` parses that text when Drizzle reads the selected expression.\n\nSQLite stores boolean-mode columns as integers. The `json(case ...)` expression turns those stored values into JSON booleans. The column's normal boolean decoder does not run inside `json_object`.\n\nPress **Run**. Ada has a bio and `active: true`; Grace has `bio: null` and `active: false`. `sql<string>` describes the JSON text before decoding; the parser's return type describes the decoded `Profile`. Parsing JSON does not validate its fields against that type.",
+      "body": "You want a profile with an ID, display name, nullable bio and active flag. This guide uses SQLite and Drizzle ORM **1.0.0-rc.6**. `json_object` builds the object as JSON text, and `.mapWith()` parses that text when Drizzle reads the selected expression.\n\nSQLite stores boolean-mode columns as integers. The `json(case ...)` expression turns those stored values into JSON booleans. The column's normal boolean decoder does not run inside `json_object`.\n\nPress **Run**. Ada has a bio and `active: true`; Grace has `bio: null` and `active: false`. `sql<string>` describes the JSON text before decoding; the parser's return type describes the decoded `Profile`. Parsing JSON does not validate its fields against that type.",
       "focus": {
         "file": "query.ts",
         "lines": [

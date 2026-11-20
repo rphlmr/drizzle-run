@@ -1,22 +1,22 @@
 {
   "recordingVersion": 1,
-  "snapshotDigest": "061f2aad0bf83ae558e7222222e65d88a7b858e19ef2acc5706eb40fa94bbcff",
-  "recordedAt": "2026-11-04T13:47:50.581Z",
+  "snapshotDigest": "cc54f0fe0cab218fbf6d27d3d0b9f8b9f458e4a12f454ae81908796b4be26e12",
+  "recordedAt": "2026-11-20T20:10:48.084Z",
   "result": {
     "version": 1,
     "target": {
       "dialect": "postgresql"
     },
     "tuple": {
-      "id": "postgresql-pglite__orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+      "id": "postgresql-pglite__orm-1.0.0-rc.6__kit-1.0.0-rc.6",
       "target": {
         "dialect": "postgresql"
       },
-      "ormVersion": "1.0.0-rc.5",
-      "kitVersion": "1.0.0-rc.5"
+      "ormVersion": "1.0.0-rc.6",
+      "kitVersion": "1.0.0-rc.6"
     },
     "random": {
-      "effectiveSeed": 3336809916,
+      "effectiveSeed": 1828256162,
       "source": "generated",
       "derivation": "crypto-u32-v1",
       "generator": "mulberry32-v1"
@@ -25,74 +25,74 @@
       {
         "phase": "validate",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:47:48.207Z",
-        "durationMs": 0.09500002861022949
+        "startedAt": "2026-11-20T20:10:46.707Z",
+        "durationMs": 0.06999999657273293
       },
       {
         "phase": "resolve",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:47:48.207Z",
-        "durationMs": 0.009999990463256836
+        "startedAt": "2026-11-20T20:10:46.707Z",
+        "durationMs": 0.005000002682209015
       },
       {
         "phase": "load_artifacts",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:47:48.546Z",
-        "durationMs": 686.3049999475479
+        "startedAt": "2026-11-20T20:10:46.938Z",
+        "durationMs": 445.2250000014901
       },
       {
         "phase": "compile",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:47:48.336Z",
-        "durationMs": 210.22500002384186
+        "startedAt": "2026-11-20T20:10:46.757Z",
+        "durationMs": 180.99000000208616
       },
       {
         "phase": "evaluate_schema",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:47:49.233Z",
-        "durationMs": 67.27499997615814
+        "startedAt": "2026-11-20T20:10:47.384Z",
+        "durationMs": 63.41499999910593
       },
       {
         "phase": "generate_bootstrap",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:47:49.301Z",
-        "durationMs": 24.259999990463257
+        "startedAt": "2026-11-20T20:10:47.448Z",
+        "durationMs": 19.774999998509884
       },
       {
         "phase": "apply_bootstrap",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:47:49.326Z",
-        "durationMs": 936.8899999856949
+        "startedAt": "2026-11-20T20:10:47.468Z",
+        "durationMs": 370.804999999702
       },
       {
         "phase": "seed",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:47:50.263Z",
-        "durationMs": 14.399999976158142
+        "startedAt": "2026-11-20T20:10:47.838Z",
+        "durationMs": 7.655000001192093
       },
       {
         "phase": "run",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:47:50.278Z",
-        "durationMs": 83.17500007152557
+        "startedAt": "2026-11-20T20:10:47.846Z",
+        "durationMs": 56.144999999552965
       },
       {
         "phase": "inspect",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:47:50.360Z",
-        "durationMs": 82.27999997138977
+        "startedAt": "2026-11-20T20:10:47.903Z",
+        "durationMs": 53.21999999880791
       },
       {
         "phase": "plan",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:47:50.443Z",
-        "durationMs": 0.07500004768371582
+        "startedAt": "2026-11-20T20:10:47.956Z",
+        "durationMs": 0.054999999701976776
       },
       {
         "phase": "cleanup",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:47:50.444Z",
-        "durationMs": 5.440000057220459
+        "startedAt": "2026-11-20T20:10:47.956Z",
+        "durationMs": 2.6049999967217445
       }
     ],
     "diagnostics": [],
@@ -114,7 +114,7 @@
         "sql": "BEGIN",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 2
+        "durationMs": 0.999755859375
       },
       {
         "sequence": 3,
@@ -124,7 +124,7 @@
         "sql": "CREATE TABLE \"users\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"email\" text NOT NULL UNIQUE,\n\t\"credits\" integer NOT NULL\n);\n",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 18
+        "durationMs": 13
       },
       {
         "sequence": 4,
@@ -134,7 +134,7 @@
         "sql": "COMMIT",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 2
+        "durationMs": 1
       },
       {
         "sequence": 5,
@@ -153,7 +153,7 @@
           },
           {
             "type": "primitive",
-            "value": 10
+            "value": "10"
           },
           {
             "type": "primitive",
@@ -165,13 +165,11 @@
           },
           {
             "type": "primitive",
-            "value": 5
+            "value": "5"
           }
         ],
         "outcome": "succeeded",
-        "source": "seed.ts",
-        "line": 5,
-        "durationMs": 12.999755859375,
+        "durationMs": 4,
         "rowCount": 2
       },
       {
@@ -191,15 +189,15 @@
           },
           {
             "type": "primitive",
-            "value": 0
+            "value": "0"
           }
         ],
         "outcome": "failed",
-        "durationMs": 3,
+        "durationMs": 1.999755859375,
         "error": {
           "name": "DatabaseError",
           "message": "duplicate key value violates unique constraint \"users_email_key\"",
-          "stack": "    at Sua (dependencies.js:4893:26275)\n    at <anonymous> (dependencies.js:4893:27304)\n    at <anonymous> (dependencies.js:4893:26652)\n    at exchange (dependencies.js:4893:16492)\n"
+          "stack": "    at UMn (dependencies.js:1484:26335)\n    at <anonymous> (dependencies.js:1484:27352)\n    at <anonymous> (dependencies.js:1484:26700)\n    at exchange (dependencies.js:1484:16538)\n"
         }
       },
       {
@@ -369,7 +367,7 @@
           }
         ],
         "source": "query.ts",
-        "line": 26
+        "line": 38
       }
     ],
     "events": [
@@ -397,7 +395,7 @@
           "sql": "BEGIN",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 2
+          "durationMs": 0.999755859375
         }
       },
       {
@@ -411,7 +409,7 @@
           "sql": "CREATE TABLE \"users\" (\n\t\"id\" serial PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"email\" text NOT NULL UNIQUE,\n\t\"credits\" integer NOT NULL\n);\n",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 18
+          "durationMs": 13
         }
       },
       {
@@ -425,7 +423,7 @@
           "sql": "COMMIT",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 2
+          "durationMs": 1
         }
       },
       {
@@ -448,7 +446,7 @@
             },
             {
               "type": "primitive",
-              "value": 10
+              "value": "10"
             },
             {
               "type": "primitive",
@@ -460,13 +458,11 @@
             },
             {
               "type": "primitive",
-              "value": 5
+              "value": "5"
             }
           ],
           "outcome": "succeeded",
-          "source": "seed.ts",
-          "line": 5,
-          "durationMs": 12.999755859375,
+          "durationMs": 4,
           "rowCount": 2
         }
       },
@@ -490,15 +486,15 @@
             },
             {
               "type": "primitive",
-              "value": 0
+              "value": "0"
             }
           ],
           "outcome": "failed",
-          "durationMs": 3,
+          "durationMs": 1.999755859375,
           "error": {
             "name": "DatabaseError",
             "message": "duplicate key value violates unique constraint \"users_email_key\"",
-            "stack": "    at Sua (dependencies.js:4893:26275)\n    at <anonymous> (dependencies.js:4893:27304)\n    at <anonymous> (dependencies.js:4893:26652)\n    at exchange (dependencies.js:4893:16492)\n"
+            "stack": "    at UMn (dependencies.js:1484:26335)\n    at <anonymous> (dependencies.js:1484:27352)\n    at <anonymous> (dependencies.js:1484:26700)\n    at exchange (dependencies.js:1484:16538)\n"
           }
         }
       },
@@ -673,7 +669,7 @@
             }
           ],
           "source": "query.ts",
-          "line": 26
+          "line": 38
         }
       }
     ],
@@ -687,27 +683,27 @@
       }
     },
     "timings": {
-      "total": 2245,
-      "validate": 0.09500002861022949,
-      "resolve": 0.009999990463256836,
-      "load_artifacts": 686.3049999475479,
-      "compile": 210.22500002384186,
-      "evaluate_schema": 67.27499997615814,
-      "generate_bootstrap": 24.259999990463257,
-      "apply_bootstrap": 936.8899999856949,
-      "seed": 14.399999976158142,
-      "run": 83.17500007152557,
-      "inspect": 82.27999997138977,
-      "plan": 0.07500004768371582,
-      "cleanup": 5.440000057220459
+      "total": 1254,
+      "validate": 0.06999999657273293,
+      "resolve": 0.005000002682209015,
+      "load_artifacts": 445.2250000014901,
+      "compile": 180.99000000208616,
+      "evaluate_schema": 63.41499999910593,
+      "generate_bootstrap": 19.774999998509884,
+      "apply_bootstrap": 370.804999999702,
+      "seed": 7.655000001192093,
+      "run": 56.144999999552965,
+      "inspect": 53.21999999880791,
+      "plan": 0.054999999701976776,
+      "cleanup": 2.6049999967217445
     },
     "ok": true,
     "outcome": "succeeded"
   },
   "guests": [
     {
-      "imageId": "orm-1.0.0-rc.5__kit-1.0.0-rc.5+effect",
-      "lockDigest": "sha256-20b443c6d9ff4ed1406e665759b2a05278eaba35ee3d50adfba116745693e005"
+      "imageId": "orm-1.0.0-rc.6__kit-1.0.0-rc.6+effect",
+      "lockDigest": "sha256-dd1aec6297ad32c0d7726b32cb8a572d4315c10eb77de6ca12bb625f147bdb84"
     }
   ]
 }

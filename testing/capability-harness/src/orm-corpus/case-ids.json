@@ -109,7 +109,6 @@
     "dynamic-query-building",
     "count-helper",
     "row-locking",
-    "query-cache-opt-in",
     "prepared-statements-and-placeholders",
     "sql-template-helpers",
     "to-sql",
@@ -155,7 +154,6 @@
     "set-operations",
     "dynamic-query-building",
     "count-helper",
-    "query-cache-opt-in",
     "prepared-statements-and-placeholders",
     "sql-template-helpers",
     "to-sql",
@@ -178,5 +176,8 @@
     "table-metadata",
     "entity-checks",
     "relations-definition-parts"
-  ]
+  ],
+  "next-postgresql.rc5": ["query-cache-opt-in"],
+  "next-sqlite.rc5": ["query-cache-opt-in"],
+  "next-postgresql.rc6": ["postgres-procedure-call"]
 }

@@ -24,8 +24,8 @@
           "dialect": "postgresql"
         },
         "dependencies": {
-          "drizzle-orm": "1.0.0-rc.5",
-          "drizzle-kit": "1.0.0-rc.5"
+          "drizzle-orm": "1.0.0-rc.6",
+          "drizzle-kit": "1.0.0-rc.6"
         },
         "files": {
           "query.ts": "import { db } from \"@drizzle-run/runtime/context\";\nimport { eq, sql } from \"drizzle-orm\";\n\nimport { jsonbBuildObject } from \"./helpers\";\nimport { posts, users } from \"./schema\";\n\nconst profiles = await db.select({\n  profile: jsonbBuildObject({ id: users.id, displayName: users.name, bio: users.bio, active: users.active }),\n}).from(users).orderBy(users.id);\n\n$.display(\"Profiles\", profiles);\n\nconst cards = await db.select({\n  id: posts.id,\n  title: posts.title,\n  titleLength: sql<number>`length(${posts.title})`,\n  author: {\n    profile: jsonbBuildObject({ id: users.id, displayName: users.name, bio: users.bio, active: users.active }),\n  },\n}).from(posts).innerJoin(users, eq(posts.authorId, users.id)).orderBy(posts.id);\n\n$.display(\"Post cards\", cards);\n"
@@ -37,8 +37,8 @@
           "dialect": "postgresql"
         },
         "dependencies": {
-          "drizzle-orm": "1.0.0-rc.5",
-          "drizzle-kit": "1.0.0-rc.5"
+          "drizzle-orm": "1.0.0-rc.6",
+          "drizzle-kit": "1.0.0-rc.6"
         },
         "files": {
           "query.ts": "import { db } from \"@drizzle-run/runtime/context\";\nimport { sql } from \"drizzle-orm\";\n\nimport { jsonbBuildObject } from \"./helpers\";\n\nconst profiles = await db.query.users.findMany({\n  columns: {},\n  extras: {\n    profile: (user) => jsonbBuildObject({ id: user.id, displayName: user.name, bio: user.bio, active: user.active }),\n  },\n  orderBy: { id: \"asc\" },\n});\n\n$.display(\"Profiles\", profiles);\n\nconst cards = await db.query.posts.findMany({\n  columns: { id: true, title: true },\n  extras: { titleLength: (post) => sql<number>`length(${post.title})` },\n  with: {\n    author: {\n      columns: {},\n      extras: {\n        profile: (user) => jsonbBuildObject({ id: user.id, displayName: user.name, bio: user.bio, active: user.active }),\n      },\n    },\n  },\n  orderBy: { id: \"asc\" },\n});\n\n$.display(\"Post cards\", cards);\n"
@@ -52,7 +52,7 @@
       "id": "01-profiles",
       "label": "Select a helper",
       "title": "Use the same expression with either API",
-      "body": "You need a profile with an ID, display name, nullable bio and active flag. Both sides use Drizzle ORM **1.0.0-rc.5** and the same `jsonbBuildObject` helper from `helpers.ts`.\n\nThe SQL-like query selects the expression as `profile`. RQB puts it in `extras` and uses `columns: {}` to leave out the table's ordinary fields. Build the expression from the callback's `user` columns so it follows RQB's table alias.\n\nPress **Run**. Both sides return the same two profiles, including Grace's null bio and false active flag. Hover over `profiles`: its fields use normal TypeScript types without a handwritten result interface.",
+      "body": "You need a profile with an ID, display name, nullable bio and active flag. Both sides use Drizzle ORM **1.0.0-rc.6** and the same `jsonbBuildObject` helper from `helpers.ts`.\n\nThe SQL-like query selects the expression as `profile`. RQB puts it in `extras` and uses `columns: {}` to leave out the table's ordinary fields. Build the expression from the callback's `user` columns so it follows RQB's table alias.\n\nPress **Run**. Both sides return the same two profiles, including Grace's null bio and false active flag. Hover over `profiles`: its fields use normal TypeScript types without a handwritten result interface.",
       "edits": [
         {
           "file": "query.ts",

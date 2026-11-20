@@ -98,8 +98,9 @@ Schema, Kit, ORM, approved libraries, seed, and query execute in the same QuickJ
 project modules outside the sandbox and binds approved imports to the dependency instances already loaded
 inside it. Schema evaluation happens once; seed and query import that same module identity.
 
-The host owns the database. PostgreSQL uses the real `pg` client inside QuickJS and PGlite's binary wire
-protocol outside it. The bridge validates bounded byte requests and serializes exchanges for one client.
+The host owns the database. PostgreSQL uses PGlite's binary wire protocol. From RC6, project `db` uses
+`drizzle-orm/postgres` inside QuickJS, and earlier pairs use `node-postgres`. The bridge validates bounded
+byte requests and coordinates exchanges over the local database.
 The host never evaluates project JavaScript. SQLite uses the official SQLite Wasm package through its
 libSQL-compatible guest driver boundary. Browser and Node database workers each use a fresh memory-backed database;
 persistent VFS implementations are disabled. SQLite does not require OPFS or native database bindings.

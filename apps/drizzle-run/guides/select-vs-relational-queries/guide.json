@@ -23,8 +23,8 @@
           "dialect": "postgresql"
         },
         "dependencies": {
-          "drizzle-orm": "1.0.0-rc.5",
-          "drizzle-kit": "1.0.0-rc.5"
+          "drizzle-orm": "1.0.0-rc.6",
+          "drizzle-kit": "1.0.0-rc.6"
         },
         "files": {
           "query.ts": "import { db } from \"@drizzle-run/runtime/context\";\nimport { asc, eq } from \"drizzle-orm\";\n\nimport { posts, users } from \"./schema\";\n\n// One flat row per user and post. The left join keeps Linus, who has no posts, with a null title.\nconst rows = await db\n  .select({ userId: users.id, name: users.name, title: posts.title })\n  .from(users)\n  .leftJoin(posts, eq(posts.authorId, users.id))\n  .orderBy(asc(users.id), asc(posts.id));\n\n$.display(\"Joined rows\", rows);\n\n// Nesting is up to you: group the rows by user.\nconst authors = new Map<number, { name: string; posts: { title: string }[] }>();\n\nfor (const row of rows) {\n  const author = authors.get(row.userId) ?? { name: row.name, posts: [] };\n\n  if (row.title !== null) {\n    author.posts.push({ title: row.title });\n  }\n\n  authors.set(row.userId, author);\n}\n\n$.display(\"Authors with posts\", [...authors.values()]);\n"
@@ -36,8 +36,8 @@
           "dialect": "postgresql"
         },
         "dependencies": {
-          "drizzle-orm": "1.0.0-rc.5",
-          "drizzle-kit": "1.0.0-rc.5"
+          "drizzle-orm": "1.0.0-rc.6",
+          "drizzle-kit": "1.0.0-rc.6"
         },
         "files": {
           "query.ts": "import { db } from \"@drizzle-run/runtime/context\";\n\n// One call returns the nested result: each user with their posts, grouped by Drizzle from the relations.\n// Linus has no posts, so his list is empty.\nconst authors = await db.query.users.findMany({\n  columns: { name: true },\n  with: {\n    posts: {\n      columns: { title: true },\n      orderBy: { id: \"asc\" },\n    },\n  },\n  orderBy: { id: \"asc\" },\n});\n\n$.display(\"Authors with posts\", authors);\n"
@@ -51,7 +51,7 @@
       "id": "01-load",
       "label": "Two APIs",
       "title": "Load authors with their posts",
-      "body": "You need authors and their posts for a page. Drizzle gives you two APIs: the **SQL-like query builder**, with `select` and joins, and the **relational query builder (RQB)**, with `db.query` and `with`. Both sides here use Drizzle ORM **1.0.0-rc.5** and the same data.\n\nOn the SQL-like side, `leftJoin` connects each post's `authorId` to a user's `id`. On the RQB side, `with: { posts: ... }` uses the relations declared in `schema.ts`. Those relations describe how tables connect; the foreign key in the schema enforces the link in the database.\n\nPress **Run**. Compare **Joined rows** on the SQL-like side with **Authors with posts** on the RQB side. The data is the same, but its shape differs.",
+      "body": "You need authors and their posts for a page. Drizzle gives you two APIs: the **SQL-like query builder**, with `select` and joins, and the **relational query builder (RQB)**, with `db.query` and `with`. Both sides here use Drizzle ORM **1.0.0-rc.6** and the same data.\n\nOn the SQL-like side, `leftJoin` connects each post's `authorId` to a user's `id`. On the RQB side, `with: { posts: ... }` uses the relations declared in `schema.ts`. Those relations describe how tables connect; the foreign key in the schema enforces the link in the database.\n\nPress **Run**. Compare **Joined rows** on the SQL-like side with **Authors with posts** on the RQB side. The data is the same, but its shape differs.",
       "edits": [
         {
           "file": "query.ts",

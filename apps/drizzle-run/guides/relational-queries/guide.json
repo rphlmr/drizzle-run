@@ -3,7 +3,7 @@
   "manifestVersion": 1,
   "id": "58b9a8cb-aa44-44a5-ace3-0824b87f2b71",
   "title": "Migrate relational queries to v1",
-  "description": "Compare relational queries on Drizzle ORM 0.45.4 and 1.0.0-rc.5, side by side.",
+  "description": "Compare relational queries on Drizzle ORM 0.45.4 and 1.0.0-rc.6, side by side.",
   "project": {
     "kind": "drizzle-run-pair",
     "manifestVersion": 1,
@@ -34,8 +34,8 @@
           "dialect": "postgresql"
         },
         "dependencies": {
-          "drizzle-orm": "1.0.0-rc.5",
-          "drizzle-kit": "1.0.0-rc.5"
+          "drizzle-orm": "1.0.0-rc.6",
+          "drizzle-kit": "1.0.0-rc.6"
         },
         "files": {
           "schema.ts": "import { defineRelations } from \"drizzle-orm\";\nimport { integer, pgTable, serial, text } from \"drizzle-orm/pg-core\";\n\nexport const users = pgTable(\"users\", {\n  id: serial(\"id\").primaryKey(),\n  name: text(\"name\").notNull(),\n});\n\nexport const posts = pgTable(\"posts\", {\n  id: serial(\"id\").primaryKey(),\n  authorId: integer(\"author_id\").notNull().references(() => users.id),\n  title: text(\"title\").notNull(),\n});\n\nexport const comments = pgTable(\"comments\", {\n  id: serial(\"id\").primaryKey(),\n  postId: integer(\"post_id\").notNull().references(() => posts.id),\n  authorId: integer(\"author_id\").notNull().references(() => users.id),\n  body: text(\"body\").notNull(),\n});\n\n// Relations are declared once for the whole schema and exported as `relations`.\nexport const relations = defineRelations({ users, posts, comments }, (r) => ({\n  users: {\n    posts: r.many.posts(),\n    comments: r.many.comments(),\n  },\n  posts: {\n    author: r.one.users({ from: r.posts.authorId, to: r.users.id }),\n    comments: r.many.comments(),\n  },\n  comments: {\n    post: r.one.posts({ from: r.comments.postId, to: r.posts.id }),\n    author: r.one.users({ from: r.comments.authorId, to: r.users.id }),\n  },\n}));\n",
@@ -50,7 +50,7 @@
       "id": "01-relations",
       "label": "Relations",
       "title": "Relations in one place",
-      "body": "This guide compares Drizzle ORM **0.45.4** with **1.0.0-rc.5**. In 0.45.4, each table gets its own `relations()` call. In 1.0.0-rc.5, `defineRelations` groups the relations in one declaration.\n\nThe query on each side loads the same authors, posts and comments. Press **Run** to compare them. If you are learning relations for the first time, start with [Drizzle in five minutes](/examples/drizzle-in-five-minutes).",
+      "body": "This guide compares Drizzle ORM **0.45.4** with **1.0.0-rc.6**. In 0.45.4, each table gets its own `relations()` call. In 1.0.0-rc.6, `defineRelations` groups the relations in one declaration.\n\nThe query on each side loads the same authors, posts and comments. Press **Run** to compare them. If you are learning relations for the first time, start with [Drizzle in five minutes](/examples/drizzle-in-five-minutes).",
       "focus": {
         "file": "schema.ts",
         "lines": [

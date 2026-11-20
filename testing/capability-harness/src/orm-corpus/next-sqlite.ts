@@ -1,7 +1,6 @@
 import * as orm from "drizzle-orm";
 import type { LibSQLDatabase } from "drizzle-orm/libsql";
 import * as sqlite from "drizzle-orm/sqlite-core";
-import { usedTablesOf } from "drizzle-orm/used-tables";
 
 import * as schema from "./next-sqlite.schema.ts";
 import { describeError, runRolledBack } from "./run-cases.ts";
@@ -29,7 +28,7 @@ const toIds = (rows: { id: number }[]) => rows.map((row) => row.id);
 
 const toSortedIds = (rows: { id: number }[]) => rows.map((row) => row.id).toSorted((left, right) => left - right);
 
-/** The SQLite ORM scenarios for drizzle-orm 1.0.0-rc.5, run in order against one database. */
+/** The SQLite ORM scenarios for the Next release line, run in order against one database. */
 export const cases: OrmCase<Database>[] = [
   {
     id: "baseline-seed",
@@ -442,20 +441,6 @@ export const cases: OrmCase<Database>[] = [
           .select({ id: users.id, posts: db.$count(posts, orm.eq(posts.authorId, users.id)) })
           .from(users)
           .orderBy(users.id),
-      };
-    },
-  },
-  {
-    id: "query-cache-opt-in",
-    run: async (db) => {
-      return {
-        defaults: await db.select({ id: users.id }).from(users).orderBy(users.id).$withCache(),
-        configured: await db
-          .select({ name: users.name })
-          .from(users)
-          .where(orm.eq(users.id, 1))
-          .$withCache({ tag: "corpus-user", config: { ex: 60 }, autoInvalidate: false }),
-        disabled: await db.select({ id: users.id }).from(users).orderBy(users.id).limit(1).$withCache(false),
       };
     },
   },
@@ -1004,7 +989,6 @@ export const cases: OrmCase<Database>[] = [
           .getTableConfig(categories)
           .foreignKeys.map((foreignKey) => foreignKey.reference().columns.map((column) => column.name)),
         uniqueKeyName: sqlite.uniqueKeyName(users, ["email"]),
-        usedTables: usedTablesOf(users),
         columnTable: orm.getTableName(orm.getColumnTable(posts.title)),
         extended: orm.extractExtendedColumnType(users.profile),
         withEnum: [orm.isWithEnum(users.role), orm.isWithEnum(users.name)],

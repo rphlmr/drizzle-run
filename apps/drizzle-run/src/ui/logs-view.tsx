@@ -304,6 +304,7 @@ function SqlRow({ entry, entrypoints, compact, open, onToggle, plan, onDiagnosti
   const { event } = entry;
   const failed = event.outcome === "failed";
   const oneLine = toOneLineSql(event.sql);
+  const commandTags = event.commandTags?.join(", ");
   const tone = getStatementTone(event.sql);
   const source = (
     <RowSource
@@ -316,7 +317,13 @@ function SqlRow({ entry, entrypoints, compact, open, onToggle, plan, onDiagnosti
 
   return (
     <li data-slot="sql-line" data-sequence={event.sequence}>
-      <ToggleRow open={open} onToggle={onToggle} dataKind="sql" label={`SQL: ${oneLine}`} compact={compact}>
+      <ToggleRow
+        open={open}
+        onToggle={onToggle}
+        dataKind="sql"
+        label={commandTags ? `SQL: ${oneLine}. PostgreSQL returned ${commandTags}` : `SQL: ${oneLine}`}
+        compact={compact}
+      >
         {!compact && source}
         <span className={cn(kindClass, "text-muted")}>sql</span>
         <span
@@ -330,6 +337,7 @@ function SqlRow({ entry, entrypoints, compact, open, onToggle, plan, onDiagnosti
           data-slot="sql-text"
         >
           {tone === "query" && !failed ? <SqlTokens sql={oneLine} /> : oneLine}
+          {commandTags && <span className="ml-2 text-muted">→ {commandTags}</span>}
         </span>
         <span className={metaClass}>
           <SqlMeta rowCount={event.rowCount} durationMs={event.durationMs} failed={failed} />

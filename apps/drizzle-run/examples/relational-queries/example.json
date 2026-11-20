@@ -8,7 +8,7 @@
   "section": "relational-queries",
   "order": 30,
   "dialect": "postgresql",
-  "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+  "releasePair": "orm-1.0.0-rc.6__kit-1.0.0-rc.6",
   "links": [
     { "kind": "docs", "label": "Relations", "url": "https://orm.drizzle.team/docs/relations" },
     { "kind": "docs", "label": "Relational queries", "url": "https://orm.drizzle.team/docs/rqb" }

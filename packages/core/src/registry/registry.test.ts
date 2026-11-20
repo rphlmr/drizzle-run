@@ -29,13 +29,15 @@ function toLibrarySpecifiers(guest: GuestSelection): string[] {
 }
 
 describe("target-qualified runtime tuples", () => {
-  it("should admit two independently identified tuples per target", () => {
-    expect(listSupportedTuples(postgres)).toHaveLength(2);
-    expect(listSupportedTuples(sqlite)).toHaveLength(2);
-    expect(new Set(listSupportedTuples().map((tuple) => tuple.id)).size).toBe(4);
+  it("should admit three independently identified tuples per target", () => {
+    expect(listSupportedTuples(postgres)).toHaveLength(3);
+    expect(listSupportedTuples(sqlite)).toHaveLength(3);
+    expect(new Set(listSupportedTuples().map((tuple) => tuple.id)).size).toBe(6);
     expect(new Set(listSupportedTuples().map((tuple) => tuple.id))).toEqual(
       new Set([
         "postgresql-pglite__orm-0.45.4__kit-0.31.11",
+        "postgresql-pglite__orm-1.0.0-rc.6__kit-1.0.0-rc.6",
+        "sqlite-wasm__orm-1.0.0-rc.6__kit-1.0.0-rc.6",
         "postgresql-pglite__orm-1.0.0-rc.5__kit-1.0.0-rc.5",
         "sqlite-wasm__orm-0.45.4__kit-0.31.11",
         "sqlite-wasm__orm-1.0.0-rc.5__kit-1.0.0-rc.5",
@@ -47,7 +49,7 @@ describe("target-qualified runtime tuples", () => {
     ["0.45.1", "0.31.11"],
     ["0.45.4", "0.31.9"],
     ["1.0.0-rc.5", "1.0.0-rc.3"],
-    ["1.0.0-rc.6", "1.0.0-rc.6"],
+    ["1.0.0-rc.6", "1.0.0-rc.5"],
     ["0.45.4", "1.0.0-rc.5"],
   ])("should reject unsupported pair %s / %s without fallback", (ormVersion, kitVersion) => {
     for (const target of [postgres, sqlite]) {
@@ -133,10 +135,10 @@ describe("release lines", () => {
     const shipped = selectFromPairs(listSupportedTuples(), postgres);
 
     expect(shipped.newest.map((tuple) => [tuple.releaseLine, tuple.ormVersion])).toEqual([
-      ["next", "1.0.0-rc.5"],
+      ["next", "1.0.0-rc.6"],
       ["legacy", "0.45.4"],
     ]);
-    expect(shipped.others).toEqual([]);
+    expect(shipped.others.map((tuple) => tuple.ormVersion)).toEqual(["1.0.0-rc.5"]);
   });
 
   it("should move an older pair of a line to the other pairs", () => {
@@ -325,11 +327,13 @@ describe("guest flavors", () => {
     );
   });
 
-  it("should ship an effect image only for the Next pair", () => {
+  it("should ship an effect image for each Next pair", () => {
     expect(listGuestImages().map((image) => image.id)).toEqual([
       "orm-0.45.4__kit-0.31.11",
       "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
       "orm-1.0.0-rc.5__kit-1.0.0-rc.5+effect",
+      "orm-1.0.0-rc.6__kit-1.0.0-rc.6",
+      "orm-1.0.0-rc.6__kit-1.0.0-rc.6+effect",
     ]);
   });
 

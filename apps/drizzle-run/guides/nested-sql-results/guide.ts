@@ -14,7 +14,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
     kind: "drizzle-run",
     manifestVersion: 1,
     target: { dialect: "postgresql" },
-    dependencies: { "drizzle-orm": "1.0.0-rc.5", "drizzle-kit": "1.0.0-rc.5" },
+    dependencies: { "drizzle-orm": "1.0.0-rc.6", "drizzle-kit": "1.0.0-rc.6" },
     files: readExampleFiles("nested-sql-results", ["schema.ts", "seed.ts", "query.ts"]),
     entrypoints: { schema: "schema.ts", seed: "seed.ts", run: "query.ts" },
   }),
@@ -24,7 +24,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
       id: "01-multiplication",
       label: "Multiplied rows",
       title: "Two comments and three tags make six rows",
-      body: "You need a file with its comments, each comment's author, and its tags. This guide uses PostgreSQL with Drizzle ORM **1.0.0-rc.5**. The tables already contain Launch notes, Empty draft and Design sketch.\n\nA **join** pairs rows that satisfy its condition. Launch notes has two comments and three tags. Joining both collections gives each comment all three tags: **six rows for one file**.\n\nPress **Run**. The query is valid, but grouping these rows directly into arrays would repeat comments and tags. Empty draft also remains, with null child fields.",
+      body: "You need a file with its comments, each comment's author, and its tags. This guide uses PostgreSQL with Drizzle ORM **1.0.0-rc.6**. The tables already contain Launch notes, Empty draft and Design sketch.\n\nA **join** pairs rows that satisfy its condition. Launch notes has two comments and three tags. Joining both collections gives each comment all three tags: **six rows for one file**.\n\nPress **Run**. The query is valid, but grouping these rows directly into arrays would repeat comments and tags. Empty draft also remains, with null child fields.",
       focus: { file: "query.ts", lines: [6, 15] },
       run: "required",
       highlight: {

@@ -1,0 +1,646 @@
+{
+  "recordingVersion": 1,
+  "snapshotDigest": "03d24c0f076faa81c6f6e8b17d7fd98153162acc996df2f5bd2897fe4f37638a",
+  "recordedAt": "2026-11-20T20:27:02.256Z",
+  "result": {
+    "version": 1,
+    "target": {
+      "dialect": "postgresql"
+    },
+    "tuple": {
+      "id": "postgresql-pglite__orm-1.0.0-rc.6__kit-1.0.0-rc.6",
+      "target": {
+        "dialect": "postgresql"
+      },
+      "ormVersion": "1.0.0-rc.6",
+      "kitVersion": "1.0.0-rc.6"
+    },
+    "random": {
+      "effectiveSeed": 1621347779,
+      "source": "generated",
+      "derivation": "crypto-u32-v1",
+      "generator": "mulberry32-v1"
+    },
+    "phases": [
+      {
+        "phase": "validate",
+        "status": "succeeded",
+        "startedAt": "2026-11-20T20:27:00.900Z",
+        "durationMs": 0.030000001192092896
+      },
+      {
+        "phase": "resolve",
+        "status": "succeeded",
+        "startedAt": "2026-11-20T20:27:00.900Z",
+        "durationMs": 0
+      },
+      {
+        "phase": "load_artifacts",
+        "status": "succeeded",
+        "startedAt": "2026-11-20T20:27:01.101Z",
+        "durationMs": 364.96000000089407
+      },
+      {
+        "phase": "compile",
+        "status": "succeeded",
+        "startedAt": "2026-11-20T20:27:00.951Z",
+        "durationMs": 149.23000000044703
+      },
+      {
+        "phase": "evaluate_schema",
+        "status": "succeeded",
+        "startedAt": "2026-11-20T20:27:01.472Z",
+        "durationMs": 63.895000003278255
+      },
+      {
+        "phase": "generate_bootstrap",
+        "status": "succeeded",
+        "startedAt": "2026-11-20T20:27:01.530Z",
+        "durationMs": 20.28500000014901
+      },
+      {
+        "phase": "apply_bootstrap",
+        "status": "succeeded",
+        "startedAt": "2026-11-20T20:27:01.552Z",
+        "durationMs": 374.11500000208616
+      },
+      {
+        "phase": "seed",
+        "status": "succeeded",
+        "startedAt": "2026-11-20T20:27:01.925Z",
+        "durationMs": 8.274999998509884
+      },
+      {
+        "phase": "run",
+        "status": "succeeded",
+        "startedAt": "2026-11-20T20:27:01.933Z",
+        "durationMs": 3.985000003129244
+      },
+      {
+        "phase": "inspect",
+        "status": "succeeded",
+        "startedAt": "2026-11-20T20:27:01.938Z",
+        "durationMs": 57.32000000029802
+      },
+      {
+        "phase": "plan",
+        "status": "succeeded",
+        "startedAt": "2026-11-20T20:27:01.995Z",
+        "durationMs": 0.044999998062849045
+      },
+      {
+        "phase": "cleanup",
+        "status": "succeeded",
+        "startedAt": "2026-11-20T20:27:01.996Z",
+        "durationMs": 2.769999999552965
+      }
+    ],
+    "diagnostics": [],
+    "sql": [
+      {
+        "sequence": 1,
+        "phase": "bootstrap",
+        "origin": "kit",
+        "kind": "generated",
+        "sql": "CREATE TABLE \"posts\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"authorId\" integer NOT NULL,\n\t\"title\" text NOT NULL\n);\n",
+        "parameters": [],
+        "outcome": "succeeded"
+      },
+      {
+        "sequence": 2,
+        "phase": "bootstrap",
+        "origin": "kit",
+        "kind": "generated",
+        "sql": "CREATE TABLE \"users\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"name\" text NOT NULL\n);\n",
+        "parameters": [],
+        "outcome": "succeeded"
+      },
+      {
+        "sequence": 3,
+        "phase": "bootstrap",
+        "origin": "kit",
+        "kind": "generated",
+        "sql": "ALTER TABLE \"posts\" ADD CONSTRAINT \"posts_authorId_users_id_fkey\" FOREIGN KEY (\"authorId\") REFERENCES \"users\"(\"id\");",
+        "parameters": [],
+        "outcome": "succeeded"
+      },
+      {
+        "sequence": 4,
+        "phase": "bootstrap",
+        "origin": "adapter",
+        "kind": "executed",
+        "sql": "BEGIN",
+        "parameters": [],
+        "outcome": "succeeded",
+        "durationMs": 1.000244140625,
+        "commandTags": ["BEGIN"]
+      },
+      {
+        "sequence": 5,
+        "phase": "bootstrap",
+        "origin": "adapter",
+        "kind": "executed",
+        "sql": "CREATE TABLE \"posts\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"authorId\" integer NOT NULL,\n\t\"title\" text NOT NULL\n);\n",
+        "parameters": [],
+        "outcome": "succeeded",
+        "durationMs": 9,
+        "commandTags": ["CREATE"]
+      },
+      {
+        "sequence": 6,
+        "phase": "bootstrap",
+        "origin": "adapter",
+        "kind": "executed",
+        "sql": "CREATE TABLE \"users\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"name\" text NOT NULL\n);\n",
+        "parameters": [],
+        "outcome": "succeeded",
+        "durationMs": 3,
+        "commandTags": ["CREATE"]
+      },
+      {
+        "sequence": 7,
+        "phase": "bootstrap",
+        "origin": "adapter",
+        "kind": "executed",
+        "sql": "ALTER TABLE \"posts\" ADD CONSTRAINT \"posts_authorId_users_id_fkey\" FOREIGN KEY (\"authorId\") REFERENCES \"users\"(\"id\");",
+        "parameters": [],
+        "outcome": "succeeded",
+        "durationMs": 4,
+        "commandTags": ["ALTER"]
+      },
+      {
+        "sequence": 8,
+        "phase": "bootstrap",
+        "origin": "adapter",
+        "kind": "executed",
+        "sql": "COMMIT",
+        "parameters": [],
+        "outcome": "succeeded",
+        "durationMs": 1,
+        "commandTags": ["COMMIT"]
+      },
+      {
+        "sequence": 9,
+        "phase": "seed",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "insert into \"users\" (\"id\", \"name\") values ($1, $2)",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": "1"
+          },
+          {
+            "type": "primitive",
+            "value": "Ada"
+          }
+        ],
+        "outcome": "succeeded",
+        "durationMs": 2,
+        "rowCount": 1,
+        "commandTags": ["INSERT 0 1"]
+      },
+      {
+        "sequence": 10,
+        "phase": "seed",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "insert into \"posts\" (\"id\", \"authorId\", \"title\") values ($1, $2, $3)",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": "1"
+          },
+          {
+            "type": "primitive",
+            "value": "1"
+          },
+          {
+            "type": "primitive",
+            "value": "The first draft"
+          }
+        ],
+        "outcome": "succeeded",
+        "durationMs": 2.000244140625,
+        "rowCount": 1,
+        "commandTags": ["INSERT 0 1"]
+      },
+      {
+        "sequence": 11,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "select \"id\", \"name\" from \"users\" order by \"users\".\"id\"",
+        "parameters": [],
+        "outcome": "succeeded",
+        "durationMs": 0.999755859375,
+        "rowCount": 1,
+        "commandTags": ["SELECT 1"]
+      },
+      {
+        "sequence": 12,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "select \"id\", \"authorId\", \"title\" from \"posts\" order by \"posts\".\"id\"",
+        "parameters": [],
+        "outcome": "succeeded",
+        "durationMs": 0.999755859375,
+        "rowCount": 1,
+        "commandTags": ["SELECT 1"]
+      }
+    ],
+    "logs": [],
+    "value": {
+      "type": "undefined"
+    },
+    "displays": [
+      {
+        "label": "Authors",
+        "values": [
+          {
+            "type": "object",
+            "value": {
+              "status": {
+                "type": "primitive",
+                "value": "fulfilled"
+              },
+              "value": {
+                "type": "array",
+                "value": [
+                  {
+                    "type": "object",
+                    "value": {
+                      "id": {
+                        "type": "primitive",
+                        "value": 1
+                      },
+                      "name": {
+                        "type": "primitive",
+                        "value": "Ada"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "source": "query.ts",
+        "line": 9
+      },
+      {
+        "label": "Drafts",
+        "values": [
+          {
+            "type": "object",
+            "value": {
+              "status": {
+                "type": "primitive",
+                "value": "fulfilled"
+              },
+              "value": {
+                "type": "array",
+                "value": [
+                  {
+                    "type": "object",
+                    "value": {
+                      "id": {
+                        "type": "primitive",
+                        "value": 1
+                      },
+                      "authorId": {
+                        "type": "primitive",
+                        "value": 1
+                      },
+                      "title": {
+                        "type": "primitive",
+                        "value": "The first draft"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "source": "query.ts",
+        "line": 10
+      }
+    ],
+    "events": [
+      {
+        "type": "sql",
+        "sequence": 1,
+        "payload": {
+          "sequence": 1,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "CREATE TABLE \"posts\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"authorId\" integer NOT NULL,\n\t\"title\" text NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 2,
+        "payload": {
+          "sequence": 2,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "CREATE TABLE \"users\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"name\" text NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 3,
+        "payload": {
+          "sequence": 3,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "ALTER TABLE \"posts\" ADD CONSTRAINT \"posts_authorId_users_id_fkey\" FOREIGN KEY (\"authorId\") REFERENCES \"users\"(\"id\");",
+          "parameters": [],
+          "outcome": "succeeded"
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 4,
+        "payload": {
+          "sequence": 4,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "BEGIN",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 1.000244140625,
+          "commandTags": ["BEGIN"]
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 5,
+        "payload": {
+          "sequence": 5,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "CREATE TABLE \"posts\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"authorId\" integer NOT NULL,\n\t\"title\" text NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 9,
+          "commandTags": ["CREATE"]
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 6,
+        "payload": {
+          "sequence": 6,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "CREATE TABLE \"users\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"name\" text NOT NULL\n);\n",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 3,
+          "commandTags": ["CREATE"]
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 7,
+        "payload": {
+          "sequence": 7,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "ALTER TABLE \"posts\" ADD CONSTRAINT \"posts_authorId_users_id_fkey\" FOREIGN KEY (\"authorId\") REFERENCES \"users\"(\"id\");",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 4,
+          "commandTags": ["ALTER"]
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 8,
+        "payload": {
+          "sequence": 8,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "COMMIT",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 1,
+          "commandTags": ["COMMIT"]
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 9,
+        "payload": {
+          "sequence": 9,
+          "phase": "seed",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "insert into \"users\" (\"id\", \"name\") values ($1, $2)",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": "1"
+            },
+            {
+              "type": "primitive",
+              "value": "Ada"
+            }
+          ],
+          "outcome": "succeeded",
+          "durationMs": 2,
+          "rowCount": 1,
+          "commandTags": ["INSERT 0 1"]
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 10,
+        "payload": {
+          "sequence": 10,
+          "phase": "seed",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "insert into \"posts\" (\"id\", \"authorId\", \"title\") values ($1, $2, $3)",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": "1"
+            },
+            {
+              "type": "primitive",
+              "value": "1"
+            },
+            {
+              "type": "primitive",
+              "value": "The first draft"
+            }
+          ],
+          "outcome": "succeeded",
+          "durationMs": 2.000244140625,
+          "rowCount": 1,
+          "commandTags": ["INSERT 0 1"]
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 11,
+        "payload": {
+          "sequence": 11,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "select \"id\", \"name\" from \"users\" order by \"users\".\"id\"",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 0.999755859375,
+          "rowCount": 1,
+          "commandTags": ["SELECT 1"]
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 12,
+        "payload": {
+          "sequence": 12,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "select \"id\", \"authorId\", \"title\" from \"posts\" order by \"posts\".\"id\"",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 0.999755859375,
+          "rowCount": 1,
+          "commandTags": ["SELECT 1"]
+        }
+      },
+      {
+        "type": "display",
+        "sequence": 13,
+        "payload": {
+          "label": "Authors",
+          "values": [
+            {
+              "type": "object",
+              "value": {
+                "status": {
+                  "type": "primitive",
+                  "value": "fulfilled"
+                },
+                "value": {
+                  "type": "array",
+                  "value": [
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 1
+                        },
+                        "name": {
+                          "type": "primitive",
+                          "value": "Ada"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ],
+          "source": "query.ts",
+          "line": 9
+        }
+      },
+      {
+        "type": "display",
+        "sequence": 14,
+        "payload": {
+          "label": "Drafts",
+          "values": [
+            {
+              "type": "object",
+              "value": {
+                "status": {
+                  "type": "primitive",
+                  "value": "fulfilled"
+                },
+                "value": {
+                  "type": "array",
+                  "value": [
+                    {
+                      "type": "object",
+                      "value": {
+                        "id": {
+                          "type": "primitive",
+                          "value": 1
+                        },
+                        "authorId": {
+                          "type": "primitive",
+                          "value": 1
+                        },
+                        "title": {
+                          "type": "primitive",
+                          "value": "The first draft"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ],
+          "source": "query.ts",
+          "line": 10
+        }
+      }
+    ],
+    "cleanupErrors": [],
+    "cleanup": {
+      "guest": {
+        "mode": "graceful"
+      },
+      "database": {
+        "mode": "graceful"
+      }
+    },
+    "timings": {
+      "total": 1102,
+      "validate": 0.030000001192092896,
+      "resolve": 0,
+      "load_artifacts": 364.96000000089407,
+      "compile": 149.23000000044703,
+      "evaluate_schema": 63.895000003278255,
+      "generate_bootstrap": 20.28500000014901,
+      "apply_bootstrap": 374.11500000208616,
+      "seed": 8.274999998509884,
+      "run": 3.985000003129244,
+      "inspect": 57.32000000029802,
+      "plan": 0.044999998062849045,
+      "cleanup": 2.769999999552965
+    },
+    "ok": true,
+    "outcome": "succeeded"
+  },
+  "guests": [
+    {
+      "imageId": "orm-1.0.0-rc.6__kit-1.0.0-rc.6",
+      "lockDigest": "sha256-99db00a50a41f930b3da5212c21e22923dcad3047c6048a580ab8dae33439ed5"
+    }
+  ]
+}

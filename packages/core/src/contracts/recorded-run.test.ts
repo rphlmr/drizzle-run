@@ -58,6 +58,7 @@ function makeRunResult({
     line: 3,
     durationMs: 1.2,
     rowCount: 2,
+    commandTags: ["SELECT 2"],
     outcome: "succeeded" as const,
   };
   const log = {
@@ -196,6 +197,7 @@ describe("safeParseRecordedRun", () => {
 
     expect(result.success).toBe(true);
     expect(result.success && result.data).toEqual(input);
+    expect(result.success && result.data.result?.sql[0]?.commandTags).toEqual(["SELECT 2"]);
     expect(result.success && result.data).not.toBe(input);
   });
 

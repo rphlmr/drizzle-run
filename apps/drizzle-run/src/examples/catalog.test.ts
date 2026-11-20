@@ -114,6 +114,7 @@ describe("official examples in the repository", () => {
       "pagination-apis-sqlite",
       "pagination-postgresql",
       "pagination-sqlite",
+      "pipeline-batch-parallel",
       "prepared-queries",
       "relational-queries",
       "reusable-helpers",
@@ -126,11 +127,11 @@ describe("official examples in the repository", () => {
     ]);
   });
 
-  it("should run every official example on the rc.5 pair, named by its ORM version", () => {
+  it("should run every official example on the rc.6 pair, named by its ORM version", () => {
     for (const run of listExamples().flatMap(listExampleRuns)) {
       expect(getPairLabel(run)).toEqual({
-        label: "orm 1.0.0-rc.5",
-        title: "ORM 1.0.0-rc.5 with Kit 1.0.0-rc.5",
+        label: "orm 1.0.0-rc.6",
+        title: "ORM 1.0.0-rc.6 with Kit 1.0.0-rc.6",
       });
     }
   });
