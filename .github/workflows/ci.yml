@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   checks:
-    name: Typecheck, unit and runtime gates
+    name: Typecheck and unit tests
     if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -36,7 +36,6 @@ jobs:
       # restored cache entry.
       # Test suites use their own workers; overlapping suites and builds exhaust the private runner's two CPUs.
       - run: pnpm exec turbo run build typecheck typecheck:worker typecheck:e2e lint:workspace test test:worker test:pack --concurrency=1
-      - run: pnpm test:runtime
       # A cache hit restores generated files and a miss rewrites them, so a stale committed one shows up here either way.
       - name: Committed generated files are current
         run: |
@@ -55,6 +54,17 @@ jobs:
         with:
           path: .turbo/cache
           key: ${{ steps.setup.outputs.turbo-cache-key }}
+
+  runtime:
+    name: Runtime gates
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: ./.github/actions/setup
+      - run: pnpm runtime-assets
+      - run: pnpm test:runtime
 
   # For the Worker's D1 and the browser store: drizzle-kit check fails on clashing migrations from parallel branches,
   # and each schema check fails on a schema change without a migration. Only dependencies are needed, so it skips

@@ -1,0 +1,1198 @@
+{
+  "recordingVersion": 1,
+  "snapshotDigest": "2472b3112312a768b1bbdd4e7f710466662d098a6dd3bd2605f29ef3c4dc03dc",
+  "recordedAt": "2026-11-20T23:21:48.645Z",
+  "result": {
+    "version": 1,
+    "target": {
+      "dialect": "postgresql"
+    },
+    "tuple": {
+      "id": "postgresql-pglite__orm-1.0.0-rc.6__kit-1.0.0-rc.6",
+      "target": {
+        "dialect": "postgresql"
+      },
+      "ormVersion": "1.0.0-rc.6",
+      "kitVersion": "1.0.0-rc.6"
+    },
+    "random": {
+      "effectiveSeed": 2310825750,
+      "source": "generated",
+      "derivation": "crypto-u32-v1",
+      "generator": "mulberry32-v1"
+    },
+    "phases": [
+      {
+        "phase": "validate",
+        "status": "succeeded",
+        "startedAt": "2026-11-20T23:21:47.291Z",
+        "durationMs": 0.03999999910593033
+      },
+      {
+        "phase": "resolve",
+        "status": "succeeded",
+        "startedAt": "2026-11-20T23:21:47.291Z",
+        "durationMs": 0
+      },
+      {
+        "phase": "load_artifacts",
+        "status": "succeeded",
+        "startedAt": "2026-11-20T23:21:47.486Z",
+        "durationMs": 359.82499999552965
+      },
+      {
+        "phase": "compile",
+        "status": "succeeded",
+        "startedAt": "2026-11-20T23:21:47.342Z",
+        "durationMs": 143.8800000026822
+      },
+      {
+        "phase": "evaluate_schema",
+        "status": "succeeded",
+        "startedAt": "2026-11-20T23:21:47.847Z",
+        "durationMs": 63.21000000089407
+      },
+      {
+        "phase": "generate_bootstrap",
+        "status": "succeeded",
+        "startedAt": "2026-11-20T23:21:47.910Z",
+        "durationMs": 19.604999996721745
+      },
+      {
+        "phase": "apply_bootstrap",
+        "status": "succeeded",
+        "startedAt": "2026-11-20T23:21:47.930Z",
+        "durationMs": 373.58500000089407
+      },
+      {
+        "phase": "seed",
+        "status": "succeeded",
+        "startedAt": "2026-11-20T23:21:48.303Z",
+        "durationMs": 7.46000000089407
+      },
+      {
+        "phase": "run",
+        "status": "succeeded",
+        "startedAt": "2026-11-20T23:21:48.311Z",
+        "durationMs": 13.575000002980232
+      },
+      {
+        "phase": "inspect",
+        "status": "succeeded",
+        "startedAt": "2026-11-20T23:21:48.324Z",
+        "durationMs": 55.65500000119209
+      },
+      {
+        "phase": "plan",
+        "status": "succeeded",
+        "startedAt": "2026-11-20T23:21:48.380Z",
+        "durationMs": 0.03999999910593033
+      },
+      {
+        "phase": "cleanup",
+        "status": "succeeded",
+        "startedAt": "2026-11-20T23:21:48.381Z",
+        "durationMs": 2.0049999952316284
+      }
+    ],
+    "diagnostics": [],
+    "sql": [
+      {
+        "sequence": 1,
+        "phase": "bootstrap",
+        "origin": "kit",
+        "kind": "generated",
+        "sql": "CREATE TABLE \"inventory\" (\n\t\"warehouse\" text,\n\t\"sku\" text,\n\t\"quantity\" integer NOT NULL,\n\t\"source\" text NOT NULL,\n\t\"status\" text DEFAULT 'received' NOT NULL,\n\tCONSTRAINT \"inventory_pkey\" PRIMARY KEY(\"warehouse\",\"sku\")\n);\n",
+        "parameters": [],
+        "outcome": "succeeded"
+      },
+      {
+        "sequence": 2,
+        "phase": "bootstrap",
+        "origin": "adapter",
+        "kind": "executed",
+        "sql": "BEGIN",
+        "parameters": [],
+        "outcome": "succeeded",
+        "durationMs": 2,
+        "commandTags": ["BEGIN"]
+      },
+      {
+        "sequence": 3,
+        "phase": "bootstrap",
+        "origin": "adapter",
+        "kind": "executed",
+        "sql": "CREATE TABLE \"inventory\" (\n\t\"warehouse\" text,\n\t\"sku\" text,\n\t\"quantity\" integer NOT NULL,\n\t\"source\" text NOT NULL,\n\t\"status\" text DEFAULT 'received' NOT NULL,\n\tCONSTRAINT \"inventory_pkey\" PRIMARY KEY(\"warehouse\",\"sku\")\n);\n",
+        "parameters": [],
+        "outcome": "succeeded",
+        "durationMs": 10,
+        "commandTags": ["CREATE"]
+      },
+      {
+        "sequence": 4,
+        "phase": "bootstrap",
+        "origin": "adapter",
+        "kind": "executed",
+        "sql": "COMMIT",
+        "parameters": [],
+        "outcome": "succeeded",
+        "durationMs": 1.000244140625,
+        "commandTags": ["COMMIT"]
+      },
+      {
+        "sequence": 5,
+        "phase": "seed",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "insert into \"inventory\" (\"warehouse\", \"sku\", \"quantity\", \"source\", \"status\") values ($1, $2, $3, $4, default), ($5, $6, $7, $8, default), ($9, $10, $11, $12, default)",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": "north"
+          },
+          {
+            "type": "primitive",
+            "value": "keyboard"
+          },
+          {
+            "type": "primitive",
+            "value": "12"
+          },
+          {
+            "type": "primitive",
+            "value": "supplier"
+          },
+          {
+            "type": "primitive",
+            "value": "north"
+          },
+          {
+            "type": "primitive",
+            "value": "mouse"
+          },
+          {
+            "type": "primitive",
+            "value": "9"
+          },
+          {
+            "type": "primitive",
+            "value": "supplier"
+          },
+          {
+            "type": "primitive",
+            "value": "south"
+          },
+          {
+            "type": "primitive",
+            "value": "keyboard"
+          },
+          {
+            "type": "primitive",
+            "value": "7"
+          },
+          {
+            "type": "primitive",
+            "value": "supplier"
+          }
+        ],
+        "outcome": "succeeded",
+        "durationMs": 4.00048828125,
+        "rowCount": 3,
+        "commandTags": ["INSERT 0 3"]
+      },
+      {
+        "sequence": 6,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "begin",
+        "parameters": [],
+        "outcome": "succeeded",
+        "durationMs": 2,
+        "commandTags": ["BEGIN"]
+      },
+      {
+        "sequence": 7,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "insert into \"inventory\" (\"warehouse\",\"sku\",\"quantity\",\"source\") values ($1,$2,$3,$4)",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": "north"
+          },
+          {
+            "type": "primitive",
+            "value": "cable"
+          },
+          {
+            "type": "primitive",
+            "value": "24"
+          },
+          {
+            "type": "primitive",
+            "value": "supplier"
+          }
+        ],
+        "outcome": "succeeded",
+        "durationMs": 2,
+        "rowCount": 1,
+        "commandTags": ["INSERT 0 1"]
+      },
+      {
+        "sequence": 8,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "insert into \"inventory\" (\"warehouse\",\"sku\",\"quantity\",\"source\") values ($1,$2,$3,$4)",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": "north"
+          },
+          {
+            "type": "primitive",
+            "value": "keyboard"
+          },
+          {
+            "type": "primitive",
+            "value": "15"
+          },
+          {
+            "type": "primitive",
+            "value": "supplier"
+          }
+        ],
+        "outcome": "failed",
+        "durationMs": 2,
+        "error": {
+          "name": "DatabaseError",
+          "message": "duplicate key value violates unique constraint \"inventory_pkey\"",
+          "stack": "    at Emr (dependencies.js:1413:26250)\n    at <anonymous> (dependencies.js:1413:27267)\n    at <anonymous> (dependencies.js:1413:26615)\n    at exchange (dependencies.js:1413:16494)\n"
+        }
+      },
+      {
+        "sequence": 9,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "commit",
+        "parameters": [],
+        "outcome": "succeeded",
+        "durationMs": 2,
+        "commandTags": ["ROLLBACK"]
+      },
+      {
+        "sequence": 10,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "select \"warehouse\", \"sku\", \"quantity\", \"source\", \"status\" from \"inventory\" order by \"inventory\".\"warehouse\", \"inventory\".\"sku\"",
+        "parameters": [],
+        "outcome": "succeeded",
+        "durationMs": 1,
+        "rowCount": 3,
+        "commandTags": ["SELECT 3"]
+      },
+      {
+        "sequence": 11,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "insert into \"inventory\" (\"warehouse\",\"sku\",\"quantity\",\"source\") values ($1,$2,$3,$4)",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": "north"
+          },
+          {
+            "type": "primitive",
+            "value": "cable"
+          },
+          {
+            "type": "unsupported",
+            "valueType": "binary",
+            "description": "Binary PostgreSQL parameter of type OID 0"
+          },
+          {
+            "type": "primitive",
+            "value": "supplier"
+          }
+        ],
+        "outcome": "succeeded",
+        "durationMs": 0,
+        "rowCount": 1,
+        "commandTags": ["INSERT 0 1"]
+      },
+      {
+        "sequence": 12,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "insert into \"inventory\" (\"warehouse\",\"sku\",\"quantity\",\"source\") values ($1,$2,$3,$4)",
+        "parameters": [
+          {
+            "type": "primitive",
+            "value": "north"
+          },
+          {
+            "type": "primitive",
+            "value": "keyboard"
+          },
+          {
+            "type": "unsupported",
+            "valueType": "binary",
+            "description": "Binary PostgreSQL parameter of type OID 0"
+          },
+          {
+            "type": "primitive",
+            "value": "supplier"
+          }
+        ],
+        "outcome": "failed",
+        "durationMs": 1,
+        "error": {
+          "name": "DatabaseError",
+          "message": "duplicate key value violates unique constraint \"inventory_pkey\"",
+          "stack": "    at Emr (dependencies.js:1413:26250)\n    at <anonymous> (dependencies.js:1413:27267)\n    at <anonymous> (dependencies.js:1413:26615)\n    at exchange (dependencies.js:1413:16494)\n"
+        }
+      },
+      {
+        "sequence": 13,
+        "phase": "run",
+        "origin": "drizzle",
+        "kind": "executed",
+        "sql": "select \"warehouse\", \"sku\", \"quantity\", \"source\", \"status\" from \"inventory\" order by \"inventory\".\"warehouse\", \"inventory\".\"sku\"",
+        "parameters": [],
+        "outcome": "succeeded",
+        "durationMs": 0.999755859375,
+        "rowCount": 4,
+        "commandTags": ["SELECT 4"]
+      }
+    ],
+    "logs": [],
+    "value": {
+      "type": "undefined"
+    },
+    "displays": [
+      {
+        "label": "Atomic import rejected",
+        "values": [
+          {
+            "type": "primitive",
+            "value": "North already stocks this keyboard"
+          }
+        ],
+        "source": "query.ts",
+        "line": 15
+      },
+      {
+        "label": "Inventory after rollback",
+        "values": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "warehouse": {
+                    "type": "primitive",
+                    "value": "north"
+                  },
+                  "sku": {
+                    "type": "primitive",
+                    "value": "keyboard"
+                  },
+                  "quantity": {
+                    "type": "primitive",
+                    "value": 12
+                  },
+                  "source": {
+                    "type": "primitive",
+                    "value": "supplier"
+                  },
+                  "status": {
+                    "type": "primitive",
+                    "value": "received"
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "warehouse": {
+                    "type": "primitive",
+                    "value": "north"
+                  },
+                  "sku": {
+                    "type": "primitive",
+                    "value": "mouse"
+                  },
+                  "quantity": {
+                    "type": "primitive",
+                    "value": 9
+                  },
+                  "source": {
+                    "type": "primitive",
+                    "value": "supplier"
+                  },
+                  "status": {
+                    "type": "primitive",
+                    "value": "received"
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "warehouse": {
+                    "type": "primitive",
+                    "value": "south"
+                  },
+                  "sku": {
+                    "type": "primitive",
+                    "value": "keyboard"
+                  },
+                  "quantity": {
+                    "type": "primitive",
+                    "value": 7
+                  },
+                  "source": {
+                    "type": "primitive",
+                    "value": "supplier"
+                  },
+                  "status": {
+                    "type": "primitive",
+                    "value": "received"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "source": "query.ts",
+        "line": 18
+      },
+      {
+        "label": "Chunk rejected",
+        "values": [
+          {
+            "type": "primitive",
+            "value": "North already stocks this keyboard"
+          }
+        ],
+        "source": "query.ts",
+        "line": 24
+      },
+      {
+        "label": "Inventory after partial commit",
+        "values": [
+          {
+            "type": "array",
+            "value": [
+              {
+                "type": "object",
+                "value": {
+                  "warehouse": {
+                    "type": "primitive",
+                    "value": "north"
+                  },
+                  "sku": {
+                    "type": "primitive",
+                    "value": "cable"
+                  },
+                  "quantity": {
+                    "type": "primitive",
+                    "value": 24
+                  },
+                  "source": {
+                    "type": "primitive",
+                    "value": "supplier"
+                  },
+                  "status": {
+                    "type": "primitive",
+                    "value": "received"
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "warehouse": {
+                    "type": "primitive",
+                    "value": "north"
+                  },
+                  "sku": {
+                    "type": "primitive",
+                    "value": "keyboard"
+                  },
+                  "quantity": {
+                    "type": "primitive",
+                    "value": 12
+                  },
+                  "source": {
+                    "type": "primitive",
+                    "value": "supplier"
+                  },
+                  "status": {
+                    "type": "primitive",
+                    "value": "received"
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "warehouse": {
+                    "type": "primitive",
+                    "value": "north"
+                  },
+                  "sku": {
+                    "type": "primitive",
+                    "value": "mouse"
+                  },
+                  "quantity": {
+                    "type": "primitive",
+                    "value": 9
+                  },
+                  "source": {
+                    "type": "primitive",
+                    "value": "supplier"
+                  },
+                  "status": {
+                    "type": "primitive",
+                    "value": "received"
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "value": {
+                  "warehouse": {
+                    "type": "primitive",
+                    "value": "south"
+                  },
+                  "sku": {
+                    "type": "primitive",
+                    "value": "keyboard"
+                  },
+                  "quantity": {
+                    "type": "primitive",
+                    "value": 7
+                  },
+                  "source": {
+                    "type": "primitive",
+                    "value": "supplier"
+                  },
+                  "status": {
+                    "type": "primitive",
+                    "value": "received"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "source": "query.ts",
+        "line": 27
+      }
+    ],
+    "events": [
+      {
+        "type": "sql",
+        "sequence": 1,
+        "payload": {
+          "sequence": 1,
+          "phase": "bootstrap",
+          "origin": "kit",
+          "kind": "generated",
+          "sql": "CREATE TABLE \"inventory\" (\n\t\"warehouse\" text,\n\t\"sku\" text,\n\t\"quantity\" integer NOT NULL,\n\t\"source\" text NOT NULL,\n\t\"status\" text DEFAULT 'received' NOT NULL,\n\tCONSTRAINT \"inventory_pkey\" PRIMARY KEY(\"warehouse\",\"sku\")\n);\n",
+          "parameters": [],
+          "outcome": "succeeded"
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 2,
+        "payload": {
+          "sequence": 2,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "BEGIN",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 2,
+          "commandTags": ["BEGIN"]
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 3,
+        "payload": {
+          "sequence": 3,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "CREATE TABLE \"inventory\" (\n\t\"warehouse\" text,\n\t\"sku\" text,\n\t\"quantity\" integer NOT NULL,\n\t\"source\" text NOT NULL,\n\t\"status\" text DEFAULT 'received' NOT NULL,\n\tCONSTRAINT \"inventory_pkey\" PRIMARY KEY(\"warehouse\",\"sku\")\n);\n",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 10,
+          "commandTags": ["CREATE"]
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 4,
+        "payload": {
+          "sequence": 4,
+          "phase": "bootstrap",
+          "origin": "adapter",
+          "kind": "executed",
+          "sql": "COMMIT",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 1.000244140625,
+          "commandTags": ["COMMIT"]
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 5,
+        "payload": {
+          "sequence": 5,
+          "phase": "seed",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "insert into \"inventory\" (\"warehouse\", \"sku\", \"quantity\", \"source\", \"status\") values ($1, $2, $3, $4, default), ($5, $6, $7, $8, default), ($9, $10, $11, $12, default)",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": "north"
+            },
+            {
+              "type": "primitive",
+              "value": "keyboard"
+            },
+            {
+              "type": "primitive",
+              "value": "12"
+            },
+            {
+              "type": "primitive",
+              "value": "supplier"
+            },
+            {
+              "type": "primitive",
+              "value": "north"
+            },
+            {
+              "type": "primitive",
+              "value": "mouse"
+            },
+            {
+              "type": "primitive",
+              "value": "9"
+            },
+            {
+              "type": "primitive",
+              "value": "supplier"
+            },
+            {
+              "type": "primitive",
+              "value": "south"
+            },
+            {
+              "type": "primitive",
+              "value": "keyboard"
+            },
+            {
+              "type": "primitive",
+              "value": "7"
+            },
+            {
+              "type": "primitive",
+              "value": "supplier"
+            }
+          ],
+          "outcome": "succeeded",
+          "durationMs": 4.00048828125,
+          "rowCount": 3,
+          "commandTags": ["INSERT 0 3"]
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 6,
+        "payload": {
+          "sequence": 6,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "begin",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 2,
+          "commandTags": ["BEGIN"]
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 7,
+        "payload": {
+          "sequence": 7,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "insert into \"inventory\" (\"warehouse\",\"sku\",\"quantity\",\"source\") values ($1,$2,$3,$4)",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": "north"
+            },
+            {
+              "type": "primitive",
+              "value": "cable"
+            },
+            {
+              "type": "primitive",
+              "value": "24"
+            },
+            {
+              "type": "primitive",
+              "value": "supplier"
+            }
+          ],
+          "outcome": "succeeded",
+          "durationMs": 2,
+          "rowCount": 1,
+          "commandTags": ["INSERT 0 1"]
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 8,
+        "payload": {
+          "sequence": 8,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "insert into \"inventory\" (\"warehouse\",\"sku\",\"quantity\",\"source\") values ($1,$2,$3,$4)",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": "north"
+            },
+            {
+              "type": "primitive",
+              "value": "keyboard"
+            },
+            {
+              "type": "primitive",
+              "value": "15"
+            },
+            {
+              "type": "primitive",
+              "value": "supplier"
+            }
+          ],
+          "outcome": "failed",
+          "durationMs": 2,
+          "error": {
+            "name": "DatabaseError",
+            "message": "duplicate key value violates unique constraint \"inventory_pkey\"",
+            "stack": "    at Emr (dependencies.js:1413:26250)\n    at <anonymous> (dependencies.js:1413:27267)\n    at <anonymous> (dependencies.js:1413:26615)\n    at exchange (dependencies.js:1413:16494)\n"
+          }
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 9,
+        "payload": {
+          "sequence": 9,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "commit",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 2,
+          "commandTags": ["ROLLBACK"]
+        }
+      },
+      {
+        "type": "display",
+        "sequence": 10,
+        "payload": {
+          "label": "Atomic import rejected",
+          "values": [
+            {
+              "type": "primitive",
+              "value": "North already stocks this keyboard"
+            }
+          ],
+          "source": "query.ts",
+          "line": 15
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 11,
+        "payload": {
+          "sequence": 10,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "select \"warehouse\", \"sku\", \"quantity\", \"source\", \"status\" from \"inventory\" order by \"inventory\".\"warehouse\", \"inventory\".\"sku\"",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 1,
+          "rowCount": 3,
+          "commandTags": ["SELECT 3"]
+        }
+      },
+      {
+        "type": "display",
+        "sequence": 12,
+        "payload": {
+          "label": "Inventory after rollback",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "warehouse": {
+                      "type": "primitive",
+                      "value": "north"
+                    },
+                    "sku": {
+                      "type": "primitive",
+                      "value": "keyboard"
+                    },
+                    "quantity": {
+                      "type": "primitive",
+                      "value": 12
+                    },
+                    "source": {
+                      "type": "primitive",
+                      "value": "supplier"
+                    },
+                    "status": {
+                      "type": "primitive",
+                      "value": "received"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "warehouse": {
+                      "type": "primitive",
+                      "value": "north"
+                    },
+                    "sku": {
+                      "type": "primitive",
+                      "value": "mouse"
+                    },
+                    "quantity": {
+                      "type": "primitive",
+                      "value": 9
+                    },
+                    "source": {
+                      "type": "primitive",
+                      "value": "supplier"
+                    },
+                    "status": {
+                      "type": "primitive",
+                      "value": "received"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "warehouse": {
+                      "type": "primitive",
+                      "value": "south"
+                    },
+                    "sku": {
+                      "type": "primitive",
+                      "value": "keyboard"
+                    },
+                    "quantity": {
+                      "type": "primitive",
+                      "value": 7
+                    },
+                    "source": {
+                      "type": "primitive",
+                      "value": "supplier"
+                    },
+                    "status": {
+                      "type": "primitive",
+                      "value": "received"
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 18
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 13,
+        "payload": {
+          "sequence": 11,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "insert into \"inventory\" (\"warehouse\",\"sku\",\"quantity\",\"source\") values ($1,$2,$3,$4)",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": "north"
+            },
+            {
+              "type": "primitive",
+              "value": "cable"
+            },
+            {
+              "type": "unsupported",
+              "valueType": "binary",
+              "description": "Binary PostgreSQL parameter of type OID 0"
+            },
+            {
+              "type": "primitive",
+              "value": "supplier"
+            }
+          ],
+          "outcome": "succeeded",
+          "durationMs": 0,
+          "rowCount": 1,
+          "commandTags": ["INSERT 0 1"]
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 14,
+        "payload": {
+          "sequence": 12,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "insert into \"inventory\" (\"warehouse\",\"sku\",\"quantity\",\"source\") values ($1,$2,$3,$4)",
+          "parameters": [
+            {
+              "type": "primitive",
+              "value": "north"
+            },
+            {
+              "type": "primitive",
+              "value": "keyboard"
+            },
+            {
+              "type": "unsupported",
+              "valueType": "binary",
+              "description": "Binary PostgreSQL parameter of type OID 0"
+            },
+            {
+              "type": "primitive",
+              "value": "supplier"
+            }
+          ],
+          "outcome": "failed",
+          "durationMs": 1,
+          "error": {
+            "name": "DatabaseError",
+            "message": "duplicate key value violates unique constraint \"inventory_pkey\"",
+            "stack": "    at Emr (dependencies.js:1413:26250)\n    at <anonymous> (dependencies.js:1413:27267)\n    at <anonymous> (dependencies.js:1413:26615)\n    at exchange (dependencies.js:1413:16494)\n"
+          }
+        }
+      },
+      {
+        "type": "display",
+        "sequence": 15,
+        "payload": {
+          "label": "Chunk rejected",
+          "values": [
+            {
+              "type": "primitive",
+              "value": "North already stocks this keyboard"
+            }
+          ],
+          "source": "query.ts",
+          "line": 24
+        }
+      },
+      {
+        "type": "sql",
+        "sequence": 16,
+        "payload": {
+          "sequence": 13,
+          "phase": "run",
+          "origin": "drizzle",
+          "kind": "executed",
+          "sql": "select \"warehouse\", \"sku\", \"quantity\", \"source\", \"status\" from \"inventory\" order by \"inventory\".\"warehouse\", \"inventory\".\"sku\"",
+          "parameters": [],
+          "outcome": "succeeded",
+          "durationMs": 0.999755859375,
+          "rowCount": 4,
+          "commandTags": ["SELECT 4"]
+        }
+      },
+      {
+        "type": "display",
+        "sequence": 17,
+        "payload": {
+          "label": "Inventory after partial commit",
+          "values": [
+            {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "warehouse": {
+                      "type": "primitive",
+                      "value": "north"
+                    },
+                    "sku": {
+                      "type": "primitive",
+                      "value": "cable"
+                    },
+                    "quantity": {
+                      "type": "primitive",
+                      "value": 24
+                    },
+                    "source": {
+                      "type": "primitive",
+                      "value": "supplier"
+                    },
+                    "status": {
+                      "type": "primitive",
+                      "value": "received"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "warehouse": {
+                      "type": "primitive",
+                      "value": "north"
+                    },
+                    "sku": {
+                      "type": "primitive",
+                      "value": "keyboard"
+                    },
+                    "quantity": {
+                      "type": "primitive",
+                      "value": 12
+                    },
+                    "source": {
+                      "type": "primitive",
+                      "value": "supplier"
+                    },
+                    "status": {
+                      "type": "primitive",
+                      "value": "received"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "warehouse": {
+                      "type": "primitive",
+                      "value": "north"
+                    },
+                    "sku": {
+                      "type": "primitive",
+                      "value": "mouse"
+                    },
+                    "quantity": {
+                      "type": "primitive",
+                      "value": 9
+                    },
+                    "source": {
+                      "type": "primitive",
+                      "value": "supplier"
+                    },
+                    "status": {
+                      "type": "primitive",
+                      "value": "received"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "warehouse": {
+                      "type": "primitive",
+                      "value": "south"
+                    },
+                    "sku": {
+                      "type": "primitive",
+                      "value": "keyboard"
+                    },
+                    "quantity": {
+                      "type": "primitive",
+                      "value": 7
+                    },
+                    "source": {
+                      "type": "primitive",
+                      "value": "supplier"
+                    },
+                    "status": {
+                      "type": "primitive",
+                      "value": "received"
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": "query.ts",
+          "line": 27
+        }
+      }
+    ],
+    "cleanupErrors": [],
+    "cleanup": {
+      "guest": {
+        "mode": "graceful"
+      },
+      "database": {
+        "mode": "graceful"
+      }
+    },
+    "timings": {
+      "total": 1094,
+      "validate": 0.03999999910593033,
+      "resolve": 0,
+      "load_artifacts": 359.82499999552965,
+      "compile": 143.8800000026822,
+      "evaluate_schema": 63.21000000089407,
+      "generate_bootstrap": 19.604999996721745,
+      "apply_bootstrap": 373.58500000089407,
+      "seed": 7.46000000089407,
+      "run": 13.575000002980232,
+      "inspect": 55.65500000119209,
+      "plan": 0.03999999910593033,
+      "cleanup": 2.0049999952316284
+    },
+    "ok": true,
+    "outcome": "succeeded"
+  },
+  "guests": [
+    {
+      "imageId": "orm-1.0.0-rc.6__kit-1.0.0-rc.6",
+      "lockDigest": "sha256-99db00a50a41f930b3da5212c21e22923dcad3047c6048a580ab8dae33439ed5"
+    }
+  ]
+}
