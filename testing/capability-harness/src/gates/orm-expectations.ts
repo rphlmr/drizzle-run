@@ -214,7 +214,13 @@ function approximate(expected: number): Expectation {
   };
 }
 
-function createColumnTypeExpectation(dialect: Dialect): Expectation {
+type OrmRelease = Pick<HarnessPair, "ormApi"> & Partial<Pick<HarnessPair, "ormVersion">>;
+
+function postgresInt8(value: string, rc6: boolean) {
+  return rc6 ? { $bigint: value } : value;
+}
+
+function createColumnTypeExpectation(dialect: Dialect, rc6: boolean): Expectation {
   const postgres = dialect === "postgresql";
   const bytes = { $bytes: "00017f80ff" };
   const json = { nested: { list: [1, "two", null] } };
@@ -286,9 +292,9 @@ function createColumnTypeExpectation(dialect: Dialect): Expectation {
   const raw: Record<string, Expectation> = postgres
     ? {
         ...decoded,
-        bigNumber: "9007199254740991",
-        bigExact: "9223372036854775807",
-        bigSerial: "1",
+        bigNumber: postgresInt8("9007199254740991", rc6),
+        bigExact: postgresInt8("9223372036854775807", rc6),
+        bigSerial: postgresInt8("1", rc6),
         exactNumber: "99.25",
         exactBigint: "123456789012345678901234567890",
         dateObject: "2024-03-01",
@@ -297,7 +303,17 @@ function createColumnTypeExpectation(dialect: Dialect): Expectation {
           const timestamp = z.string().parse(value);
           assert.equal(new Date(timestamp).toISOString(), "2024-06-30T23:59:59.000Z");
         },
-        pointTuple: { x: 1.5, y: -2 },
+        ...(rc6
+          ? {
+              dateString: { $date: "2024-02-29T00:00:00.000Z" },
+              dateObject: { $date: "2024-03-01T00:00:00.000Z" },
+              timestampDate: { $date: "2024-01-02T03:04:05.678Z" },
+              timestampString: { $date: "2024-01-02T03:04:05.000Z" },
+              timestampZone: { $date: "2024-06-30T23:59:59.000Z" },
+              pointObject: "(3,4)",
+            }
+          : {}),
+        pointTuple: rc6 ? "(1.5,-2)" : { x: 1.5, y: -2 },
         lineTuple: "{1,-1,0}",
         lineObject: "{2,3,4}",
         custom: "mixed",
@@ -342,7 +358,7 @@ function createGeneratedExpectation(dialect: Dialect): Expectation {
   };
 }
 
-function createMetadataExpectation(pair: Pick<HarnessPair, "ormApi">, dialect: Dialect): Expectation {
+function createMetadataExpectation(pair: OrmRelease, dialect: Dialect): Expectation {
   const postgres = dialect === "postgresql";
   const next = pair.ormApi === "v1";
   const keys = {
@@ -371,7 +387,7 @@ function createMetadataExpectation(pair: Pick<HarnessPair, "ormApi">, dialect: D
       ? { users: keys, secured: { enableRLS: true, policies: ["corpus_secured_read"] }, scope: "corpus_scope" }
       : keys),
     uniqueKeyName: "corpus_users_email_unique",
-    usedTables: ["corpus_users"],
+    ...(!next ? { usedTables: ["corpus_users"] } : {}),
     sameKeys: [true, false],
     isConfig: [true, false],
     ...(next
@@ -388,9 +404,10 @@ function createMetadataExpectation(pair: Pick<HarnessPair, "ormApi">, dialect: D
 }
 
 /** Independent expectations derived from the corpus seed, SQL predicates, schema defaults, and driver contracts. */
-export function getOrmExpectations(pair: Pick<HarnessPair, "ormApi">, dialect: Dialect): Record<string, Expectation> {
+export function getOrmExpectations(pair: OrmRelease, dialect: Dialect): Record<string, Expectation> {
   const postgres = dialect === "postgresql";
   const next = pair.ormApi === "v1";
+  const rc6 = pair.ormVersion === "1.0.0-rc.6";
   const users = createUsers(dialect);
   const userNames = names.map((name, index) => ({ id: index + 1, name }));
   const unique = databaseError({
@@ -425,7 +442,7 @@ export function getOrmExpectations(pair: Pick<HarnessPair, "ormApi">, dialect: D
   });
   const query = (fragments: string[], params: Expectation) => sqlQuery({ fragments, params });
   const expected: Record<string, Expectation> = {
-    "column-type-round-trip": createColumnTypeExpectation(dialect),
+    "column-type-round-trip": createColumnTypeExpectation(dialect, rc6),
     [postgres ? "identity-generated-and-hooks" : "generated-and-hooks"]: createGeneratedExpectation(dialect),
     "table-metadata": createMetadataExpectation(pair, dialect),
     "baseline-seed": users,
@@ -578,7 +595,7 @@ export function getOrmExpectations(pair: Pick<HarnessPair, "ormApi">, dialect: D
         { authorId: 2, views: 50 },
       ],
       scalar: names.map((name, index) => ({ name, latestTitle: ["Engines", "Compilers", "Kernels", null][index] })),
-      withSqlAlias: [{ total: postgres ? "4" : 4 }],
+      withSqlAlias: [{ total: postgres ? postgresInt8("4", rc6) : 4 }],
     },
     "common-table-expressions": {
       fromCte: [userNames[1], userNames[3]],
@@ -601,7 +618,16 @@ export function getOrmExpectations(pair: Pick<HarnessPair, "ormApi">, dialect: D
       writers: 2,
       nested: [2, 1, 1, 0].map((count, index) => ({ id: index + 1, posts: count })),
     },
-    "query-cache-opt-in": { defaults: idRows(1, 2, 3, 4), configured: nameRows("Ada"), disabled: idRows(1) },
+    ...(!rc6
+      ? {
+          "query-cache-opt-in": {
+            defaults: idRows(1, 2, 3, 4),
+            configured: nameRows("Ada"),
+            disabled: idRows(1),
+            ...(next ? { usedTables: ["corpus_users"] } : {}),
+          },
+        }
+      : {}),
     "prepared-statements-and-placeholders": {
       first: nameRows("Ada"),
       second: nameRows("Grace"),
@@ -616,7 +642,7 @@ export function getOrmExpectations(pair: Pick<HarnessPair, "ormApi">, dialect: D
       raw: [{ three: 3 }],
       fromList: [{ four: postgres ? "4" : 4 }],
       appended: [{ five: 5 }],
-      typed: [{ total: postgres ? "4" : 4 }],
+      typed: [{ total: postgres ? postgresInt8("4", rc6) : 4 }],
       inlined: query(["select 'it''s', 10"], []),
       rendered: query(
         ['select "corpus_users"."id", "corpus_users"."name"', 'from "corpus_users"', 'where "corpus_users"."id" ='],
@@ -921,8 +947,8 @@ export function getOrmExpectations(pair: Pick<HarnessPair, "ormApi">, dialect: D
       enumWithSchema: "corpus_scope",
       scoped: [{ id: 2, status: "closed" }],
       scopedSql: query(['"corpus_scope"."items"'], []),
-      counter: [{ value: "1000", next: "1010" }],
-      scopedSequence: [{ value: "50" }],
+      counter: [{ value: postgresInt8("1000", rc6), next: postgresInt8("1010", rc6) }],
+      scopedSequence: [{ value: postgresInt8("50", rc6) }],
       prefixed: query(['"corpus_prefixed_things"'], []),
       prefixedRows: [{ id: 1, name: "prefixed" }],
       secured: [{ id: 1, owner: "corpus" }],
@@ -955,10 +981,14 @@ export function getOrmExpectations(pair: Pick<HarnessPair, "ormApi">, dialect: D
       ],
       nearest: idRows(2),
     };
+    if (rc6) {
+      expected["postgres-procedure-call"] = { procedure: true, unsupported: false, user: nameRows("Renamed") };
+    }
+
     expected["postgres-array-helpers"] = {
       make: '{"a","b,c",null,"d\\"e"}',
       makeNested: "{{1,2},{3,4}}",
-      parse: ["a", "b,c", "NULL"],
+      parse: ["a", "b,c", rc6 ? null : "NULL"],
       parseNested: [
         [
           [
@@ -987,7 +1017,7 @@ export function assertOrmCaseResults({
   dialect,
   results,
 }: {
-  pair: Pick<HarnessPair, "ormApi">;
+  pair: OrmRelease;
   dialect: Dialect;
   results: readonly OrmCaseResult[];
 }): void {

@@ -26,6 +26,8 @@ import { runStoredProject } from "./run-project";
 
 const appDirectory = resolve("apps/drizzle-run");
 const force = process.env.OFFICIAL_RECORDINGS_FORCE === "1";
+const localRuntimeAssetPrefix =
+  /https?:\/\/(?:localhost|127\.0\.0\.1|\[::1\])(?::\d+)?\/runtime-assets\/[a-f0-9]{64}\//g;
 
 test.describe.configure({ mode: "parallel" });
 
@@ -35,9 +37,11 @@ for (const embed of listOfficialEmbeds(readOfficialExamples())) {
   test(`official embed ${name}: record`, async ({ page }) => {
     test.setTimeout(10 * 60_000);
     const recordingFile = join(appDirectory, embed.recordingPath);
+    const existing = existsSync(recordingFile) ? readFileSync(recordingFile, "utf8") : undefined;
     const kept =
-      existsSync(recordingFile) &&
-      resolveOfficialRecording(embed, JSON.parse(readFileSync(recordingFile, "utf8"))) !== null;
+      existing !== undefined &&
+      existing.search(localRuntimeAssetPrefix) === -1 &&
+      resolveOfficialRecording(embed, JSON.parse(existing)) !== null;
 
     test.skip(kept && !force, `${embed.recordingPath} is still valid for its code and guests.`);
 
@@ -81,6 +85,13 @@ for (const embed of listOfficialEmbeds(readOfficialExamples())) {
     }
 
     mkdirSync(dirname(recordingFile), { recursive: true });
-    writeFileSync(recordingFile, `${JSON.stringify(created.recording, null, 2)}\n`);
+    // Keep the runtime file and frame location portable across recording servers.
+    const json = JSON.stringify(
+      created.recording,
+      (key, value: unknown) =>
+        key === "stack" && typeof value === "string" ? value.replace(localRuntimeAssetPrefix, "") : value,
+      2,
+    );
+    writeFileSync(recordingFile, `${json}\n`);
   });
 }

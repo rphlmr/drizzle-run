@@ -16,7 +16,7 @@ export function createHelperApiGuide({ id, exampleId, dialect }: { id: string; e
   );
   const run = {
     target: { dialect },
-    dependencies: { "drizzle-orm": "1.0.0-rc.5", "drizzle-kit": "1.0.0-rc.5" },
+    dependencies: { "drizzle-orm": "1.0.0-rc.6", "drizzle-kit": "1.0.0-rc.6" },
   } as const;
 
   return defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta>()({
@@ -41,7 +41,7 @@ export function createHelperApiGuide({ id, exampleId, dialect }: { id: string; e
         id: "01-profiles",
         label: "Select a helper",
         title: "Use the same expression with either API",
-        body: `You need a profile with an ID, display name, nullable bio and active flag. Both sides use Drizzle ORM **1.0.0-rc.5** and the same \`${helper}\` helper from \`helpers.ts\`.\n\nThe SQL-like query selects the expression as \`profile\`. RQB puts it in \`extras\` and uses \`columns: {}\` to leave out the table's ordinary fields. Build the expression from the callback's \`user\` columns so it follows RQB's table alias.\n\nPress **Run**. Both sides return the same two profiles, including Grace's null bio and false active flag. Hover over \`profiles\`: its fields use normal TypeScript types without a handwritten result interface.`,
+        body: `You need a profile with an ID, display name, nullable bio and active flag. Both sides use Drizzle ORM **1.0.0-rc.6** and the same \`${helper}\` helper from \`helpers.ts\`.\n\nThe SQL-like query selects the expression as \`profile\`. RQB puts it in \`extras\` and uses \`columns: {}\` to leave out the table's ordinary fields. Build the expression from the callback's \`user\` columns so it follows RQB's table alias.\n\nPress **Run**. Both sides return the same two profiles, including Grace's null bio and false active flag. Hover over \`profiles\`: its fields use normal TypeScript types without a handwritten result interface.`,
         edits: PAIR_SIDES.map((side) => ({
           file: "query.ts",
           side,

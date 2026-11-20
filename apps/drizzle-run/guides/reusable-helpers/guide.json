@@ -11,8 +11,8 @@
       "dialect": "postgresql"
     },
     "dependencies": {
-      "drizzle-orm": "1.0.0-rc.5",
-      "drizzle-kit": "1.0.0-rc.5"
+      "drizzle-orm": "1.0.0-rc.6",
+      "drizzle-kit": "1.0.0-rc.6"
     },
     "files": {
       "schema.ts": "import { boolean, integer, pgTable, text } from \"drizzle-orm/pg-core\";\n\nexport const users = pgTable(\"users\", {\n  id: integer(\"id\").primaryKey(),\n  name: text(\"name\").notNull(),\n  bio: text(\"bio\"),\n  active: boolean(\"active\").notNull(),\n});\n\nexport const posts = pgTable(\"posts\", {\n  id: integer(\"id\").primaryKey(),\n  authorId: integer(\"author_id\").notNull().references(() => users.id),\n  title: text(\"title\").notNull(),\n});\n",
@@ -32,7 +32,7 @@
       "id": "01-inline",
       "label": "Start with SQL",
       "title": "Return a JSONB object from a selection",
-      "body": "You want a profile object with an ID, a display name, a nullable bio and an active flag. PostgreSQL's `jsonb_build_object` builds it from key/value pairs. This guide uses Drizzle ORM **1.0.0-rc.5**.\n\nPress **Run**. Ada has a bio; Grace has `bio: null`. Both have a boolean `active` field. PostgreSQL builds the objects as part of the query.\n\n`sql<Profile>` tells TypeScript what comes back. You maintain that type separately from the SQL, so changing a field means keeping both in sync. It does not validate or convert the result at runtime.",
+      "body": "You want a profile object with an ID, a display name, a nullable bio and an active flag. PostgreSQL's `jsonb_build_object` builds it from key/value pairs. This guide uses Drizzle ORM **1.0.0-rc.6**.\n\nPress **Run**. Ada has a bio; Grace has `bio: null`. Both have a boolean `active` field. PostgreSQL builds the objects as part of the query.\n\n`sql<Profile>` tells TypeScript what comes back. You maintain that type separately from the SQL, so changing a field means keeping both in sync. It does not validate or convert the result at runtime.",
       "focus": {
         "file": "query.ts",
         "lines": [

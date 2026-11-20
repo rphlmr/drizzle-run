@@ -19,11 +19,11 @@ describe("GUEST_PACKAGE_POLICIES", () => {
     expect(unpoliced).toEqual([]);
   });
 
-  it("should pin Temporal in the rc.5 guests without changing the legacy guest", () => {
-    for (const imageId of Object.keys(GUEST_IMAGES)) {
+  it("should pin Temporal in the Next guests only", () => {
+    for (const [imageId, image] of Object.entries(GUEST_IMAGES)) {
       const version = getGuestPackageVersion({ imageId, packageName: "@js-temporal/polyfill" });
 
-      expect(version).toBe(imageId.startsWith("orm-1.0.0-rc.5__") ? "0.5.1" : null);
+      expect(version).toBe(image.releaseLine === "next" ? "0.5.1" : null);
     }
   });
 

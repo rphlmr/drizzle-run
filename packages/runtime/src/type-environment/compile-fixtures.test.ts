@@ -125,15 +125,17 @@ type FixtureReleaseLine = "legacy" | "next";
 const projectFixture = ({
   target,
   releaseLine,
+  rcVersion = "1.0.0-rc.5",
 }: {
   target: FixtureTarget;
   releaseLine: FixtureReleaseLine;
+  rcVersion?: "1.0.0-rc.5" | "1.0.0-rc.6";
 }): RunManifest => {
   const isPostgres = target.dialect === "postgresql";
   const dependencies: RunManifest["dependencies"] =
     releaseLine === "legacy"
       ? { "drizzle-orm": "0.45.4", "drizzle-kit": "0.31.11" }
-      : { "drizzle-orm": "1.0.0-rc.5", "drizzle-kit": "1.0.0-rc.5" };
+      : { "drizzle-orm": rcVersion, "drizzle-kit": rcVersion };
   const schema = isPostgres
     ? `
       import { customType, pgTable, serial, text } from "drizzle-orm/pg-core";
@@ -190,11 +192,16 @@ const projectFixture = ({
       void directlyImportedInteger;
     `;
   const schemaType = releaseLine === "next" ? 'typeof import("./schema.ts").relations' : 'typeof import("./schema.ts")';
-  const dbType = isPostgres
-    ? `import type { NodePgDatabase } from "drizzle-orm/node-postgres";
+  const dbType =
+    isPostgres && releaseLine === "next" && rcVersion === "1.0.0-rc.6"
+      ? `import type { Pool, PostgresDatabase } from "drizzle-orm/postgres";
+      const exactDb: PostgresDatabase<${schemaType}> & { $client: Pool } = db;
+      await db.pipeline([db.select().from(users)]);`
+      : isPostgres
+        ? `import type { NodePgDatabase } from "drizzle-orm/node-postgres";
       import type { Client } from "pg";
       const exactDb: NodePgDatabase<${schemaType}> & { $client: Client } = db;`
-    : `import type { LibSQLDatabase, LibSQLSession } from "drizzle-orm/libsql";
+        : `import type { LibSQLDatabase, LibSQLSession } from "drizzle-orm/libsql";
       const exactDb: LibSQLDatabase<${schemaType}> & { $client: ConstructorParameters<typeof LibSQLSession>[0] } = db;`;
   const legacyGoodies = `
       import { createSelectSchema as zodSchema } from "drizzle-zod";
@@ -354,6 +361,13 @@ describe("compile-time project fixtures", () => {
       });
     }
   }
+
+  it("should type-check the default PostgreSQL driver and the batch APIs on RC6", async () => {
+    const environment = await createProjectTypeEnvironment(
+      projectFixture({ target: { dialect: "postgresql" }, releaseLine: "next", rcVersion: "1.0.0-rc.6" }),
+    );
+    expect(compileVirtualProject(environment)).toBe("");
+  });
 
   for (const dialect of ["postgresql", "sqlite"] as const) {
     it(`should type-check Effect Schema and the Effect query API on the ${dialect} effect guest`, async () => {

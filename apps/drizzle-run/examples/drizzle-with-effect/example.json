@@ -8,13 +8,6 @@
   "section": "integrations",
   "order": 80,
   "dialect": "postgresql",
-  "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
-  "guestFlavor": "effect",
-  "links": [
-    {
-      "kind": "docs",
-      "label": "Drizzle with Effect Postgres",
-      "url": "https://orm.drizzle.team/docs/connect-effect-postgres"
-    }
-  ]
+  "releasePair": "orm-1.0.0-rc.6__kit-1.0.0-rc.6",
+  "guestFlavor": "effect"
 }

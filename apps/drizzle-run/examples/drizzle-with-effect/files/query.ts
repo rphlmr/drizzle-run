@@ -1,7 +1,7 @@
 import { postgresConnection } from "@drizzle-run/runtime/context";
-import * as PgClient from "@effect/sql-pg/PgClient";
 import { asc } from "drizzle-orm";
-import * as PgDrizzle from "drizzle-orm/effect-postgres";
+import { createPool } from "drizzle-orm/postgres";
+import * as PgDrizzle from "drizzle-orm/postgres/effect";
 import { Effect } from "effect";
 
 import { users } from "./schema";
@@ -15,6 +15,18 @@ const program = Effect.gen(function* () {
 });
 
 // The program needs a PostgreSQL client, and this layer is the one for Drizzle Run's database.
-const DatabaseLive = PgClient.layerFrom(PgClient.makeClient(postgresConnection));
+const pool = Effect.acquireRelease(
+  Effect.sync(() =>
+    createPool({
+      user: postgresConnection.username,
+      database: postgresConnection.database,
+      socket: postgresConnection.stream,
+    }),
+  ),
+  (client) => Effect.promise(() => client.end()),
+);
+const DatabaseLive = PgDrizzle.DrizzlePostgresClient.layerFrom(
+  PgDrizzle.DrizzlePostgresClient.fromPool({ acquire: pool }),
+);
 
 $.display("Users", await Effect.runPromise(program.pipe(Effect.provide(DatabaseLive))));

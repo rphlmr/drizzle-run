@@ -23,7 +23,7 @@ export function createFirstRunGuide(version: { id: string; slug: string }, diale
       kind: "drizzle-run",
       manifestVersion: 1,
       target: { dialect },
-      dependencies: { "drizzle-orm": "1.0.0-rc.5", "drizzle-kit": "1.0.0-rc.5" },
+      dependencies: { "drizzle-orm": "1.0.0-rc.6", "drizzle-kit": "1.0.0-rc.6" },
       files: readExampleFiles(exampleFolder, ["schema.ts", "seed.ts", "query.ts"]),
       entrypoints: { schema: "schema.ts", seed: "seed.ts", run: "query.ts" },
     }),

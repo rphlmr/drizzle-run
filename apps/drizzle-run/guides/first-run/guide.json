@@ -11,8 +11,8 @@
       "dialect": "postgresql"
     },
     "dependencies": {
-      "drizzle-orm": "1.0.0-rc.5",
-      "drizzle-kit": "1.0.0-rc.5"
+      "drizzle-orm": "1.0.0-rc.6",
+      "drizzle-kit": "1.0.0-rc.6"
     },
     "files": {
       "schema.ts": "import { pgTable, integer, text } from \"drizzle-orm/pg-core\";\n\nexport const users = pgTable(\"users\", {\n  id: integer(\"id\").primaryKey(),\n  name: text(\"name\").notNull(),\n});\n",

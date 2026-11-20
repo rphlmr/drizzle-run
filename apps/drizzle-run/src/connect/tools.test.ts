@@ -425,7 +425,10 @@ describe("connect tools on a one-version project", () => {
       }),
     ).toEqual({
       ok: false,
-      error: { code: "invalid_input", message: `guest_flavor effect runs only on ${rc.ormVersion} for postgresql.` },
+      error: {
+        code: "invalid_input",
+        message: "guest_flavor effect runs only on 1.0.0-rc.5, 1.0.0-rc.6 for postgresql.",
+      },
       summary: { label: "Created a project", target: "No" },
     });
 
@@ -459,7 +462,10 @@ describe("connect tools on a one-version project", () => {
     expect(state.project.manifest).not.toHaveProperty(["dependencies", "effect"]);
     expect(await call("switch_release", { orm_version: legacy.ormVersion, guest_flavor: "effect" })).toMatchObject({
       ok: false,
-      error: { code: "invalid_input", message: `guest_flavor effect runs only on ${rc.ormVersion} for postgresql.` },
+      error: {
+        code: "invalid_input",
+        message: "guest_flavor effect runs only on 1.0.0-rc.5, 1.0.0-rc.6 for postgresql.",
+      },
     });
   });
 
@@ -762,7 +768,7 @@ describe("connect tools in a guided view", () => {
     expect(state.ran).toBe(0);
     expect(readResult(await call("read_file", { path: "query.ts" }))).toMatchObject({
       path: "query.ts",
-      guide: { id: transactions.id, pair: [{ drizzle_orm: "1.0.0-rc.5", drizzle_kit: "1.0.0-rc.5" }] },
+      guide: { id: transactions.id, pair: [{ drizzle_orm: "1.0.0-rc.6", drizzle_kit: "1.0.0-rc.6" }] },
     });
     expect(readResult(await call("get_project")).guide).not.toHaveProperty("note");
   });

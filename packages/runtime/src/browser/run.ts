@@ -301,8 +301,8 @@ export class BrowserRunImpl implements BrowserRun {
         }
 
         if (message.type === "sql") {
-          const { commandTags, ...event } = message.payload;
-          this.#statementRoles.set(event.sequence, classifyStatement(event.sql, commandTags));
+          const event = message.payload;
+          this.#statementRoles.set(event.sequence, classifyStatement(event.sql, event.commandTags));
           this.#publishEvent({ type: "sql", payload: this.#withCallSite(event) });
           return;
         }

@@ -11,8 +11,8 @@
       "dialect": "postgresql"
     },
     "dependencies": {
-      "drizzle-orm": "1.0.0-rc.5",
-      "drizzle-kit": "1.0.0-rc.5"
+      "drizzle-orm": "1.0.0-rc.6",
+      "drizzle-kit": "1.0.0-rc.6"
     },
     "files": {
       "schema.ts": "import { integer, pgTable, serial, text } from \"drizzle-orm/pg-core\";\n\nexport const accounts = pgTable(\"accounts\", {\n  id: serial(\"id\").primaryKey(),\n  owner: text(\"owner\").notNull(),\n  balance: integer(\"balance\").notNull(),\n});\n",

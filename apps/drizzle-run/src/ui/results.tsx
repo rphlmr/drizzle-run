@@ -607,11 +607,26 @@ function formatTotalDuration(statements: readonly SqlEvent[]): string | undefine
 
 const copyLabels = { copied: "Copied", failed: "Couldn't copy" } as const;
 
+function ResultCommandTags({ tags }: { tags: readonly string[] }) {
+  if (tags.length === 0) {
+    return null;
+  }
+
+  return (
+    <span className="min-w-0 truncate font-mono text-[11.5px] text-muted">
+      <span className="sr-only">PostgreSQL returned </span>
+      <span aria-hidden="true">→ </span>
+      {tags.join(", ")}
+    </span>
+  );
+}
+
 /** The SQL behind a result, folded to one line under the card; its chevron sits left of Copy. */
 function ResultSql({ statements, onShowInLogs }: { statements: readonly SqlEvent[]; onShowInLogs?: () => void }) {
   const [open, setOpen] = useState(false);
   const { outcome, copy } = useCopyFeedback();
   const sql = statements.map((statement) => statement.sql).join(";\n");
+  const commandTags = statements.flatMap((statement) => statement.commandTags ?? []);
   const duration = formatTotalDuration(statements);
   const ToggleIcon = open ? ChevronUpIcon : ChevronDownIcon;
 
@@ -628,6 +643,7 @@ function ResultSql({ statements, onShowInLogs }: { statements: readonly SqlEvent
             <SqlTokens sql={statements.map((statement) => statement.sql.replace(/\s+/g, " ")).join("; ")} />
           </code>
         )}
+        {!open && <ResultCommandTags tags={commandTags} />}
         {duration && (
           <span className="font-mono text-[11px] text-muted" data-duration="">
             {duration}
@@ -664,6 +680,12 @@ function ResultSql({ statements, onShowInLogs }: { statements: readonly SqlEvent
               {statements.map((statement, index) => (
                 <span key={index} className="block">
                   <SqlTokens sql={formatSql(statement.sql)} />
+                  {statement.commandTags && (
+                    <>
+                      {"  "}
+                      <ResultCommandTags tags={statement.commandTags} />
+                    </>
+                  )}
                 </span>
               ))}
             </code>

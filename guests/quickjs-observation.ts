@@ -141,7 +141,7 @@ export function createRunObservation() {
       const results: unknown[] = Array.isArray(value) ? value : [value];
       const commandTags = results
         .map((result) => property(result, "command"))
-        .filter((command): command is string => typeof command === "string" && /^[A-Z]{1,32}$/.test(command));
+        .filter((command): command is string => typeof command === "string" && /^[A-Z][A-Z0-9 ]{0,127}$/.test(command));
       const counts = results
         .map((result) => property(result, "rowCount"))
         .filter((count): count is number => typeof count === "number" && Number.isSafeInteger(count) && count >= 0);
@@ -371,9 +371,7 @@ export function createRunObservation() {
     return observePostgresWire({
       onStart: startStatement,
       onStatement(wireStatement, outcome, cause) {
-        const commandTags = wireStatement.tags
-          .map((tag) => tag.split(" ")[0])
-          .filter((tag) => /^[A-Z]{1,32}$/.test(tag));
+        const commandTags = wireStatement.tags;
         const counts = wireStatement.tags.flatMap((tag) => {
           const count = /^(?:INSERT \d+|SELECT|UPDATE|DELETE|MERGE|COPY|FETCH|MOVE) (\d+)$/.exec(tag)?.[1];
 

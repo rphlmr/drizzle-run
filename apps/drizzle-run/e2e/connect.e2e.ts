@@ -1258,7 +1258,7 @@ test.describe("AI chat link", () => {
     expect(readResultData(turn?.results[0]?.text)).toMatchObject({
       id: expect.stringMatching(/^[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$/),
       position: "step 1 of 3",
-      guide: { pair: [{ drizzle_orm: "1.0.0-rc.5" }] },
+      guide: { pair: [{ drizzle_orm: "1.0.0-rc.6" }] },
     });
     expect(readResultData(turn?.results[2]?.text)).toMatchObject({
       text: "# Transactions\nNested transactions are savepoints.",

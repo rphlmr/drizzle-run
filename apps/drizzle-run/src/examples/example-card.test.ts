@@ -62,7 +62,7 @@ describe("example card", () => {
   });
 
   it.each([
-    ["relational-queries", "Drizzle 0.45.4 vs Drizzle 1.0.0-rc.5"],
+    ["relational-queries", "Drizzle 0.45.4 vs Drizzle 1.0.0-rc.6"],
     ["select-vs-relational-queries", "SQL-like vs RQB"],
     ["postgresql-vs-sqlite", "PostgreSQL vs SQLite"],
   ])("should say what %s compares", (slug, comparison) => {

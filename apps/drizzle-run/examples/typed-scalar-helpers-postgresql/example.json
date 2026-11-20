@@ -8,7 +8,7 @@
   "section": "helpers",
   "order": 90,
   "dialect": "postgresql",
-  "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+  "releasePair": "orm-1.0.0-rc.6__kit-1.0.0-rc.6",
   "links": [
     {
       "kind": "docs",

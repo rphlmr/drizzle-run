@@ -8,6 +8,6 @@
   "section": "start",
   "order": 10,
   "dialect": "postgresql",
-  "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+  "releasePair": "orm-1.0.0-rc.6__kit-1.0.0-rc.6",
   "links": [{ "kind": "docs", "label": "Select", "url": "https://orm.drizzle.team/docs/select" }]
 }

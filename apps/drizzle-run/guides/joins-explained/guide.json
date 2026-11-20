@@ -11,8 +11,8 @@
       "dialect": "postgresql"
     },
     "dependencies": {
-      "drizzle-orm": "1.0.0-rc.5",
-      "drizzle-kit": "1.0.0-rc.5"
+      "drizzle-orm": "1.0.0-rc.6",
+      "drizzle-kit": "1.0.0-rc.6"
     },
     "files": {
       "schema.ts": "import { boolean, integer, pgTable, text } from \"drizzle-orm/pg-core\";\n\nexport const authors = pgTable(\"authors\", {\n  id: integer(\"id\").primaryKey(),\n  name: text(\"name\").notNull(),\n});\n\nexport const books = pgTable(\"books\", {\n  id: integer(\"id\").primaryKey(),\n  authorId: integer(\"author_id\").references(() => authors.id),\n  title: text(\"title\").notNull(),\n  published: boolean(\"published\").notNull().default(false),\n});\n",
@@ -31,7 +31,7 @@
       "id": "01-inner",
       "label": "Inner join",
       "title": "Keep rows that match",
-      "body": "A **join** combines rows from two sources. Its `ON` condition decides which pairs match. Here, a book matches an author when `books.authorId` equals `authors.id`.\n\nThis guide runs on PostgreSQL with Drizzle ORM **1.0.0-rc.5**. Ada has two books, Grace has one, Linus has none, and Anonymous tale has no author. You can inspect them in `seed.ts`.\n\nPress **Run**. An `innerJoin` returns only matching pairs. Ada appears twice because she has two books. Linus and Anonymous tale do not appear.",
+      "body": "A **join** combines rows from two sources. Its `ON` condition decides which pairs match. Here, a book matches an author when `books.authorId` equals `authors.id`.\n\nThis guide runs on PostgreSQL with Drizzle ORM **1.0.0-rc.6**. Ada has two books, Grace has one, Linus has none, and Anonymous tale has no author. You can inspect them in `seed.ts`.\n\nPress **Run**. An `innerJoin` returns only matching pairs. Ada appears twice because she has two books. Linus and Anonymous tale do not appear.",
       "focus": {
         "file": "query.ts",
         "lines": [

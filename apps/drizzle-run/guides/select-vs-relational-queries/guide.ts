@@ -17,7 +17,7 @@ const relationalQuery = readFileSync(
 const joinedRows = sqlQuery.slice(0, sqlQuery.indexOf("// Nesting is up to you:"));
 const run = {
   target: { dialect: "postgresql" },
-  dependencies: { "drizzle-orm": "1.0.0-rc.5", "drizzle-kit": "1.0.0-rc.5" },
+  dependencies: { "drizzle-orm": "1.0.0-rc.6", "drizzle-kit": "1.0.0-rc.6" },
 } as const;
 const project = definePairManifest({
   kind: "drizzle-run-pair",
@@ -45,7 +45,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
       id: "01-load",
       label: "Two APIs",
       title: "Load authors with their posts",
-      body: "You need authors and their posts for a page. Drizzle gives you two APIs: the **SQL-like query builder**, with `select` and joins, and the **relational query builder (RQB)**, with `db.query` and `with`. Both sides here use Drizzle ORM **1.0.0-rc.5** and the same data.\n\nOn the SQL-like side, `leftJoin` connects each post's `authorId` to a user's `id`. On the RQB side, `with: { posts: ... }` uses the relations declared in `schema.ts`. Those relations describe how tables connect; the foreign key in the schema enforces the link in the database.\n\nPress **Run**. Compare **Joined rows** on the SQL-like side with **Authors with posts** on the RQB side. The data is the same, but its shape differs.",
+      body: "You need authors and their posts for a page. Drizzle gives you two APIs: the **SQL-like query builder**, with `select` and joins, and the **relational query builder (RQB)**, with `db.query` and `with`. Both sides here use Drizzle ORM **1.0.0-rc.6** and the same data.\n\nOn the SQL-like side, `leftJoin` connects each post's `authorId` to a user's `id`. On the RQB side, `with: { posts: ... }` uses the relations declared in `schema.ts`. Those relations describe how tables connect; the foreign key in the schema enforces the link in the database.\n\nPress **Run**. Compare **Joined rows** on the SQL-like side with **Authors with posts** on the RQB side. The data is the same, but its shape differs.",
       edits: [{ file: "query.ts", side: 0, write: joinedRows }],
       focus: { file: "query.ts", side: 0, lines: [8, 12] },
       run: "required",

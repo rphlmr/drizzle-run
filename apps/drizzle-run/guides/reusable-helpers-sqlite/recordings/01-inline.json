@@ -1,22 +1,22 @@
 {
   "recordingVersion": 1,
-  "snapshotDigest": "46b5390b5e0c829c059f47f553f71322e09c9051b3a4f0734642129541eb2404",
-  "recordedAt": "2026-11-04T09:42:20.179Z",
+  "snapshotDigest": "363b922a4e31dfa3f805aa867088f56751b455531500bd41da9842c1f8946798",
+  "recordedAt": "2026-11-20T20:11:15.503Z",
   "result": {
     "version": 1,
     "target": {
       "dialect": "sqlite"
     },
     "tuple": {
-      "id": "sqlite-wasm__orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+      "id": "sqlite-wasm__orm-1.0.0-rc.6__kit-1.0.0-rc.6",
       "target": {
         "dialect": "sqlite"
       },
-      "ormVersion": "1.0.0-rc.5",
-      "kitVersion": "1.0.0-rc.5"
+      "ormVersion": "1.0.0-rc.6",
+      "kitVersion": "1.0.0-rc.6"
     },
     "random": {
-      "effectiveSeed": 314961158,
+      "effectiveSeed": 49789531,
       "source": "generated",
       "derivation": "crypto-u32-v1",
       "generator": "mulberry32-v1"
@@ -25,74 +25,74 @@
       {
         "phase": "validate",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:42:18.781Z",
-        "durationMs": 0.039999961853027344
+        "startedAt": "2026-11-20T20:11:14.669Z",
+        "durationMs": 0.03999999910593033
       },
       {
         "phase": "resolve",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:42:18.781Z",
-        "durationMs": 0.004999995231628418
+        "startedAt": "2026-11-20T20:11:14.669Z",
+        "durationMs": 0.004999998956918716
       },
       {
         "phase": "load_artifacts",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:42:19.017Z",
-        "durationMs": 447.1400001049042
+        "startedAt": "2026-11-20T20:11:14.863Z",
+        "durationMs": 375.7749999985099
       },
       {
         "phase": "compile",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:42:18.864Z",
-        "durationMs": 152.36500000953674
+        "startedAt": "2026-11-20T20:11:14.707Z",
+        "durationMs": 154.87999999895692
       },
       {
         "phase": "evaluate_schema",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:42:19.465Z",
-        "durationMs": 13.785000085830688
+        "startedAt": "2026-11-20T20:11:15.239Z",
+        "durationMs": 15.554999999701977
       },
       {
         "phase": "generate_bootstrap",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:42:19.479Z",
-        "durationMs": 1.8350000381469727
+        "startedAt": "2026-11-20T20:11:15.255Z",
+        "durationMs": 2.0850000008940697
       },
       {
         "phase": "apply_bootstrap",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:42:19.481Z",
-        "durationMs": 73.79500007629395
+        "startedAt": "2026-11-20T20:11:15.257Z",
+        "durationMs": 75.02499999850988
       },
       {
         "phase": "seed",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:42:19.555Z",
-        "durationMs": 4.044999957084656
+        "startedAt": "2026-11-20T20:11:15.332Z",
+        "durationMs": 4.525000002235174
       },
       {
         "phase": "run",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:42:19.559Z",
-        "durationMs": 28.97499990463257
+        "startedAt": "2026-11-20T20:11:15.336Z",
+        "durationMs": 28.344999998807907
       },
       {
         "phase": "inspect",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:42:19.588Z",
-        "durationMs": 1.75
+        "startedAt": "2026-11-20T20:11:15.365Z",
+        "durationMs": 1.6799999997019768
       },
       {
         "phase": "plan",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:42:19.589Z",
-        "durationMs": 0.039999961853027344
+        "startedAt": "2026-11-20T20:11:15.366Z",
+        "durationMs": 0.03500000014901161
       },
       {
         "phase": "cleanup",
         "status": "succeeded",
-        "startedAt": "2026-11-04T09:42:19.590Z",
-        "durationMs": 1.1450001001358032
+        "startedAt": "2026-11-20T20:11:15.367Z",
+        "durationMs": 0.7600000016391277
       }
     ],
     "diagnostics": [],
@@ -176,7 +176,7 @@
         "outcome": "succeeded",
         "source": "seed.ts",
         "line": 5,
-        "durationMs": 2.000244140625,
+        "durationMs": 3.000244140625,
         "rowCount": 2
       },
       {
@@ -226,7 +226,7 @@
         "outcome": "succeeded",
         "source": "seed.ts",
         "line": 10,
-        "durationMs": 1.000244140625,
+        "durationMs": 0.999755859375,
         "rowCount": 3
       },
       {
@@ -239,7 +239,7 @@
         "outcome": "succeeded",
         "source": "query.ts",
         "line": 13,
-        "durationMs": 1.999755859375,
+        "durationMs": 2,
         "rowCount": 2
       }
     ],
@@ -412,7 +412,7 @@
           "outcome": "succeeded",
           "source": "seed.ts",
           "line": 5,
-          "durationMs": 2.000244140625,
+          "durationMs": 3.000244140625,
           "rowCount": 2
         }
       },
@@ -466,7 +466,7 @@
           "outcome": "succeeded",
           "source": "seed.ts",
           "line": 10,
-          "durationMs": 1.000244140625,
+          "durationMs": 0.999755859375,
           "rowCount": 3
         }
       },
@@ -483,7 +483,7 @@
           "outcome": "succeeded",
           "source": "query.ts",
           "line": 13,
-          "durationMs": 1.999755859375,
+          "durationMs": 2,
           "rowCount": 2
         }
       },
@@ -566,27 +566,27 @@
       }
     },
     "timings": {
-      "total": 813,
-      "validate": 0.039999961853027344,
-      "resolve": 0.004999995231628418,
-      "load_artifacts": 447.1400001049042,
-      "compile": 152.36500000953674,
-      "evaluate_schema": 13.785000085830688,
-      "generate_bootstrap": 1.8350000381469727,
-      "apply_bootstrap": 73.79500007629395,
-      "seed": 4.044999957084656,
-      "run": 28.97499990463257,
-      "inspect": 1.75,
-      "plan": 0.039999961853027344,
-      "cleanup": 1.1450001001358032
+      "total": 700,
+      "validate": 0.03999999910593033,
+      "resolve": 0.004999998956918716,
+      "load_artifacts": 375.7749999985099,
+      "compile": 154.87999999895692,
+      "evaluate_schema": 15.554999999701977,
+      "generate_bootstrap": 2.0850000008940697,
+      "apply_bootstrap": 75.02499999850988,
+      "seed": 4.525000002235174,
+      "run": 28.344999998807907,
+      "inspect": 1.6799999997019768,
+      "plan": 0.03500000014901161,
+      "cleanup": 0.7600000016391277
     },
     "ok": true,
     "outcome": "succeeded"
   },
   "guests": [
     {
-      "imageId": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
-      "lockDigest": "sha256-dabcc2a116ec5e228673a8c074b17ef00b455fc65afad67b9e392fd1ff4d2ad6"
+      "imageId": "orm-1.0.0-rc.6__kit-1.0.0-rc.6",
+      "lockDigest": "sha256-99db00a50a41f930b3da5212c21e22923dcad3047c6048a580ab8dae33439ed5"
     }
   ]
 }

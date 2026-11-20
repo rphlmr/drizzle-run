@@ -68,7 +68,7 @@ export function classifyStatement(sql: string, commandTags: readonly string[] = 
   }
 
   if (
-    commandTags.some((tag) => writeCommandTags.has(tag)) ||
+    commandTags.some((tag) => writeCommandTags.has(tag.split(" ", 1)[0] ?? "")) ||
     writeStart.test(text) ||
     (text.startsWith("with") && writeInsideWith.test(text))
   ) {

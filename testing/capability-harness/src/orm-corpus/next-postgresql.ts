@@ -1,7 +1,6 @@
 import * as orm from "drizzle-orm";
 import type { NodePgDatabase } from "drizzle-orm/node-postgres";
 import * as pg from "drizzle-orm/pg-core";
-import { usedTablesOf } from "drizzle-orm/used-tables";
 
 import * as schema from "./next-postgresql.schema.ts";
 import { describeError, runRolledBack } from "./run-cases.ts";
@@ -77,7 +76,7 @@ const toIds = (rows: { id: number }[]) => rows.map((row) => row.id);
 
 const toSortedIds = (rows: { id: number }[]) => rows.map((row) => row.id).toSorted((left, right) => left - right);
 
-/** The PostgreSQL ORM scenarios for drizzle-orm 1.0.0-rc.5, run in order against one database. */
+/** The PostgreSQL ORM scenarios for the Next release line, run in order against one database. */
 export const cases: OrmCase<Database>[] = [
   {
     id: "baseline-seed",
@@ -529,20 +528,6 @@ export const cases: OrmCase<Database>[] = [
     },
   },
   {
-    id: "query-cache-opt-in",
-    run: async (db) => {
-      return {
-        defaults: await db.select({ id: users.id }).from(users).orderBy(users.id).$withCache(),
-        configured: await db
-          .select({ name: users.name })
-          .from(users)
-          .where(orm.eq(users.id, 1))
-          .$withCache({ tag: "corpus-user", config: { ex: 60 }, autoInvalidate: false }),
-        disabled: await db.select({ id: users.id }).from(users).orderBy(users.id).limit(1).$withCache(false),
-      };
-    },
-  },
-  {
     id: "prepared-statements-and-placeholders",
     run: async (db) => {
       const byId = db
@@ -557,12 +542,14 @@ export const cases: OrmCase<Database>[] = [
         .orderBy(users.id)
         .limit(sql.placeholder("limit"))
         .prepare("corpus_users_by_role");
-      const insertGroup = db
-        .insert(groups)
-        .values({ name: sql.placeholder("name") })
-        .returning({ name: groups.name })
-        .prepare("corpus_insert_group");
-      const inserted = await rolledBack(db, async () => insertGroup.execute({ name: "Prepared" }));
+      const inserted = await rolledBack(db, async (tx) =>
+        tx
+          .insert(groups)
+          .values({ name: sql.placeholder("name") })
+          .returning({ name: groups.name })
+          .prepare("corpus_insert_group")
+          .execute({ name: "Prepared" }),
+      );
 
       return {
         first: await byId.execute({ id: 1 }),
@@ -1159,7 +1146,6 @@ export const cases: OrmCase<Database>[] = [
         secured: { enableRLS: securedConfig.enableRLS, policies: securedConfig.policies.map((policy) => policy.name) },
         scope: pg.getTableConfig(schema.scopedItems).schema,
         uniqueKeyName: pg.uniqueKeyName(users, ["email"]),
-        usedTables: usedTablesOf(users),
         columnTable: orm.getTableName(orm.getColumnTable(posts.title)),
         extended: orm.extractExtendedColumnType(users.tags),
         withEnum: [orm.isWithEnum(users.role), orm.isWithEnum(users.name)],

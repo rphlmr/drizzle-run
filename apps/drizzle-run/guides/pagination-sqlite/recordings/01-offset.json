@@ -1,22 +1,22 @@
 {
   "recordingVersion": 1,
-  "snapshotDigest": "ee92c9a0601f9d8e67711e92e2771564ce2772d51f2f63c5642c80b9a4e1c9f5",
-  "recordedAt": "2026-11-04T13:48:20.128Z",
+  "snapshotDigest": "79adc4989e4dff74db0d7820a78b77534777798aef485bf131d2f4ed9c861b78",
+  "recordedAt": "2026-11-20T20:12:09.439Z",
   "result": {
     "version": 1,
     "target": {
       "dialect": "sqlite"
     },
     "tuple": {
-      "id": "sqlite-wasm__orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+      "id": "sqlite-wasm__orm-1.0.0-rc.6__kit-1.0.0-rc.6",
       "target": {
         "dialect": "sqlite"
       },
-      "ormVersion": "1.0.0-rc.5",
-      "kitVersion": "1.0.0-rc.5"
+      "ormVersion": "1.0.0-rc.6",
+      "kitVersion": "1.0.0-rc.6"
     },
     "random": {
-      "effectiveSeed": 1633126851,
+      "effectiveSeed": 2236389106,
       "source": "generated",
       "derivation": "crypto-u32-v1",
       "generator": "mulberry32-v1"
@@ -25,74 +25,74 @@
       {
         "phase": "validate",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:48:18.344Z",
-        "durationMs": 0.029999971389770508
+        "startedAt": "2026-11-20T20:12:08.628Z",
+        "durationMs": 0.029999997466802597
       },
       {
         "phase": "resolve",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:48:18.344Z",
-        "durationMs": 0.009999990463256836
+        "startedAt": "2026-11-20T20:12:08.628Z",
+        "durationMs": 0.005000002682209015
       },
       {
         "phase": "load_artifacts",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:48:18.637Z",
-        "durationMs": 580.3999999761581
+        "startedAt": "2026-11-20T20:12:08.825Z",
+        "durationMs": 366.60999999940395
       },
       {
         "phase": "compile",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:48:18.436Z",
-        "durationMs": 200.0349999666214
+        "startedAt": "2026-11-20T20:12:08.668Z",
+        "durationMs": 156.39499999955297
       },
       {
         "phase": "evaluate_schema",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:48:19.218Z",
-        "durationMs": 16.97000002861023
+        "startedAt": "2026-11-20T20:12:09.192Z",
+        "durationMs": 14.42000000178814
       },
       {
         "phase": "generate_bootstrap",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:48:19.235Z",
-        "durationMs": 2.9350000619888306
+        "startedAt": "2026-11-20T20:12:09.206Z",
+        "durationMs": 1.8150000013411045
       },
       {
         "phase": "apply_bootstrap",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:48:19.239Z",
-        "durationMs": 352.6200000047684
+        "startedAt": "2026-11-20T20:12:09.209Z",
+        "durationMs": 73.69999999925494
       },
       {
         "phase": "seed",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:48:19.591Z",
-        "durationMs": 3.8499999046325684
+        "startedAt": "2026-11-20T20:12:09.283Z",
+        "durationMs": 2.980000000447035
       },
       {
         "phase": "run",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:48:19.596Z",
-        "durationMs": 37.69500005245209
+        "startedAt": "2026-11-20T20:12:09.286Z",
+        "durationMs": 29.975000001490116
       },
       {
         "phase": "inspect",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:48:19.632Z",
-        "durationMs": 1.6050000190734863
+        "startedAt": "2026-11-20T20:12:09.315Z",
+        "durationMs": 1.419999998062849
       },
       {
         "phase": "plan",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:48:19.634Z",
-        "durationMs": 0.11500000953674316
+        "startedAt": "2026-11-20T20:12:09.316Z",
+        "durationMs": 0.03500000014901161
       },
       {
         "phase": "cleanup",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:48:19.635Z",
-        "durationMs": 1.0099999904632568
+        "startedAt": "2026-11-20T20:12:09.317Z",
+        "durationMs": 0.8999999985098839
       }
     ],
     "diagnostics": [],
@@ -216,7 +216,7 @@
         "outcome": "succeeded",
         "source": "seed.ts",
         "line": 6,
-        "durationMs": 2.999755859375,
+        "durationMs": 2.000244140625,
         "rowCount": 6
       },
       {
@@ -224,17 +224,21 @@
         "phase": "run",
         "origin": "drizzle",
         "kind": "executed",
-        "sql": "select \"id\", \"title\", \"created_at\" from \"posts\" order by \"posts\".\"created_at\" asc, \"posts\".\"id\" asc limit ?",
+        "sql": "select \"id\", \"title\", \"created_at\" from \"posts\" order by \"posts\".\"created_at\" asc, \"posts\".\"id\" asc limit ? offset ?",
         "parameters": [
           {
             "type": "primitive",
             "value": 2
+          },
+          {
+            "type": "primitive",
+            "value": 0
           }
         ],
         "outcome": "succeeded",
         "source": "query.ts",
         "line": 8,
-        "durationMs": 3,
+        "durationMs": 2,
         "rowCount": 2
       },
       {
@@ -256,7 +260,7 @@
         "outcome": "succeeded",
         "source": "query.ts",
         "line": 8,
-        "durationMs": 1,
+        "durationMs": 0,
         "rowCount": 2
       },
       {
@@ -565,7 +569,7 @@
           "outcome": "succeeded",
           "source": "seed.ts",
           "line": 6,
-          "durationMs": 2.999755859375,
+          "durationMs": 2.000244140625,
           "rowCount": 6
         }
       },
@@ -577,17 +581,21 @@
           "phase": "run",
           "origin": "drizzle",
           "kind": "executed",
-          "sql": "select \"id\", \"title\", \"created_at\" from \"posts\" order by \"posts\".\"created_at\" asc, \"posts\".\"id\" asc limit ?",
+          "sql": "select \"id\", \"title\", \"created_at\" from \"posts\" order by \"posts\".\"created_at\" asc, \"posts\".\"id\" asc limit ? offset ?",
           "parameters": [
             {
               "type": "primitive",
               "value": 2
+            },
+            {
+              "type": "primitive",
+              "value": 0
             }
           ],
           "outcome": "succeeded",
           "source": "query.ts",
           "line": 8,
-          "durationMs": 3,
+          "durationMs": 2,
           "rowCount": 2
         }
       },
@@ -663,7 +671,7 @@
           "outcome": "succeeded",
           "source": "query.ts",
           "line": 8,
-          "durationMs": 1,
+          "durationMs": 0,
           "rowCount": 2
         }
       },
@@ -804,27 +812,27 @@
       }
     },
     "timings": {
-      "total": 1296,
-      "validate": 0.029999971389770508,
-      "resolve": 0.009999990463256836,
-      "load_artifacts": 580.3999999761581,
-      "compile": 200.0349999666214,
-      "evaluate_schema": 16.97000002861023,
-      "generate_bootstrap": 2.9350000619888306,
-      "apply_bootstrap": 352.6200000047684,
-      "seed": 3.8499999046325684,
-      "run": 37.69500005245209,
-      "inspect": 1.6050000190734863,
-      "plan": 0.11500000953674316,
-      "cleanup": 1.0099999904632568
+      "total": 693,
+      "validate": 0.029999997466802597,
+      "resolve": 0.005000002682209015,
+      "load_artifacts": 366.60999999940395,
+      "compile": 156.39499999955297,
+      "evaluate_schema": 14.42000000178814,
+      "generate_bootstrap": 1.8150000013411045,
+      "apply_bootstrap": 73.69999999925494,
+      "seed": 2.980000000447035,
+      "run": 29.975000001490116,
+      "inspect": 1.419999998062849,
+      "plan": 0.03500000014901161,
+      "cleanup": 0.8999999985098839
     },
     "ok": true,
     "outcome": "succeeded"
   },
   "guests": [
     {
-      "imageId": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
-      "lockDigest": "sha256-dabcc2a116ec5e228673a8c074b17ef00b455fc65afad67b9e392fd1ff4d2ad6"
+      "imageId": "orm-1.0.0-rc.6__kit-1.0.0-rc.6",
+      "lockDigest": "sha256-99db00a50a41f930b3da5212c21e22923dcad3047c6048a580ab8dae33439ed5"
     }
   ]
 }

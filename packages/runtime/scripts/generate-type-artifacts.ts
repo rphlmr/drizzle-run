@@ -41,6 +41,7 @@ const PackageMetadataSchema = z.object({
   types: z.optional(z.string()),
   typings: z.optional(z.string()),
   exports: z.optional(z.unknown()),
+  imports: z.optional(z.record(z.string(), z.unknown())),
 });
 type PackageMetadata = z.infer<typeof PackageMetadataSchema>;
 const ExportConditionsSchema = z.record(z.string(), z.unknown());
@@ -267,7 +268,11 @@ function createAliasContent(relativeTarget: string): string {
   return `// Generated declaration entrypoint; do not edit.\nexport * from ${JSON.stringify(`./${relativeTarget}`)};\n`;
 }
 
-function collectClosure(directory: string, rootFile: string): Map<string, string> {
+function collectClosure(
+  directory: string,
+  rootFile: string,
+  imports?: PackageMetadata["imports"],
+): Map<string, string> {
   const files = new Map<string, string>();
   const pending = [rootFile];
 
@@ -282,7 +287,22 @@ function collectClosure(directory: string, rootFile: string): Map<string, string
       continue;
     }
 
-    const content = readFileSync(file, "utf8");
+    const content = readFileSync(file, "utf8").replace(
+      /((?:from|import)\s*)(["'])(#[^"']+)\2/g,
+      (match: string, prefix: string, quote: string, request: string) => {
+        if (!imports || !Object.hasOwn(imports, request)) {
+          return match;
+        }
+
+        const target = chooseExportTarget(imports[request]);
+        if (!target.startsWith("./")) {
+          return match;
+        }
+
+        const path = relative(dirname(file), resolve(directory, target)).replaceAll("\\", "/");
+        return `${prefix}${quote}${path.startsWith("../") ? path : `./${path}`}${quote}`;
+      },
+    );
     files.set(file, content);
 
     for (const request of getDeclarationRequests(content)) {
@@ -445,7 +465,7 @@ function createClosureManifestText(entries: readonly ApprovedModuleEntry[]): str
     const closure = new Map<string, string>();
 
     for (const target of targets.values()) {
-      for (const [file, content] of collectClosure(directory, target)) {
+      for (const [file, content] of collectClosure(directory, target, metadata.imports)) {
         closure.set(file, content);
       }
     }

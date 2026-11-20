@@ -42,7 +42,7 @@ describe("classifyStatement", () => {
 
   it("should count a write Postgres tagged even when the text hides it", () => {
     expect(classifyStatement('/* move */ update "accounts" set "balance" = $1', ["UPDATE"])).toBe("write");
-    expect(classifyStatement('select 1; delete from "accounts"', ["SELECT", "DELETE"])).toBe("write");
+    expect(classifyStatement('select 1; delete from "accounts"', ["SELECT 1", "DELETE 2"])).toBe("write");
     expect(classifyStatement('/* move */ update "accounts" set "balance" = $1')).toBe("read");
   });
 

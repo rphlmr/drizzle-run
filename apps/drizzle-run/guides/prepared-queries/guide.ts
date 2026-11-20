@@ -14,7 +14,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
     kind: "drizzle-run",
     manifestVersion: 1,
     target: { dialect: "postgresql" },
-    dependencies: { "drizzle-orm": "1.0.0-rc.5", "drizzle-kit": "1.0.0-rc.5" },
+    dependencies: { "drizzle-orm": "1.0.0-rc.6", "drizzle-kit": "1.0.0-rc.6" },
     files: readExampleFiles("prepared-queries", ["schema.ts", "seed.ts", "query.ts"]),
     entrypoints: { schema: "schema.ts", seed: "seed.ts", run: "query.ts" },
   }),
@@ -25,7 +25,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
       focus: { file: "query.ts", lines: [7, 13] },
       label: "Bound values",
       title: "Pass a value to an ordinary query",
-      body: "This guide uses PostgreSQL and Drizzle ORM **1.0.0-rc.5** to search a small product catalogue. Prices are stored as integer cents.\n\nStart with an ordinary query. `eq(products.category, category)` binds the category as a parameter. It does not paste the text into SQL. You do not need `.prepare()` to bind values safely.\n\nPress **Run**, then look at the SQL panel: the statement and its parameter values are separate. The result contains three books, ordered by price and then ID.",
+      body: "This guide uses PostgreSQL and Drizzle ORM **1.0.0-rc.6** to search a small product catalogue. Prices are stored as integer cents.\n\nStart with an ordinary query. `eq(products.category, category)` binds the category as a parameter. It does not paste the text into SQL. You do not need `.prepare()` to bind values safely.\n\nPress **Run**, then look at the SQL panel: the statement and its parameter values are separate. The result contains three books, ordered by price and then ID.",
       run: "required",
       highlight: {
         displays: ["Books"],

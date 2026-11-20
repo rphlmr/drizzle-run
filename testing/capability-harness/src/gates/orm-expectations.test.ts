@@ -16,7 +16,15 @@ void describe("ORM acceptance expectations", () => {
     for (const ormApi of ["v0", "v1"] as const) {
       for (const dialect of ["postgresql", "sqlite"] as const) {
         const corpus = `${ormApi === "v0" ? "legacy" : "next"}-${dialect}`;
-        assert.deepEqual(Object.keys(getOrmExpectations({ ormApi }, dialect)).toSorted(), ids[corpus].toSorted());
+        const versions = ormApi === "v0" ? [undefined] : ["1.0.0-rc.5", "1.0.0-rc.6"];
+        for (const ormVersion of versions) {
+          const release = ormVersion?.split("-").at(-1)?.replace(".", "");
+          const fixtureIds = ids[`${corpus}.${release}`] ?? [];
+          assert.deepEqual(
+            Object.keys(getOrmExpectations({ ormApi, ormVersion }, dialect)).toSorted(),
+            [...ids[corpus], ...fixtureIds].toSorted(),
+          );
+        }
       }
     }
   });

@@ -191,8 +191,8 @@ describe("collectReportFacts", () => {
   const tuple = {
     id: "pg",
     target: { dialect: "sqlite" },
-    ormVersion: "1.0.0-rc.6",
-    kitVersion: "1.0.0-rc.6",
+    ormVersion: "1.0.0-rc.7",
+    kitVersion: "1.0.0-rc.7",
   } as const;
   const cleanup = { guest: { mode: "graceful" }, database: { mode: "graceful" } } as const;
 
@@ -214,7 +214,7 @@ describe("collectReportFacts", () => {
       "Runtime issues",
       "Libraries",
     ]);
-    expect(factValue(facts, "Release pair")).toBe("orm 1.0.0-rc.6 · kit 1.0.0-rc.6");
+    expect(factValue(facts, "Release pair")).toBe("orm 1.0.0-rc.7 · kit 1.0.0-rc.7");
     expect(factValue(facts, "Libraries")).toBe("unknown");
     expect(factValue(facts, "Database")).toBe("SQLite WASM · SQLite");
     expect(factValue(facts, "Guest")).toBe("fresh · QuickJS");

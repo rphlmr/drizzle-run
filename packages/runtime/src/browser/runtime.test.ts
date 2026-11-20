@@ -98,7 +98,7 @@ describe("createBrowserRuntime", () => {
             parameters: [],
             outcome: "succeeded",
             rowCount: 1,
-            commandTags: ["SELECT"],
+            commandTags: ["SELECT 1"],
           },
         });
         options?.onMessage?.({
@@ -140,7 +140,7 @@ describe("createBrowserRuntime", () => {
     expect(result.events.map((event) => event.type)).toEqual(["log", "sql", "display"]);
     expect(result.events.map((event) => event.sequence)).toEqual([1, 2, 3]);
     expect(result.logs[0]).toMatchObject({ source: "tasks/query.ts", line: 3 });
-    expect(result.sql[0]).toMatchObject({ rowCount: 1 });
+    expect(result.sql[0]).toMatchObject({ rowCount: 1, commandTags: ["SELECT 1"] });
     expect(result.displays[0]?.label).toBe("result");
     expect(result.transactions).toHaveLength(1);
     expect(result.queryPlans?.settings).toEqual({ size: "100k", measureRealTime: true });

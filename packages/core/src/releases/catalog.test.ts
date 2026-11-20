@@ -31,16 +31,25 @@ const expectedReleasePairs = {
     recommended: true,
     guestFlavors: ["slim", "effect"],
   },
+  "orm-1.0.0-rc.6__kit-1.0.0-rc.6": {
+    releaseLine: "next",
+    ormVersion: "1.0.0-rc.6",
+    kitVersion: "1.0.0-rc.6",
+    recommended: false,
+    guestFlavors: ["slim", "effect"],
+  },
 } as const;
 
 describe("runtime package catalog", () => {
   it("should retain only the admitted database targets and release pairs", () => {
     expectTypeOf<DatabaseTargetId>().toEqualTypeOf<"postgresql-pglite" | "sqlite-wasm">();
-    expectTypeOf<OrmVersion>().toEqualTypeOf<"0.45.4" | "1.0.0-rc.5">();
-    expectTypeOf<RuntimeOrmVersion>().toEqualTypeOf<"0.45.4" | "1.0.0-rc.5">();
-    expectTypeOf<KitVersion>().toEqualTypeOf<"0.31.11" | "1.0.0-rc.5">();
+    expectTypeOf<OrmVersion>().toEqualTypeOf<"0.45.4" | "1.0.0-rc.5" | "1.0.0-rc.6">();
+    expectTypeOf<RuntimeOrmVersion>().toEqualTypeOf<"0.45.4" | "1.0.0-rc.5" | "1.0.0-rc.6">();
+    expectTypeOf<KitVersion>().toEqualTypeOf<"0.31.11" | "1.0.0-rc.5" | "1.0.0-rc.6">();
     expectTypeOf<SeedVersion>().toEqualTypeOf<"0.3.1" | "1.0.0-rc.5">();
-    expectTypeOf<ReleasePairId>().toEqualTypeOf<"orm-0.45.4__kit-0.31.11" | "orm-1.0.0-rc.5__kit-1.0.0-rc.5">();
+    expectTypeOf<ReleasePairId>().toEqualTypeOf<
+      "orm-0.45.4__kit-0.31.11" | "orm-1.0.0-rc.5__kit-1.0.0-rc.5" | "orm-1.0.0-rc.6__kit-1.0.0-rc.6"
+    >();
     expectTypeOf<ReleaseLine>().toEqualTypeOf<"legacy" | "next">();
     expectTypeOf(RELEASE_PAIRS).toEqualTypeOf(expectedReleasePairs);
 
@@ -49,7 +58,7 @@ describe("runtime package catalog", () => {
       "sqlite-wasm": { dialect: "sqlite" },
     });
     expect(RELEASE_PAIRS).toEqual(expectedReleasePairs);
-    expect(KIT_VERSIONS).toEqual(["0.31.11", "1.0.0-rc.5"]);
+    expect(KIT_VERSIONS).toEqual(["0.31.11", "1.0.0-rc.5", "1.0.0-rc.6"]);
   });
 
   it("should look up a guest image's pin, or null when it has none", () => {

@@ -1,7 +1,7 @@
 import type { Dialect } from "@drizzle-run/core/catalog";
 import type { SupportedRuntimeTuple } from "@drizzle-run/core/catalog";
 import type { RunManifestTarget } from "@drizzle-run/core/manifest";
-import { RUNTIME_CONTEXT_SPECIFIER } from "@drizzle-run/core/registry";
+import { listApprovedModules, RUNTIME_CONTEXT_SPECIFIER } from "@drizzle-run/core/registry";
 
 interface RuntimeContextInput {
   target: RunManifestTarget;
@@ -21,9 +21,16 @@ const CONTEXT_TYPES = {
   },
 } as const satisfies Record<Dialect, { database: string; client: string }>;
 
-function getDatabaseType(target: RunManifestTarget, releaseLine: SupportedRuntimeTuple["releaseLine"]): string {
+function getDatabaseType(target: RunManifestTarget, tuple: SupportedRuntimeTuple): string {
+  const schemaType = tuple.releaseLine === "next" ? "SchemaRelations" : "typeof schema";
+  const usesDrizzlePostgres = listApprovedModules({ tuple, guestFlavor: "slim" }).some((entry) =>
+    entry.allowedSpecifiers.includes("drizzle-orm/postgres"),
+  );
+  if (usesDrizzlePostgres) {
+    return `import("drizzle-orm/postgres").PostgresDatabase<${schemaType}> & { $client: import("drizzle-orm/postgres").Pool }`;
+  }
+
   const contextTypes = CONTEXT_TYPES[target.dialect];
-  const schemaType = releaseLine === "next" ? "SchemaRelations" : "typeof schema";
 
   return `${contextTypes.database}<${schemaType}> & { $client: ${contextTypes.client} }`;
 }
@@ -52,7 +59,7 @@ function createContextMembers(
 ${indent}type SchemaRelations = typeof schema extends { relations: infer Relations }
 ${indent}  ? Relations
 ${indent}  : {};
-${indent}${declareKeyword}const db: ${getDatabaseType(target, tuple.releaseLine)};
+${indent}${declareKeyword}const db: ${getDatabaseType(target, tuple)};
 ${indent}${declareKeyword}const env: Readonly<Record<string, string>>;
 ${indent}${declareKeyword}const target: ${JSON.stringify(target)};
 ${createPostgresConnectionMember(target, indent, declareKeyword)}

@@ -7,7 +7,7 @@
   "topics": ["Schema"],
   "section": "schema",
   "order": 45,
-  "releasePair": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+  "releasePair": "orm-1.0.0-rc.6__kit-1.0.0-rc.6",
   "sides": [
     { "name": "PostgreSQL", "dialect": "postgresql" },
     { "name": "SQLite", "dialect": "sqlite" }

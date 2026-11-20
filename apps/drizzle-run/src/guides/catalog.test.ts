@@ -47,6 +47,7 @@ describe("guide catalog", () => {
       "pagination-apis-sqlite published",
       "pagination-postgresql published",
       "pagination-sqlite published",
+      "pipeline-batch-parallel published",
       "prepared-queries published",
       "relational-queries published",
       "reusable-helpers published",

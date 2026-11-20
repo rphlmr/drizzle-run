@@ -33,7 +33,7 @@ const MAX_COMMAND_TAGS = 10_000;
 const MAX_WIRE_TRANSACTIONS = 200;
 const textEncoder = new TextEncoder();
 
-const commandTagPattern = /^[A-Z]{1,32}$/;
+const commandTagPattern = /^[A-Z][A-Z0-9 ]{0,127}$/;
 const callSiteFramesPattern = /^\d{1,7}:\d{1,7}(?: \d{1,7}:\d{1,7}){0,7}$/;
 const bigintPattern = /^-?\d+$/;
 const base64Pattern = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/;
@@ -47,14 +47,6 @@ export interface WireCallSite {
   frames?: string;
 }
 
-/**
- * The command tag Postgres returned for each statement of a query (`UPDATE`, `SELECT`), first word only. The host
- * reads statement roles from them, then drops them; they never reach a published event. SQLite sends none.
- */
-export interface WireCommandTags {
-  commandTags?: readonly string[];
-}
-
 /** A message the execution worker posts to the host; `parseRuntimeWorkerMessage` checks its exact shape. */
 export type RuntimeWorkerMessage =
   | { kind: "ready"; kitLoadMs: number }
@@ -65,7 +57,7 @@ export type RuntimeWorkerMessage =
       status: "running" | "succeeded" | "failed";
       durationMs?: number;
     }
-  | { kind: "event"; type: "sql"; payload: SqlEvent & WireCallSite & WireCommandTags }
+  | { kind: "event"; type: "sql"; payload: SqlEvent & WireCallSite }
   | { kind: "event"; type: "log"; payload: LogEvent & WireCallSite }
   | { kind: "event"; type: "display"; payload: DisplayResult & WireCallSite }
   | { kind: "event"; type: "diagnostic"; payload: Diagnostic }
@@ -182,7 +174,7 @@ const SqlEventSchema = exactRecord("Invalid SQL event", {
       .array(patternText(invalidCommandTags, commandTagPattern), { error: invalidCommandTags })
       .check(z.maxLength(MAX_COMMAND_TAGS, { error: invalidCommandTags })),
   ),
-}) satisfies z.ZodMiniType<SqlEvent & WireCallSite & WireCommandTags>;
+}) satisfies z.ZodMiniType<SqlEvent & WireCallSite>;
 
 const invalidLogFields = "Invalid log event fields";
 

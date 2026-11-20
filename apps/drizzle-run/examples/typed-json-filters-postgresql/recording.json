@@ -1,22 +1,22 @@
 {
   "recordingVersion": 1,
-  "snapshotDigest": "54a8f938047901e37a5629c9233d7927b98d3fa59a9ea83fbbb4dbfe9fd292ab",
-  "recordedAt": "2026-11-04T13:48:06.023Z",
+  "snapshotDigest": "2f767b40a7b226a17b2b977bc812f23712a25616bf6f5123dc6ea51c4e2e77ae",
+  "recordedAt": "2026-11-20T20:11:40.747Z",
   "result": {
     "version": 1,
     "target": {
       "dialect": "postgresql"
     },
     "tuple": {
-      "id": "postgresql-pglite__orm-1.0.0-rc.5__kit-1.0.0-rc.5",
+      "id": "postgresql-pglite__orm-1.0.0-rc.6__kit-1.0.0-rc.6",
       "target": {
         "dialect": "postgresql"
       },
-      "ormVersion": "1.0.0-rc.5",
-      "kitVersion": "1.0.0-rc.5"
+      "ormVersion": "1.0.0-rc.6",
+      "kitVersion": "1.0.0-rc.6"
     },
     "random": {
-      "effectiveSeed": 86200186,
+      "effectiveSeed": 386634336,
       "source": "generated",
       "derivation": "crypto-u32-v1",
       "generator": "mulberry32-v1"
@@ -25,74 +25,74 @@
       {
         "phase": "validate",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:48:03.791Z",
-        "durationMs": 0.034999966621398926
+        "startedAt": "2026-11-20T20:11:39.398Z",
+        "durationMs": 0.03999999910593033
       },
       {
         "phase": "resolve",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:48:03.791Z",
-        "durationMs": 0.004999995231628418
+        "startedAt": "2026-11-20T20:11:39.398Z",
+        "durationMs": 0.009999997913837433
       },
       {
         "phase": "load_artifacts",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:48:04.053Z",
-        "durationMs": 596.8949999809265
+        "startedAt": "2026-11-20T20:11:39.601Z",
+        "durationMs": 359.2550000026822
       },
       {
         "phase": "compile",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:48:03.869Z",
-        "durationMs": 182.74000000953674
+        "startedAt": "2026-11-20T20:11:39.437Z",
+        "durationMs": 163.75499999895692
       },
       {
         "phase": "evaluate_schema",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:48:04.650Z",
-        "durationMs": 66.86500000953674
+        "startedAt": "2026-11-20T20:11:39.961Z",
+        "durationMs": 72.8450000025332
       },
       {
         "phase": "generate_bootstrap",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:48:04.717Z",
-        "durationMs": 25.30999994277954
+        "startedAt": "2026-11-20T20:11:40.034Z",
+        "durationMs": 19.75
       },
       {
         "phase": "apply_bootstrap",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:48:04.743Z",
-        "durationMs": 657.3099999427795
+        "startedAt": "2026-11-20T20:11:40.054Z",
+        "durationMs": 372.4749999977648
       },
       {
         "phase": "seed",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:48:05.400Z",
-        "durationMs": 9.449999928474426
+        "startedAt": "2026-11-20T20:11:40.426Z",
+        "durationMs": 6.259999997913837
       },
       {
         "phase": "run",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:48:05.411Z",
-        "durationMs": 45.830000042915344
+        "startedAt": "2026-11-20T20:11:40.432Z",
+        "durationMs": 32.62000000104308
       },
       {
         "phase": "inspect",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:48:05.455Z",
-        "durationMs": 61.519999980926514
+        "startedAt": "2026-11-20T20:11:40.465Z",
+        "durationMs": 52.935000002384186
       },
       {
         "phase": "plan",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:48:05.517Z",
-        "durationMs": 0.09000003337860107
+        "startedAt": "2026-11-20T20:11:40.518Z",
+        "durationMs": 0.044999998062849045
       },
       {
         "phase": "cleanup",
         "status": "succeeded",
-        "startedAt": "2026-11-04T13:48:05.518Z",
-        "durationMs": 2.3350000381469727
+        "startedAt": "2026-11-20T20:11:40.519Z",
+        "durationMs": 2.3599999994039536
       }
     ],
     "diagnostics": [],
@@ -114,7 +114,7 @@
         "sql": "BEGIN",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 1.000244140625
+        "durationMs": 0.999755859375
       },
       {
         "sequence": 3,
@@ -124,7 +124,7 @@
         "sql": "CREATE TABLE \"products\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"attributes\" jsonb NOT NULL\n);\n",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 10
+        "durationMs": 9
       },
       {
         "sequence": 4,
@@ -134,7 +134,7 @@
         "sql": "COMMIT",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 2
+        "durationMs": 1
       },
       {
         "sequence": 5,
@@ -145,120 +145,67 @@
         "parameters": [
           {
             "type": "primitive",
-            "value": 1
+            "value": "1"
           },
           {
             "type": "primitive",
             "value": "Blue shirt"
           },
           {
-            "type": "object",
-            "value": {
-              "color": {
-                "type": "primitive",
-                "value": "blue"
-              },
-              "sizes": {
-                "type": "array",
-                "value": [
-                  {
-                    "type": "primitive",
-                    "value": "S"
-                  },
-                  {
-                    "type": "primitive",
-                    "value": "M"
-                  }
-                ]
-              }
-            }
+            "type": "primitive",
+            "value": "{\"color\":\"blue\",\"sizes\":[\"S\",\"M\"]}"
           },
           {
             "type": "primitive",
-            "value": 2
+            "value": "2"
           },
           {
             "type": "primitive",
             "value": "Blue coat"
           },
           {
-            "type": "object",
-            "value": {
-              "color": {
-                "type": "primitive",
-                "value": "blue"
-              },
-              "sizes": {
-                "type": "array",
-                "value": [
-                  {
-                    "type": "primitive",
-                    "value": "L"
-                  }
-                ]
-              }
-            }
+            "type": "primitive",
+            "value": "{\"color\":\"blue\",\"sizes\":[\"L\"]}"
           },
           {
             "type": "primitive",
-            "value": 3
+            "value": "3"
           },
           {
             "type": "primitive",
             "value": "Red shirt"
           },
           {
-            "type": "object",
-            "value": {
-              "color": {
-                "type": "primitive",
-                "value": "red"
-              },
-              "sizes": {
-                "type": "array",
-                "value": [
-                  {
-                    "type": "primitive",
-                    "value": "M"
-                  }
-                ]
-              }
-            }
+            "type": "primitive",
+            "value": "{\"color\":\"red\",\"sizes\":[\"M\"]}"
           },
           {
             "type": "primitive",
-            "value": 4
+            "value": "4"
           },
           {
             "type": "primitive",
             "value": "Gift card"
           },
           {
-            "type": "object",
-            "value": {}
+            "type": "primitive",
+            "value": "{}"
           },
           {
             "type": "primitive",
-            "value": 5
+            "value": "5"
           },
           {
             "type": "primitive",
             "value": "Uncoloured sample"
           },
           {
-            "type": "object",
-            "value": {
-              "color": {
-                "type": "primitive",
-                "value": null
-              }
-            }
+            "type": "primitive",
+            "value": "{\"color\":null}"
           }
         ],
         "outcome": "succeeded",
-        "source": "seed.ts",
-        "line": 5,
-        "durationMs": 8,
+        "durationMs": 2,
         "rowCount": 5
       },
       {
@@ -274,9 +221,7 @@
           }
         ],
         "outcome": "succeeded",
-        "source": "query.ts",
-        "line": 10,
-        "durationMs": 9.000244140625,
+        "durationMs": 3,
         "rowCount": 5
       },
       {
@@ -304,9 +249,7 @@
           }
         ],
         "outcome": "succeeded",
-        "source": "query.ts",
-        "line": 13,
-        "durationMs": 7.000244140625,
+        "durationMs": 2,
         "rowCount": 1
       }
     ],
@@ -465,7 +408,7 @@
           "sql": "BEGIN",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 1.000244140625
+          "durationMs": 0.999755859375
         }
       },
       {
@@ -479,7 +422,7 @@
           "sql": "CREATE TABLE \"products\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"name\" text NOT NULL,\n\t\"attributes\" jsonb NOT NULL\n);\n",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 10
+          "durationMs": 9
         }
       },
       {
@@ -493,7 +436,7 @@
           "sql": "COMMIT",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 2
+          "durationMs": 1
         }
       },
       {
@@ -508,120 +451,67 @@
           "parameters": [
             {
               "type": "primitive",
-              "value": 1
+              "value": "1"
             },
             {
               "type": "primitive",
               "value": "Blue shirt"
             },
             {
-              "type": "object",
-              "value": {
-                "color": {
-                  "type": "primitive",
-                  "value": "blue"
-                },
-                "sizes": {
-                  "type": "array",
-                  "value": [
-                    {
-                      "type": "primitive",
-                      "value": "S"
-                    },
-                    {
-                      "type": "primitive",
-                      "value": "M"
-                    }
-                  ]
-                }
-              }
+              "type": "primitive",
+              "value": "{\"color\":\"blue\",\"sizes\":[\"S\",\"M\"]}"
             },
             {
               "type": "primitive",
-              "value": 2
+              "value": "2"
             },
             {
               "type": "primitive",
               "value": "Blue coat"
             },
             {
-              "type": "object",
-              "value": {
-                "color": {
-                  "type": "primitive",
-                  "value": "blue"
-                },
-                "sizes": {
-                  "type": "array",
-                  "value": [
-                    {
-                      "type": "primitive",
-                      "value": "L"
-                    }
-                  ]
-                }
-              }
+              "type": "primitive",
+              "value": "{\"color\":\"blue\",\"sizes\":[\"L\"]}"
             },
             {
               "type": "primitive",
-              "value": 3
+              "value": "3"
             },
             {
               "type": "primitive",
               "value": "Red shirt"
             },
             {
-              "type": "object",
-              "value": {
-                "color": {
-                  "type": "primitive",
-                  "value": "red"
-                },
-                "sizes": {
-                  "type": "array",
-                  "value": [
-                    {
-                      "type": "primitive",
-                      "value": "M"
-                    }
-                  ]
-                }
-              }
+              "type": "primitive",
+              "value": "{\"color\":\"red\",\"sizes\":[\"M\"]}"
             },
             {
               "type": "primitive",
-              "value": 4
+              "value": "4"
             },
             {
               "type": "primitive",
               "value": "Gift card"
             },
             {
-              "type": "object",
-              "value": {}
+              "type": "primitive",
+              "value": "{}"
             },
             {
               "type": "primitive",
-              "value": 5
+              "value": "5"
             },
             {
               "type": "primitive",
               "value": "Uncoloured sample"
             },
             {
-              "type": "object",
-              "value": {
-                "color": {
-                  "type": "primitive",
-                  "value": null
-                }
-              }
+              "type": "primitive",
+              "value": "{\"color\":null}"
             }
           ],
           "outcome": "succeeded",
-          "source": "seed.ts",
-          "line": 5,
-          "durationMs": 8,
+          "durationMs": 2,
           "rowCount": 5
         }
       },
@@ -641,9 +531,7 @@
             }
           ],
           "outcome": "succeeded",
-          "source": "query.ts",
-          "line": 10,
-          "durationMs": 9.000244140625,
+          "durationMs": 3,
           "rowCount": 5
         }
       },
@@ -756,9 +644,7 @@
             }
           ],
           "outcome": "succeeded",
-          "source": "query.ts",
-          "line": 13,
-          "durationMs": 7.000244140625,
+          "durationMs": 2,
           "rowCount": 1
         }
       },
@@ -824,27 +710,27 @@
       }
     },
     "timings": {
-      "total": 1733,
-      "validate": 0.034999966621398926,
-      "resolve": 0.004999995231628418,
-      "load_artifacts": 596.8949999809265,
-      "compile": 182.74000000953674,
-      "evaluate_schema": 66.86500000953674,
-      "generate_bootstrap": 25.30999994277954,
-      "apply_bootstrap": 657.3099999427795,
-      "seed": 9.449999928474426,
-      "run": 45.830000042915344,
-      "inspect": 61.519999980926514,
-      "plan": 0.09000003337860107,
-      "cleanup": 2.3350000381469727
+      "total": 1126,
+      "validate": 0.03999999910593033,
+      "resolve": 0.009999997913837433,
+      "load_artifacts": 359.2550000026822,
+      "compile": 163.75499999895692,
+      "evaluate_schema": 72.8450000025332,
+      "generate_bootstrap": 19.75,
+      "apply_bootstrap": 372.4749999977648,
+      "seed": 6.259999997913837,
+      "run": 32.62000000104308,
+      "inspect": 52.935000002384186,
+      "plan": 0.044999998062849045,
+      "cleanup": 2.3599999994039536
     },
     "ok": true,
     "outcome": "succeeded"
   },
   "guests": [
     {
-      "imageId": "orm-1.0.0-rc.5__kit-1.0.0-rc.5",
-      "lockDigest": "sha256-dabcc2a116ec5e228673a8c074b17ef00b455fc65afad67b9e392fd1ff4d2ad6"
+      "imageId": "orm-1.0.0-rc.6__kit-1.0.0-rc.6",
+      "lockDigest": "sha256-99db00a50a41f930b3da5212c21e22923dcad3047c6048a580ab8dae33439ed5"
     }
   ]
 }
