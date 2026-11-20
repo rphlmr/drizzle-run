@@ -1,5 +1,19 @@
 # @drizzle-run/app
 
+## 0.3.0
+
+### Minor Changes
+
+- cefe614: Add the Drizzle ORM and Kit 1.0.0-rc.6 pair with optional Effect support. Use the Drizzle PostgreSQL driver for the RC6 runtime and expose PostgreSQL command tags in SQL events and recordings. Move the guides and examples to RC6, update the Effect examples to use the Drizzle driver, and add a guide to pipeline, batch, parallel execution, and partial failures.
+
+### Patch Changes
+
+- Updated dependencies [cefe614]
+  - @drizzle-run/core@0.4.0
+  - @drizzle-run/runtime@0.4.0
+  - @drizzle-run/orchestration@0.2.3
+  - @drizzle-run/react@0.2.3
+
 ## 0.2.1
 
 ### Patch Changes
