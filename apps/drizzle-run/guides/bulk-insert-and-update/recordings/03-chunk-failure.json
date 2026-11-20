@@ -115,9 +115,7 @@
         "parameters": [],
         "outcome": "succeeded",
         "durationMs": 2,
-        "commandTags": [
-          "BEGIN"
-        ]
+        "commandTags": ["BEGIN"]
       },
       {
         "sequence": 3,
@@ -128,9 +126,7 @@
         "parameters": [],
         "outcome": "succeeded",
         "durationMs": 10,
-        "commandTags": [
-          "CREATE"
-        ]
+        "commandTags": ["CREATE"]
       },
       {
         "sequence": 4,
@@ -141,9 +137,7 @@
         "parameters": [],
         "outcome": "succeeded",
         "durationMs": 1.000244140625,
-        "commandTags": [
-          "COMMIT"
-        ]
+        "commandTags": ["COMMIT"]
       },
       {
         "sequence": 5,
@@ -204,9 +198,7 @@
         "outcome": "succeeded",
         "durationMs": 4.00048828125,
         "rowCount": 3,
-        "commandTags": [
-          "INSERT 0 3"
-        ]
+        "commandTags": ["INSERT 0 3"]
       },
       {
         "sequence": 6,
@@ -217,9 +209,7 @@
         "parameters": [],
         "outcome": "succeeded",
         "durationMs": 2,
-        "commandTags": [
-          "BEGIN"
-        ]
+        "commandTags": ["BEGIN"]
       },
       {
         "sequence": 7,
@@ -248,9 +238,7 @@
         "outcome": "succeeded",
         "durationMs": 2,
         "rowCount": 1,
-        "commandTags": [
-          "INSERT 0 1"
-        ]
+        "commandTags": ["INSERT 0 1"]
       },
       {
         "sequence": 8,
@@ -293,9 +281,7 @@
         "parameters": [],
         "outcome": "succeeded",
         "durationMs": 2,
-        "commandTags": [
-          "ROLLBACK"
-        ]
+        "commandTags": ["ROLLBACK"]
       },
       {
         "sequence": 10,
@@ -307,9 +293,7 @@
         "outcome": "succeeded",
         "durationMs": 1,
         "rowCount": 3,
-        "commandTags": [
-          "SELECT 3"
-        ]
+        "commandTags": ["SELECT 3"]
       },
       {
         "sequence": 11,
@@ -339,9 +323,7 @@
         "outcome": "succeeded",
         "durationMs": 0,
         "rowCount": 1,
-        "commandTags": [
-          "INSERT 0 1"
-        ]
+        "commandTags": ["INSERT 0 1"]
       },
       {
         "sequence": 12,
@@ -386,9 +368,7 @@
         "outcome": "succeeded",
         "durationMs": 0.999755859375,
         "rowCount": 4,
-        "commandTags": [
-          "SELECT 4"
-        ]
+        "commandTags": ["SELECT 4"]
       }
     ],
     "logs": [],
@@ -644,9 +624,7 @@
           "parameters": [],
           "outcome": "succeeded",
           "durationMs": 2,
-          "commandTags": [
-            "BEGIN"
-          ]
+          "commandTags": ["BEGIN"]
         }
       },
       {
@@ -661,9 +639,7 @@
           "parameters": [],
           "outcome": "succeeded",
           "durationMs": 10,
-          "commandTags": [
-            "CREATE"
-          ]
+          "commandTags": ["CREATE"]
         }
       },
       {
@@ -678,9 +654,7 @@
           "parameters": [],
           "outcome": "succeeded",
           "durationMs": 1.000244140625,
-          "commandTags": [
-            "COMMIT"
-          ]
+          "commandTags": ["COMMIT"]
         }
       },
       {
@@ -745,9 +719,7 @@
           "outcome": "succeeded",
           "durationMs": 4.00048828125,
           "rowCount": 3,
-          "commandTags": [
-            "INSERT 0 3"
-          ]
+          "commandTags": ["INSERT 0 3"]
         }
       },
       {
@@ -762,9 +734,7 @@
           "parameters": [],
           "outcome": "succeeded",
           "durationMs": 2,
-          "commandTags": [
-            "BEGIN"
-          ]
+          "commandTags": ["BEGIN"]
         }
       },
       {
@@ -797,9 +767,7 @@
           "outcome": "succeeded",
           "durationMs": 2,
           "rowCount": 1,
-          "commandTags": [
-            "INSERT 0 1"
-          ]
+          "commandTags": ["INSERT 0 1"]
         }
       },
       {
@@ -850,9 +818,7 @@
           "parameters": [],
           "outcome": "succeeded",
           "durationMs": 2,
-          "commandTags": [
-            "ROLLBACK"
-          ]
+          "commandTags": ["ROLLBACK"]
         }
       },
       {
@@ -883,9 +849,7 @@
           "outcome": "succeeded",
           "durationMs": 1,
           "rowCount": 3,
-          "commandTags": [
-            "SELECT 3"
-          ]
+          "commandTags": ["SELECT 3"]
         }
       },
       {
@@ -1010,9 +974,7 @@
           "outcome": "succeeded",
           "durationMs": 0,
           "rowCount": 1,
-          "commandTags": [
-            "INSERT 0 1"
-          ]
+          "commandTags": ["INSERT 0 1"]
         }
       },
       {
@@ -1080,9 +1042,7 @@
           "outcome": "succeeded",
           "durationMs": 0.999755859375,
           "rowCount": 4,
-          "commandTags": [
-            "SELECT 4"
-          ]
+          "commandTags": ["SELECT 4"]
         }
       },
       {
