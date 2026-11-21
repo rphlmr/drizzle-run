@@ -14,6 +14,7 @@ interface ReleaseRun {
   needs: {
     packages: { result: JobResult; outputs: { "has-changesets": string; "app-deployed": string } };
     pack: { result: JobResult; outputs: { unpublished: string } };
+    "release-checks": { result: JobResult };
     publish: { result: JobResult };
   };
 }
@@ -21,6 +22,7 @@ interface ReleaseRun {
 function makeRun({
   packages = "success",
   pack = "success",
+  releaseChecks = "success",
   publish = "success",
   unpublished = "true",
   hasChangesets = "false",
@@ -32,6 +34,7 @@ function makeRun({
 }: {
   packages?: JobResult;
   pack?: JobResult;
+  releaseChecks?: JobResult;
   publish?: JobResult;
   unpublished?: string;
   hasChangesets?: string;
@@ -48,26 +51,27 @@ function makeRun({
     needs: {
       packages: { result: packages, outputs: { "has-changesets": hasChangesets, "app-deployed": deployed } },
       pack: { result: pack, outputs: { unpublished } },
+      "release-checks": { result: releaseChecks },
       publish: { result: publish },
     },
   };
 }
 
 /** Evaluate the real job condition after its declared dependencies, including GitHub's implicit success check. */
-function shouldDeploy(run: ReleaseRun): boolean {
+function shouldRunJob(jobId: keyof ReleaseRun["needs"] | "production", run: ReleaseRun): boolean {
   const workflow = readFileSync(new URL("../../../.github/workflows/release.yml", import.meta.url), "utf8");
-  const production = workflow.split("\n  production:\n")[1];
+  const job = workflow.split(`\n  ${jobId}:\n`)[1]?.split(/\n  [\w-]+:\n/)[0];
 
-  if (production === undefined) {
-    throw new Error("Release workflow has no production job");
+  if (job === undefined) {
+    throw new Error(`Release workflow has no ${jobId} job`);
   }
 
-  const dependencyLine = production.match(/^    needs: (.+)$/m)?.[1];
-  const conditionMatch = production.match(/^    if: (?:>-\n((?:      .+\n)+)|(.+))/m);
+  const dependencyLine = job.match(/^    needs: (.+)$/m)?.[1];
+  const conditionMatch = job.match(/^    if: (?:>-\n((?:      .+\n)+)|(.+))/m);
   const condition = (conditionMatch?.[1] ?? conditionMatch?.[2])?.trim();
 
   if (dependencyLine === undefined || condition === undefined) {
-    throw new Error("Production job must declare its dependencies and condition");
+    throw new Error(`The ${jobId} job must declare its dependencies and condition`);
   }
 
   const dependencyNames = dependencyLine
@@ -79,7 +83,7 @@ function shouldDeploy(run: ReleaseRun): boolean {
     const dependency = Object.entries(run.needs).find(([id]) => id === name)?.[1];
 
     if (dependency === undefined) {
-      throw new Error(`Unexpected production dependency: ${name}`);
+      throw new Error(`Unexpected ${jobId} dependency: ${name}`);
     }
 
     return dependency;
@@ -108,6 +112,39 @@ function shouldDeploy(run: ReleaseRun): boolean {
     }),
   );
 }
+
+function shouldDeploy(run: ReleaseRun): boolean {
+  return shouldRunJob("production", run);
+}
+
+describe("pre-release CI", () => {
+  it.each([
+    { label: "an unpublished package", deployed: "true" },
+    { label: "a new app version", unpublished: "false" },
+    {
+      label: "a production hotfix",
+      deployed: "true",
+      unpublished: "false",
+      eventName: "workflow_dispatch",
+      productionHotfix: true,
+    },
+  ])("should run before releasing $label", ({ label, ...options }) => {
+    expect(shouldRunJob("release-checks", makeRun(options)), label).toBe(true);
+  });
+
+  it.each([
+    { label: "all versions are already released", unpublished: "false", deployed: "true" },
+    { label: "changesets are pending", hasChangesets: "true", pack: "skipped" as const },
+    { label: "packing failed", pack: "failure" as const },
+  ])("should skip when $label", ({ label, ...options }) => {
+    expect(shouldRunJob("release-checks", makeRun(options)), label).toBe(false);
+  });
+
+  it("should require successful CI before publishing packages", () => {
+    expect(shouldRunJob("publish", makeRun())).toBe(true);
+    expect(shouldRunJob("publish", makeRun({ releaseChecks: "failure" }))).toBe(false);
+  });
+});
 
 describe("production release prerequisites", () => {
   it("should deploy a manually requested hotfix on main after the app version was already deployed", () => {
@@ -165,6 +202,7 @@ describe("production release prerequisites", () => {
     { label: "packing failed", pack: "failure", publish: "skipped" },
     { label: "packing was cancelled", pack: "cancelled", publish: "skipped" },
     { label: "packing was skipped", pack: "skipped", publish: "skipped" },
+    { label: "pre-release CI failed", releaseChecks: "failure", unpublished: "false", publish: "skipped" },
     { label: "publishing failed", publish: "failure" },
     { label: "publishing was cancelled", publish: "cancelled" },
     { label: "unpublished packages were not published", publish: "skipped" },

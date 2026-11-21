@@ -92,7 +92,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
       id: "03-chunk-failure",
       label: "Chunk failure",
       title: "See which rows survive a failed chunk",
-      body: "The first row adds a cable. The second tries to insert a keyboard the north warehouse already stocks. This example sets `chunk: 1` so each row goes in its own statement.\n\nPress **Run**. By default, both bulk methods pipeline their chunks inside one transaction. The duplicate key rolls back the entire first call, including the cable insert. With `atomic: false`, each chunk commits on its own. The second call still throws on the keyboard, and the cable stays in inventory.\n\nIf you allow partial imports, account for already committed chunks before retrying. Replaying the same input here would hit a duplicate key on the cable.",
+      body: "The first row adds a cable. The second tries to insert a keyboard the north warehouse already stocks. This example sets `chunk: 1` so each row goes in its own statement.\n\nPress **Run**. By default, both bulk methods pipeline their chunks inside one transaction. The duplicate key rolls back the entire first call, including the cable insert. With `atomic: false`, each chunk commits on its own. The second call still throws on the keyboard, and the cable stays in inventory.\n\nIf you allow partial imports, account for already committed chunks before retrying. Replaying the same input here would hit a duplicate key on the cable.\n\nSee the [Drizzle Batch API reference](https://orm.drizzle.team/docs/batch-api) for the bulk method options.",
       edits: [{ file: "query.ts", write: chunkFailure }],
       focus: { file: "query.ts", lines: [11, 26] },
       run: "required",

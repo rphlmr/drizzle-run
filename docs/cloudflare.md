@@ -230,12 +230,16 @@ To adapt this CI pipeline for a fork:
 ```text
 pull request ──▶ Preview workflow ──▶ pr-<n>.<subdomain>.workers.dev   (deleted when it closes)
 push to main ──▶ Release workflow ─┬▶ Version Packages pull request ──▶ next.drizzle.run
-                                   └▶ it merges ──▶ npm publish, app version bump ──▶ production
+                                   └▶ it merges ──▶ CI ──▶ npm publish ──▶ production
 ```
 
 `next` is a deployment environment, not a Git branch. Both next and production deploy from `main`, through
 [the Release workflow](../.github/workflows/release.yml). Pending changesets send the build to next. Merging the
 Version Packages pull request consumes those changesets and makes the version eligible for production.
+
+The full CI suite runs on pull requests. The Release workflow runs the same suite on the release commit before
+publishing new package versions to npm or deploying production, including manual production hotfixes.
+Preview and next deployments still run their browser smoke tests.
 
 **Pull request previews run in a Cloudflare account of their own.** A preview runs the pull request's code with a
 token that creates and deletes Workers and D1 databases and writes R2 objects. Keep that account separate from
