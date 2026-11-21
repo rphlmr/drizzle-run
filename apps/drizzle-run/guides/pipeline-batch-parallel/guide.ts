@@ -83,6 +83,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
       focus: { file: "query.ts", lines: [4, 7] },
       run: "required",
       highlight: { displays: ["Authors", "Drafts"] },
+      links: [{ label: "Pipeline", href: "https://orm.drizzle.team/docs/batch-api#pipeline" }],
       meta: { summary: "Two result sets from queries sent on the same connection." },
     },
     {
@@ -95,6 +96,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
       focus: { file: "query.ts", lines: [4, 7] },
       run: "required",
       highlight: { displays: ["Saved together"] },
+      links: [{ label: "Batch", href: "https://orm.drizzle.team/docs/batch-api#batch" }],
       meta: { summary: "One transaction inserts both rows and returns both results." },
     },
     {
@@ -107,6 +109,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
       focus: { file: "query.ts", lines: [5, 8] },
       run: "required",
       highlight: { displays: ["Batch rejected", "Authors after rollback"] },
+      links: [{ label: "Batch", href: "https://orm.drizzle.team/docs/batch-api#batch" }],
       meta: { summary: "A duplicate draft ID rolls back both inserts." },
     },
     {
@@ -119,6 +122,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
       focus: { file: "query.ts", lines: [4, 7] },
       run: "required",
       highlight: { displays: ["Authors", "Drafts"] },
+      links: [{ label: "Parallel", href: "https://orm.drizzle.team/docs/batch-api#parallel" }],
       meta: { summary: "The pool dispatches each independent query and reports its outcome." },
     },
     {
@@ -126,11 +130,15 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
       id: "05-partial-failure",
       label: "Partial failure",
       title: "Keep the result of the query that succeeds",
-      body: "Run the same two statements through `db.pipeline()` and `db.parallel()`. The first tries to insert a draft with ID 1 again. The second loads the drafts.\n\nIn both groups, the insert returns `{ status: 'rejected', reason }` and the select returns `{ status: 'fulfilled', value }`. The call resolves with both outcomes in input order. Check each `status` before reading its `value` or `reason`.\n\nEach statement runs independently, so a successful write can still commit when another statement fails. Use `db.batch()` when all the writes need to succeed together.\n\nSee the [Drizzle Batch API reference](https://orm.drizzle.team/docs/batch-api) for more examples.",
+      body: "Run the same two statements through `db.pipeline()` and `db.parallel()`. The first tries to insert a draft with ID 1 again. The second loads the drafts.\n\nIn both groups, the insert returns `{ status: 'rejected', reason }` and the select returns `{ status: 'fulfilled', value }`. The call resolves with both outcomes in input order. Check each `status` before reading its `value` or `reason`.\n\nEach statement runs independently, so a successful write can still commit when another statement fails. Use `db.batch()` when all the writes need to succeed together.",
       edits: [{ file: "query.ts", write: partialFailure }],
       focus: { file: "query.ts", lines: [4, 8] },
       run: "required",
       highlight: { displays: ["Pipeline results", "Parallel results"] },
+      links: [
+        { label: "Pipeline", href: "https://orm.drizzle.team/docs/batch-api#pipeline" },
+        { label: "Parallel", href: "https://orm.drizzle.team/docs/batch-api#parallel" },
+      ],
       meta: { summary: "Both methods report the failed insert and still return the drafts." },
     },
   ],
