@@ -1,5 +1,11 @@
 # @drizzle-run/app
 
+## 0.3.2
+
+### Patch Changes
+
+- 34a5a55: Link to the official Drizzle Batch API reference from the Pipeline, batch, and parallel and Bulk insert and update guides.
+
 ## 0.3.1
 
 ### Patch Changes
