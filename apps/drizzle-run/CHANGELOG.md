@@ -1,5 +1,11 @@
 # @drizzle-run/app
 
+## 0.3.1
+
+### Patch Changes
+
+- 4cedf63: Add an interactive PostgreSQL guide to bulk inserts, updates by composite key, and per-chunk commits.
+
 ## 0.3.0
 
 ### Minor Changes
