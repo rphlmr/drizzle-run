@@ -73,6 +73,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
       focus: { file: "query.ts", lines: [4, 7] },
       run: "required",
       highlight: { displays: ["Rows inserted", "Inventory"] },
+      links: [{ label: "Bulk insert", href: "https://orm.drizzle.team/docs/batch-api#bulkinsert" }],
       meta: { summary: "Insert two inventory rows and see how their defaults are filled." },
     },
     {
@@ -85,6 +86,7 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
       focus: { file: "query.ts", lines: [4, 11] },
       run: "required",
       highlight: { displays: ["Rows updated", "Inventory"] },
+      links: [{ label: "Bulk update", href: "https://orm.drizzle.team/docs/batch-api#bulkupdate" }],
       meta: { summary: "Update two stock counts by composite key and let Drizzle set the status." },
     },
     {
@@ -104,6 +106,12 @@ export const guide = defineGuideManifest<DrizzleRunGuideMeta, DrizzleRunStepMeta
           "Inventory after partial commit",
         ],
       },
+      links: [
+        {
+          label: "Bulk writes and transactions",
+          href: "https://orm.drizzle.team/docs/batch-api#bulk-writes-and-transactions",
+        },
+      ],
       meta: { summary: "Compare a full rollback with a commit per chunk." },
     },
   ],

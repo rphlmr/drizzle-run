@@ -3,7 +3,7 @@ name: Release
 # On every push to main:
 #
 #   pending changesets ──▶ Version Packages pull request opened or updated ──▶ next.drizzle.run redeployed
-#   Version Packages merged ──▶ SDK and companion tarballs published to npm ──▶ production deployed
+#   Version Packages merged ──▶ CI ──▶ SDK and companion tarballs published to npm ──▶ production deployed
 #
 # Production deploys while the app's version has no `drizzle-run-app@<version>` tag and no changeset is pending, and
 # tags it once deployed. So a run GitHub drops from the queue, or a failed deploy, is caught up by the next push that
@@ -81,15 +81,24 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     outputs:
-      unpublished: ${{ steps.pack.outputs.unpublished }}
+      unpublished: ${{ steps.registry.outputs.unpublished == 'true' && steps.pack.outputs.unpublished || steps.registry.outputs.unpublished }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           persist-credentials: false
-      - uses: ./.github/actions/setup
-      - run: pnpm exec turbo run build test:pack --filter='./packages/*'
-      - run: pnpm test:sdk-api && pnpm --filter @drizzle-run/runtime test:sdk
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version-file: .node-version
+      - id: registry
+        run: node scripts/pack-release.ts --check
+      - if: steps.registry.outputs.unpublished == 'true'
+        uses: ./.github/actions/setup
+      - if: steps.registry.outputs.unpublished == 'true'
+        run: pnpm exec turbo run build --filter='./packages/*'
+      - if: steps.registry.outputs.unpublished == 'true'
+        run: pnpm test:sdk-api && pnpm --filter @drizzle-run/runtime test:sdk
       - id: pack
+        if: steps.registry.outputs.unpublished == 'true'
         run: node scripts/pack-release.ts "${RUNNER_TEMP}/packages"
       - if: steps.pack.outputs.unpublished == 'true'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
@@ -99,9 +108,18 @@ jobs:
           if-no-files-found: error
           retention-days: 7
 
+  release-checks:
+    name: Pre-release CI
+    needs: [packages, pack]
+    if: >-
+      needs.pack.outputs.unpublished == 'true' ||
+      needs.packages.outputs.app-deployed == 'false' ||
+      (github.event_name == 'workflow_dispatch' && inputs.production_hotfix && github.ref == 'refs/heads/main')
+    uses: ./.github/workflows/ci.yml
+
   publish:
     name: Publish the SDK and companion to npm
-    needs: pack
+    needs: [pack, release-checks]
     if: needs.pack.outputs.unpublished == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -234,13 +252,14 @@ jobs:
 
   production:
     name: Deploy production
-    needs: [packages, pack, publish]
+    needs: [packages, pack, publish, release-checks]
     # Not while changesets are pending: main then holds work meant for next, which only the Version Packages pull
     # request may release. A skipped publish is valid only when every exact package version already exists.
     if: >-
       !cancelled() &&
       needs.packages.result == 'success' &&
       needs.pack.result == 'success' &&
+      needs.release-checks.result == 'success' &&
       (needs.packages.outputs.app-deployed == 'false' ||
        (github.event_name == 'workflow_dispatch' && inputs.production_hotfix && github.ref == 'refs/heads/main')) &&
       needs.packages.outputs.has-changesets == 'false' &&

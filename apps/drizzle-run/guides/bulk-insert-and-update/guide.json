@@ -46,6 +46,12 @@
           "Inventory"
         ]
       },
+      "links": [
+        {
+          "label": "Bulk insert",
+          "href": "https://orm.drizzle.team/docs/batch-api#bulkinsert"
+        }
+      ],
       "meta": {
         "summary": "Insert two inventory rows and see how their defaults are filled."
       }
@@ -76,6 +82,12 @@
           "Inventory"
         ]
       },
+      "links": [
+        {
+          "label": "Bulk update",
+          "href": "https://orm.drizzle.team/docs/batch-api#bulkupdate"
+        }
+      ],
       "meta": {
         "summary": "Update two stock counts by composite key and let Drizzle set the status."
       }
@@ -108,6 +120,12 @@
           "Inventory after partial commit"
         ]
       },
+      "links": [
+        {
+          "label": "Bulk writes and transactions",
+          "href": "https://orm.drizzle.team/docs/batch-api#bulk-writes-and-transactions"
+        }
+      ],
       "meta": {
         "summary": "Compare a full rollback with a commit per chunk."
       }

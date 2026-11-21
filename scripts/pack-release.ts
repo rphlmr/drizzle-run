@@ -83,15 +83,21 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   const destination = process.argv[2];
 
   if (!destination) {
-    throw new Error("Usage: node scripts/pack-release.ts <tarball-directory>");
+    throw new Error("Usage: node scripts/pack-release.ts <tarball-directory> | --check");
   }
 
   const packages = await findUnpublishedPackages({ packages: await readReleasePackages() });
-  await packReleasePackages({ packages, destination });
+  if (destination !== "--check") {
+    await packReleasePackages({ packages, destination });
+  }
 
   if (process.env.GITHUB_OUTPUT) {
     await appendFile(process.env.GITHUB_OUTPUT, `unpublished=${packages.length > 0}\n`);
   }
 
-  console.log(`Packed ${packages.length} unpublished package versions. Nothing was published.`);
+  console.log(
+    destination === "--check"
+      ? `Found ${packages.length} unpublished package versions.`
+      : `Packed ${packages.length} unpublished package versions. Nothing was published.`,
+  );
 }
