@@ -19,7 +19,6 @@ import { getSizeLabel, getTableColumns, getTableRows, type TableColumn } from ".
 import { JsonTree } from "./json-tree-view";
 import {
   countQueries,
-  getStatementParams,
   groupFooterStatements,
   type FooterGroup,
   type FooterStatement,
@@ -27,6 +26,7 @@ import {
 } from "./result-sql";
 import { SqlTokens } from "./sql-block";
 import { formatSql } from "./sql-highlight";
+import { StatementParams } from "./statement-params";
 import { PHONE_QUERY, useMediaQuery } from "./use-media-query";
 
 type ObjectValue = Extract<SerializedValue, { type: "object" }>;
@@ -656,32 +656,9 @@ function ResultCommandTags({ tags }: { tags: readonly string[] }) {
   );
 }
 
-/** A bound value as a chip; the chip's border, not quotes, shows where a value with spaces ends. */
-function ParamValue({ value }: { value: SerializedValue }) {
-  if (value.type === "array" || value.type === "object") {
-    return <span>{JSON.stringify(toPreview(value))}</span>;
-  }
-
-  return <Value value={value} />;
-}
-
-/** A compact JSON preview of an array or object param. */
-function toPreview(value: SerializedValue): unknown {
-  if (value.type === "array") {
-    return value.value.map(toPreview);
-  }
-
-  if (value.type === "object") {
-    return Object.fromEntries(Object.entries(value.value).map(([key, item]) => [key, toPreview(item)]));
-  }
-
-  return value.type === "primitive" || value.type === "bigint" || value.type === "date" ? value.value : value.type;
-}
-
 /** One query: its number, formatted SQL, own params, and what PostgreSQL answered. */
 function StatementRow({ entry }: { entry: FooterStatement }) {
   const { statement, number } = entry;
-  const params = getStatementParams(statement);
   const failed = statement.outcome === "failed";
 
   return (
@@ -695,21 +672,7 @@ function StatementRow({ entry }: { entry: FooterStatement }) {
             <SqlTokens sql={formatSql(statement.sql)} />
           </code>
         </pre>
-        {params.length > 0 && (
-          <ul className="mt-1.5 flex flex-wrap gap-1.5 font-mono text-[11.5px]" aria-label="Params">
-            {params.map((param, index) => (
-              <li
-                key={index}
-                className="inline-flex max-w-full items-baseline gap-1 rounded-md border border-border bg-surface-2 px-1.5 py-px"
-              >
-                <span className="text-muted">{param.label}</span>
-                <span className="min-w-0 wrap-break-word">
-                  <ParamValue value={param.value} />
-                </span>
-              </li>
-            ))}
-          </ul>
-        )}
+        <StatementParams statement={statement} className="mt-1.5" />
       </div>
       <div className="text-right font-mono text-[11.5px]/5">
         {failed ? (

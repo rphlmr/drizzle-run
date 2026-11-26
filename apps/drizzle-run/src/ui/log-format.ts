@@ -16,39 +16,6 @@ export function formatRowCount(count: number): string {
   return count === 1 ? "1 row" : `${count} rows`;
 }
 
-/** A parameter as JSON, containers spelled out in full (a JSON column's value, an array parameter). */
-function toParamJson(value: SerializedValue): string {
-  if (value.type === "array") {
-    return `[${value.value.map(toParamJson).join(", ")}]`;
-  }
-
-  if (value.type === "object") {
-    return `{${Object.entries(value.value)
-      .map(([key, item]) => `${JSON.stringify(key)}: ${toParamJson(item)}`)
-      .join(", ")}}`;
-  }
-
-  return toJsonLiteral(value);
-}
-
-/** "$1 = 'Ada', $2 = 0", or "no params". Strings take SQL quotes; anything else shows as JSON. */
-export function formatParams(parameters: readonly SerializedValue[]): string {
-  if (parameters.length === 0) {
-    return "no params";
-  }
-
-  return parameters
-    .map((value, index) => {
-      const literal =
-        value.type === "primitive" && typeof value.value === "string"
-          ? `'${value.value.replaceAll("'", "''")}'`
-          : toParamJson(value);
-
-      return `$${index + 1} = ${literal}`;
-    })
-    .join(", ");
-}
-
 /** How many characters a logged value's one-line preview holds before it ends in an ellipsis. */
 const PREVIEW_LENGTH = 300;
 
