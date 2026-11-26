@@ -310,13 +310,29 @@ export function PairBody({
   );
 }
 
+/** Restore this tab's existing pairing if the companion no longer has its code. */
+function PairingRecovery({ command }: { command: string }) {
+  const [shown, setShown] = useState(false);
+
+  return (
+    <div className="flex flex-col items-start gap-2">
+      <Button variant="ghost" className={smallButtonClass} aria-expanded={shown} onClick={() => setShown(!shown)}>
+        {shown ? "Hide pairing code" : "Show pairing code"}
+      </Button>
+      {shown && <CommandBox command={command} />}
+    </div>
+  );
+}
+
 /** ChatReturn: paired before; start the companion again. */
 export function ReturnBody({
   command,
+  recoveryCommand,
   projectName,
   onForget,
 }: {
   command: string;
+  recoveryCommand: string | undefined;
   projectName: string;
   onForget: () => void;
 }) {
@@ -334,6 +350,7 @@ export function ReturnBody({
         <div className="mt-2.5">
           <CommandBox command={command} />
         </div>
+        {recoveryCommand && <PairingRecovery command={recoveryCommand} />}
       </div>
       <div className={cardClass}>
         <div className="flex items-center gap-2 text-[13px] font-semibold">
@@ -675,7 +692,7 @@ export function ChatMessages({
 }
 
 /** Says the companion stopped, with the command that starts it again. */
-export function StoppedBanner({ command }: { command: string }) {
+export function StoppedBanner({ command, recoveryCommand }: { command: string; recoveryCommand: string | undefined }) {
   return (
     <div className="flex flex-col gap-2 rounded-lg border-[1.5px] border-dashed border-err bg-err-bg p-3">
       <output className="flex flex-col gap-2">
@@ -685,6 +702,7 @@ export function StoppedBanner({ command }: { command: string }) {
         </span>
       </output>
       <CommandBox command={command} />
+      {recoveryCommand && <PairingRecovery command={recoveryCommand} />}
     </div>
   );
 }

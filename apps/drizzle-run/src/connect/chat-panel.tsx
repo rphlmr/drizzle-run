@@ -385,6 +385,7 @@ function ChatPanel({
         {body === "return" && (
           <ReturnBody
             command={command ?? connect.commands.rejoin}
+            recoveryCommand={connect.recoveryCommand}
             projectName={target.project.name}
             onForget={connect.forget}
           />
@@ -411,7 +412,9 @@ function ChatPanel({
             {terminal && <TerminalNote community={community} />}
             {(readOnly || !terminal) && note}
             <ChatMessages items={items} agent={agent ?? "The agent"} />
-            {status.kind === "disconnected" && <StoppedBanner command={command ?? connect.commands.rejoin} />}
+            {status.kind === "disconnected" && (
+              <StoppedBanner command={command ?? connect.commands.rejoin} recoveryCommand={connect.recoveryCommand} />
+            )}
             {status.kind === "off" && <OffBanner onReconnect={connect.retry} />}
             {status.kind === "busy" && <BusyCard time={retryTime(status.retryAt)} />}
             {status.kind === "limited" && <LimitedCard />}

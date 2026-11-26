@@ -88,7 +88,7 @@ async function main(): Promise<void> {
   }
 
   if (command.kind === "forget") {
-    await clearPairing();
+    await clearPairing(connectHome(), command.relay);
     log(`Forgot the pairing in ${connectHome()}.`);
     return;
   }
@@ -111,13 +111,14 @@ async function main(): Promise<void> {
   }
 
   // Resolve the pairing
-  const storedPairing = await readPairing();
-  const relay =
-    command.relay ?? (command.secret === undefined ? storedPairing?.relay : undefined) ?? DEFAULT_CONNECT_ORIGIN;
+  const storedPairing = command.secret === undefined ? await readPairing(connectHome(), command.relay) : undefined;
+  const relay = command.relay ?? storedPairing?.relay ?? DEFAULT_CONNECT_ORIGIN;
   const secret = command.secret ?? storedPairing?.secret;
 
   if (secret === undefined) {
-    fail("This computer is not paired yet. In Drizzle Run, open AI chat and run the command it shows.");
+    fail(
+      `This computer is not paired yet with ${relay}. Open AI chat there and copy the command with the pairing code.`,
+    );
   }
 
   if (command.secret !== undefined) {
@@ -160,7 +161,7 @@ async function main(): Promise<void> {
               scope,
             ],
           }),
-          forget: () => clearPairing(),
+          forget: () => clearPairing(connectHome(), relay),
           log,
           exit: (reason) => startup.send({ type: "startup.stop", exitCode: reason === "relay_unreachable" ? 1 : 0 }),
         }),

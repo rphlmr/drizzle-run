@@ -26,7 +26,7 @@ To try changes that are not on npm yet, a local server runs this repository's bu
 2. Open a project at http://127.0.0.1:4173 and press AI chat. On a local server the tab shows the exact command to copy, `node packages/connect/dist/cli.js <code> --relay http://127.0.0.1:4173`.
 3. Run it in a second terminal, from the repository root, and pick the agent in the tab.
 
-Later, `node packages/connect/dist/cli.js` alone links every tab of that browser again: the companion saved the pairing, relay included, in `~/.drizzle-run/connect.json`. "Forget this computer" in the tab, or `--forget`, deletes it. To try without touching that file, give the companion a throwaway folder for the pairing:
+Later, `node packages/connect/dist/cli.js --relay http://127.0.0.1:4173` reconnects using the saved pairing for that origin. If the companion has lost its pairing, use "Show pairing code" in AI chat to copy the command again. To try with a separate set of pairings, give the companion a throwaway folder:
 
 ```sh
 DRIZZLE_RUN_HOME=$(mktemp -d) node packages/connect/dist/cli.js <code> --relay http://127.0.0.1:4173
@@ -38,7 +38,7 @@ After changing only this package, rebuild it with `pnpm --filter @drizzle-run/co
 
 - **Relay.** The tab and the companion meet in a Cloudflare Durable Object room of the Drizzle Run Worker (`/api/connect/rooms/<roomId>`). Browsers block `ws://localhost` from HTTPS pages, so there is no loopback path.
 - **End to end.** The pairing code is the key. PBKDF2 (200,000 rounds) and HKDF derive, separately, a companion proof and an AES-GCM key the relay never sees. The room id the relay routes by is the proof's SHA-256: the tab and the companion show the proof when they join, so someone who only knows the room id cannot fill the room with tabs or take it from your companion. The proof travels in the `Sec-WebSocket-Protocol` header, never in a URL, and it stays valid as long as the pairing: anyone who reads it can join the room (though not read or forge a message, which takes the key). Forget the pairing in the AI chat to make a new code, and a new proof, if it may have leaked. Every message is sealed with the sender's role, a session per peer, and a growing counter, so the relay cannot read, forge, replay, or reflect them.
-- **Memory.** The pairing is kept in `~/.drizzle-run/connect.json` (folder 0700, file 0600); `DRIZZLE_RUN_HOME` moves the folder. "Forget this computer" in the tab, or `--forget` here, clears it.
+- **Memory.** The companion saves each origin separately under `~/.drizzle-run/` (folder 0700, files 0600) and can read the pairing from an older `connect.json`. `DRIZZLE_RUN_HOME` moves the folder. Without `--relay`, the companion prefers a saved `drizzle.run` pairing and otherwise uses the most recent saved origin. "Forget this computer" or `--forget --relay <origin>` clears that origin's pairing.
 - **Agents.** Each chat has its own agent session and Drizzle Run tool set. See
   [Agent isolation details](#agent-isolation-details) for the CLI flags and runtime checks.
 - **Tools.** The agent's MCP server is this package (`--mcp-ipc`), which forwards calls over a private Unix socket to the companion, which seals them for the tab. The tab checks every input, offers each view only its tools (a guide, a shared link or an untrusted project reads only), and runs them against its open project. Every edit waits for Keep or Undo.
