@@ -1,5 +1,15 @@
 # @drizzle-run/connect
 
+## 0.3.0
+
+### Minor Changes
+
+- 63aa371: Detect companions that still require chat modes and show the update command. Restarting with the latest companion reuses the saved pairing.
+
+### Patch Changes
+
+- afb0189: Keep a separate pairing for each Drizzle Run origin and reuse matching pairings from older companion releases. Let paired browsers show their existing pairing code again when the companion needs it.
+
 ## 0.2.1
 
 ### Patch Changes

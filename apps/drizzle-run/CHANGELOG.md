@@ -1,5 +1,21 @@
 # @drizzle-run/app
 
+## 0.3.3
+
+### Patch Changes
+
+- afb0189: Keep a separate pairing for each Drizzle Run origin and reuse matching pairings from older companion releases. Let paired browsers show their existing pairing code again when the companion needs it.
+- 63aa371: Link PostgreSQL pipeline and parallel results to their executed SQL when the runtime can identify it. Show nearby statements as context for grouped results without a link and keep unrelated SQL off text-only result cards.
+
+  Show each statement of a result's SQL on its own row with its own params, command tag and duration, and frame `begin`/`commit`/`rollback` as a transaction instead of counting them as queries.
+
+- Updated dependencies [63aa371]
+- Updated dependencies [63aa371]
+  - @drizzle-run/core@0.5.0
+  - @drizzle-run/runtime@0.4.1
+  - @drizzle-run/orchestration@0.2.4
+  - @drizzle-run/react@0.2.4
+
 ## 0.3.2
 
 ### Patch Changes
