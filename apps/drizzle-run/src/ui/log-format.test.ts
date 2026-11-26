@@ -3,7 +3,6 @@ import { describe, expect, it } from "vitest";
 
 import {
   formatConsoleLine,
-  formatParams,
   formatStatementDuration,
   getStatementTone,
   summarizeStatements,
@@ -29,18 +28,6 @@ describe("formatStatementDuration", () => {
     expect(formatStatementDuration(1.4)).toBe("1.4 ms");
     expect(formatStatementDuration(21.3)).toBe("21 ms");
     expect(formatStatementDuration(1340)).toBe("1.3 s");
-  });
-});
-
-describe("formatParams", () => {
-  it("should quote strings the SQL way and spell other values as JSON", () => {
-    expect(formatParams([serializeValue("Ada")])).toBe("$1 = 'Ada'");
-    expect(formatParams([serializeValue(0), serializeValue("O'Hara")])).toBe("$1 = 0, $2 = 'O''Hara'");
-    expect(formatParams([serializeValue({ tags: ["a"] })])).toBe('$1 = {"tags": ["a"]}');
-  });
-
-  it("should say so when there are none", () => {
-    expect(formatParams([])).toBe("no params");
   });
 });
 

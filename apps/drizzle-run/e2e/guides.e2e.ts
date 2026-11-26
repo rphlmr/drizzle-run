@@ -129,6 +129,26 @@ test("should show each partial failure result with its own failed insert and suc
   }
 });
 
+test("should name the pipeline and parallel call of each failed insert in Logs", async ({ page }) => {
+  await openGuide(page, "pipeline-batch-parallel", "?step=05-partial-failure");
+  await getGuideRail(page).getByRole("button", { name: "Run", exact: true }).click();
+
+  const output = getOutputRegion(page);
+  await expect(output.getByRole("region", { name: /^Parallel results/ })).toBeVisible({ timeout: 120_000 });
+  await output.getByRole("tab", { name: /^Logs/ }).click();
+  const logs = output.getByRole("tabpanel", { name: "Logs" });
+  const inserts = logs.locator('[data-slot="sql-line"]').filter({ hasText: /insert into "posts"/i });
+  await expect(inserts).toHaveCount(2);
+  await expect(inserts.nth(0).locator('[data-slot="row-source"]')).toHaveText("query.ts:7");
+  await expect(inserts.nth(1).locator('[data-slot="row-source"]')).toHaveText("query.ts:8");
+
+  await inserts.nth(1).getByRole("button", { name: /^SQL:/ }).click();
+  const details = inserts.nth(1).locator('[data-slot="log-sql-details"]');
+  await expect(details.locator(":scope > *").first()).toHaveAttribute("data-slot", "log-sql-error");
+  await expect(details.locator('[data-slot="log-sql-error"]')).toContainText("posts_pkey");
+  await expect(details.getByRole("list", { name: "Params" })).toHaveText(/\$1\s*1\s*\$2\s*1\s*\$3\s*A second draft/);
+});
+
 for (const { step, label, statement } of [
   { step: "01-insert", label: "Rows inserted", statement: /insert into "inventory"/i },
   { step: "02-update", label: "Rows updated", statement: /update "inventory".*unnest/i },

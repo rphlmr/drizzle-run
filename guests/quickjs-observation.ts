@@ -17,6 +17,8 @@ type QueryGroup = {
   queries: string[];
   statements: Map<string, { sequence: number; outcome: SqlEvent["outcome"] } | undefined>;
   settled: number;
+  /** Where `pipeline(...)` or `parallel(...)` was called; its wire statements carry no call site of their own. */
+  frames?: string;
 };
 
 declare function hostRuntimeEvent(message: string): void;
@@ -126,7 +128,7 @@ export function createRunObservation() {
   }
 
   async function observeQueryGroup(execute: () => unknown) {
-    const group: QueryGroup = { after: sqlSequence, queries: [], statements: new Map(), settled: 0 };
+    const group: QueryGroup = { after: sqlSequence, queries: [], statements: new Map(), settled: 0, ...callSite() };
     activeGroups += 1;
     queryGroup = activeGroups === 1 ? group : undefined;
 
@@ -466,10 +468,12 @@ export function createRunObservation() {
     return observePostgresWire({
       onStart: startStatement,
       onStatement(wireStatement, outcome, cause) {
-        if (queryGroup && wireStatement.sequence > queryGroup.after) {
+        const group = queryGroup && wireStatement.sequence > queryGroup.after ? queryGroup : undefined;
+
+        if (group) {
           const { sql, sequence } = wireStatement;
-          queryGroup.settled += 1;
-          queryGroup.statements.set(sql, queryGroup.statements.has(sql) ? undefined : { sequence, outcome });
+          group.settled += 1;
+          group.statements.set(sql, group.statements.has(sql) ? undefined : { sequence, outcome });
         }
 
         const commandTags = wireStatement.tags;
@@ -498,6 +502,7 @@ export function createRunObservation() {
                     description: `Binary PostgreSQL parameter of type OID ${typeOid}`,
                   };
             }),
+            ...(group?.frames ? { frames: group.frames } : {}),
             durationMs: performance.now() - wireStatement.started,
             outcome,
             ...(outcome === "failed" ? { error: serializeError(cause) } : {}),

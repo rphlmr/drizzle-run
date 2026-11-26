@@ -9,7 +9,6 @@ import { useCopyFeedback } from "./clipboard";
 import { JsonTree } from "./json-tree-view";
 import {
   formatConsoleLine,
-  formatParams,
   formatRowCount,
   formatStatementDuration,
   getStatementTone,
@@ -32,6 +31,7 @@ import {
 } from "./run-timeline";
 import { SqlTokens } from "./sql-block";
 import { formatSql } from "./sql-highlight";
+import { StatementParams } from "./statement-params";
 
 type Entrypoints = RunManifest["entrypoints"];
 
@@ -193,22 +193,32 @@ function Chevron({ open }: { open: boolean }) {
 
 const copyLabels = { idle: "Copy SQL", copied: "Copied", failed: "Couldn't copy" } as const;
 
-/** The opened SQL: formatted, its params, and Copy SQL. */
+/** The opened SQL: its error first, then the formatted SQL, its params as chips, and Copy SQL. */
 function SqlDetails({ sql, plan, compact }: { sql: SqlEvent; plan?: ReactNode; compact: boolean }) {
   const { outcome, copy } = useCopyFeedback();
   const formatted = useMemo(() => formatSql(sql.sql), [sql.sql]);
 
   return (
     <div className={cn(openBlockClass, compact && "px-2.5")} data-slot="log-sql-details">
+      {sql.error && (
+        <p
+          className="m-0 rounded-md border border-err/30 bg-err-bg px-3 py-2 font-mono text-[12px] wrap-anywhere text-err"
+          data-slot="log-sql-error"
+        >
+          {sql.error.message}
+        </p>
+      )}
       <pre className="m-0 rounded-md border border-border bg-surface px-3 py-2.5 font-mono text-[12px]/5 wrap-break-word whitespace-pre-wrap text-text">
         <code>
           <SqlTokens sql={formatted} />
         </code>
       </pre>
-      {sql.error && <p className="m-0 font-mono text-[12px] wrap-anywhere text-err">{sql.error.message}</p>}
-      <div className="flex items-center gap-2.5 text-[12px] text-muted">
-        <span>Params</span>
-        <span className="min-w-0 truncate font-mono text-[11.5px] text-text">{formatParams(sql.parameters)}</span>
+      <div className="flex items-start gap-2.5 text-[12px] text-muted">
+        {sql.parameters.length > 0 || sql.namedParameters ? (
+          <StatementParams statement={sql} className="min-w-0 flex-1" />
+        ) : (
+          <span className="flex-1 self-center">No params</span>
+        )}
         <Button
           variant="outline"
           className={cn(
