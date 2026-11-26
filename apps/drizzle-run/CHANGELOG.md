@@ -1,5 +1,14 @@
 # @drizzle-run/app
 
+## 0.3.4
+
+### Patch Changes
+
+- 8b2a741: Name the `pipeline(...)` or `parallel(...)` call line on each PostgreSQL statement it sent. Open a SQL row in Logs on its error first, then the SQL, with each param as a chip labeled by its placeholder, as on Results.
+- Updated dependencies [8b2a741]
+  - @drizzle-run/runtime@0.4.2
+  - @drizzle-run/react@0.2.5
+
 ## 0.3.3
 
 ### Patch Changes
