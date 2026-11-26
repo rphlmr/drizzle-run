@@ -1,7 +1,7 @@
 {
   "recordingVersion": 1,
-  "snapshotDigest": "82ff4b283a089e40b85d934a3917ee82f8d553a0d00f3d3dfe4a94482254a034",
-  "recordedAt": "2026-11-20T20:30:32.410Z",
+  "snapshotDigest": "a86f44bbd0ee64eb9561725c442160c44bcdc7ae4682da13c6ca1fd09ca0e9db",
+  "recordedAt": "2026-11-26T10:20:32.754Z",
   "result": {
     "version": 1,
     "target": {
@@ -16,7 +16,7 @@
       "kitVersion": "1.0.0-rc.6"
     },
     "random": {
-      "effectiveSeed": 3615384227,
+      "effectiveSeed": 3086507843,
       "source": "generated",
       "derivation": "crypto-u32-v1",
       "generator": "mulberry32-v1"
@@ -25,74 +25,74 @@
       {
         "phase": "validate",
         "status": "succeeded",
-        "startedAt": "2026-11-20T20:30:31.057Z",
-        "durationMs": 0.030000001192092896
+        "startedAt": "2026-11-26T10:20:30.902Z",
+        "durationMs": 0.039999961853027344
       },
       {
         "phase": "resolve",
         "status": "succeeded",
-        "startedAt": "2026-11-20T20:30:31.057Z",
-        "durationMs": 0.004999998956918716
+        "startedAt": "2026-11-26T10:20:30.902Z",
+        "durationMs": 0.005000054836273193
       },
       {
         "phase": "load_artifacts",
         "status": "succeeded",
-        "startedAt": "2026-11-20T20:30:31.251Z",
-        "durationMs": 387.80000000074506
+        "startedAt": "2026-11-26T10:20:31.116Z",
+        "durationMs": 430.80000001192093
       },
       {
         "phase": "compile",
         "status": "succeeded",
-        "startedAt": "2026-11-20T20:30:31.096Z",
-        "durationMs": 154.23999999836087
+        "startedAt": "2026-11-26T10:20:30.957Z",
+        "durationMs": 157.81999999284744
       },
       {
         "phase": "evaluate_schema",
         "status": "succeeded",
-        "startedAt": "2026-11-20T20:30:31.639Z",
-        "durationMs": 63.92499999701977
+        "startedAt": "2026-11-26T10:20:31.547Z",
+        "durationMs": 66.29000002145767
       },
       {
         "phase": "generate_bootstrap",
         "status": "succeeded",
-        "startedAt": "2026-11-20T20:30:31.703Z",
-        "durationMs": 20.50499999895692
+        "startedAt": "2026-11-26T10:20:31.614Z",
+        "durationMs": 21.355000019073486
       },
       {
         "phase": "apply_bootstrap",
         "status": "succeeded",
-        "startedAt": "2026-11-20T20:30:31.725Z",
-        "durationMs": 372.2750000022352
+        "startedAt": "2026-11-26T10:20:31.636Z",
+        "durationMs": 448.2699999809265
       },
       {
         "phase": "seed",
         "status": "succeeded",
-        "startedAt": "2026-11-20T20:30:32.096Z",
-        "durationMs": 8.179999999701977
+        "startedAt": "2026-11-26T10:20:32.084Z",
+        "durationMs": 9.75
       },
       {
         "phase": "run",
         "status": "succeeded",
-        "startedAt": "2026-11-20T20:30:32.104Z",
-        "durationMs": 9.949999999254942
+        "startedAt": "2026-11-26T10:20:32.093Z",
+        "durationMs": 12.450000047683716
       },
       {
         "phase": "inspect",
         "status": "succeeded",
-        "startedAt": "2026-11-20T20:30:32.115Z",
-        "durationMs": 57.85999999940395
+        "startedAt": "2026-11-26T10:20:32.107Z",
+        "durationMs": 63.18000000715256
       },
       {
         "phase": "plan",
         "status": "succeeded",
-        "startedAt": "2026-11-20T20:30:32.172Z",
-        "durationMs": 0.04500000178813934
+        "startedAt": "2026-11-26T10:20:32.170Z",
+        "durationMs": 0.05500000715255737
       },
       {
         "phase": "cleanup",
         "status": "succeeded",
-        "startedAt": "2026-11-20T20:30:32.173Z",
-        "durationMs": 2.155000001192093
+        "startedAt": "2026-11-26T10:20:32.170Z",
+        "durationMs": 2.7950000166893005
       }
     ],
     "diagnostics": [],
@@ -143,7 +143,7 @@
         "sql": "CREATE TABLE \"posts\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"authorId\" integer NOT NULL,\n\t\"title\" text NOT NULL\n);\n",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 8,
+        "durationMs": 9,
         "commandTags": ["CREATE"]
       },
       {
@@ -154,7 +154,7 @@
         "sql": "CREATE TABLE \"users\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"name\" text NOT NULL\n);\n",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 2.999755859375,
+        "durationMs": 4,
         "commandTags": ["CREATE"]
       },
       {
@@ -165,7 +165,7 @@
         "sql": "ALTER TABLE \"posts\" ADD CONSTRAINT \"posts_authorId_users_id_fkey\" FOREIGN KEY (\"authorId\") REFERENCES \"users\"(\"id\");",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 4.00048828125,
+        "durationMs": 5,
         "commandTags": ["ALTER"]
       },
       {
@@ -221,7 +221,7 @@
           }
         ],
         "outcome": "succeeded",
-        "durationMs": 2,
+        "durationMs": 2.000244140625,
         "rowCount": 1,
         "commandTags": ["INSERT 0 1"]
       },
@@ -246,7 +246,7 @@
           }
         ],
         "outcome": "failed",
-        "durationMs": 2,
+        "durationMs": 2.999755859375,
         "error": {
           "name": "DatabaseError",
           "message": "duplicate key value violates unique constraint \"posts_pkey\"",
@@ -261,7 +261,7 @@
         "sql": "select \"id\", \"authorId\", \"title\" from \"posts\" order by \"posts\".\"id\"",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 2,
+        "durationMs": 2.999755859375,
         "rowCount": 1,
         "commandTags": ["SELECT 1"]
       },
@@ -286,7 +286,7 @@
           }
         ],
         "outcome": "failed",
-        "durationMs": 1.000244140625,
+        "durationMs": 1,
         "error": {
           "name": "DatabaseError",
           "message": "duplicate key value violates unique constraint \"posts_pkey\"",
@@ -301,7 +301,7 @@
         "sql": "select \"id\", \"authorId\", \"title\" from \"posts\" order by \"posts\".\"id\"",
         "parameters": [],
         "outcome": "succeeded",
-        "durationMs": 1,
+        "durationMs": 0.999755859375,
         "rowCount": 1,
         "commandTags": ["SELECT 1"]
       }
@@ -364,8 +364,9 @@
             ]
           }
         ],
+        "statementSequences": [11, 12],
         "source": "query.ts",
-        "line": 13
+        "line": 14
       },
       {
         "label": "Parallel results",
@@ -420,8 +421,9 @@
             ]
           }
         ],
+        "statementSequences": [13, 14],
         "source": "query.ts",
-        "line": 13
+        "line": 14
       }
     ],
     "events": [
@@ -490,7 +492,7 @@
           "sql": "CREATE TABLE \"posts\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"authorId\" integer NOT NULL,\n\t\"title\" text NOT NULL\n);\n",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 8,
+          "durationMs": 9,
           "commandTags": ["CREATE"]
         }
       },
@@ -505,7 +507,7 @@
           "sql": "CREATE TABLE \"users\" (\n\t\"id\" integer PRIMARY KEY,\n\t\"name\" text NOT NULL\n);\n",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 2.999755859375,
+          "durationMs": 4,
           "commandTags": ["CREATE"]
         }
       },
@@ -520,7 +522,7 @@
           "sql": "ALTER TABLE \"posts\" ADD CONSTRAINT \"posts_authorId_users_id_fkey\" FOREIGN KEY (\"authorId\") REFERENCES \"users\"(\"id\");",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 4.00048828125,
+          "durationMs": 5,
           "commandTags": ["ALTER"]
         }
       },
@@ -588,7 +590,7 @@
             }
           ],
           "outcome": "succeeded",
-          "durationMs": 2,
+          "durationMs": 2.000244140625,
           "rowCount": 1,
           "commandTags": ["INSERT 0 1"]
         }
@@ -617,7 +619,7 @@
             }
           ],
           "outcome": "failed",
-          "durationMs": 2,
+          "durationMs": 2.999755859375,
           "error": {
             "name": "DatabaseError",
             "message": "duplicate key value violates unique constraint \"posts_pkey\"",
@@ -636,7 +638,7 @@
           "sql": "select \"id\", \"authorId\", \"title\" from \"posts\" order by \"posts\".\"id\"",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 2,
+          "durationMs": 2.999755859375,
           "rowCount": 1,
           "commandTags": ["SELECT 1"]
         }
@@ -665,7 +667,7 @@
             }
           ],
           "outcome": "failed",
-          "durationMs": 1.000244140625,
+          "durationMs": 1,
           "error": {
             "name": "DatabaseError",
             "message": "duplicate key value violates unique constraint \"posts_pkey\"",
@@ -684,7 +686,7 @@
           "sql": "select \"id\", \"authorId\", \"title\" from \"posts\" order by \"posts\".\"id\"",
           "parameters": [],
           "outcome": "succeeded",
-          "durationMs": 1,
+          "durationMs": 0.999755859375,
           "rowCount": 1,
           "commandTags": ["SELECT 1"]
         }
@@ -745,8 +747,9 @@
               ]
             }
           ],
+          "statementSequences": [11, 12],
           "source": "query.ts",
-          "line": 13
+          "line": 14
         }
       },
       {
@@ -805,8 +808,9 @@
               ]
             }
           ],
+          "statementSequences": [13, 14],
           "source": "query.ts",
-          "line": 13
+          "line": 14
         }
       }
     ],
@@ -820,19 +824,19 @@
       }
     },
     "timings": {
-      "total": 1121,
-      "validate": 0.030000001192092896,
-      "resolve": 0.004999998956918716,
-      "load_artifacts": 387.80000000074506,
-      "compile": 154.23999999836087,
-      "evaluate_schema": 63.92499999701977,
-      "generate_bootstrap": 20.50499999895692,
-      "apply_bootstrap": 372.2750000022352,
-      "seed": 8.179999999701977,
-      "run": 9.949999999254942,
-      "inspect": 57.85999999940395,
-      "plan": 0.04500000178813934,
-      "cleanup": 2.155000001192093
+      "total": 1273,
+      "validate": 0.039999961853027344,
+      "resolve": 0.005000054836273193,
+      "load_artifacts": 430.80000001192093,
+      "compile": 157.81999999284744,
+      "evaluate_schema": 66.29000002145767,
+      "generate_bootstrap": 21.355000019073486,
+      "apply_bootstrap": 448.2699999809265,
+      "seed": 9.75,
+      "run": 12.450000047683716,
+      "inspect": 63.18000000715256,
+      "plan": 0.05500000715255737,
+      "cleanup": 2.7950000166893005
     },
     "ok": true,
     "outcome": "succeeded"

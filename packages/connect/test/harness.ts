@@ -4,6 +4,7 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import {
+  CONNECT_PROTOCOL,
   deriveConnectKeys,
   SecureChannel,
   type AgentId,
@@ -179,7 +180,7 @@ export class FakeTab {
     this.received.push(opened.message);
 
     if (opened.message.type === "hello" && opened.answerHello) {
-      const hello = await this.channel.hello("companion", { type: "hello", role: "tab", protocol: { min: 1, max: 1 } });
+      const hello = await this.channel.hello("companion", { type: "hello", role: "tab", protocol: CONNECT_PROTOCOL });
 
       this.relay.server({ t: "data", from: this.id, d: hello });
     }

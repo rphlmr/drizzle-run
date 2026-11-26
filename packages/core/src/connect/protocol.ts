@@ -15,7 +15,8 @@ import type { ConnectToolName, ConnectToolScope } from "./tools.ts";
  * It covers the messages only: a change to how a pairing secret derives its room, proof or key (`crypto.ts`) puts
  * peers in different rooms, where they never get to compare versions.
  */
-export const CONNECT_PROTOCOL = { min: 1, max: 1 } as const;
+// Version 2 sends chat messages without the mode field required by version 1 companions.
+export const CONNECT_PROTOCOL = { min: 2, max: 2 } as const;
 
 /** Which end of the link a client is. */
 export type ConnectRole = "tab" | "companion";

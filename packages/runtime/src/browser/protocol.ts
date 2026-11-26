@@ -190,6 +190,7 @@ const LogEventSchema = exactRecord("Invalid log event", {
 const DisplayEventSchema = exactRecord("Invalid display event", {
   label: boundedText("Invalid display event fields", MAX_SERIALIZED_TEXT_BYTES),
   values: z.array(SerializedValueSchema, { error: "Invalid display event fields" }),
+  statementSequences: z.optional(z.array(positiveInteger("Invalid display statement sequence"))),
   frames: CallSiteFramesSchema,
 }) satisfies z.ZodMiniType<DisplayResult & WireCallSite>;
 

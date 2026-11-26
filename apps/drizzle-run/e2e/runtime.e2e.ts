@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+
 import { turnOnDebug } from "./debug";
 import { appOrigin, expect, test } from "./fixtures";
 import { postSnapshot } from "./publish";
@@ -5,6 +7,91 @@ import { postSnapshot } from "./publish";
 interface RuntimeMetricsWindow extends Window {
   __drizzleRunMetrics?: { created: number; terminated: number; active: number };
 }
+
+test("should link pipeline results to SQL when displayed in reverse order", async ({ page, request }) => {
+  const files = new URL("../examples/pipeline-batch-parallel/files/", import.meta.url);
+  const response = await postSnapshot(request, {
+    data: {
+      snapshotVersion: 1,
+      name: "Reordered pipeline results",
+      manifest: {
+        kind: "drizzle-run",
+        manifestVersion: 1,
+        target: { dialect: "postgresql" },
+        dependencies: { "drizzle-orm": "1.0.0-rc.6", "drizzle-kit": "1.0.0-rc.6" },
+        entrypoints: { schema: "schema.ts", seed: "seed.ts", run: "query.ts" },
+        files: {
+          "schema.ts": readFileSync(new URL("schema.ts", files), "utf8"),
+          "seed.ts": readFileSync(new URL("seed.ts", files), "utf8"),
+          "query.ts": `import { db } from "@drizzle-run/runtime/context";
+import { posts, users } from "./schema";
+const [authors, drafts] = await db.pipeline([db.select().from(users), db.select().from(posts)]);
+$.display("Drafts", drafts);
+$.display("Authors", authors);
+$.display("Copy", { ...authors });`,
+        },
+      },
+    },
+  });
+  expect(response.ok(), await response.text()).toBe(true);
+  const { id } = await response.json();
+  await page.goto(`/s/${id}`);
+
+  const run = page.getByRole("button", { name: "Run", exact: true });
+  await expect(run).toBeEnabled({ timeout: 120_000 });
+  await run.click();
+  const output = page.getByRole("region", { name: "Execution output" });
+  const sql = (label: string) =>
+    output.getByRole("region", { name: label, exact: true }).locator('[data-slot="result-sql"]');
+  await expect(sql("Drafts")).toContainText('from "posts"', { timeout: 120_000 });
+  await expect(sql("Authors")).toContainText('from "users"');
+  await expect(sql("Copy")).toContainText("Ran before this result");
+});
+
+test("should keep both query results readable in one run", async ({ page, request }) => {
+  await page.setViewportSize({ width: 1024, height: 600 });
+  const response = await postSnapshot(request, {
+    data: {
+      snapshotVersion: 1,
+      name: "Multiple query results",
+      manifest: {
+        kind: "drizzle-run",
+        manifestVersion: 1,
+        target: { dialect: "sqlite" },
+        dependencies: { "drizzle-orm": "0.45.4", "drizzle-kit": "0.31.11" },
+        entrypoints: { schema: "schema.ts", run: "query.ts" },
+        files: {
+          "schema.ts":
+            'import { sqliteTable, integer } from "drizzle-orm/sqlite-core";\nexport const items = sqliteTable("items", { id: integer().primaryKey() });',
+          "query.ts": `import { db } from "@drizzle-run/runtime/context";
+import { items } from "./schema";
+await db.insert(items).values(Array.from({ length: 20 }, (_, index) => ({ id: index + 1 })));
+$.display("Ascending", await db.select().from(items).orderBy(items.id));
+$.display("Total", (await db.select().from(items)).length);`,
+        },
+      },
+    },
+  });
+  expect(response.ok(), await response.text()).toBe(true);
+  const { id } = await response.json();
+  await page.goto(`/s/${id}`);
+
+  const run = page.getByRole("button", { name: "Run", exact: true });
+  await expect(run).toBeEnabled({ timeout: 120_000 });
+  await run.click();
+  const output = page.getByRole("region", { name: "Execution output" });
+  await expect(output.getByRole("status")).toHaveText(/^Succeeded/, { timeout: 120_000 });
+  const first = output.getByRole("region", { name: "Ascending" });
+  const second = output.getByRole("region", { name: "Total" });
+  await expect(output.locator('[data-slot="result-card"] h3')).toHaveText(["Ascending", "Total"]);
+  await expect(first.getByRole("heading", { name: "Ascending" })).toBeInViewport();
+  await second.scrollIntoViewIfNeeded();
+  await expect(second.getByText("20", { exact: true })).toBeInViewport();
+
+  await run.click();
+  await expect(output.getByRole("status")).toHaveText(/^Succeeded/, { timeout: 120_000 });
+  await expect(first.getByRole("heading", { name: "Ascending" })).toBeInViewport();
+});
 
 for (const dialect of ["postgresql", "sqlite"] as const) {
   for (const [ormVersion, kitVersion] of [

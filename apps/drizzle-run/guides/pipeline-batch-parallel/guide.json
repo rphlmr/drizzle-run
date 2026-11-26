@@ -172,7 +172,7 @@
       "edits": [
         {
           "file": "query.ts",
-          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { posts } from \"./schema\";\n\nconst duplicateDraft = () => db.insert(posts).values({ id: 1, authorId: 1, title: \"A second draft\" });\nconst loadDrafts = () => db.select().from(posts).orderBy(posts.id);\n\nconst pipeline = await db.pipeline([duplicateDraft(), loadDrafts()]);\nconst parallel = await db.parallel([duplicateDraft(), loadDrafts()]);\n\nfunction showResults(label: string, results: readonly PromiseSettledResult<unknown>[]) {\n  $.display(label, results.map((result) =>\n    result.status === \"fulfilled\" ? result : { status: result.status, reason: String(result.reason) }\n  ));\n}\n\nshowResults(\"Pipeline results\", pipeline);\nshowResults(\"Parallel results\", parallel);\n"
+          "write": "import { db } from \"@drizzle-run/runtime/context\";\nimport { posts } from \"./schema\";\n\nconst duplicateDraft = () => db.insert(posts).values({ id: 1, authorId: 1, title: \"A second draft\" });\nconst loadDrafts = () => db.select().from(posts).orderBy(posts.id);\n\nconst pipeline = await db.pipeline([duplicateDraft(), loadDrafts()]);\nconst parallel = await db.parallel([duplicateDraft(), loadDrafts()]);\n\nfunction showResults(label: string, results: readonly PromiseSettledResult<unknown>[]) {\n  for (const result of results) {\n    if (result.status === \"rejected\") result.reason = String(result.reason);\n  }\n  $.display(label, results);\n}\n\nshowResults(\"Pipeline results\", pipeline);\nshowResults(\"Parallel results\", parallel);\n"
         }
       ],
       "focus": {

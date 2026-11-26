@@ -56,19 +56,113 @@ async function openGuide(page: Page, slug: string, query = "") {
   await expect(page.getByRole("button", { name: /^Run/ }).first()).toBeEnabled({ timeout: 120_000 });
 }
 
-test("should show the PostgreSQL rollback response beneath Batch rejected", async ({ page }) => {
+for (const step of ["01-pipeline", "04-parallel"]) {
+  test(`should show each result's own select for ${step}`, async ({ page }) => {
+    await openGuide(page, "pipeline-batch-parallel", `?step=${step}`);
+    await getGuideRail(page).getByRole("button", { name: "Run", exact: true }).click();
+
+    const output = getOutputRegion(page);
+    for (const { label, table, other } of [
+      { label: "Authors", table: "users", other: "posts" },
+      { label: "Drafts", table: "posts", other: "users" },
+    ]) {
+      const card = output.getByRole("region", { name: new RegExp(`^${label}`) });
+      const sql = card.locator('[data-slot="result-sql"]');
+      await expect(sql).toContainText(`from "${table}"`, { timeout: 120_000 });
+      await card.getByRole("button", { name: "Expand SQL" }).click();
+      await expect(sql).toContainText("1 query");
+      await expect(sql).not.toContainText(`from "${other}"`);
+    }
+  });
+}
+
+test("should show both inserts and the commit for a successful batch", async ({ page }) => {
+  await openGuide(page, "pipeline-batch-parallel", "?step=02-batch");
+  await getGuideRail(page).getByRole("button", { name: "Run", exact: true }).click();
+
+  const saved = getOutputRegion(page).getByRole("region", { name: /^Saved together/ });
+  const sql = saved.locator('[data-slot="result-sql"]');
+  await expect(sql).toContainText("Ran before this result", { timeout: 120_000 });
+  await saved.getByRole("button", { name: "Expand SQL" }).click();
+  await expect(sql).toContainText(/insert into "users"/i);
+  await expect(sql).toContainText(/insert into "posts"/i);
+  await expect(sql).toContainText("2 queries · transaction committed");
+  const transaction = sql.locator('[data-slot="result-sql-transaction"]');
+  await expect(transaction.locator('[data-slot="result-sql-control"]')).toHaveText([/begin/i, /commit/i]);
+  const queries = transaction.locator('[data-slot="result-sql-statement"]');
+  await expect(queries).toHaveCount(2);
+  await expect(queries.nth(0).getByRole("list", { name: "Params" })).toHaveText(/\$1\s*2\s*\$2\s*Grace/);
+  await expect(queries.nth(1).getByRole("list", { name: "Params" })).toContainText("$3A second draft");
+});
+
+test("should keep the rollback in Logs and omit SQL from the Batch rejected message", async ({ page }) => {
   await openGuide(page, "pipeline-batch-parallel", "?step=03-rollback");
   await getGuideRail(page).getByRole("button", { name: "Run", exact: true }).click();
 
   const output = getOutputRegion(page);
   const rejected = output.getByRole("region", { name: /^Batch rejected/ });
   await expect(rejected).toContainText("The draft ID already exists", { timeout: 120_000 });
-  await expect(rejected).toContainText("→ ROLLBACK");
-  await expect(rejected.locator('[data-slot="result-sql"]')).toContainText(/commit/i);
-  await rejected.getByRole("button", { name: "Expand SQL" }).click();
-  await expect(rejected.getByRole("button", { name: "Collapse SQL" })).toBeVisible();
-  await expect(rejected).toContainText("→ ROLLBACK");
-  await expect(output.getByRole("region", { name: /^Authors after rollback/ })).toContainText("Ada");
+  await expect(rejected.locator('[data-slot="result-sql"]')).toHaveCount(0);
+  const authors = output.getByRole("region", { name: /^Authors after rollback/ });
+  await expect(authors).toContainText("Ada");
+  await expect(authors.locator('[data-slot="result-sql"]')).toContainText(/from "users"/i);
+  await output.getByRole("tab", { name: /^Logs/ }).click();
+  await expect(output.getByRole("tabpanel", { name: "Logs" })).toContainText("ROLLBACK");
+});
+
+test("should show each partial failure result with its own failed insert and successful select", async ({ page }) => {
+  await openGuide(page, "pipeline-batch-parallel", "?step=05-partial-failure");
+  await getGuideRail(page).getByRole("button", { name: "Run", exact: true }).click();
+
+  const output = getOutputRegion(page);
+  for (const label of ["Pipeline results", "Parallel results"]) {
+    const card = output.getByRole("region", { name: new RegExp(`^${label}`) });
+    const sql = card.locator('[data-slot="result-sql"]');
+    await expect(sql).toBeVisible({ timeout: 120_000 });
+    await card.getByRole("button", { name: "Expand SQL" }).click();
+    await expect(sql).toContainText("2 queries · 3 params");
+    await expect(sql).not.toContainText("Ran before this result");
+    const queries = sql.locator('[data-slot="result-sql-statement"]');
+    await expect(queries).toHaveCount(2);
+    await expect(queries.filter({ hasText: /insert into "posts".*failed/is })).toHaveCount(1);
+    await expect(queries.filter({ hasText: /select .*from "posts".*SELECT 1/is })).toHaveCount(1);
+  }
+});
+
+for (const { step, label, statement } of [
+  { step: "01-insert", label: "Rows inserted", statement: /insert into "inventory"/i },
+  { step: "02-update", label: "Rows updated", statement: /update "inventory".*unnest/i },
+]) {
+  test(`should keep the bulk write and inventory select on their own results for ${step}`, async ({ page }) => {
+    await openGuide(page, "bulk-insert-and-update", `?step=${step}`);
+    await getGuideRail(page).getByRole("button", { name: "Run", exact: true }).click();
+
+    const output = getOutputRegion(page);
+    const writeSql = output.getByRole("region", { name: new RegExp(`^${label}`) }).locator('[data-slot="result-sql"]');
+    const readSql = output.getByRole("region", { name: /^Inventory\b/ }).locator('[data-slot="result-sql"]');
+    await expect(writeSql).toContainText(statement, { timeout: 120_000 });
+    await expect(readSql).toContainText(/select .* from "inventory"/i);
+  });
+}
+
+test("should show SQL only on the inventory results after bulk chunk errors", async ({ page }) => {
+  await openGuide(page, "bulk-insert-and-update", "?step=03-chunk-failure");
+  await getGuideRail(page).getByRole("button", { name: "Run", exact: true }).click();
+
+  const output = getOutputRegion(page);
+  for (const label of ["Atomic import rejected", "Chunk rejected"]) {
+    const card = output.getByRole("region", { name: new RegExp(`^${label}`) });
+    await expect(card).toContainText("North already stocks this keyboard", { timeout: 120_000 });
+    await expect(card.locator('[data-slot="result-sql"]')).toHaveCount(0);
+  }
+
+  const rolledBack = output.getByRole("region", { name: /^Inventory after rollback/ });
+  const partiallyCommitted = output.getByRole("region", { name: /^Inventory after partial commit/ });
+  for (const card of [rolledBack, partiallyCommitted]) {
+    await expect(card.locator('[data-slot="result-sql"]')).toContainText(/select .* from "inventory"/i);
+  }
+  await expect(rolledBack.getByText("cable", { exact: true })).toHaveCount(0);
+  await expect(partiallyCommitted.getByText("cable", { exact: true })).toBeVisible();
 });
 
 async function typeAtStart(page: Page, text: string) {

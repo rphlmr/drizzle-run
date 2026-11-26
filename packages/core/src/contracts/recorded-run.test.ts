@@ -135,6 +135,29 @@ describe("createRecordedRun", () => {
     expect(recording.result).not.toHaveProperty("queryPlans");
   });
 
+  it("should preserve SQL links on recorded displays and their timeline events", () => {
+    const recording = makeRecording();
+    const result = recording.result;
+    const original = result?.displays[0];
+
+    if (result === undefined || original === undefined) {
+      throw new Error("Expected a recorded display");
+    }
+
+    const display = { ...original, statementSequences: [1] };
+    const parsed = parseRecordedRun({
+      ...recording,
+      result: {
+        ...result,
+        displays: [display],
+        events: result.events.map((event) => (event.type === "display" ? { ...event, payload: display } : event)),
+      },
+    });
+
+    expect(parsed.result?.displays[0]?.statementSequences).toEqual([1]);
+    expect(parsed.result?.events.find((event) => event.type === "display")?.payload.statementSequences).toEqual([1]);
+  });
+
   it("should not record a failed or cancelled run", () => {
     for (const outcome of ["failed", "cancelled"] as const) {
       const created = createRecordedRun({

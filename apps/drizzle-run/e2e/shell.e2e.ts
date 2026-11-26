@@ -635,7 +635,7 @@ test("should show the output in run order, with Logs filters and the folding JSO
   await expect(footer).toContainText(/select/i);
   await footer.getByRole("button", { name: "Expand SQL" }).click();
   await expect(footer.getByRole("button", { name: "Collapse SQL" })).toHaveAttribute("aria-expanded", "true");
-  await expect(footer).toContainText("1 statement");
+  await expect(footer).toContainText("1 query");
   await footer.getByRole("button", { name: "Show in Logs" }).click();
   await expect(output.getByRole("tab", { name: "Logs" })).toHaveAttribute("aria-selected", "true");
   await expect(filters.getByRole("button", { name: /^SQL/ })).toHaveAttribute("aria-pressed", "true");

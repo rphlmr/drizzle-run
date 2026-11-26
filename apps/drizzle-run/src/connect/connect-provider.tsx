@@ -516,19 +516,19 @@ const companionPackageCommand = companionPackage ? `npx ${companionPackage}` : u
 
 function getCompanionCommands(origin: string): CompanionCommands {
   return {
-    rejoin: connectCommand({ origin, packageCommand: companionPackageCommand }),
-    mcp: connectCommand({ origin, mcp: true, packageCommand: companionPackageCommand }),
+    rejoin: connectCommand({ origin, latest: true, packageCommand: companionPackageCommand }),
+    mcp: connectCommand({ origin, mcp: true, latest: true, packageCommand: companionPackageCommand }),
     update: connectCommand({ origin, latest: true, packageCommand: companionPackageCommand }),
   };
 }
 
 function getCompanionCommand(status: ConnectStatus, origin: string) {
   if (status.kind === "pairing") {
-    return connectCommand({ secret: status.secret, origin, packageCommand: companionPackageCommand });
+    return connectCommand({ secret: status.secret, origin, latest: true, packageCommand: companionPackageCommand });
   }
 
   if (status.kind === "waiting" || status.kind === "disconnected") {
-    return connectCommand({ origin, packageCommand: companionPackageCommand });
+    return getCompanionCommands(origin).rejoin;
   }
 
   return undefined;

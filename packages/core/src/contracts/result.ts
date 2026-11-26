@@ -89,6 +89,8 @@ export interface LogEvent {
 export interface DisplayResult {
   label: string;
   values: readonly SerializedValue[];
+  /** SQL event sequences associated with the displayed values by the runtime. */
+  statementSequences?: readonly number[];
   /** The project file and 1-based line of the `$.display` call. */
   source?: string;
   line?: number;

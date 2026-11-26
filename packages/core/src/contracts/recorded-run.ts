@@ -275,6 +275,7 @@ const LogEventSchema = objectOf({
 const DisplayResultSchema = objectOf({
   label: required(TextSchema),
   values: required(listOf(SerializedValueSchema)),
+  statementSequences: z.optional(listOf(IntegerSchema)),
   source: z.optional(TextSchema),
   line: z.optional(IntegerSchema),
 }) satisfies z.ZodMiniType<DisplayResult>;

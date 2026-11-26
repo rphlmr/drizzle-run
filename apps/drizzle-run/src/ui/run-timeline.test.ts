@@ -14,7 +14,7 @@ import {
   countTimeline,
   filterLogs,
   filterTimeline,
-  getResultStatements,
+  getResultSql,
   type TimelineEntry,
   type TimelineInput,
   type TimelineRow,
@@ -533,7 +533,7 @@ const makeStatement = (
   ...(line === undefined ? {} : { line }),
 });
 
-describe("getResultStatements", () => {
+describe("getResultSql", () => {
   it("should take the statements run on the result's own line", () => {
     const entries = buildRunTimeline(
       makeTimelineInput([
@@ -543,7 +543,7 @@ describe("getResultStatements", () => {
       ]),
     );
 
-    expect(getResultStatements(entries, findResult(entries, "Users")).map((event) => event.sql)).toEqual([
+    expect(getResultSql(entries, findResult(entries, "Users")).statements.map((event) => event.sql)).toEqual([
       "select users",
     ]);
   });
@@ -561,12 +561,55 @@ describe("getResultStatements", () => {
       ]),
     );
 
-    expect(getResultStatements(entries, findResult(entries, "First")).map((event) => event.sql)).toEqual([
+    expect(getResultSql(entries, findResult(entries, "First")).statements.map((event) => event.sql)).toEqual([
       "select first",
     ]);
-    expect(getResultStatements(entries, findResult(entries, "Second")).map((event) => event.sql)).toEqual([
+    expect(getResultSql(entries, findResult(entries, "Second")).statements.map((event) => event.sql)).toEqual([
       "select second",
     ]);
-    expect(getResultStatements(entries, findResult(entries, "Third"))).toEqual([]);
+    expect(getResultSql(entries, findResult(entries, "Third")).statements).toEqual([]);
+  });
+
+  it("should keep preceding queries together when adjacent displays have no matching call site", () => {
+    const users = makeStatement("select users");
+    const posts = makeStatement("select posts");
+    const entries = buildRunTimeline(
+      makeTimelineInput([
+        { type: "sql", sequence: 1, payload: users },
+        { type: "sql", sequence: 2, payload: posts },
+        { type: "display", sequence: 3, payload: makeDisplay("Drafts", 9) },
+        { type: "display", sequence: 4, payload: makeDisplay("Authors", 10) },
+      ]),
+    );
+
+    for (const label of ["Drafts", "Authors"]) {
+      expect(getResultSql(entries, findResult(entries, label))).toEqual({
+        preceding: true,
+        statements: [users, posts],
+      });
+    }
+  });
+
+  it("should omit contextual SQL for a message and keep a query matched on its display line", () => {
+    const authors = makeStatement("select users", 15);
+    const entries = buildRunTimeline(
+      makeTimelineInput([
+        { type: "sql", sequence: 1, payload: makeStatement("insert users") },
+        { type: "sql", sequence: 2, payload: makeStatement("commit") },
+        {
+          type: "display",
+          sequence: 3,
+          payload: { ...makeDisplay("Batch rejected", 12), values: [serializeValue("The draft ID already exists")] },
+        },
+        { type: "sql", sequence: 4, payload: authors },
+        { type: "display", sequence: 5, payload: makeDisplay("Authors after rollback", 15) },
+      ]),
+    );
+
+    expect(getResultSql(entries, findResult(entries, "Batch rejected")).statements).toEqual([]);
+    expect(getResultSql(entries, findResult(entries, "Authors after rollback"))).toEqual({
+      preceding: false,
+      statements: [authors],
+    });
   });
 });
