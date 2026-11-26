@@ -1,4 +1,5 @@
 import {
+  CONNECT_PROTOCOL,
   deriveConnectKeys,
   roomProtocols,
   RELAY_CLOSE,
@@ -89,7 +90,7 @@ class FakeRoom {
   /** A companion joins and says hello, as `npx @drizzle-run/connect` does. */
   async join(
     companion: CompanionInfo = { version: "0.1.0", mode: "chat", agents: [{ id: "claude", name: "Claude Code" }] },
-    protocol = { min: 1, max: 1 },
+    protocol: { min: number; max: number } = CONNECT_PROTOCOL,
     peer = COMPANION,
   ) {
     this.companionId = peer;
@@ -1268,14 +1269,29 @@ describe("connect machine", () => {
     actor.stop();
   });
 
-  it("should refuse a companion that shares no protocol version", async () => {
-    const { actor, room } = start({ pairing: paired });
+  it("should reconnect after a companion update using the same saved pairing", async () => {
+    const { actor, room, clear, saved, stored } = start({ pairing: paired });
 
     await vi.waitFor(() => expect(room.handlers).toBeDefined());
     room.welcome();
-    await room.join({ version: "9.0.0", mode: "chat", agents: [] }, { min: 7, max: 9 });
+    await room.join({ version: "0.1.1", mode: "chat", agents: [] }, { min: 1, max: 1 });
     await waitFor(actor, (snapshot) => snapshot.matches({ linked: "incompatible" }));
-    expect(connectStatus(actor.getSnapshot())).toEqual({ kind: "incompatible", companion: { min: 7, max: 9 } });
+    expect(connectStatus(actor.getSnapshot())).toEqual({ kind: "incompatible", companion: { min: 1, max: 1 } });
+
+    await room.join(
+      { version: "0.3.0", mode: "chat", agents: [{ id: "claude", name: "Claude Code" }], agent: "claude" },
+      CONNECT_PROTOCOL,
+      "updated-companion",
+    );
+    await waitFor(actor, (snapshot) => snapshot.matches({ linked: "connected" }));
+    expect(connectStatus(actor.getSnapshot())).toMatchObject({ kind: "ready", agent: "claude" });
+    expect(room.received).not.toContainEqual(expect.objectContaining({ type: "forget" }));
+    expect(stored()).toEqual(paired);
+    expect(saved).toEqual([]);
+    expect(clear).not.toHaveBeenCalled();
+
+    actor.send({ type: "chat.message.send", conversation: "p1", text: "Hi" });
+    expect(await room.next("chat.send")).toMatchObject({ text: "Hi" });
     actor.stop();
   });
 

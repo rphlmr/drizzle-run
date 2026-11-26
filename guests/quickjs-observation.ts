@@ -12,6 +12,12 @@ type TransactionRecord = Omit<WireTransaction, "outcome" | "durationMs"> & {
   outcome?: WireTransaction["outcome"];
   durationMs?: number;
 };
+type QueryGroup = {
+  after: number;
+  queries: string[];
+  statements: Map<string, { sequence: number; outcome: SqlEvent["outcome"] } | undefined>;
+  settled: number;
+};
 
 declare function hostRuntimeEvent(message: string): void;
 
@@ -55,6 +61,10 @@ export function createRunObservation() {
   let transactionOwnership: "known" | "ambiguous" = "known";
   const transactions: TransactionRecord[] = [];
   const openTransactions: TransactionRecord[] = [];
+  const resultStatements = new WeakMap<object, readonly number[]>();
+  let queryGroup: QueryGroup | undefined;
+  let groupLogging: QueryGroup | undefined;
+  let activeGroups = 0;
   let access: { frames?: string; phase: GuestPhase; status: "unused" | "used" | "ambiguous" } = {
     phase,
     status: "used",
@@ -89,7 +99,88 @@ export function createRunObservation() {
   }
 
   function display(label: string, values: unknown[]) {
-    emit({ kind: "event", type: "display", payload: { label, values: values.map(serializeValue), ...callSite() } });
+    const statementSequences = new Set<number>();
+
+    for (const value of values) {
+      if (value !== null && typeof value === "object") {
+        for (const sequence of resultStatements.get(value) ?? []) {
+          statementSequences.add(sequence);
+        }
+      }
+    }
+
+    emit({
+      kind: "event",
+      type: "display",
+      payload: {
+        label,
+        values: values.map(serializeValue),
+        ...(statementSequences.size > 0 ? { statementSequences: [...statementSequences] } : {}),
+        ...callSite(),
+      },
+    });
+  }
+
+  function recordGroupQuery(sql: string) {
+    groupLogging?.queries.push(sql);
+  }
+
+  async function observeQueryGroup(execute: () => unknown) {
+    const group: QueryGroup = { after: sqlSequence, queries: [], statements: new Map(), settled: 0 };
+    activeGroups += 1;
+    queryGroup = activeGroups === 1 ? group : undefined;
+
+    try {
+      const result: unknown = await (() => {
+        // Drizzle logs all prepared inputs synchronously before submitting the group to the pool.
+        const previous = groupLogging;
+        groupLogging = group;
+
+        try {
+          return execute();
+        } finally {
+          groupLogging = previous;
+        }
+      })();
+
+      // Match only complete, isolated captures. Repeated SQL has no unique wire event to link.
+      if (
+        queryGroup === group &&
+        Array.isArray(result) &&
+        group.queries.length === result.length &&
+        group.settled === result.length &&
+        sqlSequence - group.after === result.length
+      ) {
+        const sequences = group.queries.flatMap((sql, index) => {
+          const value: unknown = result[index];
+          const statement = group.statements.get(sql);
+
+          if (
+            statement !== undefined &&
+            value !== null &&
+            typeof value === "object" &&
+            property(value, "status") === (statement.outcome === "succeeded" ? "fulfilled" : "rejected")
+          ) {
+            resultStatements.set(value, [statement.sequence]);
+            return [statement.sequence];
+          }
+
+          return [];
+        });
+
+        if (sequences.length === result.length && new Set(sequences).size === sequences.length) {
+          resultStatements.set(result, sequences);
+        }
+      }
+
+      return result;
+    } finally {
+      activeGroups -= 1;
+
+      if (queryGroup === group) {
+        queryGroup = undefined;
+      }
+    }
   }
 
   function generated(sql: string) {
@@ -295,6 +386,10 @@ export function createRunObservation() {
           return method;
         }
 
+        if (phase === "run" && (key === "pipeline" || key === "parallel")) {
+          return (...args: unknown[]) => observeQueryGroup(() => Reflect.apply(method, target, args));
+        }
+
         if (key !== "transaction" || (phase !== "run" && phase !== "seed")) {
           return (...args: unknown[]) => Reflect.apply(method, target, args);
         }
@@ -371,6 +466,12 @@ export function createRunObservation() {
     return observePostgresWire({
       onStart: startStatement,
       onStatement(wireStatement, outcome, cause) {
+        if (queryGroup && wireStatement.sequence > queryGroup.after) {
+          const { sql, sequence } = wireStatement;
+          queryGroup.settled += 1;
+          queryGroup.statements.set(sql, queryGroup.statements.has(sql) ? undefined : { sequence, outcome });
+        }
+
         const commandTags = wireStatement.tags;
         const counts = wireStatement.tags.flatMap((tag) => {
           const count = /^(?:INSERT \d+|SELECT|UPDATE|DELETE|MERGE|COPY|FETCH|MOVE) (\d+)$/.exec(tag)?.[1];
@@ -408,6 +509,7 @@ export function createRunObservation() {
         });
       },
       onError(cause) {
+        queryGroup = undefined;
         emit({
           kind: "event",
           type: "diagnostic",
@@ -425,6 +527,7 @@ export function createRunObservation() {
     setPhase,
     log,
     display,
+    recordGroupQuery,
     generated,
     observeClient,
     observeDatabase,

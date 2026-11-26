@@ -2,6 +2,7 @@ import { readdir, realpath } from "node:fs/promises";
 import { join } from "node:path";
 
 import {
+  CONNECT_PROTOCOL,
   CONNECT_ROOM_PROTOCOL,
   connectToolsFor,
   deriveConnectKeys,
@@ -975,7 +976,7 @@ describe("companion", () => {
     tab.leave();
     relay.server({ t: "peer", event: "join", peer: { id: "tab2", role: "tab" } });
 
-    const hello = await lateChannel.hello("companion", { type: "hello", role: "tab", protocol: { min: 1, max: 1 } });
+    const hello = await lateChannel.hello("companion", { type: "hello", role: "tab", protocol: CONNECT_PROTOCOL });
 
     relay.server({ t: "data", from: "tab2", d: hello });
     relay.server({ t: "peer", event: "leave", peer: { id: "tab2", role: "tab" } });

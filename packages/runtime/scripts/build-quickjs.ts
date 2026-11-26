@@ -202,7 +202,7 @@ async function buildGuest({ image, dialect }: { image: GuestImage; dialect: "pos
     ${dialect === "postgresql" ? 'const postgresConnection = Object.freeze({ username: "postgres", database: "postgres", stream: session.connection });' : ""}
     const db = ${
       usesDrizzlePostgres
-        ? "drizzle({ connection: { user: postgresConnection.username, database: postgresConnection.database, socket: postgresConnection.stream, max: 2, reconnect: false }, relations: schema.relations ?? {}, paramsInErrors: true })"
+        ? "drizzle({ connection: { user: postgresConnection.username, database: postgresConnection.database, socket: postgresConnection.stream, max: 2, reconnect: false }, relations: schema.relations ?? {}, paramsInErrors: true, logger: { logQuery: observation.recordGroupQuery } })"
         : image.releaseLine === "legacy"
           ? "drizzle(client, { schema })"
           : "drizzle({ client, relations: schema.relations ?? {}, paramsInErrors: true })"

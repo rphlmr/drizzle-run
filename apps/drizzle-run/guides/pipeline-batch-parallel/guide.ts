@@ -50,9 +50,10 @@ const pipeline = await db.pipeline([duplicateDraft(), loadDrafts()]);
 const parallel = await db.parallel([duplicateDraft(), loadDrafts()]);
 
 function showResults(label: string, results: readonly PromiseSettledResult<unknown>[]) {
-  $.display(label, results.map((result) =>
-    result.status === "fulfilled" ? result : { status: result.status, reason: String(result.reason) }
-  ));
+  for (const result of results) {
+    if (result.status === "rejected") result.reason = String(result.reason);
+  }
+  $.display(label, results);
 }
 
 showResults("Pipeline results", pipeline);

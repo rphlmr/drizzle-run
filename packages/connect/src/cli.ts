@@ -123,7 +123,7 @@ async function main(): Promise<void> {
   if (command.secret !== undefined) {
     await writePairing({ secret, relay, pairedAt: new Date().toISOString() });
     log(
-      `Paired. Next time, run ${connectCommand({ origin: relay, packageCommand: publishedPackageCommand })} to rejoin.`,
+      `Paired. Next time, run ${connectCommand({ origin: relay, latest: true, packageCommand: publishedPackageCommand })} to rejoin.`,
     );
   }
 

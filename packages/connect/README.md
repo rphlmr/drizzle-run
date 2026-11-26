@@ -11,9 +11,9 @@ On Windows, install the agent's native `.exe` or `.com` executable on PATH. Batc
 are not supported because agents launch directly without a command shell.
 
 ```sh
-npx @drizzle-run/connect <code>   # pair this computer with the code Drizzle Run shows
-npx @drizzle-run/connect          # later: start again, for every tab
-npx @drizzle-run/connect --mcp    # serve the same tools to a terminal agent, acting on the tab in front
+npx @drizzle-run/connect@latest <code>   # pair this computer with the code Drizzle Run shows
+npx @drizzle-run/connect@latest          # start or update using the saved pairing
+npx @drizzle-run/connect@latest --mcp    # serve the same tools to a terminal agent, acting on the tab in front
 ```
 
 Options: `--agent claude|codex|grok`, `--relay <origin>` (a Drizzle Run other than https://drizzle.run, such as a local server), `--forget`, `--version`, `--help`.

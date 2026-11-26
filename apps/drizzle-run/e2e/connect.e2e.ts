@@ -329,23 +329,29 @@ test.describe("AI chat link", () => {
     await symlink(process.execPath, join(bin, "node"));
     await writeFile(scriptPath, JSON.stringify(agentScript));
 
-    companion = spawn(process.execPath, [CLI, secret, "--relay", appOrigin, ...args], {
-      env: {
-        ...process.env,
-        DRIZZLE_RUN_HOME: join(scratch, "home"),
-        PATH: `${bin}:/usr/bin:/bin`,
-        FAKE_AGENT_SCRIPT: scriptPath,
-        FAKE_AGENT_LOG: join(scratch, "agent.log"),
-        ...agentEnv,
-      },
-      stdio: ["ignore", "pipe", "pipe"],
-    });
-    companion.stdout?.on("data", (chunk: Buffer) => {
-      output += chunk.toString();
-    });
-    companion.stderr?.on("data", (chunk: Buffer) => {
-      output += chunk.toString();
-    });
+    const launch = (pairingArgs: string[]) => {
+      companion = spawn(process.execPath, [CLI, ...pairingArgs, ...args], {
+        env: {
+          ...process.env,
+          DRIZZLE_RUN_HOME: join(scratch, "home"),
+          PATH: `${bin}:/usr/bin:/bin`,
+          FAKE_AGENT_SCRIPT: scriptPath,
+          FAKE_AGENT_LOG: join(scratch, "agent.log"),
+          ...agentEnv,
+        },
+        stdio: ["ignore", "pipe", "pipe"],
+      });
+      companion.stdout?.on("data", (chunk: Buffer) => {
+        output += chunk.toString();
+      });
+      companion.stderr?.on("data", (chunk: Buffer) => {
+        output += chunk.toString();
+      });
+    };
+
+    launch([secret, "--relay", appOrigin]);
+
+    return () => launch([]);
   };
   const readAgentLog = async () => {
     const log = await readFile(join(scratch, "agent.log"), "utf8").catch(() => "");
@@ -560,7 +566,7 @@ test.describe("AI chat link", () => {
     const secret = (await getConnectHook(page).status())?.secret ?? "";
 
     await expect(command.locator("b")).toHaveText(secret);
-    await startCompanion(secret, PANEL_SCRIPT);
+    const restartCompanion = await startCompanion(secret, PANEL_SCRIPT);
 
     await expect(panel.getByText("Connected · this project only")).toBeVisible({ timeout: 30_000 });
     await expect(panel.getByRole("heading", { name: "Ask about Connect transfers" })).toBeVisible();
@@ -653,6 +659,10 @@ test.describe("AI chat link", () => {
     await expect(panel.getByText("The companion stopped")).toBeVisible();
     await expect(message).toBeDisabled();
     await expect(message).toHaveAttribute("placeholder", "Not connected");
+
+    restartCompanion();
+    await expect(panel.getByText("Connected · this project only")).toBeVisible({ timeout: 30_000 });
+    await expect(message).toBeEnabled();
 
     await panel.getByRole("button", { name: "Close chat" }).click();
     await expect(panel).toHaveCount(0);

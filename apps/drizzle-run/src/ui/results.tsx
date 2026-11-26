@@ -17,6 +17,14 @@ import { cn } from "../lib/utils";
 import { useCopyFeedback } from "./clipboard";
 import { getSizeLabel, getTableColumns, getTableRows, type TableColumn } from "./json-tree";
 import { JsonTree } from "./json-tree-view";
+import {
+  countQueries,
+  getStatementParams,
+  groupFooterStatements,
+  type FooterGroup,
+  type FooterStatement,
+  type StatementKind,
+} from "./result-sql";
 import { SqlTokens } from "./sql-block";
 import { formatSql } from "./sql-highlight";
 import { PHONE_QUERY, useMediaQuery } from "./use-media-query";
@@ -412,7 +420,10 @@ function isContainerValue(value: SerializedValue) {
 
 type ResultView = "table" | "json";
 
-const resultViews: Record<ResultView, string> = { table: "Table", json: "JSON" };
+const resultViews: Record<ResultView, string> = {
+  table: "Table",
+  json: "JSON",
+};
 
 function isResultView(key: string): key is ResultView {
   return Object.hasOwn(resultViews, key);
@@ -577,14 +588,18 @@ function CardTable({
   );
 }
 
-function formatStatementCount(count: number) {
-  return count === 1 ? "1 statement" : `${count} statements`;
+function formatQueryCount(count: number) {
+  return count === 1 ? "1 query" : `${count} queries`;
 }
 
 function formatParamCount(statements: readonly SqlEvent[]): string {
   const count = statements.reduce((total, statement) => total + statement.parameters.length, 0);
 
   return count === 0 ? "no params" : count === 1 ? "1 param" : `${count} params`;
+}
+
+function formatDuration(durationMs: number): string {
+  return durationMs < 10 ? `${durationMs.toFixed(1)} ms` : `${Math.round(durationMs)} ms`;
 }
 
 /**
@@ -600,10 +615,30 @@ function formatTotalDuration(statements: readonly SqlEvent[]): string | undefine
     return undefined;
   }
 
-  const total = durations.reduce((sum, duration) => sum + duration, 0);
-
-  return total < 10 ? `${total.toFixed(1)} ms` : `${Math.round(total)} ms`;
+  return formatDuration(durations.reduce((sum, duration) => sum + duration, 0));
 }
+
+/** The header's plain-language summary, such as "2 queries · transaction committed · 5 params". */
+function formatSqlSummary(statements: readonly SqlEvent[], groups: readonly FooterGroup[], preceding: boolean): string {
+  const transactions = groups.flatMap((group) => (group.transaction ? [group.transaction.outcome] : []));
+  const parts = [formatQueryCount(countQueries(statements))];
+
+  if (transactions.length === 1) {
+    parts.push(transactionLabels[transactions[0]]);
+  } else if (transactions.length > 1) {
+    parts.push(`${transactions.length} transactions`);
+  }
+
+  parts.push(formatParamCount(statements));
+
+  return `${preceding ? "Ran before this result · " : ""}${parts.join(" · ")}`;
+}
+
+const transactionLabels = {
+  committed: "transaction committed",
+  rolled_back: "transaction rolled back",
+  open: "transaction left open",
+} as const;
 
 const copyLabels = { copied: "Copied", failed: "Couldn't copy" } as const;
 
@@ -621,29 +656,168 @@ function ResultCommandTags({ tags }: { tags: readonly string[] }) {
   );
 }
 
+/** A bound value as a chip; the chip's border, not quotes, shows where a value with spaces ends. */
+function ParamValue({ value }: { value: SerializedValue }) {
+  if (value.type === "array" || value.type === "object") {
+    return <span>{JSON.stringify(toPreview(value))}</span>;
+  }
+
+  return <Value value={value} />;
+}
+
+/** A compact JSON preview of an array or object param. */
+function toPreview(value: SerializedValue): unknown {
+  if (value.type === "array") {
+    return value.value.map(toPreview);
+  }
+
+  if (value.type === "object") {
+    return Object.fromEntries(Object.entries(value.value).map(([key, item]) => [key, toPreview(item)]));
+  }
+
+  return value.type === "primitive" || value.type === "bigint" || value.type === "date" ? value.value : value.type;
+}
+
+/** One query: its number, formatted SQL, own params, and what PostgreSQL answered. */
+function StatementRow({ entry }: { entry: FooterStatement }) {
+  const { statement, number } = entry;
+  const params = getStatementParams(statement);
+  const failed = statement.outcome === "failed";
+
+  return (
+    <li className="grid grid-cols-[1.25rem_minmax(0,1fr)_auto] gap-x-2.5 px-3 py-2.5" data-slot="result-sql-statement">
+      <span className="font-mono text-[11.5px]/5 text-muted" aria-hidden="true">
+        {number}
+      </span>
+      <div className="min-w-0">
+        <pre className="text-[12px]/5 wrap-break-word whitespace-pre-wrap text-text">
+          <code>
+            <SqlTokens sql={formatSql(statement.sql)} />
+          </code>
+        </pre>
+        {params.length > 0 && (
+          <ul className="mt-1.5 flex flex-wrap gap-1.5 font-mono text-[11.5px]" aria-label="Params">
+            {params.map((param, index) => (
+              <li
+                key={index}
+                className="inline-flex max-w-full items-baseline gap-1 rounded-md border border-border bg-surface-2 px-1.5 py-px"
+              >
+                <span className="text-muted">{param.label}</span>
+                <span className="min-w-0 wrap-break-word">
+                  <ParamValue value={param.value} />
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+      <div className="text-right font-mono text-[11.5px]/5">
+        {failed ? (
+          <div className="text-err">failed</div>
+        ) : (
+          statement.commandTags &&
+          statement.commandTags.length > 0 && (
+            <div className="text-soft">
+              <span className="sr-only">PostgreSQL returned </span>
+              {statement.commandTags.join(", ")}
+            </div>
+          )
+        )}
+        {statement.durationMs !== undefined && (
+          <div className="text-muted" data-duration="">
+            {formatDuration(statement.durationMs)}
+          </div>
+        )}
+      </div>
+    </li>
+  );
+}
+
+/** A `begin`, `commit`, `rollback` or savepoint line: a thin band, not a numbered query. */
+function ControlRow({ entry, outcome }: { entry: FooterStatement; outcome?: string }) {
+  const tone = entry.kind === "rollback" ? "text-err" : entry.kind === "commit" ? "text-ok" : "text-muted";
+
+  return (
+    <li
+      className="flex items-baseline justify-between gap-3 bg-surface-2 px-3 py-1.5 font-mono text-[11.5px]"
+      data-slot="result-sql-control"
+    >
+      <code className="min-w-0 truncate">
+        <SqlTokens sql={entry.statement.sql.replace(/\s+/g, " ")} />
+      </code>
+      <span className={cn("shrink-0 font-sans text-[11.5px]", tone)}>{outcome}</span>
+    </li>
+  );
+}
+
+const controlLabels: Record<Exclude<StatementKind, "query">, string> = {
+  begin: "transaction",
+  commit: "committed",
+  rollback: "rolled back",
+  savepoint: "savepoint",
+};
+
+/** The statements of one group, framed with a border when a transaction holds them. */
+function StatementGroup({ group }: { group: FooterGroup }) {
+  const items = group.statements.map((entry, index) =>
+    entry.kind === "query" ? (
+      <StatementRow key={index} entry={entry} />
+    ) : (
+      <ControlRow key={index} entry={entry} outcome={controlLabels[entry.kind]} />
+    ),
+  );
+
+  if (!group.transaction) {
+    return (
+      <ol className="overflow-hidden rounded-lg border border-border bg-surface [&>li+li]:border-t [&>li+li]:border-border">
+        {items}
+      </ol>
+    );
+  }
+
+  return (
+    <ol
+      className="overflow-hidden rounded-lg border border-border bg-surface [&>li+li]:border-t [&>li+li]:border-border"
+      aria-label={transactionLabels[group.transaction.outcome]}
+      data-slot="result-sql-transaction"
+    >
+      {items}
+    </ol>
+  );
+}
+
 /** The SQL behind a result, folded to one line under the card; its chevron sits left of Copy. */
-function ResultSql({ statements, onShowInLogs }: { statements: readonly SqlEvent[]; onShowInLogs?: () => void }) {
+function ResultSql({
+  statements,
+  preceding,
+  onShowInLogs,
+}: {
+  statements: readonly SqlEvent[];
+  preceding: boolean;
+  onShowInLogs?: () => void;
+}) {
   const [open, setOpen] = useState(false);
   const { outcome, copy } = useCopyFeedback();
-  const sql = statements.map((statement) => statement.sql).join(";\n");
-  const commandTags = statements.flatMap((statement) => statement.commandTags ?? []);
+  const groups = groupFooterStatements(statements);
+  const showSummary = open || preceding || groups.some((group) => group.transaction);
+  const commandTags = showSummary ? [] : statements.flatMap((statement) => statement.commandTags ?? []);
   const duration = formatTotalDuration(statements);
   const ToggleIcon = open ? ChevronUpIcon : ChevronDownIcon;
 
   return (
     <div className="border-t border-border bg-surface-2" data-slot="result-sql">
       <div className="flex items-center gap-2.5 py-2 pr-2.5 pl-4">
-        <span className="text-[10.5px] font-bold tracking-[0.06em] text-muted">SQL</span>
-        {open ? (
+        <span className="shrink-0 text-[10.5px] font-bold tracking-[0.06em] text-muted">SQL</span>
+        {showSummary ? (
           <span className="min-w-0 flex-1 text-[12px] text-muted">
-            {formatStatementCount(statements.length)} · {formatParamCount(statements)}
+            {formatSqlSummary(statements, groups, preceding)}
           </span>
         ) : (
           <code className="min-w-0 flex-1 truncate text-[11.5px] text-text">
             <SqlTokens sql={statements.map((statement) => statement.sql.replace(/\s+/g, " ")).join("; ")} />
           </code>
         )}
-        {!open && <ResultCommandTags tags={commandTags} />}
+        {!showSummary && <ResultCommandTags tags={commandTags} />}
         {duration && (
           <span className="font-mono text-[11px] text-muted" data-duration="">
             {duration}
@@ -664,7 +838,7 @@ function ResultSql({ statements, onShowInLogs }: { statements: readonly SqlEvent
             "h-6.5 shrink-0 px-2 text-[12px] max-phone:relative max-phone:h-9 max-phone:px-2.5 max-phone:text-[12.5px] max-phone:after:absolute max-phone:after:-inset-1.25",
             outcome === "failed" && "text-err",
           )}
-          onClick={() => copy(sql)}
+          onClick={() => copy(statements.map((statement) => statement.sql).join(";\n"))}
         >
           {outcome ? copyLabels[outcome] : "Copy"}
         </Button>
@@ -674,34 +848,12 @@ function ResultSql({ statements, onShowInLogs }: { statements: readonly SqlEvent
         </span>
       </div>
       {open && (
-        <>
-          <pre className="overflow-x-auto px-4 pt-0.5 pb-2.5 text-[12px]/5 whitespace-pre text-text">
-            <code>
-              {statements.map((statement, index) => (
-                <span key={index} className="block">
-                  <SqlTokens sql={formatSql(statement.sql)} />
-                  {statement.commandTags && (
-                    <>
-                      {"  "}
-                      <ResultCommandTags tags={statement.commandTags} />
-                    </>
-                  )}
-                </span>
-              ))}
-            </code>
-          </pre>
-          {statements.some((statement) => statement.parameters.length > 0) && (
-            <div className="flex flex-wrap items-baseline gap-2 px-4 pb-2.5 font-mono text-[12px]">
-              <span className="font-sans text-muted">Params</span>
-              {statements
-                .flatMap((statement) => statement.parameters)
-                .map((value, index) => (
-                  <Value key={index} value={value} />
-                ))}
-            </div>
-          )}
+        <div className="flex flex-col gap-2 px-4 pt-0.5 pb-3">
+          {groups.map((group, index) => (
+            <StatementGroup key={index} group={group} />
+          ))}
           {onShowInLogs && (
-            <div className="px-4 pb-3 text-[12px]">
+            <div className="pt-0.5 text-[12px]">
               <button
                 type="button"
                 className="border-0 bg-transparent p-0 font-semibold text-accent-text underline max-phone:relative max-phone:after:absolute max-phone:after:-inset-x-1 max-phone:after:-inset-y-3.5"
@@ -711,7 +863,7 @@ function ResultSql({ statements, onShowInLogs }: { statements: readonly SqlEvent
               </button>
             </div>
           )}
-        </>
+        </div>
       )}
     </div>
   );
@@ -724,8 +876,10 @@ export interface ResultCardProps {
   values: readonly SerializedValue[];
   /** Where the result came from, such as a `query.ts:31` link. */
   source?: ReactNode;
-  /** The SQL behind the result, shown in the card's footer. */
+  /** SQL shown in the card's footer. */
   statements: readonly SqlEvent[];
+  /** The SQL is context from the run timeline. */
+  precedingSql?: boolean;
   onShowInLogs?: () => void;
   /** How this result differs from an earlier run, such as the step before in a guide. */
   change?: DisplayChange;
@@ -743,6 +897,7 @@ export function ResultCard({
   values,
   source,
   statements,
+  precedingSql = false,
   onShowInLogs,
   change,
   compareLabel,
@@ -767,7 +922,10 @@ export function ResultCard({
     }
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    card.current.scrollIntoView({ block: "nearest", behavior: reducedMotion ? "auto" : "smooth" });
+    card.current.scrollIntoView({
+      block: "nearest",
+      behavior: reducedMotion ? "auto" : "smooth",
+    });
   }, [highlighted]);
 
   if (compact) {
@@ -861,7 +1019,9 @@ export function ResultCard({
           </div>
         );
       })}
-      {statements.length > 0 && <ResultSql statements={statements} onShowInLogs={onShowInLogs} />}
+      {statements.length > 0 && (
+        <ResultSql statements={statements} preceding={precedingSql} onShowInLogs={onShowInLogs} />
+      )}
     </section>
   );
 }

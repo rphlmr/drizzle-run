@@ -27,13 +27,7 @@ import { PlansNotice, PlansTabMark } from "./query-plans-view";
 import { OutputEmpty, ResultCard, ResultsEmpty } from "./results";
 import { OlderRunNote, RunHistoryMenu } from "./run-history-menu";
 import { RunningDot, RunningDuration, RunningNote } from "./run-loader";
-import {
-  buildRunTimeline,
-  countTimeline,
-  filterTimeline,
-  getResultStatements,
-  type TimelineFilter,
-} from "./run-timeline";
+import { buildRunTimeline, countTimeline, filterTimeline, getResultSql, type TimelineFilter } from "./run-timeline";
 import { useFadeInOnChange } from "./use-fade-in-on-change";
 import { useTabAfterRun } from "./use-tab-after-run";
 
@@ -598,7 +592,7 @@ export function OutputPanel({
                       return undefined;
                     }
 
-                    const statements = getResultStatements(entries, entry);
+                    const { statements, preceding } = getResultSql(entries, entry);
 
                     return (
                       <ResultCard
@@ -617,6 +611,7 @@ export function OutputPanel({
                           )
                         }
                         statements={statements}
+                        precedingSql={preceding}
                         onShowInLogs={views.includes("logs") ? () => showInLogs(statements) : undefined}
                         change={compared?.changes?.displays.find((display) => display.label === entry.label)}
                         compareLabel={compared?.compareLabel}

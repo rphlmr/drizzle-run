@@ -41,7 +41,14 @@ export type TimelineProblem =
 export type TimelineEntry = { key: string } & (
   | { kind: "sql"; event: SqlEvent }
   | { kind: "console"; event: LogEvent }
-  | { kind: "result"; label: string | undefined; values: readonly SerializedValue[]; source?: string; line?: number }
+  | {
+      kind: "result";
+      label: string | undefined;
+      values: readonly SerializedValue[];
+      source?: string;
+      line?: number;
+      statementSequences?: readonly number[];
+    }
   | { kind: "problem"; problem: TimelineProblem }
 );
 
@@ -198,6 +205,9 @@ export function buildRunTimeline(result: TimelineInput | undefined, runError?: s
         kind: "result",
         label: event.payload.label,
         values: event.payload.values,
+        ...(event.payload.statementSequences === undefined
+          ? {}
+          : { statementSequences: event.payload.statementSequences }),
         source: event.payload.source,
         line: event.payload.line,
       });
@@ -313,13 +323,18 @@ function groupQueries(rows: readonly TimelineRow[], entries: readonly TimelineEn
     }
 
     if (row.kind === "result" && row.label !== undefined) {
-      const fed = new Set(getResultStatements(entries, row).map((event) => event.sequence));
+      const { statements, preceding } = getResultSql(entries, row);
+      const fed = new Set(preceding ? [] : statements.map((event) => event.sequence));
       const feeder = grouped.findLastIndex(
         (item) => item.kind === "query" && item.entries.some((entry) => fed.has(entry.event.sequence)),
       );
       const card = grouped[feeder];
 
-      if (card?.kind === "query" && card.display === undefined) {
+      if (
+        card?.kind === "query" &&
+        card.display === undefined &&
+        (row.statementSequences === undefined || card.entries.every((entry) => fed.has(entry.event.sequence)))
+      ) {
         grouped[feeder] = { ...card, display: row.label };
         continue;
       }
@@ -489,33 +504,62 @@ function foldSetup(entries: readonly TimelineEntry[], folded: readonly SetupEntr
 type ResultEntry = Extract<TimelineEntry, { kind: "result" }>;
 
 /**
- * The SQL behind a result card: the statements the run executed on the result's own
- * line since the previous result, or else the last one it executed before it.
+ * Prefer the display's recorded SQL, then statements on its own line. Several statements before a display
+ * are context only: adjacent displays may show any subset or ordering of their results.
  */
-export function getResultStatements(entries: readonly TimelineEntry[], result: ResultEntry): SqlEvent[] {
-  const index = entries.indexOf(result);
-  const statements: SqlEvent[] = [];
+export function getResultSql(
+  entries: readonly TimelineEntry[],
+  result: ResultEntry,
+): { statements: readonly SqlEvent[]; preceding: boolean } {
+  let statements: SqlEvent[] = [];
+  let previous: readonly SqlEvent[] = [];
+  const recorded = new Set(result.statementSequences);
+  const linked: SqlEvent[] = [];
 
-  for (const entry of entries.slice(0, Math.max(index, 0))) {
+  for (const entry of entries) {
+    if (entry === result) {
+      if (linked.length > 0 && linked.length === recorded.size) {
+        return { statements: linked, preceding: false };
+      }
+
+      const sameLine =
+        result.line === undefined
+          ? []
+          : statements.filter(
+              (event) => event.line === result.line && (event.source === undefined || event.source === result.source),
+            );
+
+      if (sameLine.length > 0) {
+        return { statements: sameLine, preceding: false };
+      }
+
+      if (
+        result.values.length > 0 &&
+        result.values.every((value) => value.type === "primitive" && typeof value.value === "string")
+      ) {
+        return { statements: [], preceding: false };
+      }
+
+      const context = statements.length === 0 && previous.length > 1 ? previous : statements;
+
+      return { statements: context, preceding: context.length > 1 };
+    }
+
     if (entry.kind === "result") {
-      statements.length = 0;
+      if (statements.length > 0) {
+        previous = statements;
+        statements = [];
+      }
     } else if (entry.kind === "sql" && entry.event.phase === "run" && entry.event.kind === "executed") {
       statements.push(entry.event);
+
+      if (recorded.has(entry.event.sequence)) {
+        linked.push(entry.event);
+      }
     }
   }
 
-  const sameLine =
-    result.line === undefined
-      ? []
-      : statements.filter(
-          (event) => event.line === result.line && (event.source === undefined || event.source === result.source),
-        );
-
-  if (sameLine.length > 0) {
-    return sameLine;
-  }
-
-  return statements.slice(-1);
+  return { statements: [], preceding: false };
 }
 
 /** The tab and filter chips. SQL counts executed statements, as the database saw them; Logs adds console lines. */
