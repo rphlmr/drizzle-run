@@ -1,5 +1,17 @@
 # @drizzle-run/core
 
+## 0.5.0
+
+### Minor Changes
+
+- 63aa371: Detect companions that still require chat modes and show the update command. Restarting with the latest companion reuses the saved pairing.
+
+### Patch Changes
+
+- 63aa371: Link PostgreSQL pipeline and parallel results to their executed SQL when the runtime can identify it. Show nearby statements as context for grouped results without a link and keep unrelated SQL off text-only result cards.
+
+  Show each statement of a result's SQL on its own row with its own params, command tag and duration, and frame `begin`/`commit`/`rollback` as a transaction instead of counting them as queries.
+
 ## 0.4.0
 
 ### Minor Changes
