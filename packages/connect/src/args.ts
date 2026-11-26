@@ -14,7 +14,7 @@ import {
 export type CliCommand =
   | { kind: "help" }
   | { kind: "version" }
-  | { kind: "forget" }
+  | { kind: "forget"; relay?: string }
   | { kind: "mcp_ipc"; socket: string; token: string; scope: ConnectToolScope }
   | { kind: "connect"; secret?: string; relay?: string; mcp: boolean; agent?: AgentId };
 
@@ -26,7 +26,7 @@ export const AGENT_NAME_LIST = orList.format(AGENT_IDS.map((id) => AGENT_NAMES[i
 const OPTION_ROWS: readonly (readonly [flag: string, help: string])[] = [
   [`--agent ${AGENT_IDS.join("|")}`, "Chat through this agent"],
   ["--relay <origin>", `A Drizzle Run other than ${DEFAULT_CONNECT_ORIGIN}, such as a local server`],
-  ["--forget", "Forget the pairing on this computer"],
+  ["--forget", "Forget the pairing for the selected relay"],
   ["--version, --help", ""],
 ];
 const optionFlagWidth = Math.max(26, ...OPTION_ROWS.map(([flag]) => flag.length)) + 2;
@@ -73,7 +73,7 @@ export function readRelayOrigin(value: string): string | undefined {
 /**
  * Parse the command line
  *
- * `--help`, `--version` and `--forget` win as soon as they appear. `--mcp-ipc` and `--turn` must come
+ * `--help` and `--version` win as soon as they appear. `--forget` can take a `--relay`. `--mcp-ipc` and `--turn` must come
  * together. Returns an `error` command, with the message to print, for anything it does not accept.
  */
 export function parseArgs(argv: readonly string[]): CliCommand | { kind: "error"; message: string } {
@@ -81,6 +81,7 @@ export function parseArgs(argv: readonly string[]): CliCommand | { kind: "error"
   let relay: string | undefined;
   let agent: AgentId | undefined;
   let mcp = false;
+  let forget = false;
   let socket: string | undefined;
   let token: string | undefined;
   let scope: ConnectToolScope = "project";
@@ -105,7 +106,8 @@ export function parseArgs(argv: readonly string[]): CliCommand | { kind: "error"
       }
 
       case "--forget": {
-        return { kind: "forget" };
+        forget = true;
+        break;
       }
 
       case "--mcp": {
@@ -172,6 +174,10 @@ export function parseArgs(argv: readonly string[]): CliCommand | { kind: "error"
         }
       }
     }
+  }
+
+  if (forget) {
+    return { kind: "forget", ...(relay ? { relay } : {}) };
   }
 
   if (socket !== undefined || token !== undefined) {

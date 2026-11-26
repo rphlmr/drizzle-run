@@ -6,6 +6,7 @@ import { join, resolve } from "node:path";
 import type { BrowserContext, Page } from "@playwright/test";
 import { escapeRegExp } from "es-toolkit";
 
+import { clearPairing, readPairing } from "../../../packages/connect/src/home";
 import { storeProjects } from "./data";
 import { appOrigin, expect, test } from "./fixtures";
 import { postSnapshot } from "./publish";
@@ -351,7 +352,7 @@ test.describe("AI chat link", () => {
 
     launch([secret, "--relay", appOrigin]);
 
-    return () => launch([]);
+    return launch;
   };
   const readAgentLog = async () => {
     const log = await readFile(join(scratch, "agent.log"), "utf8").catch(() => "");
@@ -444,7 +445,7 @@ test.describe("AI chat link", () => {
     await expect
       .poll(() => tab.status(), { timeout: 30_000, message: output })
       .toMatchObject({ kind: "ready", agent: "claude" });
-    expect(JSON.parse(await readFile(join(home, "connect.json"), "utf8"))).toMatchObject({
+    expect(await readPairing(home, appOrigin)).toMatchObject({
       secret,
       relay: appOrigin,
     });
@@ -660,9 +661,23 @@ test.describe("AI chat link", () => {
     await expect(message).toBeDisabled();
     await expect(message).toHaveAttribute("placeholder", "Not connected");
 
-    restartCompanion();
+    const savedPairing = await callStore(page, "readSetting", "connect.pairing");
+    const home = join(scratch, "home");
+    await clearPairing(home, appOrigin);
+    expect(await readPairing(home, appOrigin)).toBeUndefined();
+
+    const showCode = panel.getByRole("button", { name: "Show pairing code" });
+    await showCode.click();
+    const recovered = panel.locator("[data-slot=command] code").last();
+    await expect(recovered).toHaveText(`node packages/connect/dist/cli.js ${secret} --relay ${appOrigin}`);
+    const pairingArgs = (await recovered.innerText()).split(" ").slice(2);
+    await panel.getByRole("button", { name: "Hide pairing code" }).click();
+    await expect(panel.locator("[data-slot=command] code").last()).not.toContainText(secret);
+
+    restartCompanion(pairingArgs);
     await expect(panel.getByText("Connected · this project only")).toBeVisible({ timeout: 30_000 });
     await expect(message).toBeEnabled();
+    expect(await callStore(page, "readSetting", "connect.pairing")).toEqual(savedPairing);
 
     await panel.getByRole("button", { name: "Close chat" }).click();
     await expect(panel).toHaveCount(0);

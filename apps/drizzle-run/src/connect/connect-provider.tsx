@@ -1,5 +1,11 @@
 import type { AgentTuning, ChatContextEntry, ChatProject, CompanionInfo } from "@drizzle-run/core/connect";
-import { AGENT_NAMES, connectCommand, type AgentId, type ConnectToolScope } from "@drizzle-run/core/connect";
+import {
+  AGENT_NAMES,
+  DEFAULT_CONNECT_ORIGIN,
+  connectCommand,
+  type AgentId,
+  type ConnectToolScope,
+} from "@drizzle-run/core/connect";
 import {
   connectQuota,
   connectStatus,
@@ -454,6 +460,8 @@ export interface ConnectApi {
   pendingRuns: readonly PendingRun[];
   /** The command to show: with the secret while pairing, without it to rejoin. */
   command: string | undefined;
+  /** Restore the browser's existing pairing on the companion. */
+  recoveryCommand: string | undefined;
   /**
    * This tab's companion commands: rejoin, a terminal agent's `--mcp`, and an update. On a local server they run the
    * checkout's build.
@@ -514,17 +522,25 @@ export interface CompanionCommands {
 const companionPackage = import.meta.env.VITE_CONNECT_PACKAGE;
 const companionPackageCommand = companionPackage ? `npx ${companionPackage}` : undefined;
 
+function getTabCommand(origin: string, options: { secret?: string; mcp?: boolean } = {}): string {
+  const command = connectCommand({ ...options, origin, latest: true, packageCommand: companionPackageCommand });
+
+  return origin === DEFAULT_CONNECT_ORIGIN ? `${command} --relay ${origin}` : command;
+}
+
 function getCompanionCommands(origin: string): CompanionCommands {
+  const rejoin = getTabCommand(origin);
+
   return {
-    rejoin: connectCommand({ origin, latest: true, packageCommand: companionPackageCommand }),
-    mcp: connectCommand({ origin, mcp: true, latest: true, packageCommand: companionPackageCommand }),
-    update: connectCommand({ origin, latest: true, packageCommand: companionPackageCommand }),
+    rejoin,
+    mcp: getTabCommand(origin, { mcp: true }),
+    update: rejoin,
   };
 }
 
 function getCompanionCommand(status: ConnectStatus, origin: string) {
   if (status.kind === "pairing") {
-    return connectCommand({ secret: status.secret, origin, latest: true, packageCommand: companionPackageCommand });
+    return getTabCommand(origin, { secret: status.secret });
   }
 
   if (status.kind === "waiting" || status.kind === "disconnected") {
@@ -544,6 +560,7 @@ export function useConnect(): ConnectApi {
 
   const { actor } = runtime;
   const status = useSelector(actor, connectStatus, isEqual);
+  const secret = useSelector(actor, (snapshot) => snapshot.context.pairing?.secret);
   const quota = useSelector(actor, connectQuota, isEqual);
   const companion = useSelector(actor, (snapshot) => snapshot.context.companion);
   const activity = useSelector(actor, (snapshot) => snapshot.context.activity);
@@ -561,6 +578,7 @@ export function useConnect(): ConnectApi {
     pendingEdits,
     pendingRuns,
     command: getCompanionCommand(status, window.location.origin),
+    recoveryCommand: secret === undefined ? undefined : getTabCommand(window.location.origin, { secret }),
     commands: getCompanionCommands(window.location.origin),
     working: (conversation) => workingTurn(activity, conversation),
     pair: () => actor.send({ type: "pairing.create" }),

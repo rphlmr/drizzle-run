@@ -5,7 +5,7 @@ import { join } from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { CLI, fakeAgentBin, tempFolder } from "../test/harness.ts";
-import { readPairing } from "./home.ts";
+import { pairingFileName, readPairing, writePairing } from "./home.ts";
 
 /** The real command line, with a temp home and fake agents on PATH. It never reaches a relay. */
 
@@ -58,7 +58,7 @@ describe("npx @drizzle-run/connect", () => {
     await vi.waitFor(() => expect(paired.output()).toContain("Paired."), { timeout: 10_000 });
     expect(await readPairing(home)).toMatchObject({ secret: "k7Pq-2xZm-9fLw", relay: "http://127.0.0.1:9" });
     expect((await stat(home)).mode & 0o777).toBe(0o700);
-    expect((await stat(join(home, "connect.json"))).mode & 0o777).toBe(0o600);
+    expect((await stat(join(home, pairingFileName("http://127.0.0.1:9")))).mode & 0o777).toBe(0o600);
     await vi.waitFor(() => expect(paired.output()).toContain("Agents: Claude Code (9.9.9 (claude))."), {
       timeout: 10_000,
     });
@@ -132,6 +132,21 @@ describe("npx @drizzle-run/connect", () => {
 
     expect(await unpaired.exited).toBe(1);
     expect(unpaired.output()).toContain("not paired yet");
+  });
+
+  it("should refuse to reuse a production code for a different relay", async () => {
+    const { home, env } = await makeCliEnvironment();
+    const production = {
+      relay: "https://drizzle.run",
+      secret: "k7Pq-2xZm-9fLw",
+      pairedAt: "2026-10-15T10:00:00.000Z",
+    };
+    await writePairing(production, home);
+    const preview = runCli(["--relay", "https://next.drizzle.run"], env);
+
+    expect(await preview.exited).toBe(1);
+    expect(preview.output()).toContain("not paired yet with https://next.drizzle.run");
+    expect(await readPairing(home)).toEqual(production);
   });
 
   it("should refuse an agent CLI that lacks a lockdown option", async () => {

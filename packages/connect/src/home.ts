@@ -1,17 +1,18 @@
-import { chmod, lstat, mkdir, open, readFile, rename, rm } from "node:fs/promises";
+import { createHash, randomUUID } from "node:crypto";
+import { chmod, lstat, mkdir, open, readdir, readFile, rename, rm } from "node:fs/promises";
 import { homedir } from "node:os";
 import { join } from "node:path";
 
-import { normalizePairingSecret } from "@drizzle-run/core/connect";
+import { DEFAULT_CONNECT_ORIGIN, normalizePairingSecret } from "@drizzle-run/core/connect";
 import * as z from "zod/mini";
 
 /**
- * The pairing this computer remembers, in `~/.drizzle-run/connect.json`. The folder is
+ * The pairings this computer remembers, one file per relay in `~/.drizzle-run`. The folder is
  * owner-only (0700) and the file too (0600): the secret is the end-to-end key.
  * `DRIZZLE_RUN_HOME` moves the folder, which tests use so they never touch the real home.
  */
 
-/** A pairing as stored in `connect.json`. */
+/** A stored pairing. Older releases kept a single one in `connect.json`. */
 export interface StoredPairing {
   secret: string;
   /** The Drizzle Run origin the pairing belongs to. */
@@ -20,7 +21,12 @@ export interface StoredPairing {
   pairedAt: string;
 }
 
-const PAIRING_FILE_NAME = "connect.json";
+const LEGACY_PAIRING_FILE = "connect.json";
+const PAIRING_FILE_PATTERN = /^connect-[a-f0-9]{64}\.json$/;
+
+export function pairingFileName(relay: string): string {
+  return `connect-${createHash("sha256").update(relay).digest("hex")}.json`;
+}
 
 const StoredPairingSchema = z.object({
   secret: z.pipe(
@@ -87,8 +93,7 @@ async function ensureHome(home: string): Promise<void> {
  * read, such as for its permissions.
  * Tightens a file that others could read to 0600.
  */
-export async function readPairing(home = connectHome()): Promise<StoredPairing | undefined> {
-  const path = join(home, PAIRING_FILE_NAME);
+async function readPairingFile(path: string): Promise<StoredPairing | undefined> {
   let fileStats;
 
   try {
@@ -125,24 +130,79 @@ export async function readPairing(home = connectHome()): Promise<StoredPairing |
   return pairing.success ? pairing.data : undefined;
 }
 
+/** Find a pairing for one origin, or prefer the public site and fall back to the most recent pairing. */
+export async function readPairing(home = connectHome(), relay?: string): Promise<StoredPairing | undefined> {
+  if (relay !== undefined) {
+    const pairing = await readPairingFile(join(home, pairingFileName(relay)));
+
+    if (pairing?.relay === relay) {
+      return pairing;
+    }
+
+    const legacy = await readPairingFile(join(home, LEGACY_PAIRING_FILE));
+    return legacy?.relay === relay ? legacy : undefined;
+  }
+
+  const production = await readPairing(home, DEFAULT_CONNECT_ORIGIN);
+
+  if (production !== undefined) {
+    return production;
+  }
+
+  const files = await readdir(home).catch((cause: unknown) => {
+    if (isMissingFileError(cause)) {
+      return [];
+    }
+
+    throw cause;
+  });
+  const pairings = await Promise.all(
+    files
+      .filter((name) => name === LEGACY_PAIRING_FILE || PAIRING_FILE_PATTERN.test(name))
+      .map(async (name) => {
+        const pairing = await readPairingFile(join(home, name));
+        return pairing && (name === LEGACY_PAIRING_FILE || name === pairingFileName(pairing.relay))
+          ? pairing
+          : undefined;
+      }),
+  );
+
+  return pairings
+    .filter((pairing) => pairing !== undefined)
+    .toSorted((first, second) => second.pairedAt.localeCompare(first.pairedAt))[0];
+}
+
 /** Write the pairing through a temp file created 0600, then rename it into place. */
 export async function writePairing(pairing: StoredPairing, home = connectHome()): Promise<void> {
   await ensureHome(home);
 
-  const path = join(home, PAIRING_FILE_NAME);
-  const tempPath = join(home, `${PAIRING_FILE_NAME}.${process.pid}.tmp`);
+  const path = join(home, pairingFileName(pairing.relay));
+  const tempPath = `${path}.${randomUUID()}.tmp`;
   const handle = await open(tempPath, "wx", 0o600);
 
   try {
-    await handle.writeFile(`${JSON.stringify(pairing, null, 2)}\n`);
+    try {
+      await handle.writeFile(`${JSON.stringify(pairing, null, 2)}\n`);
+    } finally {
+      await handle.close();
+    }
+    await rename(tempPath, path);
   } finally {
-    await handle.close();
+    await rm(tempPath, { force: true });
   }
-
-  await rename(tempPath, path);
 }
 
-/** Forget the stored pairing. Does nothing when there is none. */
-export async function clearPairing(home = connectHome()): Promise<void> {
-  await rm(join(home, PAIRING_FILE_NAME), { force: true });
+/** Forget one relay's pairing, including its legacy copy if present. */
+export async function clearPairing(home = connectHome(), relay?: string): Promise<void> {
+  const origin = relay ?? (await readPairing(home))?.relay;
+  const legacyPath = join(home, LEGACY_PAIRING_FILE);
+  const legacy = await readPairingFile(legacyPath);
+
+  if (origin !== undefined) {
+    await rm(join(home, pairingFileName(origin)), { force: true });
+  }
+
+  if (origin === undefined || legacy?.relay === origin) {
+    await rm(legacyPath, { force: true });
+  }
 }

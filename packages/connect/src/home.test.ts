@@ -5,7 +5,7 @@ import { join } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { tempFolder } from "../test/harness.ts";
-import { clearPairing, connectHome, readPairing, writePairing } from "./home.ts";
+import { clearPairing, connectHome, pairingFileName, readPairing, writePairing } from "./home.ts";
 
 const cleanups: (() => Promise<void>)[] = [];
 
@@ -38,7 +38,7 @@ describe("pairing memory", () => {
     await writePairing(pairing, path);
     expect(await readPairing(path)).toEqual(pairing);
     expect((await stat(path)).mode & 0o777).toBe(0o700);
-    expect((await stat(join(path, "connect.json"))).mode & 0o777).toBe(0o600);
+    expect((await stat(join(path, pairingFileName(pairing.relay)))).mode & 0o777).toBe(0o600);
 
     await clearPairing(path);
     expect(await readPairing(path)).toBeUndefined();
@@ -47,17 +47,18 @@ describe("pairing memory", () => {
 
   it("should tighten a folder or file that others could read", async () => {
     const path = await makeHome();
+    const file = join(path, pairingFileName(pairing.relay));
 
     await writePairing(pairing, path);
     await chmod(path, 0o755);
-    await chmod(join(path, "connect.json"), 0o644);
+    await chmod(file, 0o644);
     expect(await readPairing(path)).toEqual(pairing);
-    expect((await stat(join(path, "connect.json"))).mode & 0o777).toBe(0o600);
+    expect((await stat(file)).mode & 0o777).toBe(0o600);
 
-    await writePairing({ ...pairing, relay: "http://127.0.0.1:4173" }, path);
+    await writePairing({ ...pairing, pairedAt: "2026-10-16T10:00:00.000Z" }, path);
     expect((await stat(path)).mode & 0o777).toBe(0o700);
-    expect(JSON.parse(await readFile(join(path, "connect.json"), "utf8"))).toMatchObject({
-      relay: "http://127.0.0.1:4173",
+    expect(JSON.parse(await readFile(file, "utf8"))).toMatchObject({
+      pairedAt: "2026-10-16T10:00:00.000Z",
     });
   });
 
@@ -80,8 +81,24 @@ describe("pairing memory", () => {
     const path = await makeHome();
 
     await writePairing(pairing, path);
-    await chmod(join(path, "connect.json"), 0o000);
+    await chmod(join(path, pairingFileName(pairing.relay)), 0o000);
 
     await expect(readPairing(path)).rejects.toThrow("Cannot read the pairing");
+  });
+
+  it("should keep a legacy pairing available only for its relay and forget the selected relay", async () => {
+    const path = await makeHome();
+    const next = { ...pairing, relay: "https://next.drizzle.run", secret: "u7Pq-2xZm-9fLw" };
+
+    await mkdir(path, { recursive: true, mode: 0o700 });
+    await writeFile(join(path, "connect.json"), JSON.stringify(pairing), { mode: 0o600 });
+    await expect(readPairing(path, next.relay)).resolves.toBeUndefined();
+    await writePairing(next, path);
+    await expect(readPairing(path, next.relay)).resolves.toEqual(next);
+    await expect(readPairing(path)).resolves.toEqual(pairing);
+
+    await clearPairing(path, next.relay);
+    await expect(readPairing(path, next.relay)).resolves.toBeUndefined();
+    await expect(readPairing(path, pairing.relay)).resolves.toEqual(pairing);
   });
 });
